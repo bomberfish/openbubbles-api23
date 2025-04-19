@@ -88,7 +88,7 @@ class MessageHelper {
     return _messages;
   }
 
-  static Future<void> handleNotification(Message message, Chat chat, {bool findExisting = true}) async {
+  static Future<void> handleNotification(Message message, Chat chat, {bool findExisting = true, bool notifyAnyways = false}) async {
     // if from me
     if (message.isFromMe! || message.handle == null) return;
     // if it is a "kept audio" message
@@ -101,7 +101,7 @@ class MessageHelper {
     if (ls.isAlive && cm.isChatActive(chat.guid)) return;
     // if app is alive, on chat list, but notifying on chat list is disabled
     if (ls.isAlive && cm.activeChat == null && Get.rawRoute?.settings.name == "/" && !ss.settings.notifyOnChatList.value) return;
-    await notif.createNotification(chat, message);
+    await notif.createNotification(chat, message, notifyAnyways: notifyAnyways);
   }
 
   static Future<void> handleSummaryNotification(List<Message> messages, {bool findExisting = true}) async {

@@ -6,7 +6,7 @@ use rustpush::get_gateways_for_mccmnc;
 use tokio::{runtime::{Handle, Runtime}, sync::Mutex};
 
 use futures::FutureExt;
-use crate::{api::api::{decline_facetime, get_phase, new_push_state, recv_wait, PollResult, PushMessage, PushState, RegistrationPhase}, frb_generated::FLUTTER_RUST_BRIDGE_HANDLER, init_logger, RUNTIME};
+use crate::{api::api::{decline_facetime, get_phase, new_push_state, recv_wait, set_status, PollResult, PushMessage, PushState, RegistrationPhase}, frb_generated::FLUTTER_RUST_BRIDGE_HANDLER, init_logger, RUNTIME};
 
 #[derive(uniffi::Record)] 
 pub struct FileInfo {
@@ -144,6 +144,15 @@ impl NativePushState {
         RUNTIME.spawn(async move {
             if let Err(e) = decline_facetime(&state_ref, guid).await {
                 warn!("Failed to decline facetime {e}");
+            }
+        });
+    }
+    
+    pub fn publish_status(&self, guid: Option<String>) {
+        let state_ref = self.state.clone();
+        RUNTIME.spawn(async move {
+            if let Err(e) = set_status(&state_ref, guid).await {
+                warn!("Failed to decline publish status {e}");
             }
         });
     }

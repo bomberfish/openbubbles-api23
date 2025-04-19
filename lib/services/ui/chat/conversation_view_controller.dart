@@ -29,6 +29,7 @@ class ConversationViewController extends StatefulController with GetSingleTicker
 
   ConversationViewController(this.chat, {String? tag_}) {
     tag = tag_ ?? chat.guid;
+    recipientNotifsSilenced.value = chat.notifsSilenced;
   }
 
   // caching items

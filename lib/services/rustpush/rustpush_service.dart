@@ -48,9 +48,6 @@ RustPushService pushService =
 
 const rpApiRoot = "https://hw.openbubbles.app/code";
 
-class OutgoingCallSession {
-  
-}
 
 // utils for communicating between dart and rustpush.
 class RustPushBBUtils {
@@ -1451,7 +1448,13 @@ class RustPushService extends GetxService {
     Logger.info("reflecting msg");
     var chat = myMsg.conversation != null ? await chatForMessage(myMsg) : null;
     var myHandles = (await api.getHandles(state: pushService.state));
-    if (myMsg.message is api.Message_Message) {
+    if (myMsg.message is api.Message_NotifyAnyways) {
+      var msgObj = Message.findOne(guid: myMsg.id)!;
+      msgObj.wasDeliveredQuietly = false;
+      Logger.info("Got notify anyways message");
+      MessageHelper.handleNotification(msgObj, msgObj.chat.target!, findExisting: false, notifyAnyways: true);
+      return msgObj;
+    } else if (myMsg.message is api.Message_Message) {
       var innerMsg = myMsg.message as api.Message_Message;
       var attributedBodyData = await indexedPartsToAttributedBodyDyn(innerMsg.field0.parts.field0, myMsg.id, null);
       var sender = myMsg.sender;
@@ -1685,7 +1688,7 @@ class RustPushService extends GetxService {
       msgObj.attributedBody = [attributedBodyDataInclusive.$1];
       return msgObj;
     }
-    throw Exception("bad message type!");
+    throw Exception("bad message type! ${myMsg.message}");
   }
 
   String getService(api.MessageInst msg) {
@@ -2078,6 +2081,17 @@ class RustPushService extends GetxService {
   String? incomingRingingCallGuid;
 
   Future handleMsg(api.PushMessage push) async {
+    if (push is api.PushMessage_StatusUpdate) {
+      var status = push.field0;
+      final result = (await Chat.findByRust(api.ConversationData(participants: [status.user]), "iMessage", soft: true));
+      if (result == null) return;
+      result.notifsSilenced = !status.allowed;
+      result.save(updateNotifsSilenced: true);
+      cvc(result).recipientNotifsSilenced.value = !status.allowed;
+      cvc(result).chat.notifsSilenced = !status.allowed; // make sure all our objects are in sync lmao
+      return;
+    }
+
     if (push is api.PushMessage_FaceTime) {
       var facetime = push.field0;
       if (facetime is api.FTMessage_AddMembers ||
@@ -2429,6 +2443,10 @@ class RustPushService extends GetxService {
       } else {
         message.dateRead = parseDate(myMsg.sentTimestamp);
       }
+      if (message.chat.target!.notifsSilenced) {
+        var lastNotifiedAnyways = message.chat.target!.dateNotifiedAnyways;
+        message.wasDeliveredQuietly = lastNotifiedAnyways == null || DateTime.now().difference(lastNotifiedAnyways).inMinutes > 5;
+      }
       message.save();
       inq.queue(IncomingItem(
         chat: message.chat.target!,
@@ -2700,6 +2718,52 @@ class RustPushService extends GetxService {
   }
 
   late Future initFuture;
+
+  Future<bool> setupZenMode(bool val) async {
+    if (val) {
+      if (!await api.canStatuskit(state: pushService.state)) {
+        showSnackbar("Relog Required", "Re-log in Settings -> Reconfigure to use zen modes");
+        return false;
+      }
+      if (!await mcs.invokeMethod("zen-mode-setup")) return false;
+    }
+    await mcs.invokeMethod("zen-mode-uuid", {"key": val ? "enable" : "disable"});
+    ss.settings.enableShareZen.value = val;
+    ss.settings.zenModeAware.value = true;
+    ss.saveSettings();
+    return true;
+  }
+
+  void onboardZenMode() async {
+    if (ss.settings.zenModeAware.value) return;
+    String? currentMode = await mcs.invokeMethod("get-zen-mode");
+    if (currentMode == null) return;
+    ss.settings.zenModeAware.value = true;
+    ss.saveSettings();
+    await showDialog(
+        context: Get.context!,
+        barrierDismissible: false,
+        builder: (context) => AlertDialog(
+          backgroundColor: Get.theme.colorScheme.properSurface,
+          title: Text("Allow OpenBubbles to share that you have notifications silenced?", style: Get.textTheme.titleLarge),
+          content: Text(
+            "When you're using Do Not Disturb or other modes, OpenBubbles will share with your contacts that you have notifications silenced.",
+            style: Get.textTheme.bodyLarge,
+          ),
+          actions: [
+            TextButton(
+                onPressed: () => Get.back(),
+                child: Text("Don't allow", style: Get.textTheme.bodyLarge!.copyWith(color: Get.theme.colorScheme.primary))),
+            TextButton(
+                onPressed: () async {
+                  if (await setupZenMode(true)) {
+                    Get.back();
+                  }
+                },
+                child: Text("Allow", style: Get.textTheme.bodyLarge!.copyWith(color: Get.theme.colorScheme.primary)))
+          ],
+        ));
+  }
 
   void tryWarnVpn() async {
     var state = await VpnConnectionDetector.isVpnActive();

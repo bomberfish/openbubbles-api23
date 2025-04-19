@@ -192,6 +192,27 @@ Future<ShareProfileMessage> setProfile(
 Future<bool> canProfileShare({required ArcPushState state}) =>
     RustLib.instance.api.crateApiApiCanProfileShare(state: state);
 
+Future<bool> canStatuskit({required ArcPushState state}) =>
+    RustLib.instance.api.crateApiApiCanStatuskit(state: state);
+
+Future<void> inviteToChannel(
+        {required ArcPushState state,
+        required String handle,
+        required Map<String, StatusKitPersonalConfig> to}) =>
+    RustLib.instance.api
+        .crateApiApiInviteToChannel(state: state, handle: handle, to: to);
+
+Future<void> resetChannelKeys({required ArcPushState state}) =>
+    RustLib.instance.api.crateApiApiResetChannelKeys(state: state);
+
+Future<void> requestHandles(
+        {required ArcPushState state, required List<String> to}) =>
+    RustLib.instance.api.crateApiApiRequestHandles(state: state, to: to);
+
+Future<void> setStatus({required ArcPushState state, String? newStatus}) =>
+    RustLib.instance.api
+        .crateApiApiSetStatus(state: state, newStatus: newStatus);
+
 Future<PollResult> recvWait({required ArcPushState state}) =>
     RustLib.instance.api.crateApiApiRecvWait(state: state);
 
@@ -1626,6 +1647,7 @@ sealed class Message with _$Message {
   const factory Message.shareProfile(
     ShareProfileMessage field0,
   ) = Message_ShareProfile;
+  const factory Message.notifyAnyways() = Message_NotifyAnyways;
 }
 
 class MessageInst {
@@ -2069,6 +2091,9 @@ sealed class PushMessage with _$PushMessage {
   const factory PushMessage.faceTime(
     FTMessage field0,
   ) = PushMessage_FaceTime;
+  const factory PushMessage.statusUpdate(
+    StatusKitMessage field0,
+  ) = PushMessage_StatusUpdate;
 }
 
 class ReactMessage {
@@ -2323,6 +2348,35 @@ class SharedPoster {
           lowResWallpaperTag == other.lowResWallpaperTag &&
           wallpaperTag == other.wallpaperTag &&
           messageTag == other.messageTag;
+}
+
+@freezed
+sealed class StatusKitMessage with _$StatusKitMessage {
+  const StatusKitMessage._();
+
+  const factory StatusKitMessage.statusChanged({
+    required String user,
+    String? mode,
+    required bool allowed,
+  }) = StatusKitMessage_StatusChanged;
+}
+
+class StatusKitPersonalConfig {
+  final List<String> allowedModes;
+
+  const StatusKitPersonalConfig({
+    required this.allowedModes,
+  });
+
+  @override
+  int get hashCode => allowedModes.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is StatusKitPersonalConfig &&
+          runtimeType == other.runtimeType &&
+          allowedModes == other.allowedModes;
 }
 
 class SupportAction {

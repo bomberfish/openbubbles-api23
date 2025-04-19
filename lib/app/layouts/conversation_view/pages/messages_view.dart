@@ -5,6 +5,7 @@ import 'package:audio_waveforms/audio_waveforms.dart';
 import 'package:bluebubbles/app/layouts/conversation_view/widgets/message/message_holder.dart';
 import 'package:bluebubbles/app/layouts/conversation_view/widgets/message/typing/typing_indicator.dart';
 import 'package:bluebubbles/database/database.dart';
+import 'package:bluebubbles/services/rustpush/rustpush_service.dart';
 import 'package:bluebubbles/utils/logger/logger.dart';
 import 'package:bluebubbles/helpers/helpers.dart';
 import 'package:bluebubbles/services/network/backend_service.dart';
@@ -23,6 +24,7 @@ import 'package:get/get.dart';
 import 'package:google_ml_kit/google_ml_kit.dart' hide Message;
 import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:super_drag_and_drop/super_drag_and_drop.dart';
+import 'package:bluebubbles/src/rust/api/api.dart' as api;
 
 class MessagesView extends StatefulWidget {
   final MessagesService? customService;
@@ -518,13 +520,19 @@ class MessagesViewState extends OptimizedState<MessagesView> {
                                     children: [
                                       toReturn,
                                       if (!chat.isGroup && chat.isIMessage)
-                                        AnimatedSize(
+                                        Align(child:AnimatedSize(
                                           key: controller.focusInfoKey,
                                           duration: const Duration(milliseconds: 250),
                                           child: Obx(() => controller.recipientNotifsSilenced.value
                                               ? Padding(
-                                                  padding: const EdgeInsets.all(10.0),
-                                                  child: Column(
+                                                  padding: const EdgeInsets.only(top: 20, bottom: 10),
+                                                  child: Obx(() {
+                                                    latestMessageDeliveredState.value;
+                                                    var showNotifyAnyways = _messages.firstOrNull?.isFromMe == true &&
+                                                        _messages.firstOrNull?.dateRead == null &&
+                                                        _messages.firstOrNull?.wasDeliveredQuietly == true &&
+                                                        _messages.firstOrNull?.didNotifyRecipient == false;
+                                                    return Column(
                                                     mainAxisSize: MainAxisSize.min,
                                                     children: [
                                                       Row(
@@ -535,39 +543,64 @@ class MessagesViewState extends OptimizedState<MessagesView> {
                                                             style: TextStyle(
                                                               fontFamily: moonIcon.fontFamily,
                                                               package: moonIcon.fontPackage,
-                                                              fontSize: context.theme.textTheme.bodyMedium!.fontSize,
-                                                              color: context.theme.colorScheme.tertiaryContainer,
+                                                              fontSize: context.theme.textTheme.bodyLarge!.fontSize,
+                                                              color: showNotifyAnyways ? context.theme.colorScheme.outline : Colors.deepPurple,
                                                             ),
                                                           ),
                                                           Text(
                                                             " ${chat.title ?? "Recipient"} has notifications silenced",
                                                             style:
-                                                                context.theme.textTheme.bodyMedium!.copyWith(color: context.theme.colorScheme.tertiaryContainer),
+                                                                context.theme.textTheme.bodyLarge!.copyWith(color: showNotifyAnyways ? context.theme.colorScheme.outline : Colors.deepPurple),
                                                           ),
                                                         ],
-                                                      ),
-                                                      Obx(() {
-                                                        // DO NOT REMOVE, used to update Obx widget
-                                                        latestMessageDeliveredState.value;
-                                                        if (_messages.firstOrNull?.isFromMe == true &&
-                                                            _messages.firstOrNull?.dateRead == null &&
-                                                            _messages.firstOrNull?.wasDeliveredQuietly == true &&
-                                                            _messages.firstOrNull?.didNotifyRecipient == false) {
-                                                          return TextButton(
-                                                            child: Text("Notify Anyway",
-                                                                style: context.theme.textTheme.labelLarge!
-                                                                    .copyWith(color: context.theme.colorScheme.tertiaryContainer)),
-                                                            onPressed: () async {
-                                                              await http.notify(_messages.first.guid!);
-                                                            },
+                                                        ),
+                                                      showNotifyAnyways ? TextButton(
+                                                        child: Text("Notify Anyway",
+                                                            style: context.theme.textTheme.labelLarge!
+                                                                .copyWith(color: Colors.deepPurple)),
+                                                        style: TextButton.styleFrom(
+                                                          padding: EdgeInsets.zero,
+                                                          minimumSize: Size(50, 30),
+                                                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                                          alignment: Alignment.centerLeft),
+                                                        onPressed: () async {
+                                                          var msg = await api.newMsg(
+                                                            state: pushService.state,
+                                                            conversation: await chat.getConversationData(),
+                                                            sender: await chat.ensureHandle(),
+                                                            message: const api.Message.notifyAnyways(),
                                                           );
-                                                        }
-                                                        return const SizedBox.shrink();
-                                                      }),
+                                                          msg.id = _messages.first.guid!;
+                                                          try {
+                                                            await (backend as RustPushBackend).sendMsg(msg);
+                                                          } catch (e) {
+                                                            Logger.error(e);
+                                                            if (!chat.isRpSms) {
+                                                              rethrow; // APN errors are fatal for non-SMS messages
+                                                            }
+                                                          }
+                                                          _messages.first.wasDeliveredQuietly = false;
+                                                          _messages.first.save();
+                                                          eventDispatcher.emit("message-updated-${_messages.first.guid}");
+                                                          latestMessageDeliveredState.value = true;
+                                                          latestMessageDeliveredState.value = false;
+                                                          chat.dateNotifiedAnyways = DateTime.now();
+                                                          chat.save(updateDateNotifiedAnyways: true);
+                                                        },
+                                                      ) : const SizedBox.shrink()
                                                     ],
-                                                  ),
+                                                  );
+                                                  })
                                                 )
-                                              : const SizedBox.shrink()),
+                                              : ConstrainedBox(
+                                                constraints: const BoxConstraints(
+                                                  minWidth: double.infinity, // Fix the width
+                                                  maxWidth: double.infinity,
+                                                ),
+                                                child: const SizedBox.shrink(),
+                                              )),
+                                        ),
+                                        alignment: Alignment.center,
                                         ),
                                       Obx(() => Row(
                                               mainAxisSize: MainAxisSize.min,

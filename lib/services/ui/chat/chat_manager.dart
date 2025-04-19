@@ -61,6 +61,13 @@ class ChatManager extends GetxService {
       var participants = (await chat.getConversationData()).participants;
       var targets = await pushService.doValidateTargets(participants, await chat.ensureHandle());
       Logger.info("finished ensuring keys ${targets.length}/${participants.length}");
+      if (chat.participants.length == 1) {
+        participants.remove(await chat.ensureHandle());
+        Logger.info("showing interest in handle ${participants[0]}");
+        await api.requestHandles(state: pushService.state, to: [participants[0]]);
+        Logger.info("showed interest in handles");
+        chat.fixZenModeShared();
+      }
     })();
 
     createChatController(chat, active: true);

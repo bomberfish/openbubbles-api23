@@ -9,12 +9,18 @@ pub use icloud_auth::{LoginState, AppleAccount};
 pub use rustpush::findmy::{Follow, Address, Location, FoundDevice};
 pub use rustpush::facetime::{FTSession, FTMode, FTParticipant, FTMember, LetMeInRequest, FTMessage};
 pub use rustpush::facetime::facetimep::{ConversationParticipant, ConversationLink};
+pub use rustpush::statuskit::{StatusKitPersonalConfig, StatusKitMessage};
 
 #[repr(C)]
 #[frb(mirror(SupportAction))]
 pub struct DartSupportAction {
     pub url: String,
     pub button: String,
+}
+
+#[frb(mirror(StatusKitPersonalConfig))]
+pub struct DartStatusKitPersonalConfig {
+    pub allowed_modes: Vec<String>,
 }
 
 #[repr(C)]
@@ -518,6 +524,15 @@ pub struct DartUpdateProfileSharingMessage {
     pub version: u64,
 }
 
+#[frb(mirror(StatusKitMessage))]
+pub enum DartStatusKitMessage {
+    StatusChanged {
+        user: String,
+        mode: Option<String>,
+        allowed: bool,
+    }
+}
+
 #[repr(C)]
 #[frb(non_opaque, mirror(Message))]
 pub enum DartMessage {
@@ -546,6 +561,7 @@ pub enum DartMessage {
     UpdateProfile(UpdateProfileMessage),
     UpdateProfileSharing(UpdateProfileSharingMessage),
     ShareProfile(ShareProfileMessage),
+    NotifyAnyways,
 }
 
 #[frb(mirror(MessageTarget))]

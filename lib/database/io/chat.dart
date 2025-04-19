@@ -171,6 +171,25 @@ class GetMessages extends AsyncTask<List<dynamic>, List<Message>> {
   }
 }
 
+Future<String> getZenKey(String key) async {
+  return await mcs.invokeMethod("zen-mode-uuid", { "key": key });
+}
+
+Future<api.StatusKitPersonalConfig> configForMask(int mask) async {
+  bool isStarredContact = ((mask >> 0) & 1) == 1;
+  bool isPriority = ((mask >> 1) & 1) == 1;
+  
+
+  return api.StatusKitPersonalConfig(allowedModes: [
+    if (isStarredContact)
+    await getZenKey("starred"),
+    if (isPriority)
+    await getZenKey("priority"),
+    if (isStarredContact || isPriority)
+    await getZenKey("starred_priority"),
+  ]);
+}
+
 /// Async method to add messages to objectbox
 class AddMessages extends AsyncTask<List<dynamic>, List<Message>> {
   final List<dynamic> stuff;
@@ -375,6 +394,10 @@ class Chat {
   String? usingHandle;
   bool isRpSms;
   int? telephonyId;
+  bool? shareZenMode;
+  bool notifsSilenced = false;
+  int? zenModeIsShared;
+  DateTime? dateNotifiedAnyways;
 
   @Backlink('chat')
   final messages = ToMany<Message>();
@@ -406,6 +429,10 @@ class Chat {
     this.usingHandle,
     this.isRpSms = false,
     this.telephonyId,
+    this.shareZenMode,
+    this.notifsSilenced = false,
+    this.dateNotifiedAnyways,
+    this.zenModeIsShared,
     List<String>? guidRefs,
   }) : guidRefs = guidRefs ?? [guid] {
     customAvatarPath = customAvatar;
@@ -441,7 +468,11 @@ class Chat {
       usingHandle: json["usingHandle"],
       isRpSms: json["isRpSms"] ?? false,
       guidRefs: json["guidRefs"]?.cast<String>() ?? [],
-      telephonyId: json["telephonyId"]
+      telephonyId: json["telephonyId"],
+      shareZenMode: json["shareZenMode"],
+      notifsSilenced: json["notifsSilenced"] ?? false,
+      zenModeIsShared: json["zenModeIsShared"],
+      dateNotifiedAnyways: parseDate(json["dateNotifiedAnyways"]),
     );
   }
 
@@ -486,6 +517,10 @@ class Chat {
     bool updateAPNTitle = false,
     bool updateGuidRefs = false,
     bool updateTelephonyId = false,
+    bool updateNotifsSilenced = false,
+    bool updateZenModeIsShared = false,
+    bool updateShareZenMode = false,
+    bool updateDateNotifiedAnyways = false,
   }) {
     if (kIsWeb) return this;
     Database.runInTransaction(TxMode.write, () {
@@ -561,6 +596,18 @@ class Chat {
       if (!updateTelephonyId) {
         telephonyId = existing?.telephonyId ?? telephonyId;
       }
+      if (!updateNotifsSilenced) {
+        notifsSilenced = existing?.notifsSilenced ?? notifsSilenced;
+      }
+      if (!updateZenModeIsShared) {
+        zenModeIsShared = existing?.zenModeIsShared ?? zenModeIsShared;
+      }
+      if (!updateShareZenMode) {
+        shareZenMode = existing?.shareZenMode ?? shareZenMode;
+      }
+      if (!updateDateNotifiedAnyways) {
+        dateNotifiedAnyways = existing?.dateNotifiedAnyways ?? dateNotifiedAnyways;
+      }
 
       /// Save the chat and add the participants
       for (int i = 0; i < participants.length; i++) {
@@ -582,6 +629,71 @@ class Chat {
       } on UniqueViolationException catch (_) {}
     });
     return this;
+  }
+
+  Future<int> getPersonalConfig() async {
+    if (participants.length > 1 || participants.isEmpty || !Platform.isAndroid) return 0;
+
+    bool isStarredContact = await mcs.invokeMethod("is-conversation-exempt", {
+      "mode": "star",
+      "contactId": participants.first.contact!.id.toInt(),
+    });
+
+    bool isPriority = await mcs.invokeMethod("is-conversation-exempt", {
+      "mode": "priority",
+      "guid": guid
+    });
+
+    int configMask = 
+      ((isStarredContact ? 1 : 0) << 0) |
+      ((isPriority ? 1 : 0) << 1);
+
+    return configMask;
+  }
+
+  void fixZenModeShared() async {
+    if (!ss.settings.enableShareZen.value) return;
+    bool wantsZenMode = (shareZenMode ?? true) && participants.firstOrNull?.contact?.isShared == false;
+    var config = wantsZenMode ? await getPersonalConfig() : null;
+    if (config == zenModeIsShared) return;
+
+    if (wantsZenMode) {
+      await api.inviteToChannel(state: pushService.state, handle: await ensureHandle(), to: {
+        getRustHandlesExcludingMine()[0]: await configForMask(config!)
+      });
+      zenModeIsShared = config;
+      save(updateZenModeIsShared: true);
+    } else {
+      // okay, sooo
+      // get everyone who *is* allowed to have my status updates
+      final query = Database.chats.query(Chat_.zenModeIsShared.notNull().and(Chat_.dbOnlyLatestMessageDate.greaterThanDate(DateTime.now().subtract(const Duration(days: 7))))).build();
+      final results = query.find();
+      query.close();
+      
+      Map<String, Map<String, api.StatusKitPersonalConfig>> sendMap = {};
+      for (var result in results) {
+        if (result.guid == guid) continue; // no longer share us
+        var handle = await result.ensureHandle();
+        sendMap.putIfAbsent(handle, () => {});
+        sendMap[handle]![result.getRustHandlesExcludingMine()[0]] = await configForMask(result.zenModeIsShared!);
+      }
+      
+      await api.resetChannelKeys(state: pushService.state);
+      for (var handle in sendMap.entries) {
+        await api.inviteToChannel(state: pushService.state, handle: handle.key, to: handle.value);
+      }
+      zenModeIsShared = null;
+      save(updateZenModeIsShared: true);
+
+      // these people sadly fall off
+      final o = Database.chats.query(Chat_.zenModeIsShared.notNull().and(Chat_.dbOnlyLatestMessageDate.lessThanDate(DateTime.now().subtract(const Duration(days: 7))))).build();
+      final older = o.find();
+      o.close();
+      for (var item in older) {
+        item.zenModeIsShared = null;
+      }
+      Database.chats.putMany(older);
+    }
   }
 
   static Future<Chat> getChatForTel(int tid, List<String> participants) async {
@@ -731,15 +843,19 @@ class Chat {
       }
     }
   }
-  
-  Future<api.ConversationData> getConversationData() async {
-    var handles = participants.map((e) {
+
+  List<String> getRustHandlesExcludingMine() {
+    return participants.map((e) {
       if (e.address.isEmail) {
         return "mailto:${e.address}";
       } else {
         return "tel:${e.address}";
       }
     }).toList();
+  }
+  
+  Future<api.ConversationData> getConversationData() async {
+    var handles = getRustHandlesExcludingMine();
     handles.add(await ensureHandle());
     return api.ConversationData(participants: handles, cvName: apnTitle, senderGuid: guid, afterGuid: sendLastMessage.stagingGuid ?? sendLastMessage.guid);
   }
@@ -1399,5 +1515,9 @@ class Chat {
     // intentionally not [from] for debugging,
     "textFieldText": textFieldText,
     "textFieldAnnotations": textFieldAnnotations,
+    "notifsSilenced": notifsSilenced,
+    "zenModeIsShared": zenModeIsShared,
+    "shareZenMode": shareZenMode,
+    "dateNotifiedAnyways": dateNotifiedAnyways?.millisecondsSinceEpoch,
   };
 }

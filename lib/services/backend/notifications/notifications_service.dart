@@ -182,7 +182,7 @@ class NotificationsService extends GetxService {
     );
   }
 
-  Future<void> createNotification(Chat chat, Message message) async {
+  Future<void> createNotification(Chat chat, Message message, {bool notifyAnyways = false}) async {
     if (chat.shouldMuteNotification(message) || message.isFromMe!) return;
     final isGroup = chat.isGroup;
     final guid = chat.guid;
@@ -222,6 +222,8 @@ class NotificationsService extends GetxService {
         "chat_title": title,
         "chat_icon": isGroup ? chatIcon : contactIcon,
         "contact_name": contactName,
+        "contact_uri": isGroup ? null : chat.getRustHandlesExcludingMine()[0], // other people use uris :wink:
+        "notify_anyways": notifyAnyways,
         "contact_avatar": contactIcon,
         "message_guid": message.guid!,
         "message_text": text,

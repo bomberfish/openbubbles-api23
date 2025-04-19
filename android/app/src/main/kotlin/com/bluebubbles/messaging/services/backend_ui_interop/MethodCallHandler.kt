@@ -39,7 +39,11 @@ import com.bluebubbles.messaging.services.foreground.StartForegroundServiceHandl
 import com.bluebubbles.messaging.services.foreground.StopForegroundServiceHandler
 import com.bluebubbles.messaging.services.notifications.CreateMissedFaceTimeNotification
 import com.bluebubbles.messaging.services.rustpush.GetNativeHandleHandler
+import com.bluebubbles.messaging.services.system.ConversationExemptHandler
+import com.bluebubbles.messaging.services.system.GetZenMode
 import com.bluebubbles.messaging.services.system.RecentContactsRequestHandler
+import com.bluebubbles.messaging.services.system.ZenModeSetupHandler
+import com.bluebubbles.messaging.services.system.ZenModeUUIDHandler
 import com.bluebubbles.telephony_plus.receive.SMSObserver
 import com.google.gson.GsonBuilder
 import com.google.gson.ToNumberPolicy
@@ -108,6 +112,10 @@ class MethodCallHandler {
             CreateMissedFaceTimeNotification.tag -> CreateMissedFaceTimeNotification().handleMethodCall(call, result, context)
             FaceTimeGetActiveCallHandler.tag -> FaceTimeGetActiveCallHandler().handleMethodCall(call, result, context)
             RecentContactsRequestHandler.tag -> RecentContactsRequestHandler().handleMethodCall(call, result, context)
+            ConversationExemptHandler.tag -> ConversationExemptHandler().handleMethodCall(call, result, context)
+            ZenModeSetupHandler.tag -> ZenModeSetupHandler().handleMethodCall(call, result, context)
+            ZenModeUUIDHandler.tag -> ZenModeUUIDHandler().handleMethodCall(call, result, context)
+            GetZenMode.tag -> GetZenMode().handleMethodCall(call, result, context)
             "ready" -> { MainActivity.engine_ready = true }
             else -> {
                 val error = "Could not find method call handler for ${call.method}!"

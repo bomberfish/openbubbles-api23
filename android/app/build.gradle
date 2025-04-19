@@ -30,7 +30,7 @@ if (flutterVersionName == null) {
 
 android {
     namespace "com.bluebubbles.messaging"
-    compileSdk 34
+    compileSdk 35
 
     lintOptions {
         checkReleaseBuilds false

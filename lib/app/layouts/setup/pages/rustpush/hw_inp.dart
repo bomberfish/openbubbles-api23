@@ -710,7 +710,7 @@ class HwInpState extends OptimizedState<HwInp> {
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text("Self-managed",
+                                    Text("Self-hosted",
                                         style: context.theme.textTheme.titleMedium!.copyWith(color: hosted ? null : context.theme.colorScheme.onPrimary)),
                                     Text("One-time access to a Mac or a supported, always-online iPhone required. Mac devices cannot use this phone's number.",
                                         style: context.theme.textTheme.bodySmall!.copyWith(color: hosted ? null : context.theme.colorScheme.onPrimary)),

@@ -13,7 +13,7 @@ pub use plist::Value;
 use prost::Message as prostMessage;
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use tokio::{runtime::Runtime, select, sync::{broadcast, mpsc, oneshot::{self, Sender}, watch, Mutex, RwLock}};
-use rustpush::{authenticate_apple, authenticate_phone, cloudkit::{CloudKitClient, CloudKitState}, facetime::{FTClient, FTState, FACETIME_SERVICE, VIDEO_SERVICE}, findmy::{FindMyClient, FindMyState, MULTIPLEX_SERVICE}, login_apple_delegates, name_photo_sharing::ProfilesClient, sharedstreams::{AssetMetadata, FFMpegFilePackager, FileMetadata, FilePackager, PreparedAsset, PreparedFile, SharedStreamClient, SharedStreamsState, SyncController, SyncManager, SyncState}, APSMessage, IDSNGMIdentity, LoginDelegate, MADRID_SERVICE};
+use rustpush::{authenticate_apple, authenticate_phone, cloudkit::{CloudKitClient, CloudKitState}, facetime::{FTClient, FTState, FACETIME_SERVICE, VIDEO_SERVICE}, findmy::{FindMyClient, FindMyState, MULTIPLEX_SERVICE}, login_apple_delegates, name_photo_sharing::ProfilesClient, sharedstreams::{AssetMetadata, FFMpegFilePackager, FileMetadata, FilePackager, PreparedAsset, PreparedFile, SharedStreamClient, SharedStreamsState, SyncController, SyncManager, SyncState}, statuskit::{ChannelInterestToken, StatusKitClient, StatusKitState, StatusKitStatus}, APSMessage, IDSNGMIdentity, LoginDelegate, MADRID_SERVICE};
 use rustpush::AnisetteProvider;
 pub use rustpush::findmy::{FindMyFriendsClient, FindMyPhoneClient};
 pub use rustpush::sharedstreams::{SharedAlbum, SyncStatus};
@@ -169,6 +169,8 @@ pub struct InnerPushState {
     pub sharedstreams: Option<SyncManager<DefaultAnisetteProvider, MyFilePackager>>,
     pub ft_client: Option<FTClient>,
     pub profiles_client: Option<ProfilesClient<DefaultAnisetteProvider>>,
+    pub statuskit_client: Option<Arc<StatusKitClient>>,
+    pub statuskit_interest_token: Mutex<Option<ChannelInterestToken>>,
     pub conf_dir: PathBuf,
     pub os_config: Option<JoinedOSConfig>,
     pub account: Option<AppleAccount<DefaultAnisetteProvider>>,
@@ -196,6 +198,8 @@ pub async fn new_push_state(dir: String) -> Arc<PushState> {
         fmfd: None,
         sharedstreams: None,
         profiles_client: None,
+        statuskit_client: None,
+        statuskit_interest_token: Mutex::new(None),
         ft_client: None,
         conf_dir: dir,
         os_config: None,
@@ -395,6 +399,12 @@ async fn restore(curr_state: &PushState) {
 
         inner.profiles_client = Some(ProfilesClient::new(cloudkit));
     }
+
+    let path = inner.conf_dir.join("statuskit.plist");
+    let state: StatusKitState = plist::from_file(&path).unwrap_or_default();
+    inner.statuskit_client = Some(StatusKitClient::new(state, Box::new(move |state| {
+        plist::to_file_xml(&path, state).unwrap();
+    }), inner.conn.as_ref().unwrap().clone(), inner.os_config.as_ref().unwrap().config(), inner.client.as_ref().unwrap().identity.clone()).await);
 }
 
 async fn shared_items<P: AnisetteProvider + Send + Sync + 'static, F: FilePackager + Send + Sync + 'static>(manager: &SyncManager<P, F>, seen_paths: &mut HashSet<PathBuf>) -> HashSet<PathBuf> {
@@ -495,6 +505,12 @@ pub async fn register_ids(state: &Arc<PushState>, users: &Vec<IDSUser>) -> anyho
 
         inner.profiles_client = Some(ProfilesClient::new(cloudkit));
     }
+
+    let path = inner.conf_dir.join("statuskit.plist");
+    let state: StatusKitState = plist::from_file(&path).unwrap_or_default();
+    inner.statuskit_client = Some(StatusKitClient::new(state, Box::new(move |state| {
+        plist::to_file_xml(&path, state).unwrap();
+    }), inner.conn.as_ref().unwrap().clone(), inner.os_config.as_ref().unwrap().config(), inner.client.as_ref().unwrap().identity.clone()).await);
     Ok(None)
 }
 
@@ -773,6 +789,7 @@ pub enum PushMessage {
     RegistrationState(RegisterState),
     NewPhotostream(SharedAlbum),
     FaceTime(FTMessage),
+    StatusUpdate(StatusKitMessage),
 }
 
 async fn handle_photostream(client: &SharedStreamClient<DefaultAnisetteProvider>, changes: Vec<String>, local: &mpsc::Sender<PushMessage>) {
@@ -803,7 +820,7 @@ pub async fn get_anisette_headers(state: &Arc<PushState>) -> anyhow::Result<Hash
 pub async fn retry_login(state: &Arc<PushState>) -> anyhow::Result<IDSUser> {
     let inner = state.0.read().await;
     let account = inner.account.as_ref().expect("no login state!");
-    do_login(&inner.conf_dir, account.username.as_ref().unwrap().trim(), account.get_pet().as_ref().unwrap(), Some("termsAccepted=true"), account.spd.as_ref().unwrap(), inner.anisette.as_ref().unwrap(), inner.os_config.as_deref().unwrap()).await
+    do_login(&inner.conf_dir, account.username.as_ref().unwrap().trim(), account.get_pet().as_ref().unwrap(), Some("termsAccepted=true"), account.spd.as_ref().unwrap(), &account.tokens, inner.anisette.as_ref().unwrap(), inner.os_config.as_deref().unwrap()).await
 }
 
 pub async fn get_albums(state: &Arc<PushState>, refresh: bool) -> anyhow::Result<(Vec<SharedAlbum>, Vec<String>)> {
@@ -991,6 +1008,42 @@ pub async fn can_profile_share(state: &Arc<PushState>) -> bool {
     inner.profiles_client.is_some()
 }
 
+pub async fn can_statuskit(state: &Arc<PushState>) -> bool {
+    let inner = state.0.read().await;
+    let Some(status) = &inner.statuskit_client else { return false };
+    let val = status.state.read().await.auth_token != "";
+    val // right, "doesn't live long enough" smh
+}
+
+pub async fn invite_to_channel(state: &Arc<PushState>, handle: String, to: HashMap<String, StatusKitPersonalConfig>) -> anyhow::Result<()> {
+    let inner = state.0.read().await;
+    let Some(status) = inner.statuskit_client.as_ref() else { return Err(anyhow!("No profile client!")) };
+    Ok(status.invite_to_channel(&handle, to).await?)
+}
+
+pub async fn reset_channel_keys(state: &Arc<PushState>) -> anyhow::Result<()> {
+    let inner = state.0.read().await;
+    let Some(status) = inner.statuskit_client.as_ref() else { return Err(anyhow!("No profile client!")) };
+    Ok(status.reset_keys().await)
+}
+
+pub async fn request_handles(state: &Arc<PushState>, to: Vec<String>) -> anyhow::Result<()> {
+    let inner = state.0.read().await;
+    let Some(status) = inner.statuskit_client.as_ref() else { return Err(anyhow!("No profile client!")) };
+    *inner.statuskit_interest_token.lock().await = if to.is_empty() { None } else { Some(status.request_handles(&to).await.0) };
+    Ok(())
+}
+
+pub async fn set_status(state: &Arc<PushState>, new_status: Option<String>) -> anyhow::Result<()> {
+    let inner = state.0.read().await;
+    let Some(status) = inner.statuskit_client.as_ref() else { return Err(anyhow!("No profile client!")) };
+    status.share_status(&StatusKitStatus {
+        active: new_status.is_none(),
+        id: new_status,
+    }).await?;
+    Ok(())
+}
+
 pub enum PollResult {
     Stop,
     Cont(Option<PushMessage>),
@@ -1017,6 +1070,18 @@ pub async fn recv_wait(state: &Arc<PushState>) -> PollResult {
             if let Some(photostream) = &recv_path.sharedstreams {
                 if let Ok(Some(changes)) = photostream.handle(msg.clone()).await {
                     handle_photostream(&photostream.client, changes, &recv_path.local_broadcast).await;
+                }
+            }
+            if let Some(statuskit) = &recv_path.statuskit_client {
+                match statuskit.handle(msg.clone()).await {
+                    Err(e) => {
+                        error!("Statuskit handle error {e}");
+                        return PollResult::Cont(None);
+                    },
+                    Ok(None) => {},
+                    Ok(Some(msg)) => {
+                        return PollResult::Cont(Some(PushMessage::StatusUpdate(msg)))
+                    }
                 }
             }
             let ft_msg = recv_path.ft_client.as_ref().expect("no ft client??/").handle(msg.clone()).await;
@@ -1296,7 +1361,7 @@ pub async fn refresh_background_following(state: &Arc<PushState>) -> anyhow::Res
     Ok(x.following.clone())
 }
 
-async fn do_login(conf_dir: &Path, username: &str, pet: &str, cookie: Option<&str>, spd: &Dictionary, anisette: &ArcAnisetteClient<DefaultAnisetteProvider>, os_config: &dyn OSConfig) -> anyhow::Result<IDSUser> {
+async fn do_login(conf_dir: &Path, username: &str, pet: &str, cookie: Option<&str>, spd: &Dictionary, tokens: &HashMap<String, String>, anisette: &ArcAnisetteClient<DefaultAnisetteProvider>, os_config: &dyn OSConfig) -> anyhow::Result<IDSUser> {
     debug!("Got spd {:?}", spd);
     let adsid = spd.get("adsid").ok_or(anyhow!("No adsid!"))?.as_string().unwrap();
     let acname = spd.get("acname").ok_or(anyhow!("No acname!"))?.as_string().unwrap().to_string();
@@ -1304,6 +1369,14 @@ async fn do_login(conf_dir: &Path, username: &str, pet: &str, cookie: Option<&st
     
     let delegates = login_apple_delegates(username, pet, adsid, cookie, &mut *anisette.lock().await, os_config, &[LoginDelegate::IDS, LoginDelegate::MobileMe]).await?;
 
+
+    let path = conf_dir.join("statuskit.plist");
+    std::fs::write(&path, plist_to_string(&StatusKitState {
+        auth_token: tokens.get("com.apple.gs.sharedchannels.auth").ok_or(anyhow!("No sharedCHannels"))?.clone(),
+        my_key: None,
+        ..plist::from_file(&path).unwrap_or_default()
+    }).unwrap()).unwrap();
+    
     let mobileme = delegates.mobileme.unwrap();
     let findmy = FindMyState::new(dsid.clone(), acname, &mobileme);
 
@@ -1335,7 +1408,7 @@ pub async fn try_auth(state: &Arc<PushState>, username: String, password: String
 
     let mut user = None;
     if let Some(pet) = apple_account.get_pet() {
-        let identity = do_login(&inner.conf_dir, apple_account.username.as_ref().unwrap().trim(), &pet, None, apple_account.spd.as_ref().unwrap(), inner.anisette.as_ref().unwrap(), inner.os_config.as_deref().unwrap()).await?;
+        let identity = do_login(&inner.conf_dir, apple_account.username.as_ref().unwrap().trim(), &pet, None, apple_account.spd.as_ref().unwrap(), &apple_account.tokens, inner.anisette.as_ref().unwrap(), inner.os_config.as_deref().unwrap()).await?;
         user = Some(identity);
 
         // who needs extra steps when you have a PET, amirite?
@@ -1375,7 +1448,7 @@ pub async fn verify_2fa(state: &Arc<PushState>, code: String) -> anyhow::Result<
 
     let mut user = None;
     if let Some(pet) = account.get_pet() {
-        let identity = do_login(&inner.conf_dir, account.username.as_ref().unwrap().trim(), &pet, None, account.spd.as_ref().unwrap(), inner.anisette.as_ref().unwrap(), inner.os_config.as_deref().unwrap()).await?;
+        let identity = do_login(&inner.conf_dir, account.username.as_ref().unwrap().trim(), &pet, None, account.spd.as_ref().unwrap(), &account.tokens, inner.anisette.as_ref().unwrap(), inner.os_config.as_deref().unwrap()).await?;
         user = Some(identity);
 
         // who needs extra steps when you have a PET, amirite?
@@ -1414,7 +1487,7 @@ pub async fn verify_2fa_sms(state: &Arc<PushState>, body: &VerifyBody, code: Str
 
     let mut user = None;
     if let Some(pet) = account.get_pet() {
-        let identity = do_login(&inner.conf_dir, account.username.as_ref().unwrap().trim(), &pet, None, account.spd.as_ref().unwrap(), inner.anisette.as_ref().unwrap(), inner.os_config.as_deref().unwrap()).await?;
+        let identity = do_login(&inner.conf_dir, account.username.as_ref().unwrap().trim(), &pet, None, account.spd.as_ref().unwrap(), &account.tokens, inner.anisette.as_ref().unwrap(), inner.os_config.as_deref().unwrap()).await?;
         user = Some(identity);
 
         // who needs extra steps when you have a PET, amirite?
@@ -1448,6 +1521,9 @@ pub async fn reset_state(state: &Arc<PushState>, reset_hw: bool) -> anyhow::Resu
     inner.fmfd = None;
     inner.sharedstreams = None;
     inner.reg_state = None;
+    inner.profiles_client = None;
+    inner.statuskit_client = None;
+    *inner.statuskit_interest_token.lock().await = None;
     // try deregistering from iMessage, but if it fails we don't really care
     let _ = register(inner.os_config.as_deref().unwrap(), &*conn_state.state.read().await, &[], &mut [], inner.identity.as_ref().unwrap()).await;
     info!("c");
@@ -1463,12 +1539,20 @@ pub async fn reset_state(state: &Arc<PushState>, reset_hw: bool) -> anyhow::Resu
         plist::to_file_xml(inner.conf_dir.join("id_cache.plist"), &cache)?;
     }
 
+    let path = inner.conf_dir.join("statuskit.plist");
+    std::fs::write(&path, plist_to_string(&StatusKitState {
+        auth_token: "".to_string(),
+        my_key: None,
+        ..plist::from_file(&path).unwrap_or_default()
+    }).unwrap()).unwrap();
+
     if reset_hw {
         inner.inq_queue = None;
         inner.conn = None;
         inner.os_config = None;
         let _ = std::fs::remove_file(inner.conf_dir.join("hw_info.plist"));
         let _ = std::fs::remove_file(inner.conf_dir.join("id_cache.plist")); // our identity is wiped so we can wipe our counters too
+        let _ = std::fs::remove_file(inner.conf_dir.join("statuskit.plist"));
     }
 
     Ok(())

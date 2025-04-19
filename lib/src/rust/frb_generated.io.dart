@@ -159,6 +159,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   Map<String, FTParticipant> dco_decode_Map_String_ft_participant(dynamic raw);
 
   @protected
+  Map<String, StatusKitPersonalConfig>
+      dco_decode_Map_String_status_kit_personal_config(dynamic raw);
+
+  @protected
   Map<String, SyncStatus> dco_decode_Map_String_sync_status(dynamic raw);
 
   @protected
@@ -412,6 +416,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   SharedPoster dco_decode_box_autoadd_shared_poster(dynamic raw);
 
   @protected
+  StatusKitMessage dco_decode_box_autoadd_status_kit_message(dynamic raw);
+
+  @protected
   SupportAction dco_decode_box_autoadd_support_action(dynamic raw);
 
   @protected
@@ -567,6 +574,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   List<(String, FTParticipant)> dco_decode_list_record_string_ft_participant(
       dynamic raw);
+
+  @protected
+  List<(String, StatusKitPersonalConfig)>
+      dco_decode_list_record_string_status_kit_personal_config(dynamic raw);
 
   @protected
   List<(String, String)> dco_decode_list_record_string_string(dynamic raw);
@@ -828,6 +839,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   (String, FTParticipant) dco_decode_record_string_ft_participant(dynamic raw);
 
   @protected
+  (String, StatusKitPersonalConfig)
+      dco_decode_record_string_status_kit_personal_config(dynamic raw);
+
+  @protected
   (String, String) dco_decode_record_string_string(dynamic raw);
 
   @protected
@@ -860,6 +875,12 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   SharedPoster dco_decode_shared_poster(dynamic raw);
+
+  @protected
+  StatusKitMessage dco_decode_status_kit_message(dynamic raw);
+
+  @protected
+  StatusKitPersonalConfig dco_decode_status_kit_personal_config(dynamic raw);
 
   @protected
   SupportAction dco_decode_support_action(dynamic raw);
@@ -1016,6 +1037,11 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   Map<String, FTParticipant> sse_decode_Map_String_ft_participant(
       SseDeserializer deserializer);
+
+  @protected
+  Map<String, StatusKitPersonalConfig>
+      sse_decode_Map_String_status_kit_personal_config(
+          SseDeserializer deserializer);
 
   @protected
   Map<String, SyncStatus> sse_decode_Map_String_sync_status(
@@ -1292,6 +1318,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       SseDeserializer deserializer);
 
   @protected
+  StatusKitMessage sse_decode_box_autoadd_status_kit_message(
+      SseDeserializer deserializer);
+
+  @protected
   SupportAction sse_decode_box_autoadd_support_action(
       SseDeserializer deserializer);
 
@@ -1462,6 +1492,11 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   List<(String, FTParticipant)> sse_decode_list_record_string_ft_participant(
       SseDeserializer deserializer);
+
+  @protected
+  List<(String, StatusKitPersonalConfig)>
+      sse_decode_list_record_string_status_kit_personal_config(
+          SseDeserializer deserializer);
 
   @protected
   List<(String, String)> sse_decode_list_record_string_string(
@@ -1747,6 +1782,11 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       SseDeserializer deserializer);
 
   @protected
+  (String, StatusKitPersonalConfig)
+      sse_decode_record_string_status_kit_personal_config(
+          SseDeserializer deserializer);
+
+  @protected
   (String, String) sse_decode_record_string_string(
       SseDeserializer deserializer);
 
@@ -1783,6 +1823,13 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   SharedPoster sse_decode_shared_poster(SseDeserializer deserializer);
+
+  @protected
+  StatusKitMessage sse_decode_status_kit_message(SseDeserializer deserializer);
+
+  @protected
+  StatusKitPersonalConfig sse_decode_status_kit_personal_config(
+      SseDeserializer deserializer);
 
   @protected
   SupportAction sse_decode_support_action(SseDeserializer deserializer);
@@ -1948,6 +1995,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   void sse_encode_Map_String_ft_participant(
       Map<String, FTParticipant> self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_Map_String_status_kit_personal_config(
+      Map<String, StatusKitPersonalConfig> self, SseSerializer serializer);
 
   @protected
   void sse_encode_Map_String_sync_status(
@@ -2235,6 +2286,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       SharedPoster self, SseSerializer serializer);
 
   @protected
+  void sse_encode_box_autoadd_status_kit_message(
+      StatusKitMessage self, SseSerializer serializer);
+
+  @protected
   void sse_encode_box_autoadd_support_action(
       SupportAction self, SseSerializer serializer);
 
@@ -2412,6 +2467,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   void sse_encode_list_record_string_ft_participant(
       List<(String, FTParticipant)> self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_list_record_string_status_kit_personal_config(
+      List<(String, StatusKitPersonalConfig)> self, SseSerializer serializer);
 
   @protected
   void sse_encode_list_record_string_string(
@@ -2707,6 +2766,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       (String, FTParticipant) self, SseSerializer serializer);
 
   @protected
+  void sse_encode_record_string_status_kit_personal_config(
+      (String, StatusKitPersonalConfig) self, SseSerializer serializer);
+
+  @protected
   void sse_encode_record_string_string(
       (String, String) self, SseSerializer serializer);
 
@@ -2744,6 +2807,14 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void sse_encode_shared_poster(SharedPoster self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_status_kit_message(
+      StatusKitMessage self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_status_kit_personal_config(
+      StatusKitPersonalConfig self, SseSerializer serializer);
 
   @protected
   void sse_encode_support_action(SupportAction self, SseSerializer serializer);

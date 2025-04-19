@@ -112,7 +112,7 @@ final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
       id: const obx_int.IdUid(3, 9017250848141753702),
       name: 'Chat',
-      lastPropertyId: const obx_int.IdUid(35, 7774397079877699895),
+      lastPropertyId: const obx_int.IdUid(39, 1450447556768339740),
       flags: 0,
       properties: <obx_int.ModelProperty>[
         obx_int.ModelProperty(
@@ -260,6 +260,26 @@ final _entities = <obx_int.ModelEntity>[
             id: const obx_int.IdUid(35, 7774397079877699895),
             name: 'textFieldAnnotations',
             type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(36, 7143894652284556003),
+            name: 'shareZenMode',
+            type: 1,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(37, 420507915079790972),
+            name: 'notifsSilenced',
+            type: 1,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(38, 7629993644602445500),
+            name: 'dateNotifiedAnyways',
+            type: 10,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(39, 1450447556768339740),
+            name: 'zenModeIsShared',
+            type: 6,
             flags: 0)
       ],
       relations: <obx_int.ModelRelation>[
@@ -1119,7 +1139,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
           final textFieldAnnotationsOffset = object.textFieldAnnotations == null
               ? null
               : fbb.writeString(object.textFieldAnnotations!);
-          fbb.startTable(36);
+          fbb.startTable(40);
           fbb.addInt64(0, object.id ?? 0);
           fbb.addOffset(2, guidOffset);
           fbb.addOffset(4, chatIdentifierOffset);
@@ -1150,6 +1170,10 @@ obx_int.ModelDefinition getObjectBoxModel() {
           fbb.addOffset(32, guidRefsOffset);
           fbb.addInt64(33, object.telephonyId);
           fbb.addOffset(34, textFieldAnnotationsOffset);
+          fbb.addBool(35, object.shareZenMode);
+          fbb.addBool(36, object.notifsSilenced);
+          fbb.addInt64(37, object.dateNotifiedAnyways?.millisecondsSinceEpoch);
+          fbb.addInt64(38, object.zenModeIsShared);
           fbb.finish(fbb.endTable());
           return object.id ?? 0;
         },
@@ -1160,6 +1184,8 @@ obx_int.ModelDefinition getObjectBoxModel() {
               const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 26);
           final dateDeletedValue =
               const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 50);
+          final dateNotifiedAnywaysValue =
+              const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 78);
           final idParam =
               const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 4);
           final guidParam = const fb.StringReader(asciiOptimization: true)
@@ -1213,6 +1239,15 @@ obx_int.ModelDefinition getObjectBoxModel() {
               const fb.BoolReader().vTableGet(buffer, rootOffset, 66, false);
           final telephonyIdParam =
               const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 70);
+          final shareZenModeParam =
+              const fb.BoolReader().vTableGetNullable(buffer, rootOffset, 74);
+          final notifsSilencedParam =
+              const fb.BoolReader().vTableGet(buffer, rootOffset, 76, false);
+          final dateNotifiedAnywaysParam = dateNotifiedAnywaysValue == null
+              ? null
+              : DateTime.fromMillisecondsSinceEpoch(dateNotifiedAnywaysValue);
+          final zenModeIsSharedParam =
+              const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 80);
           final guidRefsParam = const fb.ListReader<String>(
                   fb.StringReader(asciiOptimization: true),
                   lazy: false)
@@ -1240,6 +1275,10 @@ obx_int.ModelDefinition getObjectBoxModel() {
               usingHandle: usingHandleParam,
               isRpSms: isRpSmsParam,
               telephonyId: telephonyIdParam,
+              shareZenMode: shareZenModeParam,
+              notifsSilenced: notifsSilencedParam,
+              dateNotifiedAnyways: dateNotifiedAnywaysParam,
+              zenModeIsShared: zenModeIsSharedParam,
               guidRefs: guidRefsParam)
             ..dbOnlyLatestMessageDate = dbOnlyLatestMessageDateValue == null
                 ? null
@@ -2118,6 +2157,22 @@ class Chat_ {
   /// See [Chat.textFieldAnnotations].
   static final textFieldAnnotations =
       obx.QueryStringProperty<Chat>(_entities[1].properties[28]);
+
+  /// See [Chat.shareZenMode].
+  static final shareZenMode =
+      obx.QueryBooleanProperty<Chat>(_entities[1].properties[29]);
+
+  /// See [Chat.notifsSilenced].
+  static final notifsSilenced =
+      obx.QueryBooleanProperty<Chat>(_entities[1].properties[30]);
+
+  /// See [Chat.dateNotifiedAnyways].
+  static final dateNotifiedAnyways =
+      obx.QueryDateProperty<Chat>(_entities[1].properties[31]);
+
+  /// See [Chat.zenModeIsShared].
+  static final zenModeIsShared =
+      obx.QueryIntegerProperty<Chat>(_entities[1].properties[32]);
 
   /// see [Chat.handles]
   static final handles =
