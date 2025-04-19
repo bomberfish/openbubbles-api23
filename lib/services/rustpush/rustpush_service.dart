@@ -2723,6 +2723,8 @@ class RustPushService extends GetxService {
     if (val) {
       if (!await api.canStatuskit(state: pushService.state)) {
         showSnackbar("Relog Required", "Re-log in Settings -> Reconfigure to use zen modes");
+        ss.settings.zenModeAware.value = false;
+        ss.saveSettings();
         return false;
       }
       if (!await mcs.invokeMethod("zen-mode-setup")) return false;
@@ -2747,7 +2749,7 @@ class RustPushService extends GetxService {
           backgroundColor: Get.theme.colorScheme.properSurface,
           title: Text("Allow OpenBubbles to share that you have notifications silenced?", style: Get.textTheme.titleLarge),
           content: Text(
-            "When you're using Do Not Disturb or other modes, OpenBubbles will share with your contacts that you have notifications silenced.",
+            "When you're using Do Not Disturb or other modes, OpenBubbles will share with your contacts that you have notifications silenced. Focus sharing on other devices will be turned off.",
             style: Get.textTheme.bodyLarge,
           ),
           actions: [
