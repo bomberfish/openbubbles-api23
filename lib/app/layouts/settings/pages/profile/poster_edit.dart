@@ -621,6 +621,29 @@ class PosterEditState
                     onPressed: () async {
                       final res = await fp.FilePicker.platform.pickFiles(withData: true, type: fp.FileType.custom, allowedExtensions: ['png', 'jpg', 'jpeg']);
                       if (res == null) return;
+
+                      showDialog(
+                        context: Get.context!,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            backgroundColor: context.theme.colorScheme.properSurface,
+                            title: Text(
+                              "Preparing poster...",
+                              style: context.theme.textTheme.titleLarge,
+                            ),
+                            content: Container(
+                              height: 70,
+                              child: Center(
+                                child: CircularProgressIndicator(
+                                  backgroundColor: context.theme.colorScheme.properSurface,
+                                  valueColor: AlwaysStoppedAnimation<Color>(context.theme.colorScheme.primary),
+                                ),
+                              ),
+                            ),
+                          );
+                        }
+                      );
+                      try {
                       fp.PlatformFile platformFile = res.files.first;
 
                       var decodedImage = await decodeImageFromBytes(platformFile.bytes!);
@@ -784,8 +807,13 @@ class PosterEditState
                         );
                         currentPoster = newPoster;
                       });
+                      } catch(e, s) {
+                        Get.back();
+                        showSnackbar("Error", "Failed to update profile! $e");
+                        rethrow;
+                      }
 
-
+                      Get.back();
                     },
                     child: const Icon(CupertinoIcons.photo_on_rectangle, color: Colors.white, size: 32,),
                   ),
@@ -804,6 +832,28 @@ class PosterEditState
                     minimumSize: Size.zero,
                   ),
                   onPressed: () async {
+                    showDialog(
+                      context: Get.context!,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          backgroundColor: context.theme.colorScheme.properSurface,
+                          title: Text(
+                            "Saving poster...",
+                            style: context.theme.textTheme.titleLarge,
+                          ),
+                          content: Container(
+                            height: 70,
+                            child: Center(
+                              child: CircularProgressIndicator(
+                                backgroundColor: context.theme.colorScheme.properSurface,
+                                valueColor: AlwaysStoppedAnimation<Color>(context.theme.colorScheme.primary),
+                              ),
+                            ),
+                          ),
+                        );
+                      }
+                    );
+                    try {
                     if (poster.type is api.PosterType_Photo) {
                       var asset = (poster.type as api.PosterType_Photo).assets[0];
                       double topPadding = getPosterPadding(asset); // constant?
@@ -948,6 +998,13 @@ class PosterEditState
 
                     ownedPosterPath = null;
                     widget.posterEdited();
+                    } catch(e, s) {
+                      Get.back();
+                      showSnackbar("Error", "Failed to update profile! $e");
+                      rethrow;
+                    }
+
+                    Get.back();
 
                     Get.back();
                   },
