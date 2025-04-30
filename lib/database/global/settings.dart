@@ -89,6 +89,7 @@ class Settings {
   final RxBool scrollToLastUnread = false.obs;
   final RxString userName = "You".obs;
   final RxnString userAvatarPath = RxnString();
+  final RxnString userPosterPath = RxnString();
   final RxBool hideNamesForReactions = false.obs;
   final RxBool replaceEmoticonsWithEmoji = true.obs;
   final RxnString lastLocation = RxnString();
@@ -426,6 +427,7 @@ class Settings {
         'colorsFromMedia': colorsFromMedia.value,
         'monetTheming': monetTheming.value.index,
         'userAvatarPath': userAvatarPath.value,
+        'userPosterPath': userPosterPath.value,
         'firstFcmRegisterDate': firstFcmRegisterDate.value,
         'sendSoundPath': sendSoundPath.value,
         'receiveSoundPath': receiveSoundPath.value,
@@ -671,6 +673,7 @@ class Settings {
     s.dismissedContacts.value = (map['dismissedContacts']?.runtimeType == String ? jsonDecode(map['dismissedContacts']) as List : []).cast<String>();
     s.shareVersion.value = map['shareVersion'] ?? 0;
     s.userAvatarPath.value = map['userAvatarPath'];
+    s.userPosterPath.value = map['userPosterPath'];
     s.privateAPISend.value = map['privateAPISend'] ?? false;
     s.privateAPIAttachmentSend.value = map['privateAPIAttachmentSend'] ?? false;
     s.enablePrivateAPI.value = usingRustPush ? true : map['enablePrivateAPI'] ?? false;

@@ -12,7 +12,7 @@ description: Send iMessages on Android using BlueBubbles!
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 
-version: 1.15.0+138
+version: 1.15.0+139
 publish_to: none
 
 environment:
@@ -33,7 +33,7 @@ dependencies:
   collection: ^1.18.0
   confetti: ^0.7.0
   connectivity_plus: ^6.0.2
-  crop_your_image: ^1.0.2
+  crop_your_image: ^2.0.0
   csslib: ^1.0.0
   cupertino_icons: ^1.0.6
   defer_pointer: ^0.0.2
@@ -208,6 +208,7 @@ dependencies:
   flutter_inappwebview: ^6.1.5
   in_app_purchase_android: ^0.4.0
   android_play_install_referrer: ^0.4.0
+  palette_generator: ^0.3.3+6
 
 
 dependency_overrides:
@@ -269,6 +270,21 @@ flutter:
   # - family: AppleColorEmoji
   #   fonts:
   #     - asset: assets/fonts/AppleColorEmoji.ttf
+  shaders:
+    - shaders/vertical_blur_gradient.frag
+  fonts:
+    - family: Inter
+      fonts:
+        - asset: assets/fonts/Inter-VariableFont_opsz,wght.ttf
+    - family: Alegreya
+      fonts:
+        - asset: assets/fonts/Alegreya-VariableFont_wght.ttf
+    - family: Nunito
+      fonts:
+        - asset: assets/fonts/Nunito-VariableFont_wght.ttf
+    - family: RobotoCondensed
+      fonts:
+        - asset: assets/fonts/RobotoCondensed-VariableFont_wght.ttf
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in

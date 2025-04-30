@@ -40,7 +40,9 @@ import com.bluebubbles.messaging.services.foreground.StopForegroundServiceHandle
 import com.bluebubbles.messaging.services.notifications.CreateMissedFaceTimeNotification
 import com.bluebubbles.messaging.services.rustpush.GetNativeHandleHandler
 import com.bluebubbles.messaging.services.system.ConversationExemptHandler
+import com.bluebubbles.messaging.services.system.GetFullResolution
 import com.bluebubbles.messaging.services.system.GetZenMode
+import com.bluebubbles.messaging.services.system.HeifDecoder
 import com.bluebubbles.messaging.services.system.RecentContactsRequestHandler
 import com.bluebubbles.messaging.services.system.ZenModeSetupHandler
 import com.bluebubbles.messaging.services.system.ZenModeUUIDHandler
@@ -116,6 +118,8 @@ class MethodCallHandler {
             ZenModeSetupHandler.tag -> ZenModeSetupHandler().handleMethodCall(call, result, context)
             ZenModeUUIDHandler.tag -> ZenModeUUIDHandler().handleMethodCall(call, result, context)
             GetZenMode.tag -> GetZenMode().handleMethodCall(call, result, context)
+            HeifDecoder.tag -> HeifDecoder().handleMethodCall(call, result, context)
+            GetFullResolution.tag -> GetFullResolution().handleMethodCall(call, result, context)
             "ready" -> { MainActivity.engine_ready = true }
             else -> {
                 val error = "Could not find method call handler for ${call.method}!"

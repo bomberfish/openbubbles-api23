@@ -5,6 +5,7 @@ import 'package:bluebubbles/app/layouts/conversation_details/dialogs/add_partici
 import 'package:bluebubbles/app/layouts/conversation_details/widgets/chat_info.dart';
 import 'package:bluebubbles/app/layouts/conversation_details/widgets/chat_options.dart';
 import 'package:bluebubbles/app/layouts/conversation_view/widgets/message/interactive/url_preview.dart';
+import 'package:bluebubbles/app/layouts/settings/pages/profile/profile_scaffold.dart';
 import 'package:bluebubbles/helpers/helpers.dart';
 import 'package:bluebubbles/app/layouts/conversation_details/widgets/media_gallery_card.dart';
 import 'package:bluebubbles/app/layouts/conversation_details/widgets/contact_tile.dart';
@@ -58,6 +59,8 @@ class _ConversationDetailsState extends OptimizedState<ConversationDetails> with
 
     cm.setActiveToDead();
 
+    cvc(widget.chat).showingOverlays = true;
+
     (() async {
       var data = await chat.getConversationData();
       ftSupportedParticipants = await api.validateTargetsFacetime(state: pushService.state, targets: data.participants, sender: await chat.ensureHandle());
@@ -99,6 +102,7 @@ class _ConversationDetailsState extends OptimizedState<ConversationDetails> with
   @override
   void dispose() {
     sub.cancel();
+    cvc(widget.chat).showingOverlays = false;
     if (cm.activeChat != null) {
       cm.setActiveToAlive();
       cvc(cm.activeChat!.chat).lastFocusedNode.requestFocus();
@@ -169,14 +173,8 @@ class _ConversationDetailsState extends OptimizedState<ConversationDetails> with
                 : (context.theme.extensions[BubbleColors] as BubbleColors?)?.onReceivedBubbleColor,
           ),
         ),
-        child: Obx(() => SettingsScaffold(
-          headerColor: headerColor,
-          title: "Details",
-          tileColor: tileColor,
-          initialHeader: null,
-          iosSubtitle: iosSubtitle,
-          materialSubtitle: materialSubtitle,
-          actions: [
+        child: Obx(() {
+          var actions = [
             Obx(() {
               if (selected.isNotEmpty) {
                 return IconButton(
@@ -207,8 +205,10 @@ class _ConversationDetailsState extends OptimizedState<ConversationDetails> with
                 return const SizedBox.shrink();
               }
             }),
-          ],
-          bodySlivers: [
+          ];
+
+          var slivers = [
+            if (chat.isGroup)
             SliverToBoxAdapter(
               child: ChatInfo(chat: chat, ftSupportedParticipants: ftSupportedParticipants,),
             ),
@@ -290,7 +290,7 @@ class _ConversationDetailsState extends OptimizedState<ConversationDetails> with
                   );
                 }, childCount: clippedParticipants.length + 2),
               ),
-            if (chat.participants.length > 2 && ss.settings.enablePrivateAPI.value && backend.canLeaveChat())
+            if (ss.settings.enablePrivateAPI.value && chat.participants.length > 2 && backend.canLeaveChat()) // evaluate this first to make GetX happy
               SliverToBoxAdapter(
                 child: Builder(
                   builder: (context) {
@@ -553,8 +553,28 @@ class _ConversationDetailsState extends OptimizedState<ConversationDetails> with
             const SliverPadding(
               padding: EdgeInsets.only(top: 50),
             ),
-          ],
-        ))
+          ];
+          
+          if (!chat.isGroup) {
+            return ProfileScaffold(
+              bodySlivers: slivers,
+              handle: chat.participants[0],
+              actions: actions,
+              chatOptions: ChatInfo(chat: chat, ftSupportedParticipants: ftSupportedParticipants,),
+            );
+          }
+
+          return SettingsScaffold(
+            headerColor: headerColor,
+            title: "Details",
+            tileColor: tileColor,
+            initialHeader: null,
+            iosSubtitle: iosSubtitle,
+            materialSubtitle: materialSubtitle,
+            actions: actions,
+            bodySlivers: slivers
+          );
+        })
       ),
     );
   }

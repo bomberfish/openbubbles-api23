@@ -339,7 +339,7 @@ final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
       id: const obx_int.IdUid(7, 1716592500251888002),
       name: 'Handle',
-      lastPropertyId: const obx_int.IdUid(13, 2987973275926761435),
+      lastPropertyId: const obx_int.IdUid(14, 7319540363051031629),
       flags: 0,
       properties: <obx_int.ModelProperty>[
         obx_int.ModelProperty(
@@ -398,6 +398,11 @@ final _entities = <obx_int.ModelEntity>[
         obx_int.ModelProperty(
             id: const obx_int.IdUid(13, 2987973275926761435),
             name: 'service',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(14, 7319540363051031629),
+            name: 'posterPath',
             type: 9,
             flags: 0)
       ],
@@ -793,7 +798,7 @@ final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
       id: const obx_int.IdUid(17, 2547083341603323785),
       name: 'Contact',
-      lastPropertyId: const obx_int.IdUid(12, 761555548860852325),
+      lastPropertyId: const obx_int.IdUid(13, 6585143364094241703),
       flags: 0,
       properties: <obx_int.ModelProperty>[
         obx_int.ModelProperty(
@@ -841,6 +846,11 @@ final _entities = <obx_int.ModelEntity>[
             id: const obx_int.IdUid(12, 761555548860852325),
             name: 'isDismissed',
             type: 1,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(13, 6585143364094241703),
+            name: 'posterPath',
+            type: 9,
             flags: 0)
       ],
       relations: <obx_int.ModelRelation>[],
@@ -1397,7 +1407,10 @@ obx_int.ModelDefinition getObjectBoxModel() {
           final uniqueAddressAndServiceOffset =
               fbb.writeString(object.uniqueAddressAndService);
           final serviceOffset = fbb.writeString(object.service);
-          fbb.startTable(14);
+          final posterPathOffset = object.posterPath == null
+              ? null
+              : fbb.writeString(object.posterPath!);
+          fbb.startTable(15);
           fbb.addInt64(0, object.id ?? 0);
           fbb.addInt64(1, object.originalROWID);
           fbb.addOffset(2, addressOffset);
@@ -1409,6 +1422,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
           fbb.addInt64(10, object.contactRelation.targetId);
           fbb.addOffset(11, uniqueAddressAndServiceOffset);
           fbb.addOffset(12, serviceOffset);
+          fbb.addOffset(13, posterPathOffset);
           fbb.finish(fbb.endTable());
           return object.id ?? 0;
         },
@@ -1448,7 +1462,9 @@ obx_int.ModelDefinition getObjectBoxModel() {
               defaultEmail: defaultEmailParam,
               defaultPhone: defaultPhoneParam)
             ..color = const fb.StringReader(asciiOptimization: true)
-                .vTableGetNullable(buffer, rootOffset, 12);
+                .vTableGetNullable(buffer, rootOffset, 12)
+            ..posterPath = const fb.StringReader(asciiOptimization: true)
+                .vTableGetNullable(buffer, rootOffset, 30);
           object.contactRelation.targetId =
               const fb.Int64Reader().vTableGet(buffer, rootOffset, 24, 0);
           object.contactRelation.attach(store);
@@ -1927,7 +1943,10 @@ obx_int.ModelDefinition getObjectBoxModel() {
           final dbStructuredNameOffset = object.dbStructuredName == null
               ? null
               : fbb.writeString(object.dbStructuredName!);
-          fbb.startTable(13);
+          final posterPathOffset = object.posterPath == null
+              ? null
+              : fbb.writeString(object.posterPath!);
+          fbb.startTable(14);
           fbb.addInt64(0, object.dbId ?? 0);
           fbb.addOffset(1, idOffset);
           fbb.addOffset(2, displayNameOffset);
@@ -1937,6 +1956,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
           fbb.addOffset(9, dbStructuredNameOffset);
           fbb.addBool(10, object.isShared);
           fbb.addBool(11, object.isDismissed);
+          fbb.addOffset(12, posterPathOffset);
           fbb.finish(fbb.endTable());
           return object.dbId ?? 0;
         },
@@ -1964,6 +1984,8 @@ obx_int.ModelDefinition getObjectBoxModel() {
               const fb.BoolReader().vTableGet(buffer, rootOffset, 24, false);
           final isDismissedParam =
               const fb.BoolReader().vTableGet(buffer, rootOffset, 26, false);
+          final posterPathParam = const fb.StringReader(asciiOptimization: true)
+              .vTableGetNullable(buffer, rootOffset, 28);
           final object = Contact(
               dbId: dbIdParam,
               id: idParam,
@@ -1972,7 +1994,8 @@ obx_int.ModelDefinition getObjectBoxModel() {
               emails: emailsParam,
               avatar: avatarParam,
               isShared: isSharedParam,
-              isDismissed: isDismissedParam)
+              isDismissed: isDismissedParam,
+              posterPath: posterPathParam)
             ..dbStructuredName = const fb.StringReader(asciiOptimization: true)
                 .vTableGetNullable(buffer, rootOffset, 22);
 
@@ -2258,6 +2281,10 @@ class Handle_ {
   /// See [Handle.service].
   static final service =
       obx.QueryStringProperty<Handle>(_entities[3].properties[10]);
+
+  /// See [Handle.posterPath].
+  static final posterPath =
+      obx.QueryStringProperty<Handle>(_entities[3].properties[11]);
 }
 
 /// [ThemeEntry] entity fields to define ObjectBox queries.
@@ -2585,4 +2612,8 @@ class Contact_ {
   /// See [Contact.isDismissed].
   static final isDismissed =
       obx.QueryBooleanProperty<Contact>(_entities[8].properties[8]);
+
+  /// See [Contact.posterPath].
+  static final posterPath =
+      obx.QueryStringProperty<Contact>(_entities[8].properties[9]);
 }

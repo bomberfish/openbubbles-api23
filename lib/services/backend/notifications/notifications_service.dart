@@ -233,7 +233,7 @@ class NotificationsService extends GetxService {
     }
   }
 
-  Future<void> createIncomingFaceTimeNotification(String? callUuid, String caller, String link, Uint8List? chatIcon) async {
+  Future<void> createIncomingFaceTimeNotification(String? callUuid, String caller, String link, Uint8List? chatIcon, String? poster) async {
     // Set some notification defaults
     String title = caller;
     String text = "${callUuid == null ? "Incoming" : "Answer"} FaceTime Call";
@@ -260,6 +260,7 @@ class NotificationsService extends GetxService {
         "call_uuid": callUuid,
         "link": link,
         "name": ss.settings.userName.value == "You" ? (await api.getHandles(state: pushService.state)).first.replaceFirst("tel:", "").replaceFirst("mailto:", "") : ss.settings.userName.value,
+        "poster": poster,
       });
     }
   }

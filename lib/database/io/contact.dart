@@ -23,6 +23,7 @@ class Contact {
     this.avatar,
     this.isShared = false,
     this.isDismissed = false,
+    this.posterPath,
   });
 
   @Id()
@@ -36,6 +37,9 @@ class Contact {
   Uint8List? avatar;
   bool isShared;
   bool isDismissed;
+
+  // only to be used for temporary posters, permanent posters are in Handle
+  String? posterPath;
 
   String? get dbStructuredName => structuredName == null ? null : jsonEncode(structuredName!.toMap());
   set dbStructuredName(String? json) => structuredName = json == null ? null : StructuredName.fromMap(jsonDecode(json));

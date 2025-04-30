@@ -159,6 +159,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   Map<String, FTParticipant> dco_decode_Map_String_ft_participant(dynamic raw);
 
   @protected
+  Map<String, Uint8List> dco_decode_Map_String_list_prim_u_8_strict(
+      dynamic raw);
+
+  @protected
   Map<String, StatusKitPersonalConfig>
       dco_decode_Map_String_status_kit_personal_config(dynamic raw);
 
@@ -350,6 +354,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   LPImageMetadata dco_decode_box_autoadd_lp_image_metadata(dynamic raw);
 
   @protected
+  MemojiData dco_decode_box_autoadd_memoji_data(dynamic raw);
+
+  @protected
   Message dco_decode_box_autoadd_message(dynamic raw);
 
   @protected
@@ -360,6 +367,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   MMCSFile dco_decode_box_autoadd_mmcs_file(dynamic raw);
+
+  @protected
+  MonogramData dco_decode_box_autoadd_monogram_data(dynamic raw);
 
   @protected
   MoveToRecycleBinMessage dco_decode_box_autoadd_move_to_recycle_bin_message(
@@ -380,6 +390,13 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   PermanentDeleteMessage dco_decode_box_autoadd_permanent_delete_message(
       dynamic raw);
+
+  @protected
+  PosterColor dco_decode_box_autoadd_poster_color(dynamic raw);
+
+  @protected
+  PRPosterContentMaterialStyle
+      dco_decode_box_autoadd_pr_poster_content_material_style(dynamic raw);
 
   @protected
   PushMessage dco_decode_box_autoadd_push_message(dynamic raw);
@@ -414,6 +431,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   SharedPoster dco_decode_box_autoadd_shared_poster(dynamic raw);
+
+  @protected
+  SimplifiedPoster dco_decode_box_autoadd_simplified_poster(dynamic raw);
 
   @protected
   StatusKitMessage dco_decode_box_autoadd_status_kit_message(dynamic raw);
@@ -468,6 +488,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   ExtensionApp dco_decode_extension_app(dynamic raw);
+
+  @protected
+  double dco_decode_f_32(dynamic raw);
 
   @protected
   double dco_decode_f_64(dynamic raw);
@@ -556,6 +579,15 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   List<MessageTarget> dco_decode_list_message_target(dynamic raw);
 
   @protected
+  List<PhotoPosterLayer> dco_decode_list_photo_poster_layer(dynamic raw);
+
+  @protected
+  List<PosterAsset> dco_decode_list_poster_asset(dynamic raw);
+
+  @protected
+  Float64List dco_decode_list_prim_f_64_strict(dynamic raw);
+
+  @protected
   List<int> dco_decode_list_prim_u_8_loose(dynamic raw);
 
   @protected
@@ -576,6 +608,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       dynamic raw);
 
   @protected
+  List<(String, Uint8List)> dco_decode_list_record_string_list_prim_u_8_strict(
+      dynamic raw);
+
+  @protected
   List<(String, StatusKitPersonalConfig)>
       dco_decode_list_record_string_status_kit_personal_config(dynamic raw);
 
@@ -593,6 +629,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   List<TrustedPhoneNumber> dco_decode_list_trusted_phone_number(dynamic raw);
 
   @protected
+  List<UIColor> dco_decode_list_ui_color(dynamic raw);
+
+  @protected
   Location dco_decode_location(dynamic raw);
 
   @protected
@@ -606,6 +645,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   LPLinkMetadata dco_decode_lp_link_metadata(dynamic raw);
+
+  @protected
+  MemojiData dco_decode_memoji_data(dynamic raw);
 
   @protected
   Message dco_decode_message(dynamic raw);
@@ -630,6 +672,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   MMCSTransferProgress dco_decode_mmcs_transfer_progress(dynamic raw);
+
+  @protected
+  MonogramData dco_decode_monogram_data(dynamic raw);
 
   @protected
   MoveToRecycleBinMessage dco_decode_move_to_recycle_bin_message(dynamic raw);
@@ -744,6 +789,13 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   PartExtension? dco_decode_opt_box_autoadd_part_extension(dynamic raw);
 
   @protected
+  PosterColor? dco_decode_opt_box_autoadd_poster_color(dynamic raw);
+
+  @protected
+  PRPosterContentMaterialStyle?
+      dco_decode_opt_box_autoadd_pr_poster_content_material_style(dynamic raw);
+
+  @protected
   PushMessage? dco_decode_opt_box_autoadd_push_message(dynamic raw);
 
   @protected
@@ -789,7 +841,49 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   PermanentDeleteMessage dco_decode_permanent_delete_message(dynamic raw);
 
   @protected
+  PhotoPosterContents dco_decode_photo_poster_contents(dynamic raw);
+
+  @protected
+  PhotoPosterContentsFrame dco_decode_photo_poster_contents_frame(dynamic raw);
+
+  @protected
+  PhotoPosterContentsSize dco_decode_photo_poster_contents_size(dynamic raw);
+
+  @protected
+  PhotoPosterLayer dco_decode_photo_poster_layer(dynamic raw);
+
+  @protected
+  PhotoPosterLayout dco_decode_photo_poster_layout(dynamic raw);
+
+  @protected
+  PhotoPosterProperties dco_decode_photo_poster_properties(dynamic raw);
+
+  @protected
   PollResult dco_decode_poll_result(dynamic raw);
+
+  @protected
+  PosterAsset dco_decode_poster_asset(dynamic raw);
+
+  @protected
+  PosterColor dco_decode_poster_color(dynamic raw);
+
+  @protected
+  PosterType dco_decode_poster_type(dynamic raw);
+
+  @protected
+  PRPosterColor dco_decode_pr_poster_color(dynamic raw);
+
+  @protected
+  PRPosterContentMaterialStyle dco_decode_pr_poster_content_material_style(
+      dynamic raw);
+
+  @protected
+  PRPosterSystemTimeFontConfiguration
+      dco_decode_pr_poster_system_time_font_configuration(dynamic raw);
+
+  @protected
+  PRPosterTitleStyleConfiguration
+      dco_decode_pr_poster_title_style_configuration(dynamic raw);
 
   @protected
   PrivateDeviceInfo dco_decode_private_device_info(dynamic raw);
@@ -839,6 +933,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   (String, FTParticipant) dco_decode_record_string_ft_participant(dynamic raw);
 
   @protected
+  (String, Uint8List) dco_decode_record_string_list_prim_u_8_strict(
+      dynamic raw);
+
+  @protected
   (String, StatusKitPersonalConfig)
       dco_decode_record_string_status_kit_personal_config(dynamic raw);
 
@@ -875,6 +973,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   SharedPoster dco_decode_shared_poster(dynamic raw);
+
+  @protected
+  SimplifiedPoster dco_decode_simplified_poster(dynamic raw);
 
   @protected
   StatusKitMessage dco_decode_status_kit_message(dynamic raw);
@@ -916,6 +1017,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   int dco_decode_u_8(dynamic raw);
 
   @protected
+  UIColor dco_decode_ui_color(dynamic raw);
+
+  @protected
   void dco_decode_unit(dynamic raw);
 
   @protected
@@ -933,6 +1037,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   BigInt dco_decode_usize(dynamic raw);
+
+  @protected
+  WallpaperMetadata dco_decode_wallpaper_metadata(dynamic raw);
 
   @protected
   AnyhowException sse_decode_AnyhowException(SseDeserializer deserializer);
@@ -1036,6 +1143,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   Map<String, FTParticipant> sse_decode_Map_String_ft_participant(
+      SseDeserializer deserializer);
+
+  @protected
+  Map<String, Uint8List> sse_decode_Map_String_list_prim_u_8_strict(
       SseDeserializer deserializer);
 
   @protected
@@ -1240,6 +1351,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       SseDeserializer deserializer);
 
   @protected
+  MemojiData sse_decode_box_autoadd_memoji_data(SseDeserializer deserializer);
+
+  @protected
   Message sse_decode_box_autoadd_message(SseDeserializer deserializer);
 
   @protected
@@ -1251,6 +1365,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   MMCSFile sse_decode_box_autoadd_mmcs_file(SseDeserializer deserializer);
+
+  @protected
+  MonogramData sse_decode_box_autoadd_monogram_data(
+      SseDeserializer deserializer);
 
   @protected
   MoveToRecycleBinMessage sse_decode_box_autoadd_move_to_recycle_bin_message(
@@ -1274,6 +1392,14 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   PermanentDeleteMessage sse_decode_box_autoadd_permanent_delete_message(
       SseDeserializer deserializer);
+
+  @protected
+  PosterColor sse_decode_box_autoadd_poster_color(SseDeserializer deserializer);
+
+  @protected
+  PRPosterContentMaterialStyle
+      sse_decode_box_autoadd_pr_poster_content_material_style(
+          SseDeserializer deserializer);
 
   @protected
   PushMessage sse_decode_box_autoadd_push_message(SseDeserializer deserializer);
@@ -1315,6 +1441,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   SharedPoster sse_decode_box_autoadd_shared_poster(
+      SseDeserializer deserializer);
+
+  @protected
+  SimplifiedPoster sse_decode_box_autoadd_simplified_poster(
       SseDeserializer deserializer);
 
   @protected
@@ -1376,6 +1506,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   ExtensionApp sse_decode_extension_app(SseDeserializer deserializer);
+
+  @protected
+  double sse_decode_f_32(SseDeserializer deserializer);
 
   @protected
   double sse_decode_f_64(SseDeserializer deserializer);
@@ -1472,6 +1605,16 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       SseDeserializer deserializer);
 
   @protected
+  List<PhotoPosterLayer> sse_decode_list_photo_poster_layer(
+      SseDeserializer deserializer);
+
+  @protected
+  List<PosterAsset> sse_decode_list_poster_asset(SseDeserializer deserializer);
+
+  @protected
+  Float64List sse_decode_list_prim_f_64_strict(SseDeserializer deserializer);
+
+  @protected
   List<int> sse_decode_list_prim_u_8_loose(SseDeserializer deserializer);
 
   @protected
@@ -1491,6 +1634,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   List<(String, FTParticipant)> sse_decode_list_record_string_ft_participant(
+      SseDeserializer deserializer);
+
+  @protected
+  List<(String, Uint8List)> sse_decode_list_record_string_list_prim_u_8_strict(
       SseDeserializer deserializer);
 
   @protected
@@ -1514,6 +1661,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       SseDeserializer deserializer);
 
   @protected
+  List<UIColor> sse_decode_list_ui_color(SseDeserializer deserializer);
+
+  @protected
   Location sse_decode_location(SseDeserializer deserializer);
 
   @protected
@@ -1527,6 +1677,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   LPLinkMetadata sse_decode_lp_link_metadata(SseDeserializer deserializer);
+
+  @protected
+  MemojiData sse_decode_memoji_data(SseDeserializer deserializer);
 
   @protected
   Message sse_decode_message(SseDeserializer deserializer);
@@ -1552,6 +1705,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   MMCSTransferProgress sse_decode_mmcs_transfer_progress(
       SseDeserializer deserializer);
+
+  @protected
+  MonogramData sse_decode_monogram_data(SseDeserializer deserializer);
 
   @protected
   MoveToRecycleBinMessage sse_decode_move_to_recycle_bin_message(
@@ -1675,6 +1831,15 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       SseDeserializer deserializer);
 
   @protected
+  PosterColor? sse_decode_opt_box_autoadd_poster_color(
+      SseDeserializer deserializer);
+
+  @protected
+  PRPosterContentMaterialStyle?
+      sse_decode_opt_box_autoadd_pr_poster_content_material_style(
+          SseDeserializer deserializer);
+
+  @protected
   PushMessage? sse_decode_opt_box_autoadd_push_message(
       SseDeserializer deserializer);
 
@@ -1728,7 +1893,56 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       SseDeserializer deserializer);
 
   @protected
+  PhotoPosterContents sse_decode_photo_poster_contents(
+      SseDeserializer deserializer);
+
+  @protected
+  PhotoPosterContentsFrame sse_decode_photo_poster_contents_frame(
+      SseDeserializer deserializer);
+
+  @protected
+  PhotoPosterContentsSize sse_decode_photo_poster_contents_size(
+      SseDeserializer deserializer);
+
+  @protected
+  PhotoPosterLayer sse_decode_photo_poster_layer(SseDeserializer deserializer);
+
+  @protected
+  PhotoPosterLayout sse_decode_photo_poster_layout(
+      SseDeserializer deserializer);
+
+  @protected
+  PhotoPosterProperties sse_decode_photo_poster_properties(
+      SseDeserializer deserializer);
+
+  @protected
   PollResult sse_decode_poll_result(SseDeserializer deserializer);
+
+  @protected
+  PosterAsset sse_decode_poster_asset(SseDeserializer deserializer);
+
+  @protected
+  PosterColor sse_decode_poster_color(SseDeserializer deserializer);
+
+  @protected
+  PosterType sse_decode_poster_type(SseDeserializer deserializer);
+
+  @protected
+  PRPosterColor sse_decode_pr_poster_color(SseDeserializer deserializer);
+
+  @protected
+  PRPosterContentMaterialStyle sse_decode_pr_poster_content_material_style(
+      SseDeserializer deserializer);
+
+  @protected
+  PRPosterSystemTimeFontConfiguration
+      sse_decode_pr_poster_system_time_font_configuration(
+          SseDeserializer deserializer);
+
+  @protected
+  PRPosterTitleStyleConfiguration
+      sse_decode_pr_poster_title_style_configuration(
+          SseDeserializer deserializer);
 
   @protected
   PrivateDeviceInfo sse_decode_private_device_info(
@@ -1782,6 +1996,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       SseDeserializer deserializer);
 
   @protected
+  (String, Uint8List) sse_decode_record_string_list_prim_u_8_strict(
+      SseDeserializer deserializer);
+
+  @protected
   (String, StatusKitPersonalConfig)
       sse_decode_record_string_status_kit_personal_config(
           SseDeserializer deserializer);
@@ -1825,6 +2043,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   SharedPoster sse_decode_shared_poster(SseDeserializer deserializer);
 
   @protected
+  SimplifiedPoster sse_decode_simplified_poster(SseDeserializer deserializer);
+
+  @protected
   StatusKitMessage sse_decode_status_kit_message(SseDeserializer deserializer);
 
   @protected
@@ -1866,6 +2087,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   int sse_decode_u_8(SseDeserializer deserializer);
 
   @protected
+  UIColor sse_decode_ui_color(SseDeserializer deserializer);
+
+  @protected
   void sse_decode_unit(SseDeserializer deserializer);
 
   @protected
@@ -1885,6 +2109,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   BigInt sse_decode_usize(SseDeserializer deserializer);
+
+  @protected
+  WallpaperMetadata sse_decode_wallpaper_metadata(SseDeserializer deserializer);
 
   @protected
   void sse_encode_AnyhowException(
@@ -1995,6 +2222,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   void sse_encode_Map_String_ft_participant(
       Map<String, FTParticipant> self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_Map_String_list_prim_u_8_strict(
+      Map<String, Uint8List> self, SseSerializer serializer);
 
   @protected
   void sse_encode_Map_String_status_kit_personal_config(
@@ -2205,6 +2436,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       LPImageMetadata self, SseSerializer serializer);
 
   @protected
+  void sse_encode_box_autoadd_memoji_data(
+      MemojiData self, SseSerializer serializer);
+
+  @protected
   void sse_encode_box_autoadd_message(Message self, SseSerializer serializer);
 
   @protected
@@ -2218,6 +2453,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   void sse_encode_box_autoadd_mmcs_file(
       MMCSFile self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_box_autoadd_monogram_data(
+      MonogramData self, SseSerializer serializer);
 
   @protected
   void sse_encode_box_autoadd_move_to_recycle_bin_message(
@@ -2241,6 +2480,14 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   void sse_encode_box_autoadd_permanent_delete_message(
       PermanentDeleteMessage self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_box_autoadd_poster_color(
+      PosterColor self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_box_autoadd_pr_poster_content_material_style(
+      PRPosterContentMaterialStyle self, SseSerializer serializer);
 
   @protected
   void sse_encode_box_autoadd_push_message(
@@ -2284,6 +2531,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   void sse_encode_box_autoadd_shared_poster(
       SharedPoster self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_box_autoadd_simplified_poster(
+      SimplifiedPoster self, SseSerializer serializer);
 
   @protected
   void sse_encode_box_autoadd_status_kit_message(
@@ -2346,6 +2597,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void sse_encode_extension_app(ExtensionApp self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_f_32(double self, SseSerializer serializer);
 
   @protected
   void sse_encode_f_64(double self, SseSerializer serializer);
@@ -2446,6 +2700,18 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       List<MessageTarget> self, SseSerializer serializer);
 
   @protected
+  void sse_encode_list_photo_poster_layer(
+      List<PhotoPosterLayer> self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_list_poster_asset(
+      List<PosterAsset> self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_list_prim_f_64_strict(
+      Float64List self, SseSerializer serializer);
+
+  @protected
   void sse_encode_list_prim_u_8_loose(List<int> self, SseSerializer serializer);
 
   @protected
@@ -2469,6 +2735,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       List<(String, FTParticipant)> self, SseSerializer serializer);
 
   @protected
+  void sse_encode_list_record_string_list_prim_u_8_strict(
+      List<(String, Uint8List)> self, SseSerializer serializer);
+
+  @protected
   void sse_encode_list_record_string_status_kit_personal_config(
       List<(String, StatusKitPersonalConfig)> self, SseSerializer serializer);
 
@@ -2489,6 +2759,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       List<TrustedPhoneNumber> self, SseSerializer serializer);
 
   @protected
+  void sse_encode_list_ui_color(List<UIColor> self, SseSerializer serializer);
+
+  @protected
   void sse_encode_location(Location self, SseSerializer serializer);
 
   @protected
@@ -2505,6 +2778,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   void sse_encode_lp_link_metadata(
       LPLinkMetadata self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_memoji_data(MemojiData self, SseSerializer serializer);
 
   @protected
   void sse_encode_message(Message self, SseSerializer serializer);
@@ -2530,6 +2806,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   void sse_encode_mmcs_transfer_progress(
       MMCSTransferProgress self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_monogram_data(MonogramData self, SseSerializer serializer);
 
   @protected
   void sse_encode_move_to_recycle_bin_message(
@@ -2662,6 +2941,14 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       PartExtension? self, SseSerializer serializer);
 
   @protected
+  void sse_encode_opt_box_autoadd_poster_color(
+      PosterColor? self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_opt_box_autoadd_pr_poster_content_material_style(
+      PRPosterContentMaterialStyle? self, SseSerializer serializer);
+
+  @protected
   void sse_encode_opt_box_autoadd_push_message(
       PushMessage? self, SseSerializer serializer);
 
@@ -2715,7 +3002,55 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       PermanentDeleteMessage self, SseSerializer serializer);
 
   @protected
+  void sse_encode_photo_poster_contents(
+      PhotoPosterContents self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_photo_poster_contents_frame(
+      PhotoPosterContentsFrame self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_photo_poster_contents_size(
+      PhotoPosterContentsSize self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_photo_poster_layer(
+      PhotoPosterLayer self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_photo_poster_layout(
+      PhotoPosterLayout self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_photo_poster_properties(
+      PhotoPosterProperties self, SseSerializer serializer);
+
+  @protected
   void sse_encode_poll_result(PollResult self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_poster_asset(PosterAsset self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_poster_color(PosterColor self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_poster_type(PosterType self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_pr_poster_color(PRPosterColor self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_pr_poster_content_material_style(
+      PRPosterContentMaterialStyle self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_pr_poster_system_time_font_configuration(
+      PRPosterSystemTimeFontConfiguration self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_pr_poster_title_style_configuration(
+      PRPosterTitleStyleConfiguration self, SseSerializer serializer);
 
   @protected
   void sse_encode_private_device_info(
@@ -2766,6 +3101,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       (String, FTParticipant) self, SseSerializer serializer);
 
   @protected
+  void sse_encode_record_string_list_prim_u_8_strict(
+      (String, Uint8List) self, SseSerializer serializer);
+
+  @protected
   void sse_encode_record_string_status_kit_personal_config(
       (String, StatusKitPersonalConfig) self, SseSerializer serializer);
 
@@ -2807,6 +3146,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void sse_encode_shared_poster(SharedPoster self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_simplified_poster(
+      SimplifiedPoster self, SseSerializer serializer);
 
   @protected
   void sse_encode_status_kit_message(
@@ -2852,6 +3195,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   void sse_encode_u_8(int self, SseSerializer serializer);
 
   @protected
+  void sse_encode_ui_color(UIColor self, SseSerializer serializer);
+
+  @protected
   void sse_encode_unit(void self, SseSerializer serializer);
 
   @protected
@@ -2871,6 +3217,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void sse_encode_usize(BigInt self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_wallpaper_metadata(
+      WallpaperMetadata self, SseSerializer serializer);
 }
 
 // Section: wire_class

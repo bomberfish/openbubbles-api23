@@ -567,7 +567,8 @@ class ActionHandler extends GetxService {
     String? address = data["handle"]?["address"];
     String caller = data["address"] ?? "Unknown Number";
     String link = data["link"]!!;
-    Uint8List? chatIcon;
+    Uint8List? chatIcon = data["icon"];
+    String? poster = data["poster"];
 
     // Find the contact info for the caller
     // Load the contact's avatar & name
@@ -587,15 +588,12 @@ class ActionHandler extends GetxService {
       });
     }
 
-    if (!ls.isAlive) {
-      if (kIsDesktop) {
-        await showFaceTimeOverlay(callUuid, caller, chatIcon, link);
-      }
-    } else {
+    // only show on desktop, rely on notif for mobile as it is better UX
+    if (kIsDesktop) {
       await showFaceTimeOverlay(callUuid, caller, chatIcon, link);
     }
     // always show facetime notification for ringtone
-    await notif.createIncomingFaceTimeNotification(callUuid, caller, link, chatIcon);
+    await notif.createIncomingFaceTimeNotification(callUuid, caller, link, chatIcon, poster);
   }
 
   Future<void> handleIncomingFaceTimeCallLegacy(Map<String, dynamic> data) async {
@@ -611,7 +609,7 @@ class ActionHandler extends GetxService {
       Contact? contact = cs.getContact(address);
       chatIcon = contact?.avatar;
       caller = contact?.displayName ?? caller;
-      await notif.createIncomingFaceTimeNotification(null, caller!, "", chatIcon);
+      await notif.createIncomingFaceTimeNotification(null, caller!, "", chatIcon, null);
     }
   }
 

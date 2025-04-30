@@ -670,6 +670,31 @@ pub async fn validate_relay(state: &Arc<PushState>) -> anyhow::Result<Option<Str
     })
 }
 
+pub fn parse_poster(poster: IMessagePosterRecord) -> anyhow::Result<SimplifiedPoster> {
+    Ok(SimplifiedPoster::from_poster(&poster)?)
+}
+
+pub fn from_poster(mut poster: SimplifiedPoster) -> anyhow::Result<IMessagePosterRecord> {
+    Ok(poster.to_poster()?)
+}
+
+// simple round trip to rust clones object
+#[frb(sync)]
+pub fn clone_poster(poster: SimplifiedPoster) -> anyhow::Result<SimplifiedPoster> {
+    Ok(poster)
+}
+
+pub fn parse_poster_save(poster: SimplifiedPoster) -> anyhow::Result<Vec<u8>> {
+    Ok(plist_to_bin(&poster)?)
+}
+
+pub fn from_poster_save(poster: Vec<u8>) -> anyhow::Result<SimplifiedPoster> {
+    debug!("Before");
+    let got = plist::from_bytes(&poster)?;
+    debug!("After");
+    Ok(got)
+}
+
 pub struct DeviceInfo {
     pub name: String,
     pub serial: String,
@@ -789,6 +814,11 @@ pub fn create_icon_array(img: LPIconMetadata) -> NSArray<LPIconMetadata> {
         objects: vec![img],
         class: NSArrayClass::NSArray,
     }
+}
+
+#[frb(sync)]
+pub fn ns_null() -> Vec<u8> {
+    plist_to_bin(&Value::String("$null".to_string())).unwrap()
 }
 
 

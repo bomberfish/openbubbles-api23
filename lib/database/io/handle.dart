@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:bluebubbles/database/database.dart';
 import 'package:bluebubbles/database/models.dart';
+import 'package:bluebubbles/services/rustpush/rustpush_service.dart';
 import 'package:bluebubbles/services/services.dart';
 import 'package:bluebubbles/helpers/helpers.dart';
 import 'package:faker/faker.dart';
@@ -24,6 +25,7 @@ class Handle {
   String? country;
   String? defaultEmail;
   String? defaultPhone;
+  String? posterPath;
   @Transient()
   final String fakeName = faker.person.name();
 
@@ -114,7 +116,7 @@ class Handle {
 
   /// Save a single handle - prefer [bulkSave] for multiple handles rather
   /// than iterating through them
-  Handle save({bool updateColor = false, matchOnOriginalROWID = false}) {
+  Handle save({bool updateColor = false, bool updatePoster = false, matchOnOriginalROWID = false}) {
     if (kIsWeb) return this;
     Database.runInTransaction(TxMode.write, () {
       Handle? existing;
@@ -132,6 +134,10 @@ class Handle {
         contactRelation.target = cs.matchHandleToContact(this);
       } else {
         id = 0;
+      }
+
+      if (!updatePoster) {
+        posterPath = existing?.posterPath ?? posterPath;
       }
       if (!updateColor) {
         color = existing?.color ?? color;
@@ -169,6 +175,31 @@ class Handle {
     });
 
     return handles;
+  }
+
+  List<Handle> getHandles() {
+    if (contact?.dbId == null) return [this];
+    return Database.handles.query(Handle_.contactRelation.equals(contact!.dbId!)).build().find();
+  }
+
+  String? getPoster() {
+    List<Handle> handles = getHandles();
+    return handles.firstWhereOrNull((h) => h.posterPath != null)?.posterPath;
+  }
+
+  void setPoster(String? poster) {
+    List<Handle> handles = getHandles();
+    var key = handles.firstWhereOrNull((h) => h.posterPath != null);
+    if (key != null) {
+      if (key.posterPath != null && key.posterPath != poster) {
+        pushService.deletePoster(key.posterPath!);
+      }
+      key.posterPath = poster;
+      key.save(updatePoster: true);
+    } else {
+      posterPath = poster;
+      save(updatePoster: true);
+    }
   }
 
   Handle updateColor(String? newColor) {

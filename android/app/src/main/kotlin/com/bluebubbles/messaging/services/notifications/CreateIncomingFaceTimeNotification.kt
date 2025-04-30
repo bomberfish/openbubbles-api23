@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.Person
 import com.bluebubbles.messaging.Constants
@@ -38,6 +39,7 @@ class CreateIncomingFaceTimeNotification: MethodCallHandlerImpl() {
         val link: String? = call.argument("link")!!
         var username: String = call.argument("name")!!
 
+        var poster: String? = call.argument("poster")
 
         // contact details
         val callerName: String = call.argument("caller")!!
@@ -56,17 +58,20 @@ class CreateIncomingFaceTimeNotification: MethodCallHandlerImpl() {
         val extras = Bundle()
         extras.putString("callUuid", callUuid)
 
+        Log.i("FaceTime", "Creating notification for call $callUuid")
+
         // intent to open the app
         val openSummaryIntent = PendingIntent.getActivity(
             context,
-            0,
+            notificationId + Constants.pendingIntentOpenFaceTimeOffset,
             Intent(context, FaceTimeActivity::class.java)
                 .putExtras(extras)
                 .putExtra("answer", false)
                 .putExtra("link", link)
                 .putExtra("name", username)
                 .putExtra("notificationId", notificationId.toString())
-                .putExtra("desc", title),
+                .putExtra("desc", title)
+                .putExtra("poster", poster),
             PendingIntent.FLAG_IMMUTABLE
         )
 
@@ -80,7 +85,8 @@ class CreateIncomingFaceTimeNotification: MethodCallHandlerImpl() {
                 .putExtra("link", link)
                 .putExtra("name", username)
                 .putExtra("notificationId", notificationId.toString())
-                .putExtra("desc", title),
+                .putExtra("desc", title)
+                .putExtra("poster", poster),
             PendingIntent.FLAG_IMMUTABLE
         )
 

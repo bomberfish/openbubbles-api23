@@ -133,7 +133,11 @@ class _AvatarCropState extends OptimizedState<AvatarCrop> {
                     child: Crop(
                         controller: _cropController,
                         image: _imageData!,
-                        onCropped: onCropped,
+                        onCropped: (cropped) {
+                          if (cropped is! CropFailure) return;
+                          var success = cropped as CropSuccess;
+                          onCropped(success.croppedImage);
+                        },
                         onStatusChanged: (status) {
                           if (status == CropStatus.ready || status == CropStatus.cropping) {
                             setState(() {
@@ -146,7 +150,10 @@ class _AvatarCropState extends OptimizedState<AvatarCrop> {
                           }
                         },
                         withCircleUi: true,
-                        initialSize: 0.5,
+                        initialRectBuilder: InitialRectBuilder.withSizeAndRatio(
+                          size: 0.5,
+                          aspectRatio: null,
+                        ),
                       ),
                   ),
                 if (_imageData == null)

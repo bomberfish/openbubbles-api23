@@ -7,6 +7,7 @@ import 'package:async_task/async_task_extension.dart';
 import 'package:bluebubbles/app/layouts/conversation_list/pages/conversation_list.dart';
 import 'package:bluebubbles/app/layouts/conversation_view/widgets/message/message_holder.dart';
 import 'package:bluebubbles/app/layouts/settings/pages/misc/shared_streams_panel.dart';
+import 'package:bluebubbles/app/layouts/settings/pages/profile/posterkit.dart';
 import 'package:bluebubbles/app/layouts/setup/setup_view.dart';
 import 'package:bluebubbles/app/wrappers/titlebar_wrapper.dart';
 import 'package:bluebubbles/database/database.dart';
@@ -40,6 +41,7 @@ import 'package:telephony_plus/telephony_plus.dart';
 import 'package:vpn_connection_detector/vpn_connection_detector.dart';
 import 'package:convert/convert.dart';
 import 'package:bluebubbles/helpers/types/constants.dart' as constants;
+import 'dart:ui' as ui;
 
 var uuid = const Uuid();
 RustPushService pushService =
@@ -1691,6 +1693,17 @@ class RustPushService extends GetxService {
     throw Exception("bad message type! ${myMsg.message}");
   }
 
+  File fileForAsset(String path, api.PosterAsset asset, String n, {bool friendly = false}) {
+    var name = "${asset.uuid}_$n";
+    if (friendly) {
+      File f2 = File("$path/${sha256.convert(name.codeUnits).toString()}.png");
+      if (f2.existsSync()) {
+        return f2;
+      }
+    }
+    return File("$path/${sha256.convert(name.codeUnits).toString()}");
+  }
+
   String getService(api.MessageInst msg) {
     if (msg.message is api.Message_Message) {
       var m = msg.message as api.Message_Message;
@@ -1937,8 +1950,30 @@ class RustPushService extends GetxService {
 
     currentOutgoingCall = outgoingguid.obs;
 
-    showOutgoingFaceTimeOverlay(currentOutgoingCall!, desc, caller, targets, null, link);
+    Uint8List? icon;
+    String? poster;
+    if (targets.length == 1) {
+      var handle = RustPushBBUtils.rustHandleToBB(targets[0]);
+      icon = handle.contact?.avatar;
+      poster = handle.getPoster();
+    }
+
+    showOutgoingFaceTimeOverlay(currentOutgoingCall!, desc, caller, targets, icon, link, poster);
     await api.createFacetime(state: pushService.state, uuid: outgoingguid, handle: caller, participants: targets);
+  }
+
+  // returns handle to show poster of
+  String? getSessionIdentity(String guid, bool active) {
+    var session = activeSessions.firstWhereOrNull((a) => a.groupId == guid);
+    if (session == null) {
+      if (!active) {
+        session = sessions.firstWhereOrNull((a) => a.groupId == guid);
+      }
+      if (session == null) {
+        return null;
+      }
+    }
+    return session.members.where((a) => !session!.myHandles.contains(a.handle)).firstOrNull?.handle;
   }
 
   String? getSessionName(String guid, bool active) {
@@ -1989,6 +2024,7 @@ class RustPushService extends GetxService {
     return null;
   }
 
+  List<String> profilesDownloading = [];
   Future handleSharedProfile(api.ShareProfileMessage shared, String sender, List<Handle> targets) async {
     var myHandles = await api.getHandles(state: pushService.state);
     if (myHandles.contains(sender)) {
@@ -2003,41 +2039,128 @@ class RustPushService extends GetxService {
     }
     if (!(await api.canProfileShare(state: pushService.state))) return;
 
-    if (Contact.findOne(id: shared.cloudKitRecordKey) != null) return; // already downloaded
+    // mask with profilesDownloading because iPhones have a nasty habit of sharing once to every handle. We don't want to download 15 times for each handle
+    if (Contact.findOne(id: shared.cloudKitRecordKey) != null || profilesDownloading.contains(shared.cloudKitRecordKey)) return; // already downloaded
+    profilesDownloading.add(shared.cloudKitRecordKey);
 
-    var fetch = await api.fetchProfile(state: pushService.state, message: shared);
-    var otherHandle = RustPushBBUtils.rustHandleToBB(sender);
+    try {
+      var fetch = await api.fetchProfile(state: pushService.state, message: shared);
+      var otherHandle = RustPushBBUtils.rustHandleToBB(sender);
 
-    var existingShared = Contact.findOne(address: otherHandle.address, wantShared: true);
-    if (existingShared != null) {
-      if (otherHandle.contactRelation.targetId == existingShared.dbId) {
-        otherHandle.contactRelation.target = null;
+      String? posterPath;
+      if (fetch.poster != null && !kIsDesktop) {
+        var decoded = await api.parsePoster(poster: fetch.poster!);
+        try {
+          posterPath = await savePoster(decoded, name: otherHandle.displayName);
+        } catch (e, t) {
+          Logger.error("Could not decode other poster", error: e, trace: t); 
+        }
       }
-      Database.contacts.remove(existingShared.dbId!);
+
+      var existingShared = Contact.findOne(address: otherHandle.address, wantShared: true);
+      if (existingShared != null) {
+        if (otherHandle.contactRelation.targetId == existingShared.dbId) {
+          otherHandle.contactRelation.target = null;
+        }
+        if (existingShared.posterPath != null) {
+          try {
+            await deletePoster(existingShared.posterPath!);
+          } catch (e) { /* */ }
+        }
+        Database.contacts.remove(existingShared.dbId!);
+      }
+      if (otherHandle.getPoster() == null) {
+        otherHandle.setPoster(posterPath);
+        posterPath = "alreadyset";
+      }
+      var newId = Database.contacts.put(Contact(
+        id: shared.cloudKitRecordKey,
+        displayName: "Maybe: ${fetch.name.name}",
+        structuredName: StructuredName(
+          namePrefix: "",
+          nameSuffix: "",
+          givenName: fetch.name.first,
+          middleName: "",
+          familyName: fetch.name.last,
+        ),
+        avatar: fetch.image,
+        isShared: true,
+        phones: otherHandle.contact?.phones ?? (otherHandle.address.isEmail ? [] : [otherHandle.address]),
+        emails: otherHandle.contact?.emails ?? (otherHandle.address.isEmail ? [otherHandle.address] : []),
+        posterPath: posterPath,
+      ));
+      if (otherHandle.contactRelation.target == null) {
+        otherHandle.contactRelation.targetId = newId;
+        Database.handles.put(otherHandle);
+      }
+      final result = (await Chat.findByRust(api.ConversationData(participants: [sender]), "iMessage", soft: true));
+      if (result != null) {
+        cvc(result).updateContactInfo();
+      }
+    } finally {
+      profilesDownloading.remove(shared.cloudKitRecordKey);
     }
-    var newId = Database.contacts.put(Contact(
-      id: shared.cloudKitRecordKey,
-      displayName: "Maybe: ${fetch.name.name}",
-      structuredName: StructuredName(
-        namePrefix: "",
-        nameSuffix: "",
-        givenName: fetch.name.first,
-        middleName: "",
-        familyName: fetch.name.last,
-      ),
-      avatar: fetch.image,
-      isShared: true,
-      phones: otherHandle.contact?.phones ?? (otherHandle.address.isEmail ? [] : [otherHandle.address]),
-      emails: otherHandle.contact?.emails ?? (otherHandle.address.isEmail ? [otherHandle.address] : []),
-    ));
-    if (otherHandle.contactRelation.target == null) {
-      otherHandle.contactRelation.targetId = newId;
-      Database.handles.put(otherHandle);
+  }
+
+  Future<void> deletePoster(String path) async {
+    if (Directory(path).existsSync()) {
+      await Directory(path).delete(recursive: true);
     }
-    final result = (await Chat.findByRust(api.ConversationData(participants: [sender]), "iMessage", soft: true));
-    if (result != null) {
-      cvc(result).updateContactInfo();
+    if (File("$path.jpg").existsSync()) {
+      await File("$path.jpg").delete(); 
     }
+    if (File("$path-preview.png").existsSync()) {
+      await File("$path-preview.png").delete();
+    }
+  }
+
+  Future<String> savePoster(api.SimplifiedPoster decoded, {String? name}) async {
+    int number = Random().nextInt(9999999);
+
+    String appDocPath = fs.appDocDir.path;
+    if (decoded.type is api.PosterType_Photo) {
+      var photo = decoded.type as api.PosterType_Photo;
+      for (var asset in photo.assets) {
+        Map<String, Uint8List> entries = {};
+        for (var file in asset.files.entries) {
+          File f = fileForAsset("$appDocPath/avatars/you/poster-$number", asset, file.key);
+          if (!(await f.exists())) {
+            await f.create(recursive: true);
+          }
+          await f.writeAsBytes(file.value);
+
+          if (file.key.endsWith("HEIC")) {
+            await mcs.invokeMethod("decode-heif", {"file": f.path, "output": "${f.path}.png"});
+          }
+
+          entries[file.key] = Uint8List(0);
+        }
+        asset.files = entries;
+      }
+    }
+
+    if (decoded.type is api.PosterType_Memoji) {
+      var memoji = decoded.type as api.PosterType_Memoji;
+      File f = File("$appDocPath/avatars/you/poster-$number/memoji_orig.heic");
+      if (!(await f.exists())) {
+        await f.create(recursive: true);
+      }
+      await f.writeAsBytes(memoji.data.avatarImageData);
+
+      await mcs.invokeMethod("decode-heif", {"file": f.path, "output": "$appDocPath/avatars/you/poster-$number/memoji.png"});
+      memoji.data.avatarImageData = Uint8List(0);
+    }
+
+    var save = await api.parsePosterSave(poster: decoded);
+    File file = File("$appDocPath/avatars/you/poster-$number.jpg");
+    if (!(await file.exists())) {
+      await file.create(recursive: true);
+    }
+    await file.writeAsBytes(save);
+
+    Logger.info("Wrote poster $appDocPath/avatars/you/poster-$number");
+
+    return "$appDocPath/avatars/you/poster-$number";
   }
 
   Future invalidatePeerCaches() async {
@@ -2162,10 +2285,45 @@ class RustPushService extends GetxService {
         var link = await api.getFtLink(state: pushService.state, usage: "nextincomingcall");
         rotateIncomingLink();
         incomingRingingCallGuid = ring;
+
+        String? myPoster;
+        Uint8List? icon;
+        var identity = getSessionIdentity(ring, true);
+        if (identity != null) {
+          var handle = RustPushBBUtils.rustHandleToBB(identity);
+          icon = handle.contact?.avatar;
+          var poster = handle.getPoster();
+          if (poster != null && !kIsDesktop) {
+            var loaded = await api.fromPosterSave(poster: await File("$poster.jpg").readAsBytes());
+            var images = await loadPosterImages(poster, loaded);
+
+            var recorder = ui.PictureRecorder();
+            var canvas = Canvas(recorder);
+
+            var painter = PosterPainter(poster: loaded, images: images, name: handle.displayName);
+
+            Map<dynamic, dynamic> results = await mcs.invokeMethod("get-full-resolution");
+
+            var size = Size((results["width"]! as int).toDouble(), (results["height"]! as int).toDouble());
+            canvas.scale(results["ratio"]! as double);
+            painter.paint(canvas, size / (results["ratio"]! as double));
+
+            ui.Picture picture = recorder.endRecording();
+            ui.Image image = await picture.toImage(size.width.toInt(), size.height.toInt());
+
+            Uint8List bytes = (await image.toByteData(format: ui.ImageByteFormat.png))!.buffer.asUint8List();
+            File file = File("$poster-preview.png");
+            await file.writeAsBytes(bytes);
+            myPoster = file.path;
+          }
+        }
+
         ah.handleIncomingFaceTimeCall({
           "uuid": ring,
           "address": session,
           "link": link,
+          "icon": icon,
+          "poster": myPoster,
         });
       }
 
@@ -2180,6 +2338,7 @@ class RustPushService extends GetxService {
             }
             // this is a missed call
             notif.createMissedCallNotification(session, facetime.guid);
+            incomingRingingCallGuid = null;
           }
 
           hideFaceTimeOverlay(facetime.guid, timeout: true); // they have given up the ringing
@@ -2275,6 +2434,12 @@ class RustPushService extends GetxService {
           } catch (e) { /*pass*/ }
           ss.settings.userAvatarPath.value = null;
         }
+        if (ss.settings.userPosterPath.value != null) {
+          try {
+            await deletePoster(ss.settings.userPosterPath.value!);
+          } catch (e) { /*pass*/ }
+          ss.settings.userPosterPath.value = null;
+        }
         ss.settings.shareContactAutomatically.value = message.field0.shareContacts;
         ss.saveSettings();
         
@@ -2290,6 +2455,16 @@ class RustPushService extends GetxService {
           await file.writeAsBytes(result.image!);
           ss.settings.userAvatarPath.value = file.path;
         }
+
+        if (result.poster != null && !kIsDesktop) {
+          var decoded = await api.parsePoster(poster: result.poster!);
+          try {
+            ss.settings.userPosterPath.value = await savePoster(decoded);
+          } catch (e, t) {
+            Logger.error("Could not decode poster", error: e, trace: t); 
+          }
+        }
+
         ss.settings.firstName.value = result.name.first;
         ss.settings.lastName.value = result.name.last;
         ss.settings.userName.value = result.name.name;

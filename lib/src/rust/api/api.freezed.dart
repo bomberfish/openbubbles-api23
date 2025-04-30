@@ -14207,6 +14207,1393 @@ abstract class PollResult_Cont extends PollResult {
 }
 
 /// @nodoc
+mixin _$PosterType {
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(List<PosterAsset> assets) photo,
+    required TResult Function(MonogramData data, PosterColor background)
+        monogram,
+    required TResult Function(MemojiData data, PosterColor background) memoji,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(List<PosterAsset> assets)? photo,
+    TResult? Function(MonogramData data, PosterColor background)? monogram,
+    TResult? Function(MemojiData data, PosterColor background)? memoji,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(List<PosterAsset> assets)? photo,
+    TResult Function(MonogramData data, PosterColor background)? monogram,
+    TResult Function(MemojiData data, PosterColor background)? memoji,
+    required TResult orElse(),
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(PosterType_Photo value) photo,
+    required TResult Function(PosterType_Monogram value) monogram,
+    required TResult Function(PosterType_Memoji value) memoji,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(PosterType_Photo value)? photo,
+    TResult? Function(PosterType_Monogram value)? monogram,
+    TResult? Function(PosterType_Memoji value)? memoji,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(PosterType_Photo value)? photo,
+    TResult Function(PosterType_Monogram value)? monogram,
+    TResult Function(PosterType_Memoji value)? memoji,
+    required TResult orElse(),
+  }) =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $PosterTypeCopyWith<$Res> {
+  factory $PosterTypeCopyWith(
+          PosterType value, $Res Function(PosterType) then) =
+      _$PosterTypeCopyWithImpl<$Res, PosterType>;
+}
+
+/// @nodoc
+class _$PosterTypeCopyWithImpl<$Res, $Val extends PosterType>
+    implements $PosterTypeCopyWith<$Res> {
+  _$PosterTypeCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of PosterType
+  /// with the given fields replaced by the non-null parameter values.
+}
+
+/// @nodoc
+abstract class _$$PosterType_PhotoImplCopyWith<$Res> {
+  factory _$$PosterType_PhotoImplCopyWith(_$PosterType_PhotoImpl value,
+          $Res Function(_$PosterType_PhotoImpl) then) =
+      __$$PosterType_PhotoImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({List<PosterAsset> assets});
+}
+
+/// @nodoc
+class __$$PosterType_PhotoImplCopyWithImpl<$Res>
+    extends _$PosterTypeCopyWithImpl<$Res, _$PosterType_PhotoImpl>
+    implements _$$PosterType_PhotoImplCopyWith<$Res> {
+  __$$PosterType_PhotoImplCopyWithImpl(_$PosterType_PhotoImpl _value,
+      $Res Function(_$PosterType_PhotoImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of PosterType
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? assets = null,
+  }) {
+    return _then(_$PosterType_PhotoImpl(
+      assets: null == assets
+          ? _value._assets
+          : assets // ignore: cast_nullable_to_non_nullable
+              as List<PosterAsset>,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$PosterType_PhotoImpl extends PosterType_Photo {
+  const _$PosterType_PhotoImpl({required final List<PosterAsset> assets})
+      : _assets = assets,
+        super._();
+
+  final List<PosterAsset> _assets;
+  @override
+  List<PosterAsset> get assets {
+    if (_assets is EqualUnmodifiableListView) return _assets;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_assets);
+  }
+
+  @override
+  String toString() {
+    return 'PosterType.photo(assets: $assets)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$PosterType_PhotoImpl &&
+            const DeepCollectionEquality().equals(other._assets, _assets));
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(_assets));
+
+  /// Create a copy of PosterType
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$PosterType_PhotoImplCopyWith<_$PosterType_PhotoImpl> get copyWith =>
+      __$$PosterType_PhotoImplCopyWithImpl<_$PosterType_PhotoImpl>(
+          this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(List<PosterAsset> assets) photo,
+    required TResult Function(MonogramData data, PosterColor background)
+        monogram,
+    required TResult Function(MemojiData data, PosterColor background) memoji,
+  }) {
+    return photo(assets);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(List<PosterAsset> assets)? photo,
+    TResult? Function(MonogramData data, PosterColor background)? monogram,
+    TResult? Function(MemojiData data, PosterColor background)? memoji,
+  }) {
+    return photo?.call(assets);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(List<PosterAsset> assets)? photo,
+    TResult Function(MonogramData data, PosterColor background)? monogram,
+    TResult Function(MemojiData data, PosterColor background)? memoji,
+    required TResult orElse(),
+  }) {
+    if (photo != null) {
+      return photo(assets);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(PosterType_Photo value) photo,
+    required TResult Function(PosterType_Monogram value) monogram,
+    required TResult Function(PosterType_Memoji value) memoji,
+  }) {
+    return photo(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(PosterType_Photo value)? photo,
+    TResult? Function(PosterType_Monogram value)? monogram,
+    TResult? Function(PosterType_Memoji value)? memoji,
+  }) {
+    return photo?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(PosterType_Photo value)? photo,
+    TResult Function(PosterType_Monogram value)? monogram,
+    TResult Function(PosterType_Memoji value)? memoji,
+    required TResult orElse(),
+  }) {
+    if (photo != null) {
+      return photo(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class PosterType_Photo extends PosterType {
+  const factory PosterType_Photo({required final List<PosterAsset> assets}) =
+      _$PosterType_PhotoImpl;
+  const PosterType_Photo._() : super._();
+
+  List<PosterAsset> get assets;
+
+  /// Create a copy of PosterType
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$PosterType_PhotoImplCopyWith<_$PosterType_PhotoImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$PosterType_MonogramImplCopyWith<$Res> {
+  factory _$$PosterType_MonogramImplCopyWith(_$PosterType_MonogramImpl value,
+          $Res Function(_$PosterType_MonogramImpl) then) =
+      __$$PosterType_MonogramImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({MonogramData data, PosterColor background});
+}
+
+/// @nodoc
+class __$$PosterType_MonogramImplCopyWithImpl<$Res>
+    extends _$PosterTypeCopyWithImpl<$Res, _$PosterType_MonogramImpl>
+    implements _$$PosterType_MonogramImplCopyWith<$Res> {
+  __$$PosterType_MonogramImplCopyWithImpl(_$PosterType_MonogramImpl _value,
+      $Res Function(_$PosterType_MonogramImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of PosterType
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? data = null,
+    Object? background = null,
+  }) {
+    return _then(_$PosterType_MonogramImpl(
+      data: null == data
+          ? _value.data
+          : data // ignore: cast_nullable_to_non_nullable
+              as MonogramData,
+      background: null == background
+          ? _value.background
+          : background // ignore: cast_nullable_to_non_nullable
+              as PosterColor,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$PosterType_MonogramImpl extends PosterType_Monogram {
+  const _$PosterType_MonogramImpl(
+      {required this.data, required this.background})
+      : super._();
+
+  @override
+  final MonogramData data;
+  @override
+  final PosterColor background;
+
+  @override
+  String toString() {
+    return 'PosterType.monogram(data: $data, background: $background)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$PosterType_MonogramImpl &&
+            (identical(other.data, data) || other.data == data) &&
+            (identical(other.background, background) ||
+                other.background == background));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, data, background);
+
+  /// Create a copy of PosterType
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$PosterType_MonogramImplCopyWith<_$PosterType_MonogramImpl> get copyWith =>
+      __$$PosterType_MonogramImplCopyWithImpl<_$PosterType_MonogramImpl>(
+          this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(List<PosterAsset> assets) photo,
+    required TResult Function(MonogramData data, PosterColor background)
+        monogram,
+    required TResult Function(MemojiData data, PosterColor background) memoji,
+  }) {
+    return monogram(data, background);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(List<PosterAsset> assets)? photo,
+    TResult? Function(MonogramData data, PosterColor background)? monogram,
+    TResult? Function(MemojiData data, PosterColor background)? memoji,
+  }) {
+    return monogram?.call(data, background);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(List<PosterAsset> assets)? photo,
+    TResult Function(MonogramData data, PosterColor background)? monogram,
+    TResult Function(MemojiData data, PosterColor background)? memoji,
+    required TResult orElse(),
+  }) {
+    if (monogram != null) {
+      return monogram(data, background);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(PosterType_Photo value) photo,
+    required TResult Function(PosterType_Monogram value) monogram,
+    required TResult Function(PosterType_Memoji value) memoji,
+  }) {
+    return monogram(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(PosterType_Photo value)? photo,
+    TResult? Function(PosterType_Monogram value)? monogram,
+    TResult? Function(PosterType_Memoji value)? memoji,
+  }) {
+    return monogram?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(PosterType_Photo value)? photo,
+    TResult Function(PosterType_Monogram value)? monogram,
+    TResult Function(PosterType_Memoji value)? memoji,
+    required TResult orElse(),
+  }) {
+    if (monogram != null) {
+      return monogram(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class PosterType_Monogram extends PosterType {
+  const factory PosterType_Monogram(
+      {required final MonogramData data,
+      required final PosterColor background}) = _$PosterType_MonogramImpl;
+  const PosterType_Monogram._() : super._();
+
+  MonogramData get data;
+  PosterColor get background;
+
+  /// Create a copy of PosterType
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$PosterType_MonogramImplCopyWith<_$PosterType_MonogramImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$PosterType_MemojiImplCopyWith<$Res> {
+  factory _$$PosterType_MemojiImplCopyWith(_$PosterType_MemojiImpl value,
+          $Res Function(_$PosterType_MemojiImpl) then) =
+      __$$PosterType_MemojiImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({MemojiData data, PosterColor background});
+}
+
+/// @nodoc
+class __$$PosterType_MemojiImplCopyWithImpl<$Res>
+    extends _$PosterTypeCopyWithImpl<$Res, _$PosterType_MemojiImpl>
+    implements _$$PosterType_MemojiImplCopyWith<$Res> {
+  __$$PosterType_MemojiImplCopyWithImpl(_$PosterType_MemojiImpl _value,
+      $Res Function(_$PosterType_MemojiImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of PosterType
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? data = null,
+    Object? background = null,
+  }) {
+    return _then(_$PosterType_MemojiImpl(
+      data: null == data
+          ? _value.data
+          : data // ignore: cast_nullable_to_non_nullable
+              as MemojiData,
+      background: null == background
+          ? _value.background
+          : background // ignore: cast_nullable_to_non_nullable
+              as PosterColor,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$PosterType_MemojiImpl extends PosterType_Memoji {
+  const _$PosterType_MemojiImpl({required this.data, required this.background})
+      : super._();
+
+  @override
+  final MemojiData data;
+  @override
+  final PosterColor background;
+
+  @override
+  String toString() {
+    return 'PosterType.memoji(data: $data, background: $background)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$PosterType_MemojiImpl &&
+            (identical(other.data, data) || other.data == data) &&
+            (identical(other.background, background) ||
+                other.background == background));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, data, background);
+
+  /// Create a copy of PosterType
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$PosterType_MemojiImplCopyWith<_$PosterType_MemojiImpl> get copyWith =>
+      __$$PosterType_MemojiImplCopyWithImpl<_$PosterType_MemojiImpl>(
+          this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(List<PosterAsset> assets) photo,
+    required TResult Function(MonogramData data, PosterColor background)
+        monogram,
+    required TResult Function(MemojiData data, PosterColor background) memoji,
+  }) {
+    return memoji(data, background);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(List<PosterAsset> assets)? photo,
+    TResult? Function(MonogramData data, PosterColor background)? monogram,
+    TResult? Function(MemojiData data, PosterColor background)? memoji,
+  }) {
+    return memoji?.call(data, background);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(List<PosterAsset> assets)? photo,
+    TResult Function(MonogramData data, PosterColor background)? monogram,
+    TResult Function(MemojiData data, PosterColor background)? memoji,
+    required TResult orElse(),
+  }) {
+    if (memoji != null) {
+      return memoji(data, background);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(PosterType_Photo value) photo,
+    required TResult Function(PosterType_Monogram value) monogram,
+    required TResult Function(PosterType_Memoji value) memoji,
+  }) {
+    return memoji(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(PosterType_Photo value)? photo,
+    TResult? Function(PosterType_Monogram value)? monogram,
+    TResult? Function(PosterType_Memoji value)? memoji,
+  }) {
+    return memoji?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(PosterType_Photo value)? photo,
+    TResult Function(PosterType_Monogram value)? monogram,
+    TResult Function(PosterType_Memoji value)? memoji,
+    required TResult orElse(),
+  }) {
+    if (memoji != null) {
+      return memoji(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class PosterType_Memoji extends PosterType {
+  const factory PosterType_Memoji(
+      {required final MemojiData data,
+      required final PosterColor background}) = _$PosterType_MemojiImpl;
+  const PosterType_Memoji._() : super._();
+
+  MemojiData get data;
+  PosterColor get background;
+
+  /// Create a copy of PosterType
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$PosterType_MemojiImplCopyWith<_$PosterType_MemojiImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+mixin _$PRPosterContentMaterialStyle {
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(double variation, List<UIColor> colors,
+            bool vibrant, bool supportsVariation, bool needsToResolveVariation)
+        prPosterContentDiscreteColorsStyle,
+    required TResult Function() prPosterContentVibrantMaterialStyle,
+    required TResult Function(int gradientType, List<UIColor> colors,
+            String startPoint, Float64List locations, String endPoint)
+        prPosterContentGradientStyle,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(double variation, List<UIColor> colors, bool vibrant,
+            bool supportsVariation, bool needsToResolveVariation)?
+        prPosterContentDiscreteColorsStyle,
+    TResult? Function()? prPosterContentVibrantMaterialStyle,
+    TResult? Function(int gradientType, List<UIColor> colors, String startPoint,
+            Float64List locations, String endPoint)?
+        prPosterContentGradientStyle,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(double variation, List<UIColor> colors, bool vibrant,
+            bool supportsVariation, bool needsToResolveVariation)?
+        prPosterContentDiscreteColorsStyle,
+    TResult Function()? prPosterContentVibrantMaterialStyle,
+    TResult Function(int gradientType, List<UIColor> colors, String startPoint,
+            Float64List locations, String endPoint)?
+        prPosterContentGradientStyle,
+    required TResult orElse(),
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(
+            PRPosterContentMaterialStyle_PRPosterContentDiscreteColorsStyle
+                value)
+        prPosterContentDiscreteColorsStyle,
+    required TResult Function(
+            PRPosterContentMaterialStyle_PRPosterContentVibrantMaterialStyle
+                value)
+        prPosterContentVibrantMaterialStyle,
+    required TResult Function(
+            PRPosterContentMaterialStyle_PRPosterContentGradientStyle value)
+        prPosterContentGradientStyle,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(
+            PRPosterContentMaterialStyle_PRPosterContentDiscreteColorsStyle
+                value)?
+        prPosterContentDiscreteColorsStyle,
+    TResult? Function(
+            PRPosterContentMaterialStyle_PRPosterContentVibrantMaterialStyle
+                value)?
+        prPosterContentVibrantMaterialStyle,
+    TResult? Function(
+            PRPosterContentMaterialStyle_PRPosterContentGradientStyle value)?
+        prPosterContentGradientStyle,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(
+            PRPosterContentMaterialStyle_PRPosterContentDiscreteColorsStyle
+                value)?
+        prPosterContentDiscreteColorsStyle,
+    TResult Function(
+            PRPosterContentMaterialStyle_PRPosterContentVibrantMaterialStyle
+                value)?
+        prPosterContentVibrantMaterialStyle,
+    TResult Function(
+            PRPosterContentMaterialStyle_PRPosterContentGradientStyle value)?
+        prPosterContentGradientStyle,
+    required TResult orElse(),
+  }) =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $PRPosterContentMaterialStyleCopyWith<$Res> {
+  factory $PRPosterContentMaterialStyleCopyWith(
+          PRPosterContentMaterialStyle value,
+          $Res Function(PRPosterContentMaterialStyle) then) =
+      _$PRPosterContentMaterialStyleCopyWithImpl<$Res,
+          PRPosterContentMaterialStyle>;
+}
+
+/// @nodoc
+class _$PRPosterContentMaterialStyleCopyWithImpl<$Res,
+        $Val extends PRPosterContentMaterialStyle>
+    implements $PRPosterContentMaterialStyleCopyWith<$Res> {
+  _$PRPosterContentMaterialStyleCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of PRPosterContentMaterialStyle
+  /// with the given fields replaced by the non-null parameter values.
+}
+
+/// @nodoc
+abstract class _$$PRPosterContentMaterialStyle_PRPosterContentDiscreteColorsStyleImplCopyWith<
+    $Res> {
+  factory _$$PRPosterContentMaterialStyle_PRPosterContentDiscreteColorsStyleImplCopyWith(
+          _$PRPosterContentMaterialStyle_PRPosterContentDiscreteColorsStyleImpl
+              value,
+          $Res Function(
+                  _$PRPosterContentMaterialStyle_PRPosterContentDiscreteColorsStyleImpl)
+              then) =
+      __$$PRPosterContentMaterialStyle_PRPosterContentDiscreteColorsStyleImplCopyWithImpl<
+          $Res>;
+  @useResult
+  $Res call(
+      {double variation,
+      List<UIColor> colors,
+      bool vibrant,
+      bool supportsVariation,
+      bool needsToResolveVariation});
+}
+
+/// @nodoc
+class __$$PRPosterContentMaterialStyle_PRPosterContentDiscreteColorsStyleImplCopyWithImpl<
+        $Res>
+    extends _$PRPosterContentMaterialStyleCopyWithImpl<$Res,
+        _$PRPosterContentMaterialStyle_PRPosterContentDiscreteColorsStyleImpl>
+    implements
+        _$$PRPosterContentMaterialStyle_PRPosterContentDiscreteColorsStyleImplCopyWith<
+            $Res> {
+  __$$PRPosterContentMaterialStyle_PRPosterContentDiscreteColorsStyleImplCopyWithImpl(
+      _$PRPosterContentMaterialStyle_PRPosterContentDiscreteColorsStyleImpl
+          _value,
+      $Res Function(
+              _$PRPosterContentMaterialStyle_PRPosterContentDiscreteColorsStyleImpl)
+          _then)
+      : super(_value, _then);
+
+  /// Create a copy of PRPosterContentMaterialStyle
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? variation = null,
+    Object? colors = null,
+    Object? vibrant = null,
+    Object? supportsVariation = null,
+    Object? needsToResolveVariation = null,
+  }) {
+    return _then(
+        _$PRPosterContentMaterialStyle_PRPosterContentDiscreteColorsStyleImpl(
+      variation: null == variation
+          ? _value.variation
+          : variation // ignore: cast_nullable_to_non_nullable
+              as double,
+      colors: null == colors
+          ? _value._colors
+          : colors // ignore: cast_nullable_to_non_nullable
+              as List<UIColor>,
+      vibrant: null == vibrant
+          ? _value.vibrant
+          : vibrant // ignore: cast_nullable_to_non_nullable
+              as bool,
+      supportsVariation: null == supportsVariation
+          ? _value.supportsVariation
+          : supportsVariation // ignore: cast_nullable_to_non_nullable
+              as bool,
+      needsToResolveVariation: null == needsToResolveVariation
+          ? _value.needsToResolveVariation
+          : needsToResolveVariation // ignore: cast_nullable_to_non_nullable
+              as bool,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$PRPosterContentMaterialStyle_PRPosterContentDiscreteColorsStyleImpl
+    extends PRPosterContentMaterialStyle_PRPosterContentDiscreteColorsStyle {
+  const _$PRPosterContentMaterialStyle_PRPosterContentDiscreteColorsStyleImpl(
+      {required this.variation,
+      required final List<UIColor> colors,
+      required this.vibrant,
+      required this.supportsVariation,
+      required this.needsToResolveVariation})
+      : _colors = colors,
+        super._();
+
+  @override
+  final double variation;
+  final List<UIColor> _colors;
+  @override
+  List<UIColor> get colors {
+    if (_colors is EqualUnmodifiableListView) return _colors;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_colors);
+  }
+
+  @override
+  final bool vibrant;
+  @override
+  final bool supportsVariation;
+  @override
+  final bool needsToResolveVariation;
+
+  @override
+  String toString() {
+    return 'PRPosterContentMaterialStyle.prPosterContentDiscreteColorsStyle(variation: $variation, colors: $colors, vibrant: $vibrant, supportsVariation: $supportsVariation, needsToResolveVariation: $needsToResolveVariation)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other
+                is _$PRPosterContentMaterialStyle_PRPosterContentDiscreteColorsStyleImpl &&
+            (identical(other.variation, variation) ||
+                other.variation == variation) &&
+            const DeepCollectionEquality().equals(other._colors, _colors) &&
+            (identical(other.vibrant, vibrant) || other.vibrant == vibrant) &&
+            (identical(other.supportsVariation, supportsVariation) ||
+                other.supportsVariation == supportsVariation) &&
+            (identical(
+                    other.needsToResolveVariation, needsToResolveVariation) ||
+                other.needsToResolveVariation == needsToResolveVariation));
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      runtimeType,
+      variation,
+      const DeepCollectionEquality().hash(_colors),
+      vibrant,
+      supportsVariation,
+      needsToResolveVariation);
+
+  /// Create a copy of PRPosterContentMaterialStyle
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$PRPosterContentMaterialStyle_PRPosterContentDiscreteColorsStyleImplCopyWith<
+          _$PRPosterContentMaterialStyle_PRPosterContentDiscreteColorsStyleImpl>
+      get copyWith =>
+          __$$PRPosterContentMaterialStyle_PRPosterContentDiscreteColorsStyleImplCopyWithImpl<
+                  _$PRPosterContentMaterialStyle_PRPosterContentDiscreteColorsStyleImpl>(
+              this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(double variation, List<UIColor> colors,
+            bool vibrant, bool supportsVariation, bool needsToResolveVariation)
+        prPosterContentDiscreteColorsStyle,
+    required TResult Function() prPosterContentVibrantMaterialStyle,
+    required TResult Function(int gradientType, List<UIColor> colors,
+            String startPoint, Float64List locations, String endPoint)
+        prPosterContentGradientStyle,
+  }) {
+    return prPosterContentDiscreteColorsStyle(
+        variation, colors, vibrant, supportsVariation, needsToResolveVariation);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(double variation, List<UIColor> colors, bool vibrant,
+            bool supportsVariation, bool needsToResolveVariation)?
+        prPosterContentDiscreteColorsStyle,
+    TResult? Function()? prPosterContentVibrantMaterialStyle,
+    TResult? Function(int gradientType, List<UIColor> colors, String startPoint,
+            Float64List locations, String endPoint)?
+        prPosterContentGradientStyle,
+  }) {
+    return prPosterContentDiscreteColorsStyle?.call(
+        variation, colors, vibrant, supportsVariation, needsToResolveVariation);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(double variation, List<UIColor> colors, bool vibrant,
+            bool supportsVariation, bool needsToResolveVariation)?
+        prPosterContentDiscreteColorsStyle,
+    TResult Function()? prPosterContentVibrantMaterialStyle,
+    TResult Function(int gradientType, List<UIColor> colors, String startPoint,
+            Float64List locations, String endPoint)?
+        prPosterContentGradientStyle,
+    required TResult orElse(),
+  }) {
+    if (prPosterContentDiscreteColorsStyle != null) {
+      return prPosterContentDiscreteColorsStyle(variation, colors, vibrant,
+          supportsVariation, needsToResolveVariation);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(
+            PRPosterContentMaterialStyle_PRPosterContentDiscreteColorsStyle
+                value)
+        prPosterContentDiscreteColorsStyle,
+    required TResult Function(
+            PRPosterContentMaterialStyle_PRPosterContentVibrantMaterialStyle
+                value)
+        prPosterContentVibrantMaterialStyle,
+    required TResult Function(
+            PRPosterContentMaterialStyle_PRPosterContentGradientStyle value)
+        prPosterContentGradientStyle,
+  }) {
+    return prPosterContentDiscreteColorsStyle(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(
+            PRPosterContentMaterialStyle_PRPosterContentDiscreteColorsStyle
+                value)?
+        prPosterContentDiscreteColorsStyle,
+    TResult? Function(
+            PRPosterContentMaterialStyle_PRPosterContentVibrantMaterialStyle
+                value)?
+        prPosterContentVibrantMaterialStyle,
+    TResult? Function(
+            PRPosterContentMaterialStyle_PRPosterContentGradientStyle value)?
+        prPosterContentGradientStyle,
+  }) {
+    return prPosterContentDiscreteColorsStyle?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(
+            PRPosterContentMaterialStyle_PRPosterContentDiscreteColorsStyle
+                value)?
+        prPosterContentDiscreteColorsStyle,
+    TResult Function(
+            PRPosterContentMaterialStyle_PRPosterContentVibrantMaterialStyle
+                value)?
+        prPosterContentVibrantMaterialStyle,
+    TResult Function(
+            PRPosterContentMaterialStyle_PRPosterContentGradientStyle value)?
+        prPosterContentGradientStyle,
+    required TResult orElse(),
+  }) {
+    if (prPosterContentDiscreteColorsStyle != null) {
+      return prPosterContentDiscreteColorsStyle(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class PRPosterContentMaterialStyle_PRPosterContentDiscreteColorsStyle
+    extends PRPosterContentMaterialStyle {
+  const factory PRPosterContentMaterialStyle_PRPosterContentDiscreteColorsStyle(
+          {required final double variation,
+          required final List<UIColor> colors,
+          required final bool vibrant,
+          required final bool supportsVariation,
+          required final bool needsToResolveVariation}) =
+      _$PRPosterContentMaterialStyle_PRPosterContentDiscreteColorsStyleImpl;
+  const PRPosterContentMaterialStyle_PRPosterContentDiscreteColorsStyle._()
+      : super._();
+
+  double get variation;
+  List<UIColor> get colors;
+  bool get vibrant;
+  bool get supportsVariation;
+  bool get needsToResolveVariation;
+
+  /// Create a copy of PRPosterContentMaterialStyle
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$PRPosterContentMaterialStyle_PRPosterContentDiscreteColorsStyleImplCopyWith<
+          _$PRPosterContentMaterialStyle_PRPosterContentDiscreteColorsStyleImpl>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$PRPosterContentMaterialStyle_PRPosterContentVibrantMaterialStyleImplCopyWith<
+    $Res> {
+  factory _$$PRPosterContentMaterialStyle_PRPosterContentVibrantMaterialStyleImplCopyWith(
+          _$PRPosterContentMaterialStyle_PRPosterContentVibrantMaterialStyleImpl
+              value,
+          $Res Function(
+                  _$PRPosterContentMaterialStyle_PRPosterContentVibrantMaterialStyleImpl)
+              then) =
+      __$$PRPosterContentMaterialStyle_PRPosterContentVibrantMaterialStyleImplCopyWithImpl<
+          $Res>;
+}
+
+/// @nodoc
+class __$$PRPosterContentMaterialStyle_PRPosterContentVibrantMaterialStyleImplCopyWithImpl<
+        $Res>
+    extends _$PRPosterContentMaterialStyleCopyWithImpl<$Res,
+        _$PRPosterContentMaterialStyle_PRPosterContentVibrantMaterialStyleImpl>
+    implements
+        _$$PRPosterContentMaterialStyle_PRPosterContentVibrantMaterialStyleImplCopyWith<
+            $Res> {
+  __$$PRPosterContentMaterialStyle_PRPosterContentVibrantMaterialStyleImplCopyWithImpl(
+      _$PRPosterContentMaterialStyle_PRPosterContentVibrantMaterialStyleImpl
+          _value,
+      $Res Function(
+              _$PRPosterContentMaterialStyle_PRPosterContentVibrantMaterialStyleImpl)
+          _then)
+      : super(_value, _then);
+
+  /// Create a copy of PRPosterContentMaterialStyle
+  /// with the given fields replaced by the non-null parameter values.
+}
+
+/// @nodoc
+
+class _$PRPosterContentMaterialStyle_PRPosterContentVibrantMaterialStyleImpl
+    extends PRPosterContentMaterialStyle_PRPosterContentVibrantMaterialStyle {
+  const _$PRPosterContentMaterialStyle_PRPosterContentVibrantMaterialStyleImpl()
+      : super._();
+
+  @override
+  String toString() {
+    return 'PRPosterContentMaterialStyle.prPosterContentVibrantMaterialStyle()';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other
+                is _$PRPosterContentMaterialStyle_PRPosterContentVibrantMaterialStyleImpl);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(double variation, List<UIColor> colors,
+            bool vibrant, bool supportsVariation, bool needsToResolveVariation)
+        prPosterContentDiscreteColorsStyle,
+    required TResult Function() prPosterContentVibrantMaterialStyle,
+    required TResult Function(int gradientType, List<UIColor> colors,
+            String startPoint, Float64List locations, String endPoint)
+        prPosterContentGradientStyle,
+  }) {
+    return prPosterContentVibrantMaterialStyle();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(double variation, List<UIColor> colors, bool vibrant,
+            bool supportsVariation, bool needsToResolveVariation)?
+        prPosterContentDiscreteColorsStyle,
+    TResult? Function()? prPosterContentVibrantMaterialStyle,
+    TResult? Function(int gradientType, List<UIColor> colors, String startPoint,
+            Float64List locations, String endPoint)?
+        prPosterContentGradientStyle,
+  }) {
+    return prPosterContentVibrantMaterialStyle?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(double variation, List<UIColor> colors, bool vibrant,
+            bool supportsVariation, bool needsToResolveVariation)?
+        prPosterContentDiscreteColorsStyle,
+    TResult Function()? prPosterContentVibrantMaterialStyle,
+    TResult Function(int gradientType, List<UIColor> colors, String startPoint,
+            Float64List locations, String endPoint)?
+        prPosterContentGradientStyle,
+    required TResult orElse(),
+  }) {
+    if (prPosterContentVibrantMaterialStyle != null) {
+      return prPosterContentVibrantMaterialStyle();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(
+            PRPosterContentMaterialStyle_PRPosterContentDiscreteColorsStyle
+                value)
+        prPosterContentDiscreteColorsStyle,
+    required TResult Function(
+            PRPosterContentMaterialStyle_PRPosterContentVibrantMaterialStyle
+                value)
+        prPosterContentVibrantMaterialStyle,
+    required TResult Function(
+            PRPosterContentMaterialStyle_PRPosterContentGradientStyle value)
+        prPosterContentGradientStyle,
+  }) {
+    return prPosterContentVibrantMaterialStyle(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(
+            PRPosterContentMaterialStyle_PRPosterContentDiscreteColorsStyle
+                value)?
+        prPosterContentDiscreteColorsStyle,
+    TResult? Function(
+            PRPosterContentMaterialStyle_PRPosterContentVibrantMaterialStyle
+                value)?
+        prPosterContentVibrantMaterialStyle,
+    TResult? Function(
+            PRPosterContentMaterialStyle_PRPosterContentGradientStyle value)?
+        prPosterContentGradientStyle,
+  }) {
+    return prPosterContentVibrantMaterialStyle?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(
+            PRPosterContentMaterialStyle_PRPosterContentDiscreteColorsStyle
+                value)?
+        prPosterContentDiscreteColorsStyle,
+    TResult Function(
+            PRPosterContentMaterialStyle_PRPosterContentVibrantMaterialStyle
+                value)?
+        prPosterContentVibrantMaterialStyle,
+    TResult Function(
+            PRPosterContentMaterialStyle_PRPosterContentGradientStyle value)?
+        prPosterContentGradientStyle,
+    required TResult orElse(),
+  }) {
+    if (prPosterContentVibrantMaterialStyle != null) {
+      return prPosterContentVibrantMaterialStyle(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class PRPosterContentMaterialStyle_PRPosterContentVibrantMaterialStyle
+    extends PRPosterContentMaterialStyle {
+  const factory PRPosterContentMaterialStyle_PRPosterContentVibrantMaterialStyle() =
+      _$PRPosterContentMaterialStyle_PRPosterContentVibrantMaterialStyleImpl;
+  const PRPosterContentMaterialStyle_PRPosterContentVibrantMaterialStyle._()
+      : super._();
+}
+
+/// @nodoc
+abstract class _$$PRPosterContentMaterialStyle_PRPosterContentGradientStyleImplCopyWith<
+    $Res> {
+  factory _$$PRPosterContentMaterialStyle_PRPosterContentGradientStyleImplCopyWith(
+          _$PRPosterContentMaterialStyle_PRPosterContentGradientStyleImpl value,
+          $Res Function(
+                  _$PRPosterContentMaterialStyle_PRPosterContentGradientStyleImpl)
+              then) =
+      __$$PRPosterContentMaterialStyle_PRPosterContentGradientStyleImplCopyWithImpl<
+          $Res>;
+  @useResult
+  $Res call(
+      {int gradientType,
+      List<UIColor> colors,
+      String startPoint,
+      Float64List locations,
+      String endPoint});
+}
+
+/// @nodoc
+class __$$PRPosterContentMaterialStyle_PRPosterContentGradientStyleImplCopyWithImpl<
+        $Res>
+    extends _$PRPosterContentMaterialStyleCopyWithImpl<$Res,
+        _$PRPosterContentMaterialStyle_PRPosterContentGradientStyleImpl>
+    implements
+        _$$PRPosterContentMaterialStyle_PRPosterContentGradientStyleImplCopyWith<
+            $Res> {
+  __$$PRPosterContentMaterialStyle_PRPosterContentGradientStyleImplCopyWithImpl(
+      _$PRPosterContentMaterialStyle_PRPosterContentGradientStyleImpl _value,
+      $Res Function(
+              _$PRPosterContentMaterialStyle_PRPosterContentGradientStyleImpl)
+          _then)
+      : super(_value, _then);
+
+  /// Create a copy of PRPosterContentMaterialStyle
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? gradientType = null,
+    Object? colors = null,
+    Object? startPoint = null,
+    Object? locations = null,
+    Object? endPoint = null,
+  }) {
+    return _then(
+        _$PRPosterContentMaterialStyle_PRPosterContentGradientStyleImpl(
+      gradientType: null == gradientType
+          ? _value.gradientType
+          : gradientType // ignore: cast_nullable_to_non_nullable
+              as int,
+      colors: null == colors
+          ? _value._colors
+          : colors // ignore: cast_nullable_to_non_nullable
+              as List<UIColor>,
+      startPoint: null == startPoint
+          ? _value.startPoint
+          : startPoint // ignore: cast_nullable_to_non_nullable
+              as String,
+      locations: null == locations
+          ? _value.locations
+          : locations // ignore: cast_nullable_to_non_nullable
+              as Float64List,
+      endPoint: null == endPoint
+          ? _value.endPoint
+          : endPoint // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$PRPosterContentMaterialStyle_PRPosterContentGradientStyleImpl
+    extends PRPosterContentMaterialStyle_PRPosterContentGradientStyle {
+  const _$PRPosterContentMaterialStyle_PRPosterContentGradientStyleImpl(
+      {required this.gradientType,
+      required final List<UIColor> colors,
+      required this.startPoint,
+      required this.locations,
+      required this.endPoint})
+      : _colors = colors,
+        super._();
+
+  @override
+  final int gradientType;
+  final List<UIColor> _colors;
+  @override
+  List<UIColor> get colors {
+    if (_colors is EqualUnmodifiableListView) return _colors;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_colors);
+  }
+
+  @override
+  final String startPoint;
+  @override
+  final Float64List locations;
+  @override
+  final String endPoint;
+
+  @override
+  String toString() {
+    return 'PRPosterContentMaterialStyle.prPosterContentGradientStyle(gradientType: $gradientType, colors: $colors, startPoint: $startPoint, locations: $locations, endPoint: $endPoint)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other
+                is _$PRPosterContentMaterialStyle_PRPosterContentGradientStyleImpl &&
+            (identical(other.gradientType, gradientType) ||
+                other.gradientType == gradientType) &&
+            const DeepCollectionEquality().equals(other._colors, _colors) &&
+            (identical(other.startPoint, startPoint) ||
+                other.startPoint == startPoint) &&
+            const DeepCollectionEquality().equals(other.locations, locations) &&
+            (identical(other.endPoint, endPoint) ||
+                other.endPoint == endPoint));
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      runtimeType,
+      gradientType,
+      const DeepCollectionEquality().hash(_colors),
+      startPoint,
+      const DeepCollectionEquality().hash(locations),
+      endPoint);
+
+  /// Create a copy of PRPosterContentMaterialStyle
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$PRPosterContentMaterialStyle_PRPosterContentGradientStyleImplCopyWith<
+          _$PRPosterContentMaterialStyle_PRPosterContentGradientStyleImpl>
+      get copyWith =>
+          __$$PRPosterContentMaterialStyle_PRPosterContentGradientStyleImplCopyWithImpl<
+                  _$PRPosterContentMaterialStyle_PRPosterContentGradientStyleImpl>(
+              this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(double variation, List<UIColor> colors,
+            bool vibrant, bool supportsVariation, bool needsToResolveVariation)
+        prPosterContentDiscreteColorsStyle,
+    required TResult Function() prPosterContentVibrantMaterialStyle,
+    required TResult Function(int gradientType, List<UIColor> colors,
+            String startPoint, Float64List locations, String endPoint)
+        prPosterContentGradientStyle,
+  }) {
+    return prPosterContentGradientStyle(
+        gradientType, colors, startPoint, locations, endPoint);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(double variation, List<UIColor> colors, bool vibrant,
+            bool supportsVariation, bool needsToResolveVariation)?
+        prPosterContentDiscreteColorsStyle,
+    TResult? Function()? prPosterContentVibrantMaterialStyle,
+    TResult? Function(int gradientType, List<UIColor> colors, String startPoint,
+            Float64List locations, String endPoint)?
+        prPosterContentGradientStyle,
+  }) {
+    return prPosterContentGradientStyle?.call(
+        gradientType, colors, startPoint, locations, endPoint);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(double variation, List<UIColor> colors, bool vibrant,
+            bool supportsVariation, bool needsToResolveVariation)?
+        prPosterContentDiscreteColorsStyle,
+    TResult Function()? prPosterContentVibrantMaterialStyle,
+    TResult Function(int gradientType, List<UIColor> colors, String startPoint,
+            Float64List locations, String endPoint)?
+        prPosterContentGradientStyle,
+    required TResult orElse(),
+  }) {
+    if (prPosterContentGradientStyle != null) {
+      return prPosterContentGradientStyle(
+          gradientType, colors, startPoint, locations, endPoint);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(
+            PRPosterContentMaterialStyle_PRPosterContentDiscreteColorsStyle
+                value)
+        prPosterContentDiscreteColorsStyle,
+    required TResult Function(
+            PRPosterContentMaterialStyle_PRPosterContentVibrantMaterialStyle
+                value)
+        prPosterContentVibrantMaterialStyle,
+    required TResult Function(
+            PRPosterContentMaterialStyle_PRPosterContentGradientStyle value)
+        prPosterContentGradientStyle,
+  }) {
+    return prPosterContentGradientStyle(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(
+            PRPosterContentMaterialStyle_PRPosterContentDiscreteColorsStyle
+                value)?
+        prPosterContentDiscreteColorsStyle,
+    TResult? Function(
+            PRPosterContentMaterialStyle_PRPosterContentVibrantMaterialStyle
+                value)?
+        prPosterContentVibrantMaterialStyle,
+    TResult? Function(
+            PRPosterContentMaterialStyle_PRPosterContentGradientStyle value)?
+        prPosterContentGradientStyle,
+  }) {
+    return prPosterContentGradientStyle?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(
+            PRPosterContentMaterialStyle_PRPosterContentDiscreteColorsStyle
+                value)?
+        prPosterContentDiscreteColorsStyle,
+    TResult Function(
+            PRPosterContentMaterialStyle_PRPosterContentVibrantMaterialStyle
+                value)?
+        prPosterContentVibrantMaterialStyle,
+    TResult Function(
+            PRPosterContentMaterialStyle_PRPosterContentGradientStyle value)?
+        prPosterContentGradientStyle,
+    required TResult orElse(),
+  }) {
+    if (prPosterContentGradientStyle != null) {
+      return prPosterContentGradientStyle(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class PRPosterContentMaterialStyle_PRPosterContentGradientStyle
+    extends PRPosterContentMaterialStyle {
+  const factory PRPosterContentMaterialStyle_PRPosterContentGradientStyle(
+          {required final int gradientType,
+          required final List<UIColor> colors,
+          required final String startPoint,
+          required final Float64List locations,
+          required final String endPoint}) =
+      _$PRPosterContentMaterialStyle_PRPosterContentGradientStyleImpl;
+  const PRPosterContentMaterialStyle_PRPosterContentGradientStyle._()
+      : super._();
+
+  int get gradientType;
+  List<UIColor> get colors;
+  String get startPoint;
+  Float64List get locations;
+  String get endPoint;
+
+  /// Create a copy of PRPosterContentMaterialStyle
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$PRPosterContentMaterialStyle_PRPosterContentGradientStyleImplCopyWith<
+          _$PRPosterContentMaterialStyle_PRPosterContentGradientStyleImpl>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
 mixin _$PushMessage {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
@@ -18832,4 +20219,779 @@ abstract class TextFormat_Effect extends TextFormat {
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$TextFormat_EffectImplCopyWith<_$TextFormat_EffectImpl> get copyWith =>
       throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+mixin _$UIColor {
+  int get colorComponents => throw _privateConstructorUsedError;
+  double get alpha => throw _privateConstructorUsedError;
+  int get colorSpace => throw _privateConstructorUsedError;
+  String get class_ => throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(
+            int colorComponents,
+            double green,
+            double blue,
+            double red,
+            double? greenDbl,
+            double? blueDbl,
+            double? redDbl,
+            double? alphaDbl,
+            double alpha,
+            Uint8List rgb,
+            int colorSpace,
+            String class_)
+        rgbaColorSpace,
+    required TResult Function(int colorComponents, double white, double alpha,
+            Uint8List bin, int colorSpace, String class_)
+        grayscaleAlphaColorSpace,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(
+            int colorComponents,
+            double green,
+            double blue,
+            double red,
+            double? greenDbl,
+            double? blueDbl,
+            double? redDbl,
+            double? alphaDbl,
+            double alpha,
+            Uint8List rgb,
+            int colorSpace,
+            String class_)?
+        rgbaColorSpace,
+    TResult? Function(int colorComponents, double white, double alpha,
+            Uint8List bin, int colorSpace, String class_)?
+        grayscaleAlphaColorSpace,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(
+            int colorComponents,
+            double green,
+            double blue,
+            double red,
+            double? greenDbl,
+            double? blueDbl,
+            double? redDbl,
+            double? alphaDbl,
+            double alpha,
+            Uint8List rgb,
+            int colorSpace,
+            String class_)?
+        rgbaColorSpace,
+    TResult Function(int colorComponents, double white, double alpha,
+            Uint8List bin, int colorSpace, String class_)?
+        grayscaleAlphaColorSpace,
+    required TResult orElse(),
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(UIColor_RGBAColorSpace value) rgbaColorSpace,
+    required TResult Function(UIColor_GrayscaleAlphaColorSpace value)
+        grayscaleAlphaColorSpace,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(UIColor_RGBAColorSpace value)? rgbaColorSpace,
+    TResult? Function(UIColor_GrayscaleAlphaColorSpace value)?
+        grayscaleAlphaColorSpace,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(UIColor_RGBAColorSpace value)? rgbaColorSpace,
+    TResult Function(UIColor_GrayscaleAlphaColorSpace value)?
+        grayscaleAlphaColorSpace,
+    required TResult orElse(),
+  }) =>
+      throw _privateConstructorUsedError;
+
+  /// Create a copy of UIColor
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $UIColorCopyWith<UIColor> get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $UIColorCopyWith<$Res> {
+  factory $UIColorCopyWith(UIColor value, $Res Function(UIColor) then) =
+      _$UIColorCopyWithImpl<$Res, UIColor>;
+  @useResult
+  $Res call({int colorComponents, double alpha, int colorSpace, String class_});
+}
+
+/// @nodoc
+class _$UIColorCopyWithImpl<$Res, $Val extends UIColor>
+    implements $UIColorCopyWith<$Res> {
+  _$UIColorCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of UIColor
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? colorComponents = null,
+    Object? alpha = null,
+    Object? colorSpace = null,
+    Object? class_ = null,
+  }) {
+    return _then(_value.copyWith(
+      colorComponents: null == colorComponents
+          ? _value.colorComponents
+          : colorComponents // ignore: cast_nullable_to_non_nullable
+              as int,
+      alpha: null == alpha
+          ? _value.alpha
+          : alpha // ignore: cast_nullable_to_non_nullable
+              as double,
+      colorSpace: null == colorSpace
+          ? _value.colorSpace
+          : colorSpace // ignore: cast_nullable_to_non_nullable
+              as int,
+      class_: null == class_
+          ? _value.class_
+          : class_ // ignore: cast_nullable_to_non_nullable
+              as String,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$UIColor_RGBAColorSpaceImplCopyWith<$Res>
+    implements $UIColorCopyWith<$Res> {
+  factory _$$UIColor_RGBAColorSpaceImplCopyWith(
+          _$UIColor_RGBAColorSpaceImpl value,
+          $Res Function(_$UIColor_RGBAColorSpaceImpl) then) =
+      __$$UIColor_RGBAColorSpaceImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {int colorComponents,
+      double green,
+      double blue,
+      double red,
+      double? greenDbl,
+      double? blueDbl,
+      double? redDbl,
+      double? alphaDbl,
+      double alpha,
+      Uint8List rgb,
+      int colorSpace,
+      String class_});
+}
+
+/// @nodoc
+class __$$UIColor_RGBAColorSpaceImplCopyWithImpl<$Res>
+    extends _$UIColorCopyWithImpl<$Res, _$UIColor_RGBAColorSpaceImpl>
+    implements _$$UIColor_RGBAColorSpaceImplCopyWith<$Res> {
+  __$$UIColor_RGBAColorSpaceImplCopyWithImpl(
+      _$UIColor_RGBAColorSpaceImpl _value,
+      $Res Function(_$UIColor_RGBAColorSpaceImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of UIColor
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? colorComponents = null,
+    Object? green = null,
+    Object? blue = null,
+    Object? red = null,
+    Object? greenDbl = freezed,
+    Object? blueDbl = freezed,
+    Object? redDbl = freezed,
+    Object? alphaDbl = freezed,
+    Object? alpha = null,
+    Object? rgb = null,
+    Object? colorSpace = null,
+    Object? class_ = null,
+  }) {
+    return _then(_$UIColor_RGBAColorSpaceImpl(
+      colorComponents: null == colorComponents
+          ? _value.colorComponents
+          : colorComponents // ignore: cast_nullable_to_non_nullable
+              as int,
+      green: null == green
+          ? _value.green
+          : green // ignore: cast_nullable_to_non_nullable
+              as double,
+      blue: null == blue
+          ? _value.blue
+          : blue // ignore: cast_nullable_to_non_nullable
+              as double,
+      red: null == red
+          ? _value.red
+          : red // ignore: cast_nullable_to_non_nullable
+              as double,
+      greenDbl: freezed == greenDbl
+          ? _value.greenDbl
+          : greenDbl // ignore: cast_nullable_to_non_nullable
+              as double?,
+      blueDbl: freezed == blueDbl
+          ? _value.blueDbl
+          : blueDbl // ignore: cast_nullable_to_non_nullable
+              as double?,
+      redDbl: freezed == redDbl
+          ? _value.redDbl
+          : redDbl // ignore: cast_nullable_to_non_nullable
+              as double?,
+      alphaDbl: freezed == alphaDbl
+          ? _value.alphaDbl
+          : alphaDbl // ignore: cast_nullable_to_non_nullable
+              as double?,
+      alpha: null == alpha
+          ? _value.alpha
+          : alpha // ignore: cast_nullable_to_non_nullable
+              as double,
+      rgb: null == rgb
+          ? _value.rgb
+          : rgb // ignore: cast_nullable_to_non_nullable
+              as Uint8List,
+      colorSpace: null == colorSpace
+          ? _value.colorSpace
+          : colorSpace // ignore: cast_nullable_to_non_nullable
+              as int,
+      class_: null == class_
+          ? _value.class_
+          : class_ // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$UIColor_RGBAColorSpaceImpl extends UIColor_RGBAColorSpace {
+  const _$UIColor_RGBAColorSpaceImpl(
+      {required this.colorComponents,
+      required this.green,
+      required this.blue,
+      required this.red,
+      this.greenDbl,
+      this.blueDbl,
+      this.redDbl,
+      this.alphaDbl,
+      required this.alpha,
+      required this.rgb,
+      required this.colorSpace,
+      required this.class_})
+      : super._();
+
+  @override
+  final int colorComponents;
+  @override
+  final double green;
+  @override
+  final double blue;
+  @override
+  final double red;
+  @override
+  final double? greenDbl;
+  @override
+  final double? blueDbl;
+  @override
+  final double? redDbl;
+  @override
+  final double? alphaDbl;
+  @override
+  final double alpha;
+  @override
+  final Uint8List rgb;
+  @override
+  final int colorSpace;
+  @override
+  final String class_;
+
+  @override
+  String toString() {
+    return 'UIColor.rgbaColorSpace(colorComponents: $colorComponents, green: $green, blue: $blue, red: $red, greenDbl: $greenDbl, blueDbl: $blueDbl, redDbl: $redDbl, alphaDbl: $alphaDbl, alpha: $alpha, rgb: $rgb, colorSpace: $colorSpace, class_: $class_)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$UIColor_RGBAColorSpaceImpl &&
+            (identical(other.colorComponents, colorComponents) ||
+                other.colorComponents == colorComponents) &&
+            (identical(other.green, green) || other.green == green) &&
+            (identical(other.blue, blue) || other.blue == blue) &&
+            (identical(other.red, red) || other.red == red) &&
+            (identical(other.greenDbl, greenDbl) ||
+                other.greenDbl == greenDbl) &&
+            (identical(other.blueDbl, blueDbl) || other.blueDbl == blueDbl) &&
+            (identical(other.redDbl, redDbl) || other.redDbl == redDbl) &&
+            (identical(other.alphaDbl, alphaDbl) ||
+                other.alphaDbl == alphaDbl) &&
+            (identical(other.alpha, alpha) || other.alpha == alpha) &&
+            const DeepCollectionEquality().equals(other.rgb, rgb) &&
+            (identical(other.colorSpace, colorSpace) ||
+                other.colorSpace == colorSpace) &&
+            (identical(other.class_, class_) || other.class_ == class_));
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      runtimeType,
+      colorComponents,
+      green,
+      blue,
+      red,
+      greenDbl,
+      blueDbl,
+      redDbl,
+      alphaDbl,
+      alpha,
+      const DeepCollectionEquality().hash(rgb),
+      colorSpace,
+      class_);
+
+  /// Create a copy of UIColor
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$UIColor_RGBAColorSpaceImplCopyWith<_$UIColor_RGBAColorSpaceImpl>
+      get copyWith => __$$UIColor_RGBAColorSpaceImplCopyWithImpl<
+          _$UIColor_RGBAColorSpaceImpl>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(
+            int colorComponents,
+            double green,
+            double blue,
+            double red,
+            double? greenDbl,
+            double? blueDbl,
+            double? redDbl,
+            double? alphaDbl,
+            double alpha,
+            Uint8List rgb,
+            int colorSpace,
+            String class_)
+        rgbaColorSpace,
+    required TResult Function(int colorComponents, double white, double alpha,
+            Uint8List bin, int colorSpace, String class_)
+        grayscaleAlphaColorSpace,
+  }) {
+    return rgbaColorSpace(colorComponents, green, blue, red, greenDbl, blueDbl,
+        redDbl, alphaDbl, alpha, rgb, colorSpace, class_);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(
+            int colorComponents,
+            double green,
+            double blue,
+            double red,
+            double? greenDbl,
+            double? blueDbl,
+            double? redDbl,
+            double? alphaDbl,
+            double alpha,
+            Uint8List rgb,
+            int colorSpace,
+            String class_)?
+        rgbaColorSpace,
+    TResult? Function(int colorComponents, double white, double alpha,
+            Uint8List bin, int colorSpace, String class_)?
+        grayscaleAlphaColorSpace,
+  }) {
+    return rgbaColorSpace?.call(colorComponents, green, blue, red, greenDbl,
+        blueDbl, redDbl, alphaDbl, alpha, rgb, colorSpace, class_);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(
+            int colorComponents,
+            double green,
+            double blue,
+            double red,
+            double? greenDbl,
+            double? blueDbl,
+            double? redDbl,
+            double? alphaDbl,
+            double alpha,
+            Uint8List rgb,
+            int colorSpace,
+            String class_)?
+        rgbaColorSpace,
+    TResult Function(int colorComponents, double white, double alpha,
+            Uint8List bin, int colorSpace, String class_)?
+        grayscaleAlphaColorSpace,
+    required TResult orElse(),
+  }) {
+    if (rgbaColorSpace != null) {
+      return rgbaColorSpace(colorComponents, green, blue, red, greenDbl,
+          blueDbl, redDbl, alphaDbl, alpha, rgb, colorSpace, class_);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(UIColor_RGBAColorSpace value) rgbaColorSpace,
+    required TResult Function(UIColor_GrayscaleAlphaColorSpace value)
+        grayscaleAlphaColorSpace,
+  }) {
+    return rgbaColorSpace(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(UIColor_RGBAColorSpace value)? rgbaColorSpace,
+    TResult? Function(UIColor_GrayscaleAlphaColorSpace value)?
+        grayscaleAlphaColorSpace,
+  }) {
+    return rgbaColorSpace?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(UIColor_RGBAColorSpace value)? rgbaColorSpace,
+    TResult Function(UIColor_GrayscaleAlphaColorSpace value)?
+        grayscaleAlphaColorSpace,
+    required TResult orElse(),
+  }) {
+    if (rgbaColorSpace != null) {
+      return rgbaColorSpace(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class UIColor_RGBAColorSpace extends UIColor {
+  const factory UIColor_RGBAColorSpace(
+      {required final int colorComponents,
+      required final double green,
+      required final double blue,
+      required final double red,
+      final double? greenDbl,
+      final double? blueDbl,
+      final double? redDbl,
+      final double? alphaDbl,
+      required final double alpha,
+      required final Uint8List rgb,
+      required final int colorSpace,
+      required final String class_}) = _$UIColor_RGBAColorSpaceImpl;
+  const UIColor_RGBAColorSpace._() : super._();
+
+  @override
+  int get colorComponents;
+  double get green;
+  double get blue;
+  double get red;
+  double? get greenDbl;
+  double? get blueDbl;
+  double? get redDbl;
+  double? get alphaDbl;
+  @override
+  double get alpha;
+  Uint8List get rgb;
+  @override
+  int get colorSpace;
+  @override
+  String get class_;
+
+  /// Create a copy of UIColor
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$UIColor_RGBAColorSpaceImplCopyWith<_$UIColor_RGBAColorSpaceImpl>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$UIColor_GrayscaleAlphaColorSpaceImplCopyWith<$Res>
+    implements $UIColorCopyWith<$Res> {
+  factory _$$UIColor_GrayscaleAlphaColorSpaceImplCopyWith(
+          _$UIColor_GrayscaleAlphaColorSpaceImpl value,
+          $Res Function(_$UIColor_GrayscaleAlphaColorSpaceImpl) then) =
+      __$$UIColor_GrayscaleAlphaColorSpaceImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {int colorComponents,
+      double white,
+      double alpha,
+      Uint8List bin,
+      int colorSpace,
+      String class_});
+}
+
+/// @nodoc
+class __$$UIColor_GrayscaleAlphaColorSpaceImplCopyWithImpl<$Res>
+    extends _$UIColorCopyWithImpl<$Res, _$UIColor_GrayscaleAlphaColorSpaceImpl>
+    implements _$$UIColor_GrayscaleAlphaColorSpaceImplCopyWith<$Res> {
+  __$$UIColor_GrayscaleAlphaColorSpaceImplCopyWithImpl(
+      _$UIColor_GrayscaleAlphaColorSpaceImpl _value,
+      $Res Function(_$UIColor_GrayscaleAlphaColorSpaceImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of UIColor
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? colorComponents = null,
+    Object? white = null,
+    Object? alpha = null,
+    Object? bin = null,
+    Object? colorSpace = null,
+    Object? class_ = null,
+  }) {
+    return _then(_$UIColor_GrayscaleAlphaColorSpaceImpl(
+      colorComponents: null == colorComponents
+          ? _value.colorComponents
+          : colorComponents // ignore: cast_nullable_to_non_nullable
+              as int,
+      white: null == white
+          ? _value.white
+          : white // ignore: cast_nullable_to_non_nullable
+              as double,
+      alpha: null == alpha
+          ? _value.alpha
+          : alpha // ignore: cast_nullable_to_non_nullable
+              as double,
+      bin: null == bin
+          ? _value.bin
+          : bin // ignore: cast_nullable_to_non_nullable
+              as Uint8List,
+      colorSpace: null == colorSpace
+          ? _value.colorSpace
+          : colorSpace // ignore: cast_nullable_to_non_nullable
+              as int,
+      class_: null == class_
+          ? _value.class_
+          : class_ // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$UIColor_GrayscaleAlphaColorSpaceImpl
+    extends UIColor_GrayscaleAlphaColorSpace {
+  const _$UIColor_GrayscaleAlphaColorSpaceImpl(
+      {required this.colorComponents,
+      required this.white,
+      required this.alpha,
+      required this.bin,
+      required this.colorSpace,
+      required this.class_})
+      : super._();
+
+  @override
+  final int colorComponents;
+  @override
+  final double white;
+  @override
+  final double alpha;
+  @override
+  final Uint8List bin;
+  @override
+  final int colorSpace;
+  @override
+  final String class_;
+
+  @override
+  String toString() {
+    return 'UIColor.grayscaleAlphaColorSpace(colorComponents: $colorComponents, white: $white, alpha: $alpha, bin: $bin, colorSpace: $colorSpace, class_: $class_)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$UIColor_GrayscaleAlphaColorSpaceImpl &&
+            (identical(other.colorComponents, colorComponents) ||
+                other.colorComponents == colorComponents) &&
+            (identical(other.white, white) || other.white == white) &&
+            (identical(other.alpha, alpha) || other.alpha == alpha) &&
+            const DeepCollectionEquality().equals(other.bin, bin) &&
+            (identical(other.colorSpace, colorSpace) ||
+                other.colorSpace == colorSpace) &&
+            (identical(other.class_, class_) || other.class_ == class_));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, colorComponents, white, alpha,
+      const DeepCollectionEquality().hash(bin), colorSpace, class_);
+
+  /// Create a copy of UIColor
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$UIColor_GrayscaleAlphaColorSpaceImplCopyWith<
+          _$UIColor_GrayscaleAlphaColorSpaceImpl>
+      get copyWith => __$$UIColor_GrayscaleAlphaColorSpaceImplCopyWithImpl<
+          _$UIColor_GrayscaleAlphaColorSpaceImpl>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(
+            int colorComponents,
+            double green,
+            double blue,
+            double red,
+            double? greenDbl,
+            double? blueDbl,
+            double? redDbl,
+            double? alphaDbl,
+            double alpha,
+            Uint8List rgb,
+            int colorSpace,
+            String class_)
+        rgbaColorSpace,
+    required TResult Function(int colorComponents, double white, double alpha,
+            Uint8List bin, int colorSpace, String class_)
+        grayscaleAlphaColorSpace,
+  }) {
+    return grayscaleAlphaColorSpace(
+        colorComponents, white, alpha, bin, colorSpace, class_);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(
+            int colorComponents,
+            double green,
+            double blue,
+            double red,
+            double? greenDbl,
+            double? blueDbl,
+            double? redDbl,
+            double? alphaDbl,
+            double alpha,
+            Uint8List rgb,
+            int colorSpace,
+            String class_)?
+        rgbaColorSpace,
+    TResult? Function(int colorComponents, double white, double alpha,
+            Uint8List bin, int colorSpace, String class_)?
+        grayscaleAlphaColorSpace,
+  }) {
+    return grayscaleAlphaColorSpace?.call(
+        colorComponents, white, alpha, bin, colorSpace, class_);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(
+            int colorComponents,
+            double green,
+            double blue,
+            double red,
+            double? greenDbl,
+            double? blueDbl,
+            double? redDbl,
+            double? alphaDbl,
+            double alpha,
+            Uint8List rgb,
+            int colorSpace,
+            String class_)?
+        rgbaColorSpace,
+    TResult Function(int colorComponents, double white, double alpha,
+            Uint8List bin, int colorSpace, String class_)?
+        grayscaleAlphaColorSpace,
+    required TResult orElse(),
+  }) {
+    if (grayscaleAlphaColorSpace != null) {
+      return grayscaleAlphaColorSpace(
+          colorComponents, white, alpha, bin, colorSpace, class_);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(UIColor_RGBAColorSpace value) rgbaColorSpace,
+    required TResult Function(UIColor_GrayscaleAlphaColorSpace value)
+        grayscaleAlphaColorSpace,
+  }) {
+    return grayscaleAlphaColorSpace(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(UIColor_RGBAColorSpace value)? rgbaColorSpace,
+    TResult? Function(UIColor_GrayscaleAlphaColorSpace value)?
+        grayscaleAlphaColorSpace,
+  }) {
+    return grayscaleAlphaColorSpace?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(UIColor_RGBAColorSpace value)? rgbaColorSpace,
+    TResult Function(UIColor_GrayscaleAlphaColorSpace value)?
+        grayscaleAlphaColorSpace,
+    required TResult orElse(),
+  }) {
+    if (grayscaleAlphaColorSpace != null) {
+      return grayscaleAlphaColorSpace(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class UIColor_GrayscaleAlphaColorSpace extends UIColor {
+  const factory UIColor_GrayscaleAlphaColorSpace(
+      {required final int colorComponents,
+      required final double white,
+      required final double alpha,
+      required final Uint8List bin,
+      required final int colorSpace,
+      required final String class_}) = _$UIColor_GrayscaleAlphaColorSpaceImpl;
+  const UIColor_GrayscaleAlphaColorSpace._() : super._();
+
+  @override
+  int get colorComponents;
+  double get white;
+  @override
+  double get alpha;
+  Uint8List get bin;
+  @override
+  int get colorSpace;
+  @override
+  String get class_;
+
+  /// Create a copy of UIColor
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$UIColor_GrayscaleAlphaColorSpaceImplCopyWith<
+          _$UIColor_GrayscaleAlphaColorSpaceImpl>
+      get copyWith => throw _privateConstructorUsedError;
 }

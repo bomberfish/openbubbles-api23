@@ -10,7 +10,7 @@ import 'package:freezed_annotation/freezed_annotation.dart' hide protected;
 part 'api.freezed.dart';
 
 // These functions are ignored because they are not marked as `pub`: `config`, `do_login`, `get_login_config`, `get_phase`, `handle_photostream`, `plist_to_bin`, `plist_to_buf`, `plist_to_string`, `restore`, `setup_push`, `shared_items`, `subscribe_streams`, `wrap_sink`
-// These types are ignored because they are not used by any `pub` functions: `FLUTTER_RUST_BRIDGE_HANDLER`, `InnerPushState`, `NSArrayClass`, `NSArrayIconArray`, `NSArrayImageArray`, `SavedHardwareState`
+// These types are ignored because they are not used by any `pub` functions: `FLUTTER_RUST_BRIDGE_HANDLER`, `GSAConfig`, `InnerPushState`, `NSArrayClass`, `NSArrayIconArray`, `NSArrayImageArray`, `SavedHardwareState`
 // These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `deref`, `deref`, `eq`, `fmt`, `get_files`, `initialize`, `spawn`
 
 Future<ArcPushState> newPushState({required String dir}) =>
@@ -50,6 +50,21 @@ Future<JoinedOsConfig> configFromRelay(
 Future<String?> validateRelay({required ArcPushState state}) =>
     RustLib.instance.api.crateApiApiValidateRelay(state: state);
 
+Future<SimplifiedPoster> parsePoster({required IMessagePosterRecord poster}) =>
+    RustLib.instance.api.crateApiApiParsePoster(poster: poster);
+
+Future<IMessagePosterRecord> fromPoster({required SimplifiedPoster poster}) =>
+    RustLib.instance.api.crateApiApiFromPoster(poster: poster);
+
+SimplifiedPoster clonePoster({required SimplifiedPoster poster}) =>
+    RustLib.instance.api.crateApiApiClonePoster(poster: poster);
+
+Future<Uint8List> parsePosterSave({required SimplifiedPoster poster}) =>
+    RustLib.instance.api.crateApiApiParsePosterSave(poster: poster);
+
+Future<SimplifiedPoster> fromPosterSave({required List<int> poster}) =>
+    RustLib.instance.api.crateApiApiFromPosterSave(poster: poster);
+
 Future<DeviceInfo> getDeviceInfoState({required ArcPushState state}) =>
     RustLib.instance.api.crateApiApiGetDeviceInfoState(state: state);
 
@@ -80,6 +95,8 @@ Future<NsArrayLpImageMetadata> createImageArray(
 
 Future<NsArrayLpIconMetadata> createIconArray({required LPIconMetadata img}) =>
     RustLib.instance.api.crateApiApiCreateIconArray(img: img);
+
+Uint8List nsNull() => RustLib.instance.api.crateApiApiNsNull();
 
 Future<String> updateAccountHeaders({required ArcPushState state}) =>
     RustLib.instance.api.crateApiApiUpdateAccountHeaders(state: state);
@@ -1584,6 +1601,41 @@ class LPLinkMetadata {
           icons == other.icons;
 }
 
+class MemojiData {
+  PosterColor backgroundColorDescription;
+  final Uint8List avatarRecordData;
+  final Uint8List avatarPoseData;
+  final bool hasBody;
+  Uint8List avatarImageData;
+
+  MemojiData({
+    required this.backgroundColorDescription,
+    required this.avatarRecordData,
+    required this.avatarPoseData,
+    required this.hasBody,
+    required this.avatarImageData,
+  });
+
+  @override
+  int get hashCode =>
+      backgroundColorDescription.hashCode ^
+      avatarRecordData.hashCode ^
+      avatarPoseData.hashCode ^
+      hasBody.hashCode ^
+      avatarImageData.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is MemojiData &&
+          runtimeType == other.runtimeType &&
+          backgroundColorDescription == other.backgroundColorDescription &&
+          avatarRecordData == other.avatarRecordData &&
+          avatarPoseData == other.avatarPoseData &&
+          hasBody == other.hasBody &&
+          avatarImageData == other.avatarImageData;
+}
+
 @freezed
 sealed class Message with _$Message {
   const Message._();
@@ -1823,6 +1875,38 @@ class MMCSTransferProgress {
           file == other.file;
 }
 
+class MonogramData {
+  PosterColor topBackgroundColorDescription;
+  PosterColor backgroundColorDescription;
+  String initials;
+  final bool monogramSupportedForName;
+
+  MonogramData({
+    required this.topBackgroundColorDescription,
+    required this.backgroundColorDescription,
+    required this.initials,
+    required this.monogramSupportedForName,
+  });
+
+  @override
+  int get hashCode =>
+      topBackgroundColorDescription.hashCode ^
+      backgroundColorDescription.hashCode ^
+      initials.hashCode ^
+      monogramSupportedForName.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is MonogramData &&
+          runtimeType == other.runtimeType &&
+          topBackgroundColorDescription ==
+              other.topBackgroundColorDescription &&
+          backgroundColorDescription == other.backgroundColorDescription &&
+          initials == other.initials &&
+          monogramSupportedForName == other.monogramSupportedForName;
+}
+
 class MoveToRecycleBinMessage {
   final DeleteTarget target;
   final int recoverableDeleteDate;
@@ -2022,6 +2106,196 @@ class PermanentDeleteMessage {
           isScheduled == other.isScheduled;
 }
 
+class PhotoPosterContents {
+  final int version;
+  List<PhotoPosterLayer> layers;
+  final PhotoPosterProperties properties;
+
+  PhotoPosterContents({
+    required this.version,
+    required this.layers,
+    required this.properties,
+  });
+
+  @override
+  int get hashCode => version.hashCode ^ layers.hashCode ^ properties.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is PhotoPosterContents &&
+          runtimeType == other.runtimeType &&
+          version == other.version &&
+          layers == other.layers &&
+          properties == other.properties;
+}
+
+class PhotoPosterContentsFrame {
+  final double width;
+  final double height;
+  final double x;
+  final double y;
+
+  const PhotoPosterContentsFrame({
+    required this.width,
+    required this.height,
+    required this.x,
+    required this.y,
+  });
+
+  @override
+  int get hashCode =>
+      width.hashCode ^ height.hashCode ^ x.hashCode ^ y.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is PhotoPosterContentsFrame &&
+          runtimeType == other.runtimeType &&
+          width == other.width &&
+          height == other.height &&
+          x == other.x &&
+          y == other.y;
+}
+
+class PhotoPosterContentsSize {
+  final double width;
+  final double height;
+
+  const PhotoPosterContentsSize({
+    required this.width,
+    required this.height,
+  });
+
+  @override
+  int get hashCode => width.hashCode ^ height.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is PhotoPosterContentsSize &&
+          runtimeType == other.runtimeType &&
+          width == other.width &&
+          height == other.height;
+}
+
+class PhotoPosterLayer {
+  PhotoPosterContentsFrame frame;
+  String filename;
+  final double zPosition;
+  final String identifier;
+
+  PhotoPosterLayer({
+    required this.frame,
+    required this.filename,
+    required this.zPosition,
+    required this.identifier,
+  });
+
+  @override
+  int get hashCode =>
+      frame.hashCode ^
+      filename.hashCode ^
+      zPosition.hashCode ^
+      identifier.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is PhotoPosterLayer &&
+          runtimeType == other.runtimeType &&
+          frame == other.frame &&
+          filename == other.filename &&
+          zPosition == other.zPosition &&
+          identifier == other.identifier;
+}
+
+class PhotoPosterLayout {
+  final int clockIntersection;
+  final PhotoPosterContentsSize deviceResolution;
+  PhotoPosterContentsFrame visibleFrame;
+  final PhotoPosterContentsFrame timeFrame;
+  final String clockLayerOrder;
+  bool hasTopEdgeContact;
+  final PhotoPosterContentsFrame inactiveFrame;
+  final PhotoPosterContentsSize imageSize;
+  final PhotoPosterContentsSize parallaxPadding;
+
+  PhotoPosterLayout({
+    required this.clockIntersection,
+    required this.deviceResolution,
+    required this.visibleFrame,
+    required this.timeFrame,
+    required this.clockLayerOrder,
+    required this.hasTopEdgeContact,
+    required this.inactiveFrame,
+    required this.imageSize,
+    required this.parallaxPadding,
+  });
+
+  @override
+  int get hashCode =>
+      clockIntersection.hashCode ^
+      deviceResolution.hashCode ^
+      visibleFrame.hashCode ^
+      timeFrame.hashCode ^
+      clockLayerOrder.hashCode ^
+      hasTopEdgeContact.hashCode ^
+      inactiveFrame.hashCode ^
+      imageSize.hashCode ^
+      parallaxPadding.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is PhotoPosterLayout &&
+          runtimeType == other.runtimeType &&
+          clockIntersection == other.clockIntersection &&
+          deviceResolution == other.deviceResolution &&
+          visibleFrame == other.visibleFrame &&
+          timeFrame == other.timeFrame &&
+          clockLayerOrder == other.clockLayerOrder &&
+          hasTopEdgeContact == other.hasTopEdgeContact &&
+          inactiveFrame == other.inactiveFrame &&
+          imageSize == other.imageSize &&
+          parallaxPadding == other.parallaxPadding;
+}
+
+class PhotoPosterProperties {
+  final PhotoPosterLayout portraitLayout;
+  final bool settlingEffectEnabled;
+  final bool depthEnabled;
+  final double clockAreaLuminance;
+  final bool parallaxDisabled;
+
+  const PhotoPosterProperties({
+    required this.portraitLayout,
+    required this.settlingEffectEnabled,
+    required this.depthEnabled,
+    required this.clockAreaLuminance,
+    required this.parallaxDisabled,
+  });
+
+  @override
+  int get hashCode =>
+      portraitLayout.hashCode ^
+      settlingEffectEnabled.hashCode ^
+      depthEnabled.hashCode ^
+      clockAreaLuminance.hashCode ^
+      parallaxDisabled.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is PhotoPosterProperties &&
+          runtimeType == other.runtimeType &&
+          portraitLayout == other.portraitLayout &&
+          settlingEffectEnabled == other.settlingEffectEnabled &&
+          depthEnabled == other.depthEnabled &&
+          clockAreaLuminance == other.clockAreaLuminance &&
+          parallaxDisabled == other.parallaxDisabled;
+}
+
 @freezed
 sealed class PollResult with _$PollResult {
   const PollResult._();
@@ -2030,6 +2304,212 @@ sealed class PollResult with _$PollResult {
   const factory PollResult.cont([
     PushMessage? field0,
   ]) = PollResult_Cont;
+}
+
+class PosterAsset {
+  final PhotoPosterContents contents;
+  Map<String, Uint8List> files;
+  final String uuid;
+
+  PosterAsset({
+    required this.contents,
+    required this.files,
+    required this.uuid,
+  });
+
+  @override
+  int get hashCode => contents.hashCode ^ files.hashCode ^ uuid.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is PosterAsset &&
+          runtimeType == other.runtimeType &&
+          contents == other.contents &&
+          files == other.files &&
+          uuid == other.uuid;
+}
+
+class PosterColor {
+  final double alpha;
+  final double blue;
+  final double green;
+  final double red;
+
+  const PosterColor({
+    required this.alpha,
+    required this.blue,
+    required this.green,
+    required this.red,
+  });
+
+  @override
+  int get hashCode =>
+      alpha.hashCode ^ blue.hashCode ^ green.hashCode ^ red.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is PosterColor &&
+          runtimeType == other.runtimeType &&
+          alpha == other.alpha &&
+          blue == other.blue &&
+          green == other.green &&
+          red == other.red;
+}
+
+@freezed
+sealed class PosterType with _$PosterType {
+  const PosterType._();
+
+  const factory PosterType.photo({
+    required List<PosterAsset> assets,
+  }) = PosterType_Photo;
+  const factory PosterType.monogram({
+    required MonogramData data,
+    required PosterColor background,
+  }) = PosterType_Monogram;
+  const factory PosterType.memoji({
+    required MemojiData data,
+    required PosterColor background,
+  }) = PosterType_Memoji;
+}
+
+class PRPosterColor {
+  final int preferredStyle;
+  final String identifier;
+  final bool suggested;
+  final UIColor color;
+
+  const PRPosterColor({
+    required this.preferredStyle,
+    required this.identifier,
+    required this.suggested,
+    required this.color,
+  });
+
+  @override
+  int get hashCode =>
+      preferredStyle.hashCode ^
+      identifier.hashCode ^
+      suggested.hashCode ^
+      color.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is PRPosterColor &&
+          runtimeType == other.runtimeType &&
+          preferredStyle == other.preferredStyle &&
+          identifier == other.identifier &&
+          suggested == other.suggested &&
+          color == other.color;
+}
+
+@freezed
+sealed class PRPosterContentMaterialStyle with _$PRPosterContentMaterialStyle {
+  const PRPosterContentMaterialStyle._();
+
+  const factory PRPosterContentMaterialStyle.prPosterContentDiscreteColorsStyle({
+    required double variation,
+    required List<UIColor> colors,
+    required bool vibrant,
+    required bool supportsVariation,
+    required bool needsToResolveVariation,
+  }) = PRPosterContentMaterialStyle_PRPosterContentDiscreteColorsStyle;
+  const factory PRPosterContentMaterialStyle.prPosterContentVibrantMaterialStyle() =
+      PRPosterContentMaterialStyle_PRPosterContentVibrantMaterialStyle;
+  const factory PRPosterContentMaterialStyle.prPosterContentGradientStyle({
+    required int gradientType,
+    required List<UIColor> colors,
+    required String startPoint,
+    required Float64List locations,
+    required String endPoint,
+  }) = PRPosterContentMaterialStyle_PRPosterContentGradientStyle;
+}
+
+class PRPosterSystemTimeFontConfiguration {
+  final bool isSystemItem;
+  String timeFontIdentifier;
+  double weight;
+
+  PRPosterSystemTimeFontConfiguration({
+    required this.isSystemItem,
+    required this.timeFontIdentifier,
+    required this.weight,
+  });
+
+  @override
+  int get hashCode =>
+      isSystemItem.hashCode ^ timeFontIdentifier.hashCode ^ weight.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is PRPosterSystemTimeFontConfiguration &&
+          runtimeType == other.runtimeType &&
+          isSystemItem == other.isSystemItem &&
+          timeFontIdentifier == other.timeFontIdentifier &&
+          weight == other.weight;
+}
+
+class PRPosterTitleStyleConfiguration {
+  final bool alternateDateEnabled;
+  final double contentsLuminence;
+  final String groupName;
+  final int preferredTitleAlignment;
+  final int preferredTitleLayout;
+  final PRPosterSystemTimeFontConfiguration timeFontConfiguration;
+  final Uint8List? timeNumberingSystem;
+  PRPosterColor titleColor;
+  final Uint8List titleContentStyle;
+  final bool userConfigured;
+  PRPosterContentMaterialStyle? titleStyle;
+
+  PRPosterTitleStyleConfiguration({
+    required this.alternateDateEnabled,
+    required this.contentsLuminence,
+    required this.groupName,
+    required this.preferredTitleAlignment,
+    required this.preferredTitleLayout,
+    required this.timeFontConfiguration,
+    this.timeNumberingSystem,
+    required this.titleColor,
+    required this.titleContentStyle,
+    required this.userConfigured,
+    this.titleStyle,
+  });
+
+  @override
+  int get hashCode =>
+      alternateDateEnabled.hashCode ^
+      contentsLuminence.hashCode ^
+      groupName.hashCode ^
+      preferredTitleAlignment.hashCode ^
+      preferredTitleLayout.hashCode ^
+      timeFontConfiguration.hashCode ^
+      timeNumberingSystem.hashCode ^
+      titleColor.hashCode ^
+      titleContentStyle.hashCode ^
+      userConfigured.hashCode ^
+      titleStyle.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is PRPosterTitleStyleConfiguration &&
+          runtimeType == other.runtimeType &&
+          alternateDateEnabled == other.alternateDateEnabled &&
+          contentsLuminence == other.contentsLuminence &&
+          groupName == other.groupName &&
+          preferredTitleAlignment == other.preferredTitleAlignment &&
+          preferredTitleLayout == other.preferredTitleLayout &&
+          timeFontConfiguration == other.timeFontConfiguration &&
+          timeNumberingSystem == other.timeNumberingSystem &&
+          titleColor == other.titleColor &&
+          titleContentStyle == other.titleContentStyle &&
+          userConfigured == other.userConfigured &&
+          titleStyle == other.titleStyle;
 }
 
 class PrivateDeviceInfo {
@@ -2350,6 +2830,37 @@ class SharedPoster {
           messageTag == other.messageTag;
 }
 
+class SimplifiedPoster {
+  final WallpaperMetadata textMetadata;
+  final PRPosterTitleStyleConfiguration titleConfiguration;
+  PosterType type;
+  Uint8List lowRes;
+
+  SimplifiedPoster({
+    required this.textMetadata,
+    required this.titleConfiguration,
+    required this.type,
+    required this.lowRes,
+  });
+
+  @override
+  int get hashCode =>
+      textMetadata.hashCode ^
+      titleConfiguration.hashCode ^
+      type.hashCode ^
+      lowRes.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is SimplifiedPoster &&
+          runtimeType == other.runtimeType &&
+          textMetadata == other.textMetadata &&
+          titleConfiguration == other.titleConfiguration &&
+          type == other.type &&
+          lowRes == other.lowRes;
+}
+
 @freezed
 sealed class StatusKitMessage with _$StatusKitMessage {
   const StatusKitMessage._();
@@ -2550,6 +3061,34 @@ class TrustedPhoneNumber {
           id == other.id;
 }
 
+@freezed
+sealed class UIColor with _$UIColor {
+  const UIColor._();
+
+  const factory UIColor.rgbaColorSpace({
+    required int colorComponents,
+    required double green,
+    required double blue,
+    required double red,
+    double? greenDbl,
+    double? blueDbl,
+    double? redDbl,
+    double? alphaDbl,
+    required double alpha,
+    required Uint8List rgb,
+    required int colorSpace,
+    required String class_,
+  }) = UIColor_RGBAColorSpace;
+  const factory UIColor.grayscaleAlphaColorSpace({
+    required int colorComponents,
+    required double white,
+    required double alpha,
+    required Uint8List bin,
+    required int colorSpace,
+    required String class_,
+  }) = UIColor_GrayscaleAlphaColorSpace;
+}
+
 class UnsendMessage {
   final String tuuid;
   final int editPart;
@@ -2636,4 +3175,47 @@ class UpdateProfileSharingMessage {
           sharedDismissed == other.sharedDismissed &&
           sharedAll == other.sharedAll &&
           version == other.version;
+}
+
+class WallpaperMetadata {
+  final PosterColor? backgroundColorKey;
+  final PosterColor fontColorKey;
+  String fontNameKey;
+  final double fontSizeKey;
+  double fontWeightKey;
+  final bool isVerticalKey;
+  final String typeKey;
+
+  WallpaperMetadata({
+    this.backgroundColorKey,
+    required this.fontColorKey,
+    required this.fontNameKey,
+    required this.fontSizeKey,
+    required this.fontWeightKey,
+    required this.isVerticalKey,
+    required this.typeKey,
+  });
+
+  @override
+  int get hashCode =>
+      backgroundColorKey.hashCode ^
+      fontColorKey.hashCode ^
+      fontNameKey.hashCode ^
+      fontSizeKey.hashCode ^
+      fontWeightKey.hashCode ^
+      isVerticalKey.hashCode ^
+      typeKey.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is WallpaperMetadata &&
+          runtimeType == other.runtimeType &&
+          backgroundColorKey == other.backgroundColorKey &&
+          fontColorKey == other.fontColorKey &&
+          fontNameKey == other.fontNameKey &&
+          fontSizeKey == other.fontSizeKey &&
+          fontWeightKey == other.fontWeightKey &&
+          isVerticalKey == other.isVerticalKey &&
+          typeKey == other.typeKey;
 }

@@ -95,13 +95,14 @@ impl NativePushState {
                                 let handler_ref = handler.clone();
                                 tokio::spawn(async move {
                                     let mut retry = 0;
-                                    tokio::time::sleep(Duration::from_secs(10)).await;
+                                    // sheesh, downloads take time...
+                                    tokio::time::sleep(Duration::from_secs(30)).await;
                                     while QUEUED_MESSAGES.lock().await.1.contains_key(&key) {
                                         retry += 1;
                                         info!("re-emitting pointer {key}, retry {retry}");
                                         // we still haven't been handled, attempt to handle again
                                         handler_ref.receieved_msg(key, retry);
-                                        tokio::time::sleep(Duration::from_secs(10)).await;
+                                        tokio::time::sleep(Duration::from_secs(30)).await;
                                     }
                                 });
 

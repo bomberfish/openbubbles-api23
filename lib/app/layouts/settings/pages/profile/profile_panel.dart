@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:bluebubbles/app/components/avatars/contact_avatar_widget.dart';
+import 'package:bluebubbles/app/layouts/settings/pages/profile/posterkit.dart';
+import 'package:bluebubbles/app/layouts/settings/pages/profile/profile_scaffold.dart';
 import 'package:bluebubbles/app/layouts/settings/pages/theming/avatar/avatar_crop.dart';
 import 'package:bluebubbles/app/layouts/settings/widgets/content/next_button.dart';
 import 'package:bluebubbles/app/wrappers/theme_switcher.dart';
@@ -164,11 +166,37 @@ class _ProfilePanelState extends OptimizedState<ProfilePanel> with WidgetsBindin
               );
             }
           );
+
+          api.SimplifiedPoster? poster;
+          if (ss.settings.userPosterPath.value != null && !kIsDesktop) {
+            var data = await File("${ss.settings.userPosterPath.value!}.jpg").readAsBytes();
+            print("Parsing file");
+            poster = await api.fromPosterSave(poster: data);
+          }
+
+          if (poster != null && poster.type is api.PosterType_Photo) {
+            var photo = poster.type as api.PosterType_Photo;
+            for (var asset in photo.assets) {
+              Map<String, Uint8List> entries = {};
+              for (var file in asset.files.entries) {
+                File f = pushService.fileForAsset(ss.settings.userPosterPath.value!, asset, file.key);
+                entries[file.key] = await f.readAsBytes();
+              }
+              asset.files = entries;
+            }
+          }
+
+          if (poster != null && poster.type is api.PosterType_Memoji) {
+            var photo = poster.type as api.PosterType_Memoji;
+            photo.data.avatarImageData = await File("${ss.settings.userPosterPath.value!}/memoji_orig.heic").readAsBytes();
+          }
+
           api.ShareProfileMessage message;
           try {
             message = await api.setProfile(state: pushService.state, record: api.IMessageNicknameRecord(
               name: api.IMessageNameRecord(name: ss.settings.userName.value, first: ss.settings.firstName.value!, last: ss.settings.lastName.value!),
               image: image,
+              poster: poster != null ? await api.fromPoster(poster: poster) : null,
             ), existing: existing);
           } catch(e, s) {
             Get.back();
@@ -305,132 +333,25 @@ class _ProfilePanelState extends OptimizedState<ProfilePanel> with WidgetsBindin
 
   @override
   Widget build(BuildContext context) {
-    return SettingsScaffold(
-      headerColor: headerColor,
-      title: "Profile",
-      tileColor: tileColor,
-      initialHeader: null,
-      iosSubtitle: iosSubtitle,
-      materialSubtitle: materialSubtitle,
+    return ProfileScaffold(
+      handle: null,
+      posterEdited: () {
+        cloudKitRecordDirty = true;
+        profileDirty = true;
+      },
       bodySlivers: [
         SliverToBoxAdapter(
           child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                const SizedBox(height: 10),
-                if (iOS)
-                  Center(
-                    child: Stack(
-                      clipBehavior: Clip.none,
-                      children: [
-                        GestureDetector(
-                          onTap: () async {
-                            updatePhoto();
-                          },
-                          child: ContactAvatarWidget(
-                            handle: null,
-                            borderThickness: 0.1,
-                            editable: false,
-                            fontSize: 22,
-                            size: 100,
-                          ),
-                        ),
-                        Obx(() => ss.settings.userAvatarPath.value != null ? Positioned(
-                          right: -5,
-                          top: -5,
-                          child: InkWell(
-                            onTap: () async {
-                              removePhoto();
-                            },
-                            child: Container(
-                              width: 30,
-                              height: 30,
-                              decoration: BoxDecoration(
-                                border: Border.all(color: context.theme.colorScheme.background, width: 1),
-                                shape: BoxShape.circle,
-                                color: context.theme.colorScheme.tertiaryContainer,
-                              ),
-                              child: Icon(
-                                Icons.close,
-                                color: context.theme.colorScheme.onTertiaryContainer,
-                                size: 20,
-                              ),
-                            ),
-                          ),
-                        ) : const SizedBox.shrink()),
-                      ],
-                    ),
-                  ),
-                if (iOS)
-                  Padding(
-                    padding: const EdgeInsets.only(top: 12.0),
-                    child: Center(
-                      child: RichText(
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.center,
-                        text: TextSpan(
-                          style: context.theme.textTheme.headlineMedium!.copyWith(
-                            fontWeight: FontWeight.bold,
-                            color: context.theme.colorScheme.onBackground,
-                          ),
-                          children: MessageHelper.buildEmojiText(
-                            ss.settings.redactedMode.value && ss.settings.hideContactInfo.value
-                                ? "User Name" : ss.settings.userName.value,
-                            context.theme.textTheme.headlineMedium!.copyWith(
-                              fontWeight: FontWeight.bold,
-                              color: context.theme.colorScheme.onBackground,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                if (iOS)
-                  Padding(
-                    padding: const EdgeInsets.only(top: 2.0),
-                    child: Center(
-                      child: RichText(
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.center,
-                        text: TextSpan(
-                          style: context.theme.textTheme.bodyMedium!.apply(color: context.theme.colorScheme.outline),
-                          children: MessageHelper.buildEmojiText(
-                              ss.settings.redactedMode.value && ss.settings.hideContactInfo.value
-                                  ? "User iCloud"
-                                  : ss.settings.iCloudAccount.isEmpty
-                                  ? "Unknown iCloud account"
-                                  : ss.settings.iCloudAccount.value,
-                              context.theme.textTheme.bodyMedium!.apply(color: context.theme.colorScheme.outline)
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                if (iOS)
-                  Center(
-                    child: TextButton(
-                      child: Text(
-                        "Change Name",
-                        style: context.theme.textTheme.bodyMedium!.apply(color: context.theme.colorScheme.primary),
-                        textScaler: const TextScaler.linear(1.15),
-                      ),
-                      onPressed: () async {
-                        updateName();
-                      },
-                    ),
-                  ),
-                if (!iOS)
-                  Padding(
-                    padding: const EdgeInsets.only(left: 15.0, bottom: 5.0),
-                    child: Text(
-                        "YOUR NAME AND PHOTO",
-                        style: context.theme.textTheme.bodyMedium!.copyWith(color: context.theme.colorScheme.outline)
-                    ),
-                  ),
-                if (!iOS)
+                SettingsHeader(
+                  iosSubtitle: iosSubtitle,
+                  materialSubtitle: materialSubtitle,
+                  text: "Your Name and Photo"),
+                SettingsSection(
+                    backgroundColor: tileColor,
+                    children: [
                   Padding(
                     padding: const EdgeInsets.only(bottom: 5.0),
                     child: Material(
@@ -466,7 +387,6 @@ class _ProfilePanelState extends OptimizedState<ProfilePanel> with WidgetsBindin
                       ),
                     ),
                   ),
-                if (!iOS)
                   Padding(
                     padding: const EdgeInsets.only(bottom: 5.0),
                     child: Material(
@@ -481,7 +401,6 @@ class _ProfilePanelState extends OptimizedState<ProfilePanel> with WidgetsBindin
                       ),
                     ),
                   ),
-                if (!iOS)
                   Obx(() => ss.settings.userAvatarPath.value != null ? Padding(
                     padding: const EdgeInsets.only(bottom: 5.0),
                     child: Material(
@@ -496,6 +415,7 @@ class _ProfilePanelState extends OptimizedState<ProfilePanel> with WidgetsBindin
                       ),
                     ),
                   ) : const SizedBox.shrink()),
+                ]),
                 SettingsHeader(
                     iosSubtitle: iosSubtitle,
                     materialSubtitle: materialSubtitle,

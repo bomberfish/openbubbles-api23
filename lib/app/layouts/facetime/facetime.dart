@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:bluebubbles/app/components/avatars/contact_avatar_group_widget.dart';
 import 'package:bluebubbles/app/layouts/settings/widgets/content/next_button.dart';
+import 'package:bluebubbles/app/wrappers/theme_switcher.dart';
 import 'package:bluebubbles/database/io/handle.dart';
 import 'package:bluebubbles/database/io/chat.dart';
 import 'package:bluebubbles/helpers/helpers.dart';
@@ -15,6 +16,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
 import 'package:bluebubbles/src/rust/api/api.dart' as api;
@@ -88,7 +90,7 @@ class _FaceTimePanelState extends OptimizedState<FaceTimePanel> {
         ]
       ),
       onTap: () async {
-        if (session.members.length == 2) {
+        if (session.members.length == 2 && !active) {
           // 1-1 facetime, call again
           await pushService.placeOutgoingCall(session.myHandles.first, [session.members.firstWhere((a) => !session.myHandles.contains(a.handle)).handle]);
           return;
@@ -127,9 +129,10 @@ class _FaceTimePanelState extends OptimizedState<FaceTimePanel> {
           IconButton(
             icon: Icon(iOS ? CupertinoIcons.add : Icons.add, color: context.theme.colorScheme.primary),
             onPressed: () {
-              ns.push(
-                context,
-                const FaceTimeCreator(),
+              Navigator.of(context).push(
+                ThemeSwitcher.buildPageRoute(
+                  builder: (context) => const FaceTimeCreator(),
+                ),
               );
             },
           ),
