@@ -648,7 +648,11 @@ class HwInpState extends OptimizedState<HwInp> {
                                           children: [
                                             Text("Hosted",
                                                 style: context.theme.textTheme.titleMedium!),
+                                            if (!kIsDesktop)
                                             Text(controller.noCapErrorMsg.value,
+                                                style: context.theme.textTheme.bodySmall!),
+                                            if (kIsDesktop)
+                                            Text("Not available on desktop.",
                                                 style: context.theme.textTheme.bodySmall!),
                                           ],
                                         )),
