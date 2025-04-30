@@ -209,7 +209,7 @@ class ProfileScaffoldState
                                       fontSize: 44,
                                       size: hasAvatar ? 300 : 100,
                                     ),
-                                    const SizedBox(height: 150,),
+                                    SizedBox(height: hasAvatar ? 150 : 100,),
                                   ] : [
                                     const SizedBox(height: 600,)
                                   ],
