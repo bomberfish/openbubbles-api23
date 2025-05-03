@@ -602,6 +602,81 @@ class MessagesViewState extends OptimizedState<MessagesView> {
                                         ),
                                         alignment: Alignment.center,
                                         ),
+                                        if (!chat.isGroup && chat.isIMessage)
+                                        Align(child:AnimatedSize(
+                                          duration: const Duration(milliseconds: 250),
+                                          child: Obx(() => controller.reportJunkAvailable.value
+                                              ? Padding(
+                                                  padding: const EdgeInsets.only(top: 20, bottom: 10),
+                                                  child: GestureDetector(
+                                                    child: RichText(
+                                                      textAlign: TextAlign.center,
+                                                      text: TextSpan(
+                                                        style: context.theme.textTheme.labelMedium!.copyWith(color: context.theme.colorScheme.outline, fontWeight: FontWeight.normal),
+                                                        children: [
+                                                          TextSpan(
+                                                            text: "This sender is not in your contacts\n",
+                                                            style: context.theme.textTheme.labelMedium!.copyWith(fontWeight: FontWeight.w600, color: context.theme.colorScheme.outline, height: 2.5),
+                                                          ),
+                                                          TextSpan(
+                                                            text: "Report Junk",
+                                                            style: context.theme.textTheme.labelMedium!.copyWith(fontWeight: FontWeight.w600, color: context.theme.primaryColor),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    onTap: () async {
+                                                      showDialog(
+                                                        context: Get.context!,
+                                                        builder: (BuildContext context) {
+                                                          return AlertDialog(
+                                                            title: Text(
+                                                              "Report junk?",
+                                                              style: context.theme.textTheme.titleLarge,
+                                                            ),
+                                                            backgroundColor: context.theme.colorScheme.properSurface,
+                                                            content: Text("You can report this message to Apple.", style: context.theme.textTheme.bodyLarge),
+                                                            actions: <Widget>[
+                                                              TextButton(
+                                                                child: Text("Cancel",
+                                                                    style: context.theme.textTheme.bodyLarge!
+                                                                        .copyWith(color: context.theme.colorScheme.primary)),
+                                                                onPressed: () {
+                                                                  Navigator.of(context).pop();
+                                                                },
+                                                              ),
+                                                              TextButton(
+                                                                child: Text("Delete and Report",
+                                                                    style: context.theme.textTheme.bodyLarge!
+                                                                        .copyWith(color: context.theme.colorScheme.primary)),
+                                                                onPressed: () async {
+                                                                  Navigator.of(context).pop();
+                                                                  Navigator.of(context).pop();
+                                                                  try {
+                                                                    await pushService.markAsSpam(chat);
+                                                                  } catch (e, s) {
+                                                                    showSnackbar("Failed to mark as spam!", "$e");
+                                                                    Logger.error("Failed to mark as spam", error: e, trace: s);
+                                                                    rethrow;
+                                                                  }
+                                                                },
+                                                              ),
+                                                            ],
+                                                          );
+                                                        });
+                                                    },
+                                                  )
+                                                )
+                                              : ConstrainedBox(
+                                                constraints: const BoxConstraints(
+                                                  minWidth: double.infinity, // Fix the width
+                                                  maxWidth: double.infinity,
+                                                ),
+                                                child: const SizedBox.shrink(),
+                                              )),
+                                        ),
+                                        alignment: Alignment.center,
+                                        ),
                                       Obx(() => Row(
                                               mainAxisSize: MainAxisSize.min,
                                               children: <Widget>[

@@ -112,7 +112,7 @@ final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
       id: const obx_int.IdUid(3, 9017250848141753702),
       name: 'Chat',
-      lastPropertyId: const obx_int.IdUid(39, 1450447556768339740),
+      lastPropertyId: const obx_int.IdUid(40, 5580492826274966240),
       flags: 0,
       properties: <obx_int.ModelProperty>[
         obx_int.ModelProperty(
@@ -280,6 +280,11 @@ final _entities = <obx_int.ModelEntity>[
             id: const obx_int.IdUid(39, 1450447556768339740),
             name: 'zenModeIsShared',
             type: 6,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(40, 5580492826274966240),
+            name: 'senderIsKnown',
+            type: 1,
             flags: 0)
       ],
       relations: <obx_int.ModelRelation>[
@@ -339,7 +344,7 @@ final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
       id: const obx_int.IdUid(7, 1716592500251888002),
       name: 'Handle',
-      lastPropertyId: const obx_int.IdUid(14, 7319540363051031629),
+      lastPropertyId: const obx_int.IdUid(15, 3522348185317901483),
       flags: 0,
       properties: <obx_int.ModelProperty>[
         obx_int.ModelProperty(
@@ -404,6 +409,11 @@ final _entities = <obx_int.ModelEntity>[
             id: const obx_int.IdUid(14, 7319540363051031629),
             name: 'posterPath',
             type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(15, 3522348185317901483),
+            name: 'blocked',
+            type: 1,
             flags: 0)
       ],
       relations: <obx_int.ModelRelation>[],
@@ -1149,7 +1159,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
           final textFieldAnnotationsOffset = object.textFieldAnnotations == null
               ? null
               : fbb.writeString(object.textFieldAnnotations!);
-          fbb.startTable(40);
+          fbb.startTable(41);
           fbb.addInt64(0, object.id ?? 0);
           fbb.addOffset(2, guidOffset);
           fbb.addOffset(4, chatIdentifierOffset);
@@ -1184,6 +1194,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
           fbb.addBool(36, object.notifsSilenced);
           fbb.addInt64(37, object.dateNotifiedAnyways?.millisecondsSinceEpoch);
           fbb.addInt64(38, object.zenModeIsShared);
+          fbb.addBool(39, object.senderIsKnown);
           fbb.finish(fbb.endTable());
           return object.id ?? 0;
         },
@@ -1258,6 +1269,8 @@ obx_int.ModelDefinition getObjectBoxModel() {
               : DateTime.fromMillisecondsSinceEpoch(dateNotifiedAnywaysValue);
           final zenModeIsSharedParam =
               const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 80);
+          final senderIsKnownParam =
+              const fb.BoolReader().vTableGetNullable(buffer, rootOffset, 82);
           final guidRefsParam = const fb.ListReader<String>(
                   fb.StringReader(asciiOptimization: true),
                   lazy: false)
@@ -1289,6 +1302,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
               notifsSilenced: notifsSilencedParam,
               dateNotifiedAnyways: dateNotifiedAnywaysParam,
               zenModeIsShared: zenModeIsSharedParam,
+              senderIsKnown: senderIsKnownParam,
               guidRefs: guidRefsParam)
             ..dbOnlyLatestMessageDate = dbOnlyLatestMessageDateValue == null
                 ? null
@@ -1410,7 +1424,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
           final posterPathOffset = object.posterPath == null
               ? null
               : fbb.writeString(object.posterPath!);
-          fbb.startTable(15);
+          fbb.startTable(16);
           fbb.addInt64(0, object.id ?? 0);
           fbb.addInt64(1, object.originalROWID);
           fbb.addOffset(2, addressOffset);
@@ -1423,6 +1437,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
           fbb.addOffset(11, uniqueAddressAndServiceOffset);
           fbb.addOffset(12, serviceOffset);
           fbb.addOffset(13, posterPathOffset);
+          fbb.addBool(14, object.blocked);
           fbb.finish(fbb.endTable());
           return object.id ?? 0;
         },
@@ -1451,6 +1466,8 @@ obx_int.ModelDefinition getObjectBoxModel() {
           final defaultPhoneParam =
               const fb.StringReader(asciiOptimization: true)
                   .vTableGetNullable(buffer, rootOffset, 14);
+          final blockedParam =
+              const fb.BoolReader().vTableGet(buffer, rootOffset, 32, false);
           final object = Handle(
               id: idParam,
               originalROWID: originalROWIDParam,
@@ -1460,7 +1477,8 @@ obx_int.ModelDefinition getObjectBoxModel() {
               uniqueAddressAndService: uniqueAddressAndServiceParam,
               country: countryParam,
               defaultEmail: defaultEmailParam,
-              defaultPhone: defaultPhoneParam)
+              defaultPhone: defaultPhoneParam,
+              blocked: blockedParam)
             ..color = const fb.StringReader(asciiOptimization: true)
                 .vTableGetNullable(buffer, rootOffset, 12)
             ..posterPath = const fb.StringReader(asciiOptimization: true)
@@ -2197,6 +2215,10 @@ class Chat_ {
   static final zenModeIsShared =
       obx.QueryIntegerProperty<Chat>(_entities[1].properties[32]);
 
+  /// See [Chat.senderIsKnown].
+  static final senderIsKnown =
+      obx.QueryBooleanProperty<Chat>(_entities[1].properties[33]);
+
   /// see [Chat.handles]
   static final handles =
       obx.QueryRelationToMany<Chat, Handle>(_entities[1].relations[0]);
@@ -2285,6 +2307,10 @@ class Handle_ {
   /// See [Handle.posterPath].
   static final posterPath =
       obx.QueryStringProperty<Handle>(_entities[3].properties[11]);
+
+  /// See [Handle.blocked].
+  static final blocked =
+      obx.QueryBooleanProperty<Handle>(_entities[3].properties[12]);
 }
 
 /// [ThemeEntry] entity fields to define ObjectBox queries.

@@ -375,6 +375,7 @@ class RustPushBackend implements BackendService {
       participants: formattedHandles,
       usingHandle: handle,
       isRpSms: service == "SMS",
+      senderIsKnown: formattedHandles.any((handle) => !(handle.contact?.isShared ?? true)),
     );
     chat.save(); //save for reflectMessage
     if (message != null) {
@@ -862,30 +863,6 @@ class RustPushBackend implements BackendService {
     return (await pushService.reflectMessageDyn(msg))!;
   }
 
-  Future<bool> markDelivered(api.MessageInst message) async {
-    if (!message.sendDelivered) return true;
-    var chat = await pushService.chatForMessage(message);
-    if (chat.isRpSms) {
-      return true; // no delivery recipts :)
-    }
-    var msg = await api.newMsg(
-      state: pushService.state,
-      conversation: api.ConversationData(
-        participants: [message.sender!],
-        cvName: message.conversation!.cvName,
-        senderGuid: message.conversation!.senderGuid
-      ),
-      sender: await chat.ensureHandle(),
-      message: const api.Message.delivered(),
-    );
-    msg.id = message.id;
-    msg.target = message.target; // delivered is only sent to the device that sent it
-    if (msg.id.contains("temp") || msg.id.contains("error")) {
-      return true;
-    }
-    await sendMsg(msg);
-    return true;
-  }
 
   @override
   bool supportsFocusStates() {
@@ -894,6 +871,7 @@ class RustPushBackend implements BackendService {
 
   @override
   Future<bool> markRead(Chat chat, bool notifyOthers) async {
+    return true;
     if (chat.isRpSms) notifyOthers = false;
     var latestMsg = chat.latestMessage.guid;
     var data = await chat.getConversationData();
@@ -2203,7 +2181,79 @@ class RustPushService extends GetxService {
   String? chosenFTRoomGuid;
   String? incomingRingingCallGuid;
 
-  Future handleMsg(api.PushMessage push) async {
+  Future<void> markCertified(api.PushMessage push) async {
+    if (push is! api.PushMessage_IMessage) return;
+    var sendDelivered = push.field0.sendDelivered;
+    try {
+      var chat = await pushService.chatForMessage(push.field0);
+      if (!chat.isGroup && chat.handles.length == 1 && chat.handles.first.isBlocked()) {
+        sendDelivered = false; // we are blocked
+      }
+      if (chat.isRpSms) {
+        sendDelivered = false; // no delivery recipts :)
+      }
+    } catch (e) { /* sending a receipt is more important */ }
+    if (push.field0.certifiedContext == null) {
+      if (sendDelivered) {
+        var chat = await pushService.chatForMessage(push.field0);
+        var message = push.field0;
+        var msg = await api.newMsg(
+          state: pushService.state,
+          conversation: api.ConversationData(
+            participants: [message.sender!],
+            cvName: message.conversation!.cvName,
+            senderGuid: message.conversation!.senderGuid
+          ),
+          sender: await chat.ensureHandle(),
+          message: const api.Message.delivered(),
+        );
+        msg.id = message.id;
+        msg.target = message.target; // delivered is only sent to the device that sent it
+        if (msg.id.contains("temp") || msg.id.contains("error")) {
+          return;
+        }
+        await (backend as RustPushBackend).sendMsg(msg);
+      }
+      return;
+    }
+    await api.certifyDelivery(state: pushService.state, context: push.field0.certifiedContext!, notify: sendDelivered);
+  }
+
+  Future markAsSpam(Chat chat) async {
+    List<api.ReportMessage> messages = [];
+    var chatMessages = Chat.getMessages(chat, limit: 5);
+    for (var message in chatMessages) {
+      api.MessageParts parts;
+      if (message.attributedBody.isNotEmpty) {
+        parts = await (backend as RustPushBackend).partsFromBody(message.attributedBody.first);
+      } else {
+        parts = api.MessageParts(field0: [api.IndexedMessagePart(part_: api.MessagePart.text(message.text!, pushService.defaultFormat()))]);
+      }
+      if (message.isFromMe!) continue;
+      messages.add(api.ReportMessage(
+        guid: message.guid!, 
+        sender: RustPushBBUtils.bbHandleToRust(message.handle!), 
+        conversationSize: chat.participants.length, 
+        parts: parts, 
+        timeOfMessage: message.dateCreated!.microsecondsSinceEpoch.toDouble() / 1000000
+      ));
+    }
+    await api.reportMessages(state: pushService.state, handle: await chat.ensureHandle(), messages: messages);
+    Chat.softDelete(chat);
+  }
+
+  Future handleMsg(api.PushMessage push, bool finalAttempt) async {
+    try {
+      await handleMsgInner(push);
+    } catch (e, s) {
+      if (finalAttempt) markCertified(push);
+      rethrow;
+    }
+    // if we complete successfully, mark delivery "certified"
+    markCertified(push);
+  }
+
+  Future handleMsgInner(api.PushMessage push) async {
     if (push is api.PushMessage_StatusUpdate) {
       var status = push.field0;
       final result = (await Chat.findByRust(api.ConversationData(participants: [status.user]), "iMessage", soft: true));
@@ -2291,6 +2341,11 @@ class RustPushService extends GetxService {
         var identity = getSessionIdentity(ring, true);
         if (identity != null) {
           var handle = RustPushBBUtils.rustHandleToBB(identity);
+          if (handle.isBlocked()) {
+            incomingRingingCallGuid = null;
+            Logger.info("Dropping call from blocked handle $handle");
+            return;
+          }
           icon = handle.contact?.avatar;
           var poster = handle.getPoster();
           if (poster != null && !kIsDesktop) {
@@ -2697,8 +2752,6 @@ class RustPushService extends GetxService {
     Logger.info("Reflect finished ${myMsg.id}");
     if (reflected != null) {
       Logger.info("Queing");
-      var service = backend as RustPushBackend;
-      service.markDelivered(myMsg);
       await inq.queue(IncomingItem(
         chat: chat,
         message: reflected,
@@ -2850,7 +2903,7 @@ class RustPushService extends GetxService {
     await initFuture;
     try {
       Logger.info("Handling $pointer $retry");
-      await handleMsg(message);
+      await handleMsg(message, retry == "3");
       Logger.info("Marking as handled $pointer");
       await markAsHandledAfter(pointer);
     } catch (e, s) {
@@ -2879,7 +2932,7 @@ class RustPushService extends GetxService {
         if (msg == null) {
           continue;
         }
-        await handleMsg(msg);
+        await handleMsg(msg, true);
       } catch (e, t) {
         // if there was an error somewhere, log it and move on.
         // don't stop our loop

@@ -1027,6 +1027,16 @@ pub async fn validate_targets_facetime(state: &Arc<PushState>, targets: Vec<Stri
     Ok(state.0.read().await.client.as_ref().unwrap().identity.validate_targets(&targets, "com.apple.private.alloy.facetime.multi", &sender).await?)
 }
 
+pub async fn certify_delivery(state: &Arc<PushState>, context: CertifiedContext, notify: bool) -> anyhow::Result<()> {
+    state.0.read().await.client.as_ref().unwrap().identity.certify_delivery("com.apple.madrid", &context, notify).await?;
+    Ok(())
+}
+
+pub async fn report_messages(state: &Arc<PushState>, handle: String, messages: Vec<ReportMessage>) -> anyhow::Result<()> {
+    state.0.read().await.client.as_ref().unwrap().identity.report_spam(&handle, &messages).await?;
+    Ok(())
+}
+
 pub fn encode_profile_message(p: &ShareProfileMessage) -> String {
     plist_to_string(&p).unwrap()
 }

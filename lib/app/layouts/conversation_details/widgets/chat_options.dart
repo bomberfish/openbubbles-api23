@@ -311,6 +311,63 @@ class _ChatOptionsState extends OptimizedState<ChatOptions> {
                     },
                     backgroundColor: tileColor,
                   ),
+                if (!kIsWeb && !chat.isGroup && chat.participants.length == 1)
+                  SettingsSwitch(
+                    title: "Block Sender",
+                    initialVal: chat.participants.first.isBlocked(),
+                    onChanged: (value) {
+                      if (value) {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                                backgroundColor: context.theme.colorScheme.properSurface,
+                                title: Text("Are you sure you want to block?", style: context.theme.textTheme.titleLarge),
+                                content: Text(
+                                  'You will not receive notifications or calls from this user, and their messages will not be marked as delivered.',
+                                  style: context.theme.textTheme.bodyLarge,
+                                ),
+                                actions: <Widget>[
+                                  TextButton(
+                                    child: Text("Cancel",
+                                        style: context.theme.textTheme.bodyLarge!
+                                            .copyWith(color: context.theme.colorScheme.primary)),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                                  TextButton(
+                                    child: Text("Block",
+                                        style: context.theme.textTheme.bodyLarge!
+                                            .copyWith(color: context.theme.colorScheme.primary)),
+                                    onPressed: () async {
+                                      Navigator.of(context).pop();
+                                      chat.participants.first.setBlocked(true);
+                                      setState(() {});
+                                    },
+                                  ),
+                                  TextButton(
+                                    child: Text("Block and archive",
+                                        style: context.theme.textTheme.bodyLarge!
+                                            .copyWith(color: context.theme.colorScheme.primary)),
+                                    onPressed: () async {
+                                      Navigator.of(context).pop();
+                                      chat.participants.first.setBlocked(true);
+                                      chat.toggleArchived(true);
+                                      setState(() {});
+                                    },
+                                  ),
+                                ]);
+                          },
+                        );
+                      } else {
+                        chat.participants.first.setBlocked(false);
+                        chat.toggleArchived(false);
+                        setState(() {});
+                      }
+                    },
+                    backgroundColor: tileColor,
+                  ),
                 if (!kIsWeb)
                   SettingsTile(
                     title: "Clear Transcript",

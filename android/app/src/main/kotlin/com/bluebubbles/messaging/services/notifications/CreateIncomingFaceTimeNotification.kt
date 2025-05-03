@@ -5,6 +5,7 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Log
@@ -23,6 +24,8 @@ import io.flutter.plugin.common.MethodChannel
 class CreateIncomingFaceTimeNotification: MethodCallHandlerImpl() {
     companion object {
         const val tag = "create-incoming-facetime-notification"
+
+        val avatarCache = mutableMapOf<String, Bitmap?>()
     }
 
     override fun handleMethodCall(
@@ -46,6 +49,10 @@ class CreateIncomingFaceTimeNotification: MethodCallHandlerImpl() {
         val callerIcon: ByteArray? = call.argument("caller_avatar")
         val callerBitmap = if ((callerIcon?.size ?: 0) == 0) null else BitmapFactory.decodeByteArray(callerIcon!!, 0, callerIcon.size)
         val callerIconCompat = if ((callerIcon?.size ?: 0) == 0) null else Utils.getAdaptiveIconFromByteArray(callerIcon!!)
+
+        if (callerBitmap != null) {
+            avatarCache[callUuid!!] = callerBitmap
+        }
 
         // build the caller object
         val caller = Person.Builder()

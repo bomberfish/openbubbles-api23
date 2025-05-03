@@ -294,6 +294,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   bool dco_decode_box_autoadd_bool(dynamic raw);
 
   @protected
+  CertifiedContext dco_decode_box_autoadd_certified_context(dynamic raw);
+
+  @protected
   ChangeParticipantMessage dco_decode_box_autoadd_change_participant_message(
       dynamic raw);
 
@@ -469,6 +472,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       dco_decode_box_autoadd_update_profile_sharing_message(dynamic raw);
 
   @protected
+  CertifiedContext dco_decode_certified_context(dynamic raw);
+
+  @protected
   ChangeParticipantMessage dco_decode_change_participant_message(dynamic raw);
 
   @protected
@@ -623,6 +629,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       dynamic raw);
 
   @protected
+  List<ReportMessage> dco_decode_list_report_message(dynamic raw);
+
+  @protected
   List<SharedAlbum> dco_decode_list_shared_album(dynamic raw);
 
   @protected
@@ -744,6 +753,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   bool? dco_decode_opt_box_autoadd_bool(dynamic raw);
+
+  @protected
+  CertifiedContext? dco_decode_opt_box_autoadd_certified_context(dynamic raw);
 
   @protected
   ConversationData? dco_decode_opt_box_autoadd_conversation_data(dynamic raw);
@@ -957,6 +969,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   RenameMessage dco_decode_rename_message(dynamic raw);
+
+  @protected
+  ReportMessage dco_decode_report_message(dynamic raw);
 
   @protected
   RichLinkImageAttachmentSubstitute
@@ -1284,6 +1299,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   bool sse_decode_box_autoadd_bool(SseDeserializer deserializer);
 
   @protected
+  CertifiedContext sse_decode_box_autoadd_certified_context(
+      SseDeserializer deserializer);
+
+  @protected
   ChangeParticipantMessage sse_decode_box_autoadd_change_participant_message(
       SseDeserializer deserializer);
 
@@ -1486,6 +1505,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
           SseDeserializer deserializer);
 
   @protected
+  CertifiedContext sse_decode_certified_context(SseDeserializer deserializer);
+
+  @protected
   ChangeParticipantMessage sse_decode_change_participant_message(
       SseDeserializer deserializer);
 
@@ -1654,6 +1676,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       SseDeserializer deserializer);
 
   @protected
+  List<ReportMessage> sse_decode_list_report_message(
+      SseDeserializer deserializer);
+
+  @protected
   List<SharedAlbum> sse_decode_list_shared_album(SseDeserializer deserializer);
 
   @protected
@@ -1780,6 +1806,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   bool? sse_decode_opt_box_autoadd_bool(SseDeserializer deserializer);
+
+  @protected
+  CertifiedContext? sse_decode_opt_box_autoadd_certified_context(
+      SseDeserializer deserializer);
 
   @protected
   ConversationData? sse_decode_opt_box_autoadd_conversation_data(
@@ -2023,6 +2053,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   RenameMessage sse_decode_rename_message(SseDeserializer deserializer);
+
+  @protected
+  ReportMessage sse_decode_report_message(SseDeserializer deserializer);
 
   @protected
   RichLinkImageAttachmentSubstitute
@@ -2364,6 +2397,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   void sse_encode_box_autoadd_bool(bool self, SseSerializer serializer);
 
   @protected
+  void sse_encode_box_autoadd_certified_context(
+      CertifiedContext self, SseSerializer serializer);
+
+  @protected
   void sse_encode_box_autoadd_change_participant_message(
       ChangeParticipantMessage self, SseSerializer serializer);
 
@@ -2576,6 +2613,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       UpdateProfileSharingMessage self, SseSerializer serializer);
 
   @protected
+  void sse_encode_certified_context(
+      CertifiedContext self, SseSerializer serializer);
+
+  @protected
   void sse_encode_change_participant_message(
       ChangeParticipantMessage self, SseSerializer serializer);
 
@@ -2751,6 +2792,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       List<(String, SyncStatus)> self, SseSerializer serializer);
 
   @protected
+  void sse_encode_list_report_message(
+      List<ReportMessage> self, SseSerializer serializer);
+
+  @protected
   void sse_encode_list_shared_album(
       List<SharedAlbum> self, SseSerializer serializer);
 
@@ -2885,6 +2930,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void sse_encode_opt_box_autoadd_bool(bool? self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_opt_box_autoadd_certified_context(
+      CertifiedContext? self, SseSerializer serializer);
 
   @protected
   void sse_encode_opt_box_autoadd_conversation_data(
@@ -3129,6 +3178,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void sse_encode_rename_message(RenameMessage self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_report_message(ReportMessage self, SseSerializer serializer);
 
   @protected
   void sse_encode_rich_link_image_attachment_substitute(

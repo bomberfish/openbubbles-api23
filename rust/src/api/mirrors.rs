@@ -3,7 +3,7 @@ use std::collections::HashMap;
 pub use rustpush::name_photo_sharing::{IMessageNameRecord, IMessagePosterRecord, IMessageNicknameRecord};
 pub use rustpush::{DeleteTarget, MoveToRecycleBinMessage, OperatedChat};
 pub use rustpush::{ShareProfileMessage, SharedPoster, UpdateProfileSharingMessage, UpdateProfileMessage, NSArrayClass, TextFlags, TextEffect, TextFormat, ScheduleMode, SupportAction, NSArray, SupportAlert, PrivateDeviceInfo, PermanentDeleteMessage, NormalMessage, MessageType, UpdateExtensionMessage, ErrorMessage, UnsendMessage, EditMessage, PartExtension, IconChangeMessage, RichLinkImageAttachmentSubstitute, ChangeParticipantMessage, ReactMessage, Reaction, ReactMessageType, RenameMessage, LPLinkMetadata, NSURL, LPIconMetadata, LPImageMetadata, LinkMeta, ExtensionApp, NSDictionaryClass, BalloonLayout, Balloon, IndexedMessagePart, AttachmentType, MacOSConfig, Message, MessageTarget, HardwareConfig, APSConnection, APSConnectionResource, APSState, Attachment, AuthPhone, IDSUserIdentity, MMCSFile, MessageInst, MessagePart, MessageParts, OSConfig, RelayConfig, ResourceState};
-pub use rustpush::{PushError, IDSUser, IMClient, ConversationData, register};
+pub use rustpush::{CertifiedContext, PushError, IDSUser, IMClient, ConversationData, ReportMessage, register};
 pub use icloud_auth::{VerifyBody, TrustedPhoneNumber};
 pub use icloud_auth::{LoginState, AppleAccount};
 pub use rustpush::findmy::{Follow, Address, Location, FoundDevice};
@@ -30,6 +30,15 @@ pub enum DartPRPosterContentMaterialStyle {
         locations: Vec<f64>,
         end_point: String,
     }
+}
+
+#[frb(mirror(ReportMessage))]
+pub struct DartReportMessage {
+    pub guid: String,
+    pub sender: String,
+    pub conversation_size: u32,
+    pub parts: MessageParts,
+    pub time_of_message: f64,
 }
 
 #[frb(mirror(PRPosterSystemTimeFontConfiguration))]
@@ -785,6 +794,16 @@ pub enum DartMessageTarget {
     Uuid(String),
 }
 
+#[frb(mirror(CertifiedContext))]
+pub struct DartCertifiedContext {
+    pub version: u32,
+    pub receipt: Vec<u8>,
+    pub sender: String,
+    pub target: String,
+    pub uuid: Vec<u8>,
+    pub token: Vec<u8>,
+}
+
 #[frb(type_64bit_int, mirror(MessageInst))]
 #[repr(C)]
 pub struct DartIMessage {
@@ -804,6 +823,8 @@ pub struct DartIMessage {
     pub send_delivered: bool,
     #[frb(non_final)]
     pub verification_failed: bool,
+    #[frb(non_final)]
+    pub certified_context: Option<CertifiedContext>,
 }
 
 #[repr(C)]

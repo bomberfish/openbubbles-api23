@@ -188,6 +188,20 @@ Future<List<String>> validateTargetsFacetime(
     RustLib.instance.api.crateApiApiValidateTargetsFacetime(
         state: state, targets: targets, sender: sender);
 
+Future<void> certifyDelivery(
+        {required ArcPushState state,
+        required CertifiedContext context,
+        required bool notify}) =>
+    RustLib.instance.api.crateApiApiCertifyDelivery(
+        state: state, context: context, notify: notify);
+
+Future<void> reportMessages(
+        {required ArcPushState state,
+        required String handle,
+        required List<ReportMessage> messages}) =>
+    RustLib.instance.api.crateApiApiReportMessages(
+        state: state, handle: handle, messages: messages);
+
 Future<String> encodeProfileMessage({required ShareProfileMessage p}) =>
     RustLib.instance.api.crateApiApiEncodeProfileMessage(p: p);
 
@@ -589,6 +603,45 @@ sealed class BalloonLayout with _$BalloonLayout {
     required String subcaption,
     required NSDictionaryClass class_,
   }) = BalloonLayout_TemplateLayout;
+}
+
+class CertifiedContext {
+  final int version;
+  final Uint8List receipt;
+  final String sender;
+  final String target;
+  final Uint8List uuid;
+  final Uint8List token;
+
+  const CertifiedContext({
+    required this.version,
+    required this.receipt,
+    required this.sender,
+    required this.target,
+    required this.uuid,
+    required this.token,
+  });
+
+  @override
+  int get hashCode =>
+      version.hashCode ^
+      receipt.hashCode ^
+      sender.hashCode ^
+      target.hashCode ^
+      uuid.hashCode ^
+      token.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is CertifiedContext &&
+          runtimeType == other.runtimeType &&
+          version == other.version &&
+          receipt == other.receipt &&
+          sender == other.sender &&
+          target == other.target &&
+          uuid == other.uuid &&
+          token == other.token;
 }
 
 class ChangeParticipantMessage {
@@ -1711,6 +1764,7 @@ class MessageInst {
   List<MessageTarget>? target;
   bool sendDelivered;
   bool verificationFailed;
+  CertifiedContext? certifiedContext;
 
   MessageInst({
     required this.id,
@@ -1721,6 +1775,7 @@ class MessageInst {
     this.target,
     required this.sendDelivered,
     required this.verificationFailed,
+    this.certifiedContext,
   });
 
   @override
@@ -1732,7 +1787,8 @@ class MessageInst {
       sentTimestamp.hashCode ^
       target.hashCode ^
       sendDelivered.hashCode ^
-      verificationFailed.hashCode;
+      verificationFailed.hashCode ^
+      certifiedContext.hashCode;
 
   @override
   bool operator ==(Object other) =>
@@ -1746,7 +1802,8 @@ class MessageInst {
           sentTimestamp == other.sentTimestamp &&
           target == other.target &&
           sendDelivered == other.sendDelivered &&
-          verificationFailed == other.verificationFailed;
+          verificationFailed == other.verificationFailed &&
+          certifiedContext == other.certifiedContext;
 }
 
 @freezed
@@ -2681,6 +2738,41 @@ class RenameMessage {
       other is RenameMessage &&
           runtimeType == other.runtimeType &&
           newName == other.newName;
+}
+
+class ReportMessage {
+  final String guid;
+  final String sender;
+  final int conversationSize;
+  final MessageParts parts;
+  final double timeOfMessage;
+
+  const ReportMessage({
+    required this.guid,
+    required this.sender,
+    required this.conversationSize,
+    required this.parts,
+    required this.timeOfMessage,
+  });
+
+  @override
+  int get hashCode =>
+      guid.hashCode ^
+      sender.hashCode ^
+      conversationSize.hashCode ^
+      parts.hashCode ^
+      timeOfMessage.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is ReportMessage &&
+          runtimeType == other.runtimeType &&
+          guid == other.guid &&
+          sender == other.sender &&
+          conversationSize == other.conversationSize &&
+          parts == other.parts &&
+          timeOfMessage == other.timeOfMessage;
 }
 
 class RichLinkImageAttachmentSubstitute {

@@ -209,7 +209,7 @@ class ProfileScaffoldState
                                       fontSize: 44,
                                       size: hasAvatar ? 300 : 100,
                                     ),
-                                    SizedBox(height: hasAvatar ? 150 : 100,),
+                                    SizedBox(height: widget.actions.isNotEmpty ? 150 : 100,),
                                   ] : [
                                     const SizedBox(height: 600,)
                                   ],
@@ -290,7 +290,7 @@ class ProfileScaffoldState
                                     ),
                                   );
                                 },
-                                child: Text("Edit", style: context.theme.textTheme.bodyLarge),
+                                child: Text("Edit", style: context.theme.textTheme.bodyLarge?.copyWith(color: Colors.white)),
                               ),
                             ),
                             Positioned(

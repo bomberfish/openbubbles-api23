@@ -26,6 +26,7 @@ class Handle {
   String? defaultEmail;
   String? defaultPhone;
   String? posterPath;
+  bool blocked = false;
   @Transient()
   final String fakeName = faker.person.name();
 
@@ -84,6 +85,7 @@ class Handle {
     String? handleColor,
     this.defaultEmail,
     this.defaultPhone,
+    this.blocked = false,
   }) {
     if (service.isEmpty) {
       service = 'iMessage';
@@ -105,6 +107,7 @@ class Handle {
     handleColor: json["color"],
     defaultPhone: json["defaultPhone"],
     defaultEmail: json["defaultEmail"],
+    blocked: json["blocked"] ?? false,
   );
 
   @override
@@ -116,7 +119,7 @@ class Handle {
 
   /// Save a single handle - prefer [bulkSave] for multiple handles rather
   /// than iterating through them
-  Handle save({bool updateColor = false, bool updatePoster = false, matchOnOriginalROWID = false}) {
+  Handle save({bool updateColor = false, bool updatePoster = false, bool updateBlocked = false, matchOnOriginalROWID = false}) {
     if (kIsWeb) return this;
     Database.runInTransaction(TxMode.write, () {
       Handle? existing;
@@ -136,6 +139,9 @@ class Handle {
         id = 0;
       }
 
+      if (!updateBlocked) {
+        blocked = existing?.blocked ?? blocked;
+      }
       if (!updatePoster) {
         posterPath = existing?.posterPath ?? posterPath;
       }
@@ -180,6 +186,19 @@ class Handle {
   List<Handle> getHandles() {
     if (contact?.dbId == null) return [this];
     return Database.handles.query(Handle_.contactRelation.equals(contact!.dbId!)).build().find();
+  }
+
+  bool isBlocked() {
+    List<Handle> handles = getHandles();
+    return handles.any((h) => h.blocked);
+  }
+
+  void setBlocked(bool blocked) {
+    List<Handle> handles = getHandles();
+    for (var handle in handles) {
+      handle.blocked = blocked;
+      handle.save(updateBlocked: true);
+    }
   }
 
   String? getPoster() {
@@ -277,6 +296,7 @@ class Handle {
       "color": color,
       "defaultPhone": defaultPhone,
       "defaultEmail": defaultEmail,
+      "blocked": blocked,
     };
 
     if (includeObjects) {

@@ -89,7 +89,7 @@
     },
     {
       "id": "3:9017250848141753702",
-      "lastPropertyId": "39:1450447556768339740",
+      "lastPropertyId": "40:5580492826274966240",
       "name": "Chat",
       "properties": [
         {
@@ -259,6 +259,11 @@
           "id": "39:1450447556768339740",
           "name": "zenModeIsShared",
           "type": 6
+        },
+        {
+          "id": "40:5580492826274966240",
+          "name": "senderIsKnown",
+          "type": 1
         }
       ],
       "relations": [
@@ -315,7 +320,7 @@
     },
     {
       "id": "7:1716592500251888002",
-      "lastPropertyId": "14:7319540363051031629",
+      "lastPropertyId": "15:3522348185317901483",
       "name": "Handle",
       "properties": [
         {
@@ -383,6 +388,11 @@
           "id": "14:7319540363051031629",
           "name": "posterPath",
           "type": 9
+        },
+        {
+          "id": "15:3522348185317901483",
+          "name": "blocked",
+          "type": 1
         }
       ],
       "relations": []

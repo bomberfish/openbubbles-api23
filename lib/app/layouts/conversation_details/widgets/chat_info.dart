@@ -300,14 +300,6 @@ class _ChatInfoState extends OptimizedState<ChatInfo> {
                   ),
                 )
               : const SizedBox.shrink()),
-        if (!chat.isGroup && !iOS)
-          ContactTile(
-            key: Key(chat.participants.first.address),
-            handle: chat.participants.first,
-            chat: chat,
-            canBeRemoved: false,
-            facetimeSupported: widget.ftSupportedParticipants.contains(RustPushBBUtils.bbHandleToRust(chat.participants.first)),
-          ),
         if (chat.isGroup && iOS)
           Center(
             child: TextButton(

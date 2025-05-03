@@ -212,12 +212,15 @@ class AttachmentsService extends GetxService {
       }
     } else {
       String? savePath;
-
+      
+      final bytes = file.bytes != null && file.bytes!.isNotEmpty ? file.bytes! : await File(file.path!).readAsBytes();
       if (ss.settings.askWhereToSave.value && !isAutoDownload) {
-        savePath = await FilePicker.platform.getDirectoryPath(
+        await FilePicker.platform.saveFile(
           initialDirectory: ss.settings.autoSaveDocsLocation.value,
           dialogTitle: 'Choose a location to save this file',
           lockParentWindow: true,
+          fileName: file.name,
+          bytes: bytes,
         );
       } else {
         if (file.name.toLowerCase().endsWith(".mov")) {
@@ -235,14 +238,8 @@ class AttachmentsService extends GetxService {
           }
           savePath = ss.settings.autoSaveDocsLocation.value;
         }
-      }
-
-      if (savePath != null) {
-        final bytes = file.bytes != null && file.bytes!.isNotEmpty ? file.bytes! : await File(file.path!).readAsBytes();
         await File(join(savePath, file.name)).writeAsBytes(bytes);
         showSnackbar('Success', 'Saved attachment to ${savePath.replaceAll("/storage/emulated/0/", "")} folder!');
-      } else {
-        return showSnackbar('Error', 'You didn\'t select a file path!');
       }
     }
   }

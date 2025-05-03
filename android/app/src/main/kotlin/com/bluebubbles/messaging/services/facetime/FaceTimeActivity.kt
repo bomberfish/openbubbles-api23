@@ -34,6 +34,7 @@ import androidx.core.view.updateLayoutParams
 import com.bluebubbles.messaging.Constants
 import com.bluebubbles.messaging.R
 import com.bluebubbles.messaging.databinding.ActivityFaceTimeBinding
+import com.bluebubbles.messaging.services.notifications.CreateIncomingFaceTimeNotification
 import com.bluebubbles.messaging.services.notifications.DeleteNotificationHandler
 import com.bluebubbles.messaging.services.rustpush.APNClient
 import com.bluebubbles.messaging.services.rustpush.APNService
@@ -382,6 +383,11 @@ class FaceTimeActivity : Activity() {
         val isAnsweringCall = extras.containsKey("answer")
         notificationId = extras.getString("notificationId")?.toInt() ?: 0
         callUuid = extras.getString("callUuid")
+
+        if (CreateIncomingFaceTimeNotification.avatarCache.containsKey(callUuid)) {
+            val bitmap = CreateIncomingFaceTimeNotification.avatarCache.remove(callUuid)!!
+            binding.avatarView.setImageBitmap(bitmap)
+        }
 
         Log.i("FaceTime", "started activity for call $callUuid")
 

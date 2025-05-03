@@ -398,6 +398,7 @@ class Chat {
   bool notifsSilenced = false;
   int? zenModeIsShared;
   DateTime? dateNotifiedAnyways;
+  bool? senderIsKnown;
 
   @Backlink('chat')
   final messages = ToMany<Message>();
@@ -433,6 +434,7 @@ class Chat {
     this.notifsSilenced = false,
     this.dateNotifiedAnyways,
     this.zenModeIsShared,
+    this.senderIsKnown = true,
     List<String>? guidRefs,
   }) : guidRefs = guidRefs ?? [guid] {
     customAvatarPath = customAvatar;
@@ -521,6 +523,7 @@ class Chat {
     bool updateZenModeIsShared = false,
     bool updateShareZenMode = false,
     bool updateDateNotifiedAnyways = false,
+    bool updateSenderIsKnown = false,
   }) {
     if (kIsWeb) return this;
     Database.runInTransaction(TxMode.write, () {
@@ -607,6 +610,9 @@ class Chat {
       }
       if (!updateDateNotifiedAnyways) {
         dateNotifiedAnyways = existing?.dateNotifiedAnyways ?? dateNotifiedAnyways;
+      }
+      if (!updateSenderIsKnown) {
+        senderIsKnown = existing?.senderIsKnown ?? senderIsKnown;
       }
 
       /// Save the chat and add the participants
@@ -1011,7 +1017,8 @@ class Chat {
     if (kIsWeb) return;
     Database.runInTransaction(TxMode.write, () {
       chat.dateDeleted = null;
-      chat.save(updateDateDeleted: true);
+      chat.senderIsKnown = chat.handles.any((handle) => !(handle.contact?.isShared ?? true));
+      chat.save(updateDateDeleted: true, updateSenderIsKnown: true);
     });
   }
 
@@ -1100,6 +1107,12 @@ class Chat {
           toggleArchived(false);
         }
       }
+    }
+
+    if (!(senderIsKnown ?? true) && message.isFromMe!) {
+      senderIsKnown = true;
+      cvc(this).reportJunkAvailable.value = !(senderIsKnown ?? true);
+      save(updateSenderIsKnown: true);
     }
 
     // Save the chat.

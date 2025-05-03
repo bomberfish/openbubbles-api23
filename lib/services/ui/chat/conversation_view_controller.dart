@@ -30,6 +30,7 @@ class ConversationViewController extends StatefulController with GetSingleTicker
   ConversationViewController(this.chat, {String? tag_}) {
     tag = tag_ ?? chat.guid;
     recipientNotifsSilenced.value = chat.notifsSilenced;
+    reportJunkAvailable.value = !(chat.senderIsKnown ?? true);
   }
 
   // caching items
@@ -94,6 +95,8 @@ class ConversationViewController extends StatefulController with GetSingleTicker
   Timer? _scrollDownDebounce;
   Future<void> Function(Tuple7<List<PlatformFile>, AttributedBody, String, String?, int?, String?, PayloadData?>, bool, DateTime?)? sendFunc;
   bool isProcessingImage = false;
+
+  final RxBool reportJunkAvailable = false.obs;
 
   void updateContactInfo() {
     if (chat.participants.length == 1) {
