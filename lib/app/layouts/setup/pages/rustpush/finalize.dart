@@ -66,9 +66,24 @@ class _FinalizePageState extends OptimizedState<FinalizePage> {
                 style: context.theme.textTheme.titleMedium,
               ),
             )),
-            if (!kIsDesktop && !controller.supportsPhoneReg.value)
-            const Text(
-              "Note: Phone numbers cannot be registered without an iOS device"
+            if (!controller.supportsPhoneReg.value)
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
+                child: GestureDetector(
+                  child: Row(
+                  children: [
+                    Icon(Icons.add, color: context.theme.textTheme.titleMedium!.color!,),
+                    const SizedBox(width: 5,),
+                    Text(
+                      "Add your number",
+                      style: context.theme.textTheme.titleMedium,
+                    )
+                  ],
+                ),
+                onTap: () {
+                  pushService.wantAddNumber();
+                },
+              )
             ),
             if (handles.length > 1)
             SettingsOptions<String>(

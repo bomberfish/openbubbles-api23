@@ -634,6 +634,15 @@ class _ProfilePanelState extends OptimizedState<ProfilePanel> with WidgetsBindin
                               valueColor: AlwaysStoppedAnimation<Color>(context.theme.colorScheme.primary),
                             )) : Icon(Icons.check, color: context.theme.colorScheme.outline))
                         ),
+                      if (!(accountInfo['can_pnr'] ?? true))
+                        SettingsTile(
+                          title: "Add your phone number",
+                          onTap: () async {
+                            pushService.wantAddNumber();
+                          },
+                          trailing: const NextButton(),
+                          leading: Icon(Icons.add, color: context.theme.colorScheme.outline),
+                        ),
                       if (!(accountInfo['login_status_message']?.contains("Subscription not active!") ?? false) && ss.settings.deviceIsHosted.value)
                         SettingsTile(
                         title: "Manage subscription",
@@ -642,11 +651,6 @@ class _ProfilePanelState extends OptimizedState<ProfilePanel> with WidgetsBindin
                         },
                         trailing: const NextButton()
                       ),
-                      if (accountInfo['active_alias'] != null)
-                        Container(
-                          color: tileColor,
-                          child: SettingsDivider(color: context.theme.colorScheme.surfaceVariant, padding: EdgeInsets.zero,),
-                        ),
                       if (accountInfo['active_alias'] != null)
                         SettingsOptions<String>(
                           title: "Start Chats Using",

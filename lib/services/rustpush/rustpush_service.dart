@@ -603,6 +603,7 @@ class RustPushBackend implements BackendService {
     var detail = await pushService.getPurchaseDetails();
     var handles = await api.getHandles(state: pushService.state);
     var state = await api.getRegstate(state: pushService.state);
+    var deviceState = await api.getDeviceInfoState(state: pushService.state);
     var stateStr = "";
     if (detail == null && ss.settings.deviceIsHosted.value) {
       stateStr = "Subscription not active!";
@@ -629,6 +630,7 @@ class RustPushBackend implements BackendService {
       "active_alias": (await getDefaultHandle()).replaceFirst("tel:", "").replaceFirst("mailto:", ""),
       "sms_forwarding_capable": true,
       "sms_forwarding_enabled": smsForwardingEnabled(),
+      "can_pnr": deviceState.name.contains("iPhone") || deviceState.name.contains("iPod") || deviceState.name.contains("iPad"),
     };
   }
 
@@ -847,7 +849,7 @@ class RustPushBackend implements BackendService {
       await sendMsg(msg);
     } catch (e) {
       Logger.error(e);
-      if (!chat.isRpSms) {
+      if (!chat.isRpSms || !ss.settings.isSmsRouter.value) {
         rethrow; // APN errors are fatal for non-SMS messages
       }
     }
@@ -2173,6 +2175,47 @@ class RustPushService extends GetxService {
       );
       await (backend as RustPushBackend).sendMsg(msg);
     }
+  }
+
+  void wantAddNumber() {
+    showDialog(
+      context: Get.context!,
+      builder: (context) => AlertDialog(
+        title: Text(
+          "Adding a phone number requires an iPhone",
+          style: context.theme.textTheme.titleLarge,
+        ),
+        backgroundColor: context.theme.colorScheme.properSurface,
+        content: Text("Join the waitlist for a just-works, paid, hosted solution. Or, jailbreak your own to self-host.", style: context.theme.textTheme.bodyLarge),
+        actions: [
+          TextButton(
+            child: Text(
+                "Close",
+                style: context.theme.textTheme.bodyLarge!.copyWith(color: context.theme.colorScheme.primary)
+            ),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+          TextButton(
+            child: Text(
+                "Self-host",
+                style: context.theme.textTheme.bodyLarge!.copyWith(color: context.theme.colorScheme.primary)
+            ),
+            onPressed: () {
+              launchUrl(Uri.parse("https://openbubbles.app/docs/pnr.html"));
+            }
+          ),
+          TextButton(
+            child: Text(
+                "Join the waitlist",
+                style: context.theme.textTheme.bodyLarge!.copyWith(color: context.theme.colorScheme.primary)
+            ),
+            onPressed: () {
+              launchUrl(Uri.parse("https://openbubbles.app/#hosted-waitlist"));
+            }
+          ),
+        ],
+      ),
+    );
   }
 
   var notifiedFailed = false;
