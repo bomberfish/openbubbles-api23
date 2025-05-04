@@ -276,6 +276,11 @@ class RustPushBackend implements BackendService {
     return myHandles[0];
   }
 
+  Future<String> getDefaultSMSHandle() async {
+    if (ss.settings.smsForwardingTargets.keys.isEmpty) return await getDefaultHandle();
+    return ss.settings.smsForwardingTargets.keys.first;
+  }
+
   @override
   bool canSendSubject() {
     return true;
@@ -366,7 +371,7 @@ class RustPushBackend implements BackendService {
   @override
   Future<Chat> createChat(List<String> addresses, AttributedBody? message, String service,
       {CancelToken? cancelToken, String? existingGuid}) async {
-    var handle = await getDefaultHandle();
+    var handle = service == "SMS" ? await getDefaultSMSHandle() : await getDefaultHandle();
     var formattedHandles = (await Future.wait(
               addresses.map((e) async => RustPushBBUtils.rustHandleToBB(await RustPushBBUtils.formatAddress(e)))))
           .toList();
@@ -390,7 +395,7 @@ class RustPushBackend implements BackendService {
                   )),
           sender: handle);
       if (chat.isRpSms) {
-        msg.target = getSMSTargets();
+        msg.target = await getSMSTargets(handle);
       }
       await sendMsg(msg);
       msg.sentTimestamp = DateTime.now().millisecondsSinceEpoch;
@@ -432,8 +437,16 @@ class RustPushBackend implements BackendService {
     return attachment.getFile();
   }
 
-  List<api.MessageTarget> getSMSTargets() {
-    return ss.settings.smsForwardingTargets.map((element) => api.MessageTarget.uuid(element)).toList();
+  Future<List<api.MessageTarget>> getSMSTargets(String handle) async {
+    if (ss.settings.isSmsRouter.value) {
+      var registered = await api.getMyPhoneHandles(state: pushService.state);
+      if (registered.contains(handle)) {
+        return ss.settings.smsRoutingTargets.map((element) => api.MessageTarget.uuid(element)).toList();
+      }
+    }
+    var target = ss.settings.smsForwardingTargets[handle];
+    if (target == null) throw Exception("No SMS target for handle $handle");
+    return [api.MessageTarget.uuid(target)];
   }
 
   @override
@@ -485,7 +498,7 @@ class RustPushBackend implements BackendService {
       msg.id = m.stagingGuid!;
     }
     if (chat.isRpSms) {
-      msg.target = getSMSTargets();
+      msg.target = await getSMSTargets(msg.sender!);
     }
     m.stagingGuid = msg.id; // in case delivered comes in before sending "finishes" (also for retries, duh)
     m.save(chat: chat);
@@ -527,7 +540,7 @@ class RustPushBackend implements BackendService {
     if (m.stagingGuid != null || (m.guid != null && m.guid!.contains("error") && m.guid!.contains("temp"))) {
       msg.id = m.stagingGuid ?? m.guid!;
     }
-    msg.target = getSMSTargets();
+    msg.target = await getSMSTargets(msg.sender!);
     await sendMsg(msg);
     msg.sentTimestamp = DateTime.now().millisecondsSinceEpoch;
     return (await pushService.reflectMessageDyn(msg))!;
@@ -560,7 +573,7 @@ class RustPushBackend implements BackendService {
     );
     msg.id = m.stagingGuid ?? m.guid!;
     if (c.isRpSms) {
-      msg.target = getSMSTargets();
+      msg.target = await getSMSTargets(msg.sender!);
     }
     await sendMsg(msg);
   }
@@ -841,7 +854,7 @@ class RustPushBackend implements BackendService {
       msg.id = m.stagingGuid ?? m.guid!; // make sure we pass forwarded messages's original GUID so it doesn't get overwritten and marked as a different msg
     }
     if (chat.isRpSms) {
-      msg.target = getSMSTargets();
+      msg.target = await getSMSTargets(msg.sender!);
     }
     m.stagingGuid = msg.id; // in case delivered comes in before sending "finishes" (also for retries, duh)
     m.save(chat: chat);
@@ -873,7 +886,6 @@ class RustPushBackend implements BackendService {
 
   @override
   Future<bool> markRead(Chat chat, bool notifyOthers) async {
-    return true;
     if (chat.isRpSms) notifyOthers = false;
     var latestMsg = chat.latestMessage.guid;
     var data = await chat.getConversationData();
@@ -910,7 +922,7 @@ class RustPushBackend implements BackendService {
       return true;
     }
     if (chat.isRpSms) {
-      msg.target = getSMSTargets();
+      msg.target = await getSMSTargets(msg.sender!);
     }
     await sendMsg(msg);
     return true;
@@ -1298,6 +1310,9 @@ class RustPushService extends GetxService {
         if (part.field0.iris) {
           continue;
         }
+        if (part.field0.mime == "application/smil") {
+          continue; // who needs display info amirite?
+        }
         api.Attachment? myIris;
         var next = parts.elementAtOrNull(index + 1);
         if (next != null && next.part_ is api.MessagePart_Attachment) {
@@ -1441,6 +1456,7 @@ class RustPushService extends GetxService {
       var attributedBodyData = await indexedPartsToAttributedBodyDyn(innerMsg.field0.parts.field0, myMsg.id, null);
       var sender = myMsg.sender;
       
+      bool hasBeenForwarded = false;
       var staging = false;
       var tempGuid = "temp-${randomString(8)}";
       if (innerMsg.field0.service is api.MessageType_SMS) {
@@ -1449,6 +1465,11 @@ class RustPushService extends GetxService {
           sender = smsServ.fromHandle;
         }
         staging = myHandles.contains(sender);
+        var myPhoneHandles = await api.getMyPhoneHandles(state: pushService.state);
+        if (!myPhoneHandles.contains(smsServ.usingNumber)) {
+          // this is a forwarded message from someone else
+          hasBeenForwarded = true;
+        }
         if (staging) {
           var found = Message.findOne(guid: myMsg.id);
           if (found != null && found.guid != null) {
@@ -1477,6 +1498,7 @@ class RustPushService extends GetxService {
         amkSessionId: innerMsg.field0.app?.balloon != null ? myMsg.id : null,
         verificationFailed: myMsg.verificationFailed,
         hasApplePayloadData: innerMsg.field0.app?.balloon != null,
+        hasBeenForwarded: hasBeenForwarded,
       );
     } else if (myMsg.message is api.Message_RenameMessage) {
       var msg = myMsg.message as api.Message_RenameMessage;
@@ -2160,6 +2182,7 @@ class RustPushService extends GetxService {
     }
 
     for (var chat in chats) {
+      if (!chat.isIMessage) continue;
       var data = await chat.getConversationData();
       var sender = await chat.ensureHandle();
       handleChats[sender]?.addAll(data.participants);
@@ -2495,9 +2518,11 @@ class RustPushService extends GetxService {
       try {
         var peerUuid = await api.convertTokenToUuid(state: pushService.state, handle: myMsg.sender!, token: (myMsg.target!.first as api.MessageTarget_Token).field0);
         if (message.field0) {
-          if (!ss.settings.smsForwardingTargets.contains(peerUuid)) ss.settings.smsForwardingTargets.add(peerUuid);
+          ss.settings.smsForwardingTargets[myMsg.sender!] = peerUuid;
         } else {
-          ss.settings.smsForwardingTargets.remove(peerUuid);
+          if (ss.settings.smsForwardingTargets.containsKey(myMsg.sender!)) {
+            ss.settings.smsForwardingTargets.remove(myMsg.sender!);
+          }
         }
         ss.saveSettings();
       } catch (e) {
@@ -2704,7 +2729,7 @@ class RustPushService extends GetxService {
         return;
       }
       if (myMsg.verificationFailed) return;
-      if (myHandles.contains(myMsg.sender)) {
+      if (myHandles.contains(myMsg.sender) && message.chat.target!.isIMessage) {
         if (myMsg.message is api.Message_Read) {
           var chat = message.chat.target!;
           chat.toggleHasUnread(false, privateMark: false);
@@ -2772,7 +2797,7 @@ class RustPushService extends GetxService {
       controller.cancelTypingIndicator?.cancel();
       controller.cancelTypingIndicator = null;
       if (chat.isRpSms && !myMsg.verificationFailed) {
-        var otherIds = ss.settings.smsForwardingTargets.copy();
+        var otherIds = ss.settings.smsRoutingTargets.copy();
         var myToken = (myMsg.target!.first as api.MessageTarget_Token).field0;
         var myId = await api.convertTokenToUuid(state: pushService.state, handle: myMsg.sender!, token: myToken);
         otherIds.remove(myId);

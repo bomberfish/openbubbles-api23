@@ -187,12 +187,14 @@ class ChatCreatorState extends OptimizedState<ChatCreator> {
     if (selectedContacts.any((element) => element.iMessage.value == false)) {
       setState(() {
         iMessage = false;
+        textController.supportsFormatting = false;
         sms = true;
         filteredChats = List<Chat>.from(existingChats.where((e) => !e.isIMessage));
       });
     } else {
       setState(() {
         iMessage = true;
+        textController.supportsFormatting = true;
         sms = false;
         filteredChats = List<Chat>.from(existingChats.where((e) => e.isIMessage));
       });
@@ -533,6 +535,7 @@ class ChatCreatorState extends OptimizedState<ChatCreator> {
                       if (index == 0) {
                         setState(() {
                           iMessage = true;
+                          textController.supportsFormatting = true;
                           sms = false;
                           filteredChats = List<Chat>.from(existingChats.where((e) => e.isIMessage));
                         });
@@ -541,6 +544,7 @@ class ChatCreatorState extends OptimizedState<ChatCreator> {
                       } else {
                         setState(() {
                           iMessage = false;
+                          textController.supportsFormatting = false;
                           sms = true;
                           filteredChats = List<Chat>.from(existingChats.where((e) => !e.isIMessage));
                         });
@@ -804,7 +808,7 @@ class ChatCreatorState extends OptimizedState<ChatCreator> {
 
                             if (backend is RustPushBackend && widget.initialAttachments.isEmpty && widget.initialText == "") {
                               var b = backend as RustPushBackend;
-                              var handle = await b.getDefaultHandle();
+                              var handle = iMessage ? await b.getDefaultHandle() : await b.getDefaultSMSHandle();
                               chat.usingHandle = handle;
                               chat.save(updateUsingHandle: true);
                             }

@@ -57,6 +57,7 @@ class ChatManager extends GetxService {
     Logger.debug('Setting active chat to ${chat.guid} (${chat.displayName})');
 
     (() async {
+      if (!chat.isIMessage) return;
       Logger.info("ensuring keys");
       var participants = (await chat.getConversationData()).participants;
       var targets = await pushService.doValidateTargets(participants, await chat.ensureHandle());

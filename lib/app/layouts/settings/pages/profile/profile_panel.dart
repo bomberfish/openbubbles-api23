@@ -236,12 +236,12 @@ class _ProfilePanelState extends OptimizedState<ProfilePanel> with WidgetsBindin
     } catch (_) {
 
     }
-    var myHandles = (await api.getHandles(state: pushService.state));
-    List<api.PrivateDeviceInfo> pendingTargets = ss.settings.isSmsRouter.value ? await api.getSmsTargets(state: pushService.state, handle: myHandles.first, refresh: true) : [];
-    ss.saveSettings();
-    setState(() {
+    var myHandles = (await api.getMyPhoneHandles(state: pushService.state));
+    if (myHandles.isNotEmpty) {
+      List<api.PrivateDeviceInfo> pendingTargets = ss.settings.isSmsRouter.value ? await api.getSmsTargets(state: pushService.state, handle: myHandles.first, refresh: true) : [];
+      ss.saveSettings();
       forwardingTargets.value = pendingTargets;
-    });
+    }
     setState(() {});
   }
 
@@ -678,14 +678,14 @@ class _ProfilePanelState extends OptimizedState<ProfilePanel> with WidgetsBindin
                                 return;
                               }
                             }
-                            var myHandles = (await api.getHandles(state: pushService.state));
+                            var myHandles = (await api.getMyPhoneHandles(state: pushService.state));
                             ss.settings.isSmsRouter.value = val;
 
                             List<api.PrivateDeviceInfo> pendingTargets = val ? await api.getSmsTargets(state: pushService.state, handle: myHandles.first, refresh: true) : [];
                             if (!val) {
-                              await (backend as RustPushBackend).broadcastSmsForwardingState(false, ss.settings.smsForwardingTargets);
+                              await (backend as RustPushBackend).broadcastSmsForwardingState(false, ss.settings.smsRoutingTargets);
                             }
-                            ss.settings.smsForwardingTargets.retainWhere((element) => pendingTargets.any((e) => e.uuid == element));
+                            ss.settings.smsRoutingTargets.retainWhere((element) => pendingTargets.any((e) => e.uuid == element));
                             ss.saveSettings();
                             setState(() {
                               forwardingTargets.value = pendingTargets;
@@ -705,18 +705,18 @@ class _ProfilePanelState extends OptimizedState<ProfilePanel> with WidgetsBindin
                               showSnackbar("Can't enable SMS forwarding!", "Re-log in with 2fa on the other device");
                               return;
                             }
-                            if (ss.settings.smsForwardingTargets.contains(target.uuid)) {
-                              ss.settings.smsForwardingTargets.remove(target.uuid);
+                            if (ss.settings.smsRoutingTargets.contains(target.uuid)) {
+                              ss.settings.smsRoutingTargets.remove(target.uuid);
                               setState(() { });
                               await (backend as RustPushBackend).broadcastSmsForwardingState(false, [target.uuid!]);
                             } else {
-                              ss.settings.smsForwardingTargets.add(target.uuid!);
+                              ss.settings.smsRoutingTargets.add(target.uuid!);
                               setState(() { });                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
                               await (backend as RustPushBackend).broadcastSmsForwardingState(true, [target.uuid!]);
                             }
                             ss.saveSettings();
                           },
-                          initialVal: ss.settings.smsForwardingTargets.contains(target.uuid),
+                          initialVal: ss.settings.smsRoutingTargets.contains(target.uuid),
                           title: target.deviceName!,
                           backgroundColor: tileColor,
                         ))

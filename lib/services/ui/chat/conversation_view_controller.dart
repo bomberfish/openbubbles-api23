@@ -66,7 +66,7 @@ class ConversationViewController extends StatefulController with GetSingleTicker
   final RxList<PlatformFile> pickedAttachments = <PlatformFile>[].obs;
   final focusNode = FocusNode();
   final subjectFocusNode = FocusNode();
-  late final textController = MentionTextEditingController(focusNode: focusNode);
+  late final textController = MentionTextEditingController(focusNode: focusNode, supportsFormatting: chat.isIMessage);
   late final subjectTextController = SpellCheckTextEditingController(focusNode: subjectFocusNode);
   final Rx<(PlatformFile?, PayloadData)?> pickedApp = Rx<(PlatformFile, PayloadData)?>(null);
   final RxBool showRecording = false.obs;
@@ -114,7 +114,7 @@ class ConversationViewController extends StatefulController with GetSingleTicker
       suggestShare.value = ((chat.participants.first.contact?.isShared ?? true) || !ss.settings.shareContactAutomatically.value) 
           && !ss.settings.sharedContacts.contains(chat.participants.first.address)
           && !ss.settings.dismissedContacts.contains(chat.participants.first.address)
-          && ss.settings.nameAndPhotoSharing.value;
+          && ss.settings.nameAndPhotoSharing.value && chat.isIMessage;
     }
   }
 

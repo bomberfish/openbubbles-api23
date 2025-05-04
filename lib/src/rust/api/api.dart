@@ -253,6 +253,9 @@ Future<bool> send({required ArcPushState state, required MessageInst msg}) =>
 Future<List<String>> getHandles({required ArcPushState state}) =>
     RustLib.instance.api.crateApiApiGetHandles(state: state);
 
+Future<List<String>> getMyPhoneHandles({required ArcPushState state}) =>
+    RustLib.instance.api.crateApiApiGetMyPhoneHandles(state: state);
+
 Future<void> doReregister({required ArcPushState state}) =>
     RustLib.instance.api.crateApiApiDoReregister(state: state);
 

@@ -199,7 +199,8 @@ class Settings {
   final RxBool isSmsRouter = false.obs; // true if we can send/recieve from the app, and via sms forwarding over APNs
   final RxBool vpnWarned = false.obs;
   final RxMap<String, String> cachedCodes = <String, String>{}.obs;
-  final RxList<String> smsForwardingTargets = <String>[].obs;
+  final RxList<String> smsRoutingTargets = <String>[].obs;
+  final RxMap<String, String> smsForwardingTargets = <String, String>{}.obs;
 
   final RxBool enableShareZen = false.obs;
   final RxBool zenModeAware = false.obs;
@@ -410,7 +411,7 @@ class Settings {
       'isSmsRouter': isSmsRouter.value,
       'developerEnabled': developerEnabled.value,
       'vpnWarned': vpnWarned.value,
-      'smsForwardingTargets': smsForwardingTargets,
+      'smsForwardingTargets': smsRoutingTargets,
       'developerMode': developerMode,
       'lastLocation': lastLocation,
       'enableShareZen': enableShareZen.value,
@@ -432,6 +433,7 @@ class Settings {
         'sendSoundPath': sendSoundPath.value,
         'receiveSoundPath': receiveSoundPath.value,
         'cachedCodes': cachedCodes,
+        'smsIncomingTargets': smsForwardingTargets,
       });
     }
     return map;
@@ -575,9 +577,10 @@ class Settings {
     ss.settings.developerEnabled.value = map['developerEnabled'] ?? false;
     ss.settings.vpnWarned.value = map['vpnWarned'] ?? false;
     ss.settings.cachedCodes.value = map['cachedCodes'] ?? {};
+    ss.settings.smsForwardingTargets.value = map['smsIncomingTargets'] ?? {};
     ss.settings.enableShareZen.value = map['enableShareZen'] ?? false;
     ss.settings.zenModeAware.value = map['zenModeAware'] ?? false;
-    ss.settings.smsForwardingTargets.value = (map['smsForwardingTargets']?.runtimeType == String ? jsonDecode(map['smsForwardingTargets']) as List : []).cast<String>();
+    ss.settings.smsRoutingTargets.value = (map['smsForwardingTargets']?.runtimeType == String ? jsonDecode(map['smsForwardingTargets']) as List : []).cast<String>();
     ss.settings.developerMode.value = (map['developerMode']?.runtimeType == String ? jsonDecode(map['developerMode']) as List : []).cast<String>();
     ss.settings.lastLocation.value = map['lastLocation'];
     ss.settings.save();
@@ -737,9 +740,10 @@ class Settings {
     s.developerEnabled.value = map['developerEnabled'] ?? false;
     s.vpnWarned.value = map['vpnWarned'] ?? false;
     s.cachedCodes.value =  map['cachedCodes'] is String ? jsonDecode(map['cachedCodes']).cast<String, String>() : <String, String>{};
+    s.smsForwardingTargets.value = map['smsIncomingTargets'] is String ? jsonDecode(map['smsIncomingTargets']).cast<String, String>() : <String, String>{};
     s.enableShareZen.value = map['enableShareZen'] ?? false;
     s.zenModeAware.value = map['zenModeAware'] ?? false;
-    s.smsForwardingTargets.value = (map['smsForwardingTargets']?.runtimeType == String ? jsonDecode(map['smsForwardingTargets']) as List : []).cast<String>();
+    s.smsRoutingTargets.value = (map['smsForwardingTargets']?.runtimeType == String ? jsonDecode(map['smsForwardingTargets']) as List : []).cast<String>();
     s.developerMode.value = (map['developerMode']?.runtimeType == String ? jsonDecode(map['developerMode']) as List : []).cast<String>();
     s.lastLocation.value = map['lastLocation'];
     return s;

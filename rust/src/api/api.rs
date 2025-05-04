@@ -1211,6 +1211,13 @@ pub async fn get_handles(state: &Arc<PushState>) -> anyhow::Result<Vec<String>> 
     Ok(state.0.read().await.client.as_ref().unwrap().identity.get_handles().await.to_vec())
 }
 
+pub async fn get_my_phone_handles(state: &Arc<PushState>) -> anyhow::Result<Vec<String>> {
+    if !matches!(state.get_phase().await, RegistrationPhase::Registered) {
+        panic!("Wrong phase! (send)")
+    }
+    Ok(state.0.read().await.client.as_ref().unwrap().identity.get_my_phone_handles().await.to_vec())
+}
+
 pub async fn do_reregister(state: &Arc<PushState>) -> anyhow::Result<()> {
     if !matches!(state.get_phase().await, RegistrationPhase::Registered) {
         panic!("Wrong phase! (send)")
