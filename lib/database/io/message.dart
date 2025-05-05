@@ -22,6 +22,7 @@ import 'package:objectbox/objectbox.dart';
 import 'package:supercharged/supercharged.dart';
 import 'package:telephony_plus/telephony_plus.dart';
 import 'package:telephony_plus/src/models/attachment.dart' as TelephonyAttachment;
+import 'package:bluebubbles/src/rust/api/api.dart' as api;
 
 /// Async method to fetch attachments
 class GetMessageAttachments extends AsyncTask<List<dynamic>, Map<String, List<Attachment?>>> {
@@ -289,7 +290,7 @@ class Message {
   String? sendingServiceId;
 
   String? amkSessionId; // for sessioned messages
-  bool hasBeenForwarded; // local SMS forwarding, used to keep track of this message needs to be sent
+  bool hasBeenForwarded; // local SMS forwarding, used to keep track of this message needs to be sent locally via SMS
   String? stagingGuid;
 
   final RxInt _error = RxInt(0);
@@ -337,51 +338,61 @@ class Message {
 
   DateTime? get chatViewDate => dateScheduled ?? dateCreated;
 
+  // prevents saving, used for SMS forwarding
+  @Transient()
+  bool temp = false;
+
 
   Future<void> forwardIfNessesary(Chat chat, {bool markFailed = false}) async {
-    if (hasBeenForwarded || !ss.settings.isSmsRouter.value || !chat.isTextForwarding || !(isFromMe ?? true)) return;
+    if (hasBeenForwarded || !chat.isTextForwarding || !(isFromMe ?? true)) return;
+    if (!await chat.shouldRoute()) return;
+
+
     hasBeenForwarded = true;
     save(chat: chat);
-    var attachments = fetchAttachments()!;
-    bool useMMS = chat.participants.length > 1 || attachments.isNotEmpty;
-    int status;
-    if (useMMS) {
-      status = await TelephonyPlus().sendMMS(
-        addresses: chat.participants.map((e) => e.address).filter((e) => e.isPhoneNumber).toList(),
-        message: text?.trim() == "" ? null : text,
-        threadId: chat.telephonyId,
-        attachments: await Future.wait(attachments.map((e) => e!.toTelephony()).toList())
-      );
-    } else {
-      status = await TelephonyPlus().sendSMS(
-        address: chat.participants.first.address,
-        threadId: chat.telephonyId,
-        message: text!,
-      );
-    }
-    if (status != -1) {
-      await (backend as RustPushBackend).confirmSmsSent(this, chat, false);
-      hasBeenForwarded = false;
-      save(chat: chat);
-      if (markFailed) {
-        final tempGuid = guid;
-        var newMsg = handleSendError(Exception("failed to send sms with status $status!"), this);
 
-        if (!ls.isAlive || !(cm.getChatController(chat.guid)?.isAlive ?? false)) {
-          await notif.createFailedToSend(chat);
-        }
-        await Message.replaceMessage(tempGuid, newMsg);
-        return;
+    pushService.disableOutgoingSms = true;
+
+    try {
+      // if we are forwarding, we do not persist to disk. Therefore we don't care about temp guids
+      var attachments = fetchAttachments()!;
+      bool useMMS = chat.participants.length > 1 || attachments.isNotEmpty;
+      int status;
+      if (useMMS) {
+        status = await TelephonyPlus().sendMMS(
+          addresses: chat.participants.map((e) => e.address).filter((e) => e.isPhoneNumber).toList(),
+          message: text?.trim() == "" ? null : text,
+          threadId: chat.telephonyId,
+          attachments: await Future.wait(attachments.map((e) => e!.toTelephony()).toList())
+        );
       } else {
-        throw Exception("failed to send sms with status $status!");
+        status = await TelephonyPlus().sendSMS(
+          address: chat.participants.first.address,
+          threadId: chat.telephonyId,
+          message: text!,
+        );
       }
+      if (status != -1) {
+        await (backend as RustPushBackend).confirmSmsSent(this, chat, false);
+        hasBeenForwarded = false;
+        save(chat: chat);
+        if (markFailed) {
+
+          if (!ls.isAlive || !(cm.getChatController(chat.guid)?.isAlive ?? false)) {
+            await notif.createFailedToSend(chat);
+          }
+          return;
+        } else {
+          throw Exception("failed to send sms with status $status!");
+        }
+      }
+      await (backend as RustPushBackend).confirmSmsSent(this, chat, true);
+    } finally {
+      (() async {
+        await Future.delayed(const Duration(seconds: 5));
+        pushService.disableOutgoingSms = false;
+      })();
     }
-    if (stagingGuid == null) return; // we weren't forwarded successfully
-    var tempGuid = guid;
-    guid = stagingGuid;
-    stagingGuid = null;
-    await Message.replaceMessage(tempGuid, this);
-    await (backend as RustPushBackend).confirmSmsSent(this, chat, true);
   }
 
   Message({
@@ -433,6 +444,7 @@ class Message {
     this.sendingServiceId,
     this.associatedMessageEmoji,
     this.dateScheduled,
+    this.temp = false,
   }) {
       if (handle != null && handleId == null) handleId = handle!.originalROWID;
       if (error != null) _error.value = error;
@@ -655,7 +667,7 @@ class Message {
   /// Save a single message - prefer [bulkSave] for multiple messages rather
   /// than iterating through them
   Message save({Chat? chat, bool updateIsBookmarked = false, bool updateSendingServiceId = false}) {
-    if (kIsWeb) return this;
+    if (kIsWeb || temp) return this;
     Database.runInTransaction(TxMode.write, () {
       Message? existing = Message.findOne(guid: guid);
       if (existing != null) {
@@ -771,6 +783,7 @@ class Message {
 
   /// Replace a temp message with the message from the server
   static Future<Message> replaceMessage(String? oldGuid, Message newMessage) async {
+    if (newMessage.temp) throw Exception("Attempting to persist temp message!");
     Message? existing = Message.findOne(guid: oldGuid);
     if (existing == null) {
       throw Exception("Cannot replace on a null existing message!!");

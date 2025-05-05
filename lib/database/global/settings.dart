@@ -201,6 +201,7 @@ class Settings {
   final RxMap<String, String> cachedCodes = <String, String>{}.obs;
   final RxList<String> smsRoutingTargets = <String>[].obs;
   final RxMap<String, String> smsForwardingTargets = <String, String>{}.obs;
+  final RxBool warnedTextChats = false.obs;
 
   final RxBool enableShareZen = false.obs;
   final RxBool zenModeAware = false.obs;
@@ -415,6 +416,7 @@ class Settings {
       'developerMode': developerMode,
       'lastLocation': lastLocation,
       'enableShareZen': enableShareZen.value,
+      'warnedTextChats': warnedTextChats.value,
       'zenModeAware': zenModeAware.value,
     };
     if (includeAll) {
@@ -579,6 +581,7 @@ class Settings {
     ss.settings.cachedCodes.value = map['cachedCodes'] ?? {};
     ss.settings.smsForwardingTargets.value = map['smsIncomingTargets'] ?? {};
     ss.settings.enableShareZen.value = map['enableShareZen'] ?? false;
+    ss.settings.warnedTextChats.value = map['warnedTextChats'] ?? false;
     ss.settings.zenModeAware.value = map['zenModeAware'] ?? false;
     ss.settings.smsRoutingTargets.value = (map['smsForwardingTargets']?.runtimeType == String ? jsonDecode(map['smsForwardingTargets']) as List : []).cast<String>();
     ss.settings.developerMode.value = (map['developerMode']?.runtimeType == String ? jsonDecode(map['developerMode']) as List : []).cast<String>();
@@ -742,6 +745,7 @@ class Settings {
     s.cachedCodes.value =  map['cachedCodes'] is String ? jsonDecode(map['cachedCodes']).cast<String, String>() : <String, String>{};
     s.smsForwardingTargets.value = map['smsIncomingTargets'] is String ? jsonDecode(map['smsIncomingTargets']).cast<String, String>() : <String, String>{};
     s.enableShareZen.value = map['enableShareZen'] ?? false;
+    s.warnedTextChats.value = map['warnedTextChats'] ?? false;
     s.zenModeAware.value = map['zenModeAware'] ?? false;
     s.smsRoutingTargets.value = (map['smsForwardingTargets']?.runtimeType == String ? jsonDecode(map['smsForwardingTargets']) as List : []).cast<String>();
     s.developerMode.value = (map['developerMode']?.runtimeType == String ? jsonDecode(map['developerMode']) as List : []).cast<String>();

@@ -277,7 +277,9 @@ class RustPushBackend implements BackendService {
   }
 
   Future<String> getDefaultSMSHandle() async {
-    if (ss.settings.smsForwardingTargets.keys.isEmpty) return await getDefaultHandle();
+    var handle = await getDefaultHandle();
+    if (ss.settings.smsForwardingTargets.keys.isEmpty) return handle;
+    if (ss.settings.smsForwardingTargets.containsKey(handle)) return handle;
     return ss.settings.smsForwardingTargets.keys.first;
   }
 
@@ -306,8 +308,8 @@ class RustPushBackend implements BackendService {
     return true;
   }
 
-  Future<api.MessageType> getService(bool isSms, {Message? forMessage}) async {
-    if (isSms) {
+  Future<api.MessageType> getService(Chat chat, {Message? forMessage}) async {
+    if (chat.isRpSms) {
       String? fromHandle;
       if (forMessage != null && forMessage.handle != null) {
         var myHandles = await api.getHandles(state: pushService.state);
@@ -316,13 +318,7 @@ class RustPushBackend implements BackendService {
           fromHandle = sender; // this is a forwarded message
         }
       }
-      var number = "";
-      if (!kIsDesktop) {
-        // we don't need number on desktop, b/c it's only used for relaying messages to other devices
-        // which desktops will never do
-        number = await RustPushBBUtils.formatAddress(await TelephonyPlus().getNumber());
-      }
-      return api.MessageType.sms(isPhone: ss.settings.isSmsRouter.value, usingNumber: "tel:$number", fromHandle: fromHandle);
+      return api.MessageType.sms(isPhone: await chat.shouldRoute(), usingNumber: await chat.ensureHandle(), fromHandle: fromHandle);
     }
     return const api.MessageType.iMessage();
   }
@@ -389,7 +385,7 @@ class RustPushBackend implements BackendService {
           conversation: await chat.getConversationData(),
           message: api.Message.message(api.NormalMessage(
               parts: await partsFromBody(message),
-                  service: await getService(chat.isRpSms),
+                  service: await getService(chat),
                   voice: false,
                   embeddedProfile: await pushService.getShareProfileMessageFor(chat.participants),
                   )),
@@ -487,7 +483,7 @@ class RustPushBackend implements BackendService {
           replyGuid: m.threadOriginatorGuid,
           replyPart: m.threadOriginatorGuid == null ? null : m.threadOriginatorPart,
           effect: m.expressiveSendStyleId,
-          service: await getService(chat.isRpSms, forMessage: m),
+          service: await getService(chat, forMessage: m),
           subject: m.subject,
           app: m.payloadData == null ? null : pushService.dataToApp(m.payloadData!),
           voice: isAudioMessage,
@@ -514,23 +510,40 @@ class RustPushBackend implements BackendService {
   }
 
   Future<Message> forwardMMSAttachment(Chat chat, Message m, Attachment att) async {
-    api.Attachment? attachment = api.Attachment(
-      aType: api.AttachmentType.inline(await att.getFile().getBytes()),
-      mime: att.mimeType ?? "application/octet-stream",
-      part_: 0,
-      utiType: att.uti ?? "public.data",
-      name: att.transferName!,
-      iris: false,
-    );
+    // 300 kb
+    api.Attachment? attachment;
+    var stream = api.uploadAttachment(
+        state: pushService.state,
+        path: att.getFile().path!,
+        mime: att.mimeType ?? "application/octet-stream",
+        uti: att.uti ?? "public.data",
+        name: att.transferName!);
+    if (att.getFile().size > 300000) {
+      await for (final event in stream) {
+        if (event.attachment != null) {
+          Logger.info("upload finish");
+          attachment = event.attachment;
+        }
+      }
+    } else {
+      attachment = api.Attachment(
+        aType: api.AttachmentType.inline(await att.getFile().getBytes()),
+        mime: att.mimeType ?? "application/octet-stream",
+        part_: 0,
+        utiType: att.uti ?? "public.data",
+        name: att.transferName!,
+        iris: false,
+      );
+    }
     Logger.info("uploaded");
-    var service = await getService(chat.isRpSms, forMessage: m);
+    var service = await getService(chat, forMessage: m);
     var msg = await api.newMsg(
         state: pushService.state,
         conversation: await chat.getConversationData(),
         sender: await chat.ensureHandle(),
         message: api.Message.message(api.NormalMessage(
           parts: api.MessageParts(
-              field0: [api.IndexedMessagePart(part_: api.MessagePart.attachment(attachment))]),
+              field0: [api.IndexedMessagePart(part_: api.MessagePart.attachment(attachment!))]),
           replyGuid: m.threadOriginatorGuid,
           replyPart: m.threadOriginatorGuid == null ? null : m.threadOriginatorPart,
           effect: m.expressiveSendStyleId,
@@ -644,6 +657,7 @@ class RustPushBackend implements BackendService {
       "sms_forwarding_capable": true,
       "sms_forwarding_enabled": smsForwardingEnabled(),
       "can_pnr": deviceState.name.contains("iPhone") || deviceState.name.contains("iPod") || deviceState.name.contains("iPad"),
+      "can_forward": (await api.getMyPhoneHandles(state: pushService.state)).isNotEmpty,
     };
   }
 
@@ -840,7 +854,7 @@ class RustPushBackend implements BackendService {
         replyGuid: m.threadOriginatorGuid,
         replyPart: m.threadOriginatorGuid == null ? null : m.threadOriginatorPart,
         effect: m.expressiveSendStyleId,
-        service: await getService(chat.isRpSms, forMessage: m),
+        service: await getService(chat, forMessage: m),
         subject: m.subject == "" ? null : m.subject,
         app: m.payloadData == null ? null : pushService.dataToApp(m.payloadData!),
         linkMeta: linkMeta,
@@ -875,7 +889,8 @@ class RustPushBackend implements BackendService {
     await m.forwardIfNessesary(chat);
     m.save(chat: chat);
     msg.sentTimestamp = DateTime.now().millisecondsSinceEpoch;
-    return (await pushService.reflectMessageDyn(msg))!;
+    if (m.hasBeenForwarded) return m; // do not reflect back, it will just send it out again
+    return (await pushService.reflectMessageDyn(msg)) ?? m;
   }
 
 
@@ -1159,6 +1174,9 @@ class RustPushService extends GetxService {
 
   var findMy = false;
   var sharedStreams = false;
+
+
+  var disableOutgoingSms = false;
 
   Map<String, api.Attachment> attachments = {};
 
@@ -1718,7 +1736,7 @@ class RustPushService extends GetxService {
 
   // finds chat for message. Use over `Chat.findByRust` for incoming messages
   // to handle after conversation changes (renames, participants)
-  Future<Chat> chatForMessageInner(api.MessageInst myMsg) async {
+  Future<Chat> chatForMessageInner(api.MessageInst myMsg, {bool routingStub = false}) async {
     // find existing saved message and use that chat if we're getting a replay
     var existing = Message.findOne(guid: myMsg.id);
     if (myMsg.message is api.Message_Edit) {
@@ -1768,11 +1786,22 @@ class RustPushService extends GetxService {
         myMsg.conversation?.participants.remove(service.usingNumber);
       }
     }
-    return (await Chat.findByRust(myMsg.conversation!, getService(myMsg)))!;
+    return (await Chat.findByRust(myMsg.conversation!, getService(myMsg), routingStub: routingStub))!;
   }
 
   Future<Chat> chatForMessage(api.MessageInst myMsg) async {
-    var result = await chatForMessageInner(myMsg);
+    var routingStub = false;
+    if (myMsg.message is api.Message_Message) {
+        var message = myMsg.message as api.Message_Message;
+        var service = message.field0.service;
+        var myNumbers = await api.getMyPhoneHandles(state: pushService.state);
+        if (service is api.MessageType_SMS) {
+          if (myNumbers.contains(service.usingNumber)) {
+            routingStub = true; // we are just forwarding this, search for routing stubs
+          }
+        }
+      }
+    var result = await chatForMessageInner(myMsg, routingStub: routingStub);
     if (myMsg.conversation != null) {
       // conformance stuff
       if (myMsg.conversation!.senderGuid != null && !result.guidRefs.contains(myMsg.conversation!.senderGuid!)) {
@@ -1783,6 +1812,17 @@ class RustPushService extends GetxService {
       if (mine.isNotEmpty && !mine.contains(result.usingHandle)) {
         result.usingHandle = mine[0];
         result.save(updateUsingHandle: true);
+      }
+      if (myMsg.message is api.Message_Message) {
+        var message = myMsg.message as api.Message_Message;
+        var service = message.field0.service;
+        if (service is api.MessageType_SMS) {
+          if (service.usingNumber != result.usingHandle) {
+            Logger.info("Mismatch between chat handle ${result.usingHandle} and incoming handle ${service.usingNumber}, updating chat handle!");
+            result.usingHandle = service.usingNumber;
+            result.save(updateUsingHandle: true);
+          }
+        }
       }
       if (myMsg.message is! api.Message_ChangeParticipants) {
         var isNormal = myMsg.message is api.Message_Message;
@@ -2797,13 +2837,21 @@ class RustPushService extends GetxService {
       controller.cancelTypingIndicator?.cancel();
       controller.cancelTypingIndicator = null;
       if (chat.isRpSms && !myMsg.verificationFailed) {
-        var otherIds = ss.settings.smsRoutingTargets.copy();
-        var myToken = (myMsg.target!.first as api.MessageTarget_Token).field0;
-        var myId = await api.convertTokenToUuid(state: pushService.state, handle: myMsg.sender!, token: myToken);
-        otherIds.remove(myId);
-        if (otherIds.isNotEmpty) {
-          myMsg.target = otherIds.map((element) => api.MessageTarget.uuid(element)).toList(); // forward to other devices
-          await (backend as RustPushBackend).sendMsg(myMsg);
+        var myHandles = await api.getMyPhoneHandles(state: pushService.state);
+        var service = (myMsg.message as api.Message_Message).field0.service;
+        if (service is api.MessageType_SMS && myHandles.contains(service.usingNumber)) {
+          var otherIds = ss.settings.smsRoutingTargets.copy();
+          var myToken = (myMsg.target!.first as api.MessageTarget_Token).field0;
+          var myId = await api.convertTokenToUuid(state: pushService.state, handle: myMsg.sender!, token: myToken);
+          otherIds.remove(myId);
+          if (otherIds.isNotEmpty) {
+            myMsg.target = otherIds.map((element) => api.MessageTarget.uuid(element)).toList(); // forward to other devices
+            await (backend as RustPushBackend).sendMsg(myMsg);
+          }
+          var msg = (await pushService.reflectMessageDyn(myMsg))!;
+          msg.temp = true;
+          msg.forwardIfNessesary(chat);
+          return;
         }
       }
       var msg = myMsg.message as api.Message_Message;
@@ -3033,7 +3081,7 @@ class RustPushService extends GetxService {
   }
 
   void onboardZenMode() async {
-    if (ss.settings.zenModeAware.value) return;
+    if (ss.settings.zenModeAware.value || !ss.settings.finishedSetup.value) return;
     String? currentMode = await mcs.invokeMethod("get-zen-mode");
     if (currentMode == null) return;
     ss.settings.zenModeAware.value = true;

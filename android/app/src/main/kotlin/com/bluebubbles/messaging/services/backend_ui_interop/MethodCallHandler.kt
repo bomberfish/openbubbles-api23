@@ -43,6 +43,7 @@ import com.bluebubbles.messaging.services.system.ConversationExemptHandler
 import com.bluebubbles.messaging.services.system.GetFullResolution
 import com.bluebubbles.messaging.services.system.GetZenMode
 import com.bluebubbles.messaging.services.system.HeifDecoder
+import com.bluebubbles.messaging.services.system.OpenSMSAppHandler
 import com.bluebubbles.messaging.services.system.RecentContactsRequestHandler
 import com.bluebubbles.messaging.services.system.ZenModeSetupHandler
 import com.bluebubbles.messaging.services.system.ZenModeUUIDHandler
@@ -120,6 +121,7 @@ class MethodCallHandler {
             GetZenMode.tag -> GetZenMode().handleMethodCall(call, result, context)
             HeifDecoder.tag -> HeifDecoder().handleMethodCall(call, result, context)
             GetFullResolution.tag -> GetFullResolution().handleMethodCall(call, result, context)
+            OpenSMSAppHandler.tag -> OpenSMSAppHandler().handleMethodCall(call, result, context)
             "ready" -> { MainActivity.engine_ready = true }
             else -> {
                 val error = "Could not find method call handler for ${call.method}!"

@@ -112,7 +112,7 @@ final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
       id: const obx_int.IdUid(3, 9017250848141753702),
       name: 'Chat',
-      lastPropertyId: const obx_int.IdUid(40, 5580492826274966240),
+      lastPropertyId: const obx_int.IdUid(41, 7342392293130604386),
       flags: 0,
       properties: <obx_int.ModelProperty>[
         obx_int.ModelProperty(
@@ -284,6 +284,11 @@ final _entities = <obx_int.ModelEntity>[
         obx_int.ModelProperty(
             id: const obx_int.IdUid(40, 5580492826274966240),
             name: 'senderIsKnown',
+            type: 1,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(41, 7342392293130604386),
+            name: 'isRoutingStub',
             type: 1,
             flags: 0)
       ],
@@ -1159,7 +1164,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
           final textFieldAnnotationsOffset = object.textFieldAnnotations == null
               ? null
               : fbb.writeString(object.textFieldAnnotations!);
-          fbb.startTable(41);
+          fbb.startTable(42);
           fbb.addInt64(0, object.id ?? 0);
           fbb.addOffset(2, guidOffset);
           fbb.addOffset(4, chatIdentifierOffset);
@@ -1195,6 +1200,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
           fbb.addInt64(37, object.dateNotifiedAnyways?.millisecondsSinceEpoch);
           fbb.addInt64(38, object.zenModeIsShared);
           fbb.addBool(39, object.senderIsKnown);
+          fbb.addBool(40, object.isRoutingStub);
           fbb.finish(fbb.endTable());
           return object.id ?? 0;
         },
@@ -1271,6 +1277,8 @@ obx_int.ModelDefinition getObjectBoxModel() {
               const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 80);
           final senderIsKnownParam =
               const fb.BoolReader().vTableGetNullable(buffer, rootOffset, 82);
+          final isRoutingStubParam =
+              const fb.BoolReader().vTableGet(buffer, rootOffset, 84, false);
           final guidRefsParam = const fb.ListReader<String>(
                   fb.StringReader(asciiOptimization: true),
                   lazy: false)
@@ -1303,6 +1311,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
               dateNotifiedAnyways: dateNotifiedAnywaysParam,
               zenModeIsShared: zenModeIsSharedParam,
               senderIsKnown: senderIsKnownParam,
+              isRoutingStub: isRoutingStubParam,
               guidRefs: guidRefsParam)
             ..dbOnlyLatestMessageDate = dbOnlyLatestMessageDateValue == null
                 ? null
@@ -2218,6 +2227,10 @@ class Chat_ {
   /// See [Chat.senderIsKnown].
   static final senderIsKnown =
       obx.QueryBooleanProperty<Chat>(_entities[1].properties[33]);
+
+  /// See [Chat.isRoutingStub].
+  static final isRoutingStub =
+      obx.QueryBooleanProperty<Chat>(_entities[1].properties[34]);
 
   /// see [Chat.handles]
   static final handles =

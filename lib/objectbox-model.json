@@ -89,7 +89,7 @@
     },
     {
       "id": "3:9017250848141753702",
-      "lastPropertyId": "40:5580492826274966240",
+      "lastPropertyId": "41:7342392293130604386",
       "name": "Chat",
       "properties": [
         {
@@ -263,6 +263,11 @@
         {
           "id": "40:5580492826274966240",
           "name": "senderIsKnown",
+          "type": 1
+        },
+        {
+          "id": "41:7342392293130604386",
+          "name": "isRoutingStub",
           "type": 1
         }
       ],

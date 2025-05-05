@@ -272,7 +272,7 @@ class GetChats extends AsyncTask<List<dynamic>, List<Chat>> {
       if (stuff.length >= 3 && stuff[2] != null && stuff[2] is List) {
         queryBuilder = Database.chats.query(Chat_.id.oneOf(stuff[2] as List<int>));
       } else {
-        queryBuilder = Database.chats.query(Chat_.dateDeleted.isNull());
+        queryBuilder = Database.chats.query(Chat_.dateDeleted.isNull().and(Chat_.isRoutingStub.equals(false).or(Chat_.isRoutingStub.isNull())));
       }
 
       // Build the query, applying some sorting so we get data in the correct order.
@@ -399,6 +399,8 @@ class Chat {
   int? zenModeIsShared;
   DateTime? dateNotifiedAnyways;
   bool? senderIsKnown;
+  // true means this is a routing stub; we only hold SMS bridging information, not messages
+  bool isRoutingStub = false;
 
   @Backlink('chat')
   final messages = ToMany<Message>();
@@ -435,6 +437,7 @@ class Chat {
     this.dateNotifiedAnyways,
     this.zenModeIsShared,
     this.senderIsKnown = true,
+    this.isRoutingStub = false,
     List<String>? guidRefs,
   }) : guidRefs = guidRefs ?? [guid] {
     customAvatarPath = customAvatar;
@@ -475,15 +478,30 @@ class Chat {
       notifsSilenced: json["notifsSilenced"] ?? false,
       zenModeIsShared: json["zenModeIsShared"],
       dateNotifiedAnyways: parseDate(json["dateNotifiedAnyways"]),
+      isRoutingStub: json["isRoutingStub"] ?? false,
     );
   }
 
   Future<String> ensureHandle() async {
     if (usingHandle == null) {
-      usingHandle = await (backend as RustPushBackend).getDefaultHandle();
-      save(updateUsingHandle: true);
+      if (isRpSms) {
+        if (isRoutingStub) {
+          usingHandle = (await api.getMyPhoneHandles(state: pushService.state))[0];
+        } else {
+          usingHandle = ss.settings.smsForwardingTargets.keys.firstOrNull;
+        }
+      } else {
+        usingHandle = await (backend as RustPushBackend).getDefaultHandle();
+        save(updateUsingHandle: true);
+      }
     }
     return usingHandle!;
+  }
+
+  // return true if we should route this conversation as a router
+  Future<bool> shouldRoute() async {
+    var handles = await api.getMyPhoneHandles(state: pushService.state);
+    return handles.contains(await ensureHandle());
   }
 
   void removeProfilePhoto() {
@@ -703,12 +721,12 @@ class Chat {
   }
 
   static Future<Chat> getChatForTel(int tid, List<String> participants) async {
-    final query3 = Database.chats.query(Chat_.telephonyId.equals(tid).and(Chat_.dateDeleted.isNull())).build();
+    final query3 = Database.chats.query(Chat_.telephonyId.equals(tid).and(Chat_.dateDeleted.isNull()).and(Chat_.isRoutingStub.equals(true))).build();
     final result4 = query3.findFirst();
     query3.close();
     if (result4 != null) return result4;
 
-    final query = (Database.chats.query(Chat_.dateDeleted.isNull().and(Chat_.isRpSms.equals(true)))
+    final query = (Database.chats.query(Chat_.dateDeleted.isNull().and(Chat_.isRpSms.equals(true)).and(Chat_.isRoutingStub.equals(true)))
           ..linkMany(Chat_.handles, Handle_.address.oneOf(participants)))
             .build();
     final results = query.find();
@@ -727,6 +745,7 @@ class Chat {
     });
     if (result == null) {
       result = await backend.createChat(participants, null, "SMS");
+      result.isRoutingStub = true;
       chats.updateChat(result);
     }
     result.telephonyId = tid;
@@ -734,11 +753,18 @@ class Chat {
     return result;
   }
 
-  Future<void> deliverSMS(String sender, List<Map<String, dynamic>> parts) async {
+  Future<void> deliverSMS(String sender, bool fromMe, List<Map<String, dynamic>> parts) async {
     if (!ss.settings.isSmsRouter.value) {
       return; // don't deliver if not enabled :)
     }
     if (sender.isEmail) return; // no one uses this feature anyway, and can't debug it due to TMO's MXRT AUP
+
+    if (fromMe && "tel:$sender" != usingHandle) {
+      Logger.info("Chat delivering sms, handle $usingHandle not sms handle $sender");
+      usingHandle = "tel:$sender";
+      save(updateUsingHandle: true);
+    }
+
     var handle = Handle.findOne(addressAndService: Tuple2(sender, "iMessage"));
     if (handle == null) {
       handle = Handle(
@@ -752,6 +778,8 @@ class Chat {
     }
     for (var part in parts) {
       var partContent = part["body"] is Uint8List ? part["body"] as Uint8List : Uint8List.fromList(part["body"].cast<int>().toList());
+      // smil is for unnessesary
+      if (part["contentType"] == "application/smil") continue;
       if (part["contentType"] == "text/plain") {
         var bodyString = utf8.decode(partContent);
         if (bodyString.trim() == "") continue;
@@ -760,34 +788,23 @@ class Chat {
           threadOriginatorPart: "0:0:0",
           dateCreated: DateTime.now(),
           hasAttachments: false,
-          isFromMe: false,
+          isFromMe: fromMe,
           guid: part["id"] as String,
           handleId: 0,
           handle: handle,
           hasDdResults: true,
+          hasBeenForwarded: true,
           attributedBody: [AttributedBody(string: bodyString, runs: [Run(
             range: [0, bodyString.length],
             attributes: Attributes(
               messagePart: 0,
             )
           )])],
+          temp: true,
         );
-        try {
-          inq.queue(IncomingItem(
-            chat: this,
-            message: await backend.sendMessage(this, _message),
-            type: QueueType.newMessage
-          ));
-        } catch (e) {
-          Logger.debug("Failed to forward sms! $e");
-          inq.queue(IncomingItem(
-            chat: this,
-            message: _message,
-            type: QueueType.newMessage
-          ));
-        }
-        if (!ls.isAlive) {
-          await MessageHelper.handleNotification(_message, this, findExisting: false);
+        await backend.sendMessage(this, _message);
+        if (fromMe) {
+          await (backend as RustPushBackend).confirmSmsSent(_message, this, true);
         }
       } else {
         var myUuid = "${part["id"]}_0";
@@ -800,11 +817,12 @@ class Chat {
           threadOriginatorPart: "0:0:0",
           dateCreated: DateTime.now(),
           hasAttachments: true,
-          isFromMe: false,
+          isFromMe: fromMe,
           guid: part["id"] as String,
           handleId: 0,
           handle: handle,
           hasDdResults: true,
+          hasBeenForwarded: true,
           attributedBody: [AttributedBody(string: " ", runs: [Run(
             range: [0, 1],
             attributes: Attributes(
@@ -822,30 +840,15 @@ class Chat {
               totalBytes: partContent.length,
               transferName: "${part["id"]}.${extensionFromMime(part["contentType"] as String) ?? "bin"}"
             )
-          ]
+          ],
+          temp: true,
         );
         await _message.attachments.first!.writeToDisk();
-        try {
-          var forwarded = await (backend as RustPushBackend).forwardMMSAttachment(this, _message, _message.attachments.first!);
-          inq.queue(IncomingItem(
-            chat: this,
-            message: forwarded,
-            type: QueueType.newMessage
-          ));
-        } catch (e) {
-          // TODO resend later
-          Logger.debug("Failed to forward mms! $e");
-          inq.queue(IncomingItem(
-            chat: this,
-            message: _message,
-            type: QueueType.newMessage
-          ));
+        await (backend as RustPushBackend).forwardMMSAttachment(this, _message, _message.attachments.first!);
+        File(_message.attachments.first!.path).deleteSync();
+        if (fromMe) {
+          await (backend as RustPushBackend).confirmSmsSent(_message, this, true);
         }
-
-        if (!ls.isAlive) {
-          await MessageHelper.handleNotification(_message, this, findExisting: false);
-        }
-        
       }
     }
   }
@@ -1295,7 +1298,7 @@ class Chat {
 
   // if soft is false, return is never null
   // only null if soft is true and no matching chat is found
-  static Future<Chat?> findByRust(api.ConversationData data, String service, {bool soft = false}) async {
+  static Future<Chat?> findByRust(api.ConversationData data, String service, {bool soft = false, bool routingStub = false}) async {
     if (data.participants.isEmpty) {
       throw Exception("empty participants!??");
     }
@@ -1319,7 +1322,10 @@ class Chat {
 
     final name = data.cvName;
 
-    var cond = name != null ? Chat_.apnTitle.equals(name) : null;
+    var cond = Chat_.isRoutingStub.equals(routingStub);
+    if (name != null) {
+      cond = cond.and(Chat_.apnTitle.equals(name));
+    }
     final query = (Database.chats.query(cond)
           ..linkMany(Chat_.handles, Handle_.address.oneOf(dartParticipants.map((e) => e.address).toList())))
             .build();
@@ -1340,6 +1346,7 @@ class Chat {
     if (result == null && !soft) {
       result = await backend.createChat(dartParticipants.map((e) => e.address).toList(), null, service, existingGuid: data.senderGuid);
       result.displayName = data.cvName;
+      result.isRoutingStub = routingStub;
       result.apnTitle = data.cvName;
       if (mine.isNotEmpty) result.usingHandle = mine[0];
       result = result.save();
@@ -1532,5 +1539,6 @@ class Chat {
     "zenModeIsShared": zenModeIsShared,
     "shareZenMode": shareZenMode,
     "dateNotifiedAnyways": dateNotifiedAnyways?.millisecondsSinceEpoch,
+    "isRoutingStub": isRoutingStub,
   };
 }

@@ -12,6 +12,7 @@ import 'package:bluebubbles/services/services.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:bluebubbles/src/rust/api/api.dart' as api;
 
 MethodChannelService mcs = Get.isRegistered<MethodChannelService>() ? Get.find<MethodChannelService>() : Get.put(MethodChannelService());
 
@@ -68,7 +69,12 @@ class MethodChannelService extends GetxService {
             var map = (e as Map<Object?, Object?>).cast<String, dynamic>();
             return map["address"] as String;
           }).toList());
-          await chat.deliverSMS(sender, mapped);
+          // sent from me
+          bool fromMe = sender == "me";
+          if (fromMe && pushService.disableOutgoingSms) return true;
+          if (fromMe) sender = (await chat.ensureHandle()).replaceFirst("tel:", "");
+
+          await chat.deliverSMS(sender, fromMe, mapped);
         } catch (e, s) {
           Logger.error("SMS deliver error", error: e, trace: s);
           rethrow;

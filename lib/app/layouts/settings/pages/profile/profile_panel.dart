@@ -668,7 +668,7 @@ class _ProfilePanelState extends OptimizedState<ProfilePanel> with WidgetsBindin
                             await backend.setDefaultHandle(value);
                           },
                         ),
-                    if (usingRustPush && Platform.isAndroid)
+                    if (usingRustPush && Platform.isAndroid && (accountInfo["can_forward"] ?? false))
                       Obx(() => SettingsSwitch(
                           onChanged: (bool val) async {
                             if (val) {
@@ -692,8 +692,8 @@ class _ProfilePanelState extends OptimizedState<ProfilePanel> with WidgetsBindin
                             });
                           },
                           initialVal: ss.settings.isSmsRouter.value,
-                          title: "Use SMS with this phone (BETA)",
-                          subtitle: "Use this phone with OpenBubbles and your other Apple devices${(accountInfo['vetted_aliases']?.any((i) => !GetUtils.isEmail(i['Alias'])) ?? false) ? "" : ". Warning: no phone handles are registered; official Apple clients will only be able to receive forwarded SMS"}",
+                          title: "Text message forwarding (BETA)",
+                          subtitle: "Forward your Android SMS messages to your other Apple devices",
                           backgroundColor: tileColor,
                           isThreeLine: true,
                         )),
