@@ -21,6 +21,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart' hide Response;
 import 'package:mime_type/mime_type.dart';
+import 'package:path/path.dart';
 import 'package:tuple/tuple.dart';
 import 'package:universal_io/io.dart';
 import 'package:bluebubbles/src/rust/api/api.dart' as api;
@@ -268,6 +269,9 @@ class ActionHandler extends GetxService {
       
       String directory = "${fs.appDocDir.path}/attachments/${attachment.guid}";
       String pathName = "$directory/${attachment.transferName}";
+      if (!canonicalize(pathName).startsWith(canonicalize(directory))) {
+        throw Exception("Path traversal detected, are we under attack??");
+      }
       final file = await File(pathName).create(recursive: true);
       if (attachment.bytes != null) {
         if (attachment.mimeType == "image/gif") {

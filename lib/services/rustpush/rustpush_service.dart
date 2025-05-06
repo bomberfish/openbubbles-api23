@@ -28,6 +28,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rust_bridge/flutter_rust_bridge.dart';
 import 'package:get/get.dart';
 import 'package:in_app_purchase_android/billing_client_wrappers.dart';
+import 'package:path/path.dart';
 import 'package:slugify/slugify.dart';
 import 'package:supercharged/supercharged.dart';
 import 'package:tuple/tuple.dart';
@@ -376,7 +377,7 @@ class RustPushBackend implements BackendService {
       participants: formattedHandles,
       usingHandle: handle,
       isRpSms: service == "SMS",
-      senderIsKnown: formattedHandles.any((handle) => !(handle.contact?.isShared ?? true)),
+      senderIsKnown: true,
     );
     chat.save(); //save for reflectMessage
     if (message != null) {
@@ -1129,7 +1130,11 @@ class RustPushBackend implements BackendService {
   Future<bool> downloadLivePhoto(Attachment attachment, String target,
       {void Function(int p1, int p2)? onReceiveProgress, CancelToken? cancelToken}) async {
     var rustAttachment = await api.restoreAttachment(data: attachment.metadata!["myIris"]);
-    var stream = api.downloadAttachment(state: pushService.state, attachment: rustAttachment, path: "${attachment.directory}/$target");
+    var filePath = "${attachment.directory}/$target";
+    if (!canonicalize(filePath).startsWith(canonicalize(attachment.directory))) {
+      throw Exception("Path traversal detected, are we under attack??");
+    }
+    var stream = api.downloadAttachment(state: pushService.state, attachment: rustAttachment, path: filePath);
     await for (final event in stream) {
       if (onReceiveProgress != null) {
         onReceiveProgress(event.prog, event.total);
@@ -1381,7 +1386,7 @@ class RustPushService extends GetxService {
           uti: part.field0.utiType,
           mimeType: part.field0.mime,
           isOutgoing: false,
-          transferName: part.field0.name,
+          transferName: part.field0.name.replaceAll(RegExp(r'/'), "_").replaceAll(RegExp(r'\\'), "_"),
           totalBytes: await part.field0.getSize(),
           hasLivePhoto: myIris != null,
           metadata: {"rustpush": await api.saveAttachment(att: part.field0), "myIris": myIris != null ? await api.saveAttachment(att: myIris) : null},

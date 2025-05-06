@@ -11,6 +11,7 @@ import 'package:mime_type/mime_type.dart';
 // (needed when generating objectbox model code)
 // ignore: unnecessary_import
 import 'package:objectbox/objectbox.dart';
+import 'package:path/path.dart';
 import 'package:universal_io/io.dart';
 import 'package:telephony_plus/src/models/attachment.dart' as TelephonyAttachment;
 
@@ -259,15 +260,22 @@ class Attachment {
   String get directory => "$baseDirectory/$guid";
 
   String get path {
+    String file;
     switch (Platform.operatingSystem) {
       case "windows":
-        return "$directory/${"$transferName".replaceAll(RegExp(r'[<>:"/\|?*]'), "_")}";
+        file = "$directory/${"$transferName".replaceAll(RegExp(r'[<>:"/\|?*]'), "_")}";
       case "linux":
       case "macos":
-        return "$directory/${"$transferName".replaceAll(RegExp(r'/'), "_")}";
+        file = "$directory/${"$transferName".replaceAll(RegExp(r'/'), "_")}";
       default:
-        return "$directory/$transferName";
+        file = "$directory/${"$transferName".replaceAll(RegExp(r'/'), "_")}";
     }
+
+    if (!canonicalize(file).startsWith(canonicalize(directory))) {
+      throw Exception("Path traversal detected, are we under attack??");
+    }
+
+    return file;
   }
 
   String get convertedPath => "$path.png";
