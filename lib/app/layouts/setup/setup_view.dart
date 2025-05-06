@@ -71,7 +71,7 @@ class SetupViewController extends StatefulController {
   DateTime tokenExpiry = DateTime.fromMillisecondsSinceEpoch(0);
 
   String? currentWaitlist;
-  RxString noCapErrorMsg = "If you got an invite, enter your code from your email. Otherwise, join the waitlist!".obs;
+  RxString noCapErrorMsg = "Currently full. If you got an invite, enter your code from your email. Otherwise, join the waitlist!".obs;
 
   bool hasValidToken() {
     return !tokenExpiry.isBefore(DateTime.now());

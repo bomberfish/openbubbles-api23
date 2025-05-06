@@ -50,6 +50,7 @@ class MessageWidgetController extends StatefulController with GetSingleTickerPro
     super.onInit();
     buildMessageParts();
     if (!kIsWeb && message.id != null) {
+      print("listening ${message.id}");
       final messageQuery = Database.messages.query(Message_.id.equals(message.id!)).watch();
       sub = messageQuery.listen((Query<Message> query) async {
         if (message.id == null) return;

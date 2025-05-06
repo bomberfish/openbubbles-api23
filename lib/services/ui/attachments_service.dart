@@ -14,6 +14,7 @@ import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:get/get.dart';
 import 'package:image_size_getter/file_input.dart';
 import 'package:image_size_getter/image_size_getter.dart' as isg;
+import 'package:mime_type/mime_type.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -213,16 +214,25 @@ class AttachmentsService extends GetxService {
     } else {
       String? savePath;
       
-      final bytes = file.bytes != null && file.bytes!.isNotEmpty ? file.bytes! : await File(file.path!).readAsBytes();
       if (ss.settings.askWhereToSave.value && !isAutoDownload) {
-        await FilePicker.platform.saveFile(
-          initialDirectory: ss.settings.autoSaveDocsLocation.value,
-          dialogTitle: 'Choose a location to save this file',
-          lockParentWindow: true,
-          fileName: file.name,
-          bytes: bytes,
-        );
+        if (Platform.isAndroid && file.path != null) {
+          await mcs.invokeMethod("create-document", {
+            "path": file.path!,
+            "mime": mime(file.name),
+            "name": file.name,
+          });
+        } else {
+          final bytes = file.bytes != null && file.bytes!.isNotEmpty ? file.bytes! : await File(file.path!).readAsBytes();
+          await FilePicker.platform.saveFile(
+            initialDirectory: ss.settings.autoSaveDocsLocation.value,
+            dialogTitle: 'Choose a location to save this file',
+            lockParentWindow: true,
+            fileName: file.name,
+            bytes: bytes,
+          );
+        }
       } else {
+        try {
         if (file.name.toLowerCase().endsWith(".mov")) {
           savePath = join("/storage/emulated/0/", ss.settings.autoSavePicsLocation.value);
         } else {
@@ -238,8 +248,21 @@ class AttachmentsService extends GetxService {
           }
           savePath = ss.settings.autoSaveDocsLocation.value;
         }
-        await File(join(savePath, file.name)).writeAsBytes(bytes);
+        if (file.bytes != null && file.bytes!.isNotEmpty) {
+          await File(join(savePath, file.name)).writeAsBytes(file.bytes!);
+        } else {
+          await File(file.path!).copy(join(savePath, file.name));
+        }
         showSnackbar('Success', 'Saved attachment to ${savePath.replaceAll("/storage/emulated/0/", "")} folder!');
+        } catch (e) {
+          if (Platform.isAndroid && file.path != null) {
+            await mcs.invokeMethod("create-document", {
+              "path": file.path!,
+              "mime": mime(file.name),
+              "name": file.name,
+            });
+          }
+        }
       }
     }
   }

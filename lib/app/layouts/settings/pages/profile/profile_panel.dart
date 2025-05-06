@@ -693,7 +693,7 @@ class _ProfilePanelState extends OptimizedState<ProfilePanel> with WidgetsBindin
                           },
                           initialVal: ss.settings.isSmsRouter.value,
                           title: "Text message forwarding (BETA)",
-                          subtitle: "Forward your Android SMS messages to your other Apple devices",
+                          subtitle: "See your Android SMS messages on your other Apple devices",
                           backgroundColor: tileColor,
                           isThreeLine: true,
                         )),

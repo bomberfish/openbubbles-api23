@@ -74,6 +74,7 @@ class ExtensionService extends GetxService {
   List<App> cachedStatus = [];
 
   Map<String, String?> amkToLatest = {};
+  List<String> suppressingSessions = [];
 
   String? getLatest(String amk) {
     if (amkToLatest.containsKey(amk)) {
@@ -138,6 +139,18 @@ class ExtensionService extends GetxService {
      await mcs.invokeMethod("dev-extension-handler", {
       "serviceName": package
      });
+  }
+
+  Future<void> setSuppress(Map<String, dynamic> args) async {
+    if (args["suppress"]) {
+      if (!suppressingSessions.contains(args["session"])) {
+        suppressingSessions.add(args["session"]);
+      }
+    } else {
+      if (suppressingSessions.contains(args["session"])) {
+        suppressingSessions.remove(args["session"]);
+      }
+    }
   }
 
   Future<void> updateMessage(Map<String, dynamic> args) async {

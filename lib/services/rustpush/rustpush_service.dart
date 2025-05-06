@@ -1010,6 +1010,35 @@ class RustPushBackend implements BackendService {
   @override
   Future<Message> sendTapback(
       Chat chat, Message selected, String reaction, int? repPart) async {
+    if (!chat.isIMessage) {
+      String text;
+      if (ReactionTypes.reactionToVerb.containsKey(reaction)) {
+        var time = ReactionTypes.reactionToVerb[reaction]!;
+        // capitalize first letter
+        text = "${time[0].toUpperCase()}${time.substring(1).toLowerCase()}";
+      } else {
+        text = reaction.startsWith("-") ? "Removed ${reaction.substring(1)} from" : "Reacted $reaction to";
+      }
+      var annotations = AttributedBody.raw("$text “${selected.text}”");
+      final _message = Message(
+        text: annotations.string,
+        dateCreated: DateTime.now(),
+        hasAttachments: false,
+        isFromMe: true,
+        associatedMessageGuid: selected.guid,
+        associatedMessagePart: 0,
+        associatedMessageType: ReactionTypes.reactionToVerb.containsKey(reaction) ? reaction : reaction.startsWith("-") ? "-${ReactionTypes.EMOJI}" : ReactionTypes.EMOJI,
+        associatedMessageEmoji: ReactionTypes.reactionToVerb.containsKey(reaction) ? null : reaction.startsWith("-") ? reaction.substring(1) : reaction,
+        handleId: 0,
+        hasDdResults: true,
+        attributedBody: [
+          if (annotations.string.isNotEmpty)
+            annotations
+        ],
+      );
+      _message.generateTempGuid();
+      return await sendMessage(chat, _message);
+    }
     var enabled = !reaction.startsWith("-");
     reaction = enabled ? reaction : reaction.substring(1);
     var msg = await api.newMsg(
@@ -1496,7 +1525,7 @@ class RustPushService extends GetxService {
         }
       }
 
-      return Message(
+      var msg = Message(
         guid: staging ? tempGuid : myMsg.id,
         stagingGuid: staging ? myMsg.id : null,
         text: attributedBodyData.$2,
@@ -1518,6 +1547,11 @@ class RustPushService extends GetxService {
         hasApplePayloadData: innerMsg.field0.app?.balloon != null,
         hasBeenForwarded: hasBeenForwarded,
       );
+
+      if (innerMsg.field0.service is api.MessageType_SMS && chat != null) {
+        msg.inferReaction(chat);
+      }
+      return msg;
     } else if (myMsg.message is api.Message_RenameMessage) {
       var msg = myMsg.message as api.Message_RenameMessage;
       if (myMsg.verificationFailed) return null;

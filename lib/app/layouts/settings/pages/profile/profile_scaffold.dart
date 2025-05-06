@@ -69,6 +69,14 @@ class ProfileScaffoldState
   bool appBarVisible = false;
   bool _shouldDisplay = false;
 
+  StreamSubscription<String?>? registration;
+
+  @override
+  void dispose() {
+    super.dispose();
+    registration?.cancel();
+  }
+
   @override
   void initState() {
     super.initState();
@@ -78,6 +86,10 @@ class ProfileScaffoldState
         setState(() {});
       });
     }
+    registration = ss.settings.userAvatarPath.listen((event) {
+      updatePoster();
+      setState(() {});
+    });
     iosScrollController.addListener(() {
       var meets = poster != null ? iosScrollController.offset > 500 : iosScrollController.offset > 200;
       if (meets != track) {

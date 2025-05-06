@@ -91,6 +91,11 @@ class MessageHelper {
   static Future<void> handleNotification(Message message, Chat chat, {bool findExisting = true, bool notifyAnyways = false}) async {
     // if from me
     if (message.isFromMe! || message.handle == null || message.handle!.isBlocked()) return;
+    var session = message.payloadData?.appData?.firstOrNull?.session;
+    if (session != null && es.suppressingSessions.contains(session)) {
+      Logger.info("Suppressing incoming message notification for session $session per extension request");
+      return;
+    }
     // if it is a "kept audio" message
     if (message.itemType == 5 && message.subject != null) return;
     // See if there is an existing message for the given GUID

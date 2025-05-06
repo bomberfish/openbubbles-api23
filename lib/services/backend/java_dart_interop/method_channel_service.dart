@@ -118,6 +118,14 @@ class MethodChannelService extends GetxService {
           Logger.error("Extension update error", error: e, trace: s);
           return Future.error(PlatformException(code: "500", message: e.toString()), s);
         }
+      case "extension-set-suppress":
+        try {
+          await es.setSuppress(arguments!);
+          return true;
+        } catch (e, s) {
+          Logger.error("Set suppress error", error: e, trace: s);
+          return Future.error(PlatformException(code: "500", message: e.toString()), s);
+        }
       case "NewServerUrl":
         if (arguments == null) return Future.value(false);
         await Database.waitForInit();

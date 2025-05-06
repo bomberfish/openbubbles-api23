@@ -23,6 +23,7 @@ import 'package:supercharged/supercharged.dart';
 import 'package:telephony_plus/telephony_plus.dart';
 import 'package:telephony_plus/src/models/attachment.dart' as TelephonyAttachment;
 import 'package:bluebubbles/src/rust/api/api.dart' as api;
+import 'package:tuple/tuple.dart';
 
 /// Async method to fetch attachments
 class GetMessageAttachments extends AsyncTask<List<dynamic>, Map<String, List<Attachment?>>> {
@@ -547,6 +548,46 @@ class Message {
       associatedMessageEmoji: json['associatedMessageEmoji'],
       dateScheduled: parseDate(json['dateScheduled']),
     );
+  }
+
+  List<Tuple2<RegExp, String>> inferReactionMap = [
+    Tuple2(RegExp(r'^\s*Liked “(.*)”\s*$'), ReactionTypes.LIKE),
+    Tuple2(RegExp(r'^\s*Removed a like from “(.*)”\s*$'), "-${ReactionTypes.LIKE}"),
+    Tuple2(RegExp(r'^\s*Loved “(.*)”\s*$'), ReactionTypes.LOVE),
+    Tuple2(RegExp(r'^\s*Removed a heart from “(.*)”\s*$'), "-${ReactionTypes.LOVE}"),
+    Tuple2(RegExp(r'^\s*Disliked “(.*)”\s*$'), ReactionTypes.DISLIKE),
+    Tuple2(RegExp(r'^\s*Removed a dislike from “(.*)”\s*$'), "-${ReactionTypes.DISLIKE}"),
+    Tuple2(RegExp(r'^\s*Laughed at “(.*)”\s*$'), ReactionTypes.LAUGH),
+    Tuple2(RegExp(r'^\s*Removed a laugh from “(.*)”\s*$'), "-${ReactionTypes.LAUGH}"),
+    Tuple2(RegExp(r'^\s*Emphasized “(.*)”\s*$'), ReactionTypes.EMPHASIZE),
+    Tuple2(RegExp(r'^\s*Removed an exclamation from “(.*)”\s*$'), "-${ReactionTypes.EMPHASIZE}"),
+    Tuple2(RegExp(r'^\s*Questioned “(.*)”\s*$'), ReactionTypes.QUESTION),
+    Tuple2(RegExp(r'^\s*Removed a question mark from “(.*)”\s*$'), "-${ReactionTypes.QUESTION}"),
+    Tuple2(RegExp(r'^\s*Reacted ([^\s]+) to “(.*)”\s*$'), ReactionTypes.EMOJI),
+    Tuple2(RegExp(r'^\s*Removed ([^\s]+) from “(.*)”\s*$'), "-${ReactionTypes.EMOJI}"),
+  ];
+
+  void inferReaction(Chat chat) {
+    if (associatedMessageGuid != null) return; // already associated
+    for (var reaction in inferReactionMap) {
+      var match = reaction.item1.firstMatch(text!);
+      if (match == null) continue;
+      var query = (Database.messages.query(Message_.text.equals(match[match.groupCount > 1 ? 2 : 1]!).and(Message_.chat.equals(chat.id!)))
+        ..order(Message_.dateCreated, flags: Order.descending))
+        .build();
+      query.limit = 1;
+      var msg = query.findFirst();
+      query.close();
+    
+      if (msg == null) return;
+      associatedMessageGuid = msg.guid!;
+      associatedMessagePart = 0;
+      associatedMessageType = reaction.item2;
+      if (match.groupCount > 1) {
+        associatedMessageEmoji = match[1]!;
+      }
+      return;
+    }
   }
 
   List<MessagePart> attributedBodyToMessagePart(AttributedBody body) {

@@ -33,7 +33,7 @@ dependencies:
   collection: ^1.18.0
   confetti: ^0.7.0
   connectivity_plus: ^6.0.2
-  crop_your_image: ^2.0.0
+  crop_your_image: ^1.0.2
   csslib: ^1.0.0
   cupertino_icons: ^1.0.6
   defer_pointer: ^0.0.2

@@ -40,6 +40,7 @@ import com.bluebubbles.messaging.services.foreground.StopForegroundServiceHandle
 import com.bluebubbles.messaging.services.notifications.CreateMissedFaceTimeNotification
 import com.bluebubbles.messaging.services.rustpush.GetNativeHandleHandler
 import com.bluebubbles.messaging.services.system.ConversationExemptHandler
+import com.bluebubbles.messaging.services.system.CreateDocumentHandler
 import com.bluebubbles.messaging.services.system.GetFullResolution
 import com.bluebubbles.messaging.services.system.GetZenMode
 import com.bluebubbles.messaging.services.system.HeifDecoder
@@ -122,6 +123,7 @@ class MethodCallHandler {
             HeifDecoder.tag -> HeifDecoder().handleMethodCall(call, result, context)
             GetFullResolution.tag -> GetFullResolution().handleMethodCall(call, result, context)
             OpenSMSAppHandler.tag -> OpenSMSAppHandler().handleMethodCall(call, result, context)
+            CreateDocumentHandler.tag -> CreateDocumentHandler().handleMethodCall(call, result, context)
             "ready" -> { MainActivity.engine_ready = true }
             else -> {
                 val error = "Could not find method call handler for ${call.method}!"
