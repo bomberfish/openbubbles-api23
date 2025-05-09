@@ -676,6 +676,9 @@ internal interface UniffiCallbackInterfaceMsgReceiverMethod0 : com.sun.jna.Callb
 internal interface UniffiCallbackInterfaceMsgReceiverMethod1 : com.sun.jna.Callback {
     fun callback(`uniffiHandle`: Long,`isReady`: Byte,`state`: Pointer,`uniffiOutReturn`: Pointer,uniffiCallStatus: UniffiRustCallStatus,)
 }
+internal interface UniffiCallbackInterfaceMsgReceiverMethod2 : com.sun.jna.Callback {
+    fun callback(`uniffiHandle`: Long,`success`: Byte,`uniffiOutReturn`: Pointer,uniffiCallStatus: UniffiRustCallStatus,)
+}
 @Structure.FieldOrder("gotGateway", "uniffiFree")
 internal open class UniffiVTableCallbackInterfaceCarrierHandler(
     @JvmField internal var `gotGateway`: UniffiCallbackInterfaceCarrierHandlerMethod0? = null,
@@ -711,25 +714,34 @@ internal open class UniffiVTableCallbackInterfaceKotlinFilePackager(
     }
 
 }
-@Structure.FieldOrder("receievedMsg", "nativeReady", "uniffiFree")
+@Structure.FieldOrder("receievedMsg", "nativeReady", "twofaEvent", "uniffiFree")
 internal open class UniffiVTableCallbackInterfaceMsgReceiver(
     @JvmField internal var `receievedMsg`: UniffiCallbackInterfaceMsgReceiverMethod0? = null,
     @JvmField internal var `nativeReady`: UniffiCallbackInterfaceMsgReceiverMethod1? = null,
+    @JvmField internal var `twofaEvent`: UniffiCallbackInterfaceMsgReceiverMethod2? = null,
     @JvmField internal var `uniffiFree`: UniffiCallbackInterfaceFree? = null,
 ) : Structure() {
     class UniffiByValue(
         `receievedMsg`: UniffiCallbackInterfaceMsgReceiverMethod0? = null,
         `nativeReady`: UniffiCallbackInterfaceMsgReceiverMethod1? = null,
+        `twofaEvent`: UniffiCallbackInterfaceMsgReceiverMethod2? = null,
         `uniffiFree`: UniffiCallbackInterfaceFree? = null,
-    ): UniffiVTableCallbackInterfaceMsgReceiver(`receievedMsg`,`nativeReady`,`uniffiFree`,), Structure.ByValue
+    ): UniffiVTableCallbackInterfaceMsgReceiver(`receievedMsg`,`nativeReady`,`twofaEvent`,`uniffiFree`,), Structure.ByValue
 
    internal fun uniffiSetValue(other: UniffiVTableCallbackInterfaceMsgReceiver) {
         `receievedMsg` = other.`receievedMsg`
         `nativeReady` = other.`nativeReady`
+        `twofaEvent` = other.`twofaEvent`
         `uniffiFree` = other.`uniffiFree`
     }
 
 }
+
+
+
+
+
+
 
 
 
@@ -852,7 +864,11 @@ fun uniffi_rust_lib_bluebubbles_checksum_method_msgreceiver_receieved_msg(
 ): Short
 fun uniffi_rust_lib_bluebubbles_checksum_method_msgreceiver_native_ready(
 ): Short
+fun uniffi_rust_lib_bluebubbles_checksum_method_msgreceiver_twofa_event(
+): Short
 fun uniffi_rust_lib_bluebubbles_checksum_method_nativepushstate_decline_facetime(
+): Short
+fun uniffi_rust_lib_bluebubbles_checksum_method_nativepushstate_get_auth_code(
 ): Short
 fun uniffi_rust_lib_bluebubbles_checksum_method_nativepushstate_get_ready(
 ): Short
@@ -861,6 +877,8 @@ fun uniffi_rust_lib_bluebubbles_checksum_method_nativepushstate_get_state(
 fun uniffi_rust_lib_bluebubbles_checksum_method_nativepushstate_publish_status(
 ): Short
 fun uniffi_rust_lib_bluebubbles_checksum_method_nativepushstate_start_loop(
+): Short
+fun uniffi_rust_lib_bluebubbles_checksum_method_nativepushstate_teardown_2fa(
 ): Short
 fun ffi_rust_lib_bluebubbles_uniffi_contract_version(
 ): Int
@@ -942,12 +960,16 @@ fun uniffi_rust_lib_bluebubbles_fn_method_msgreceiver_receieved_msg(`ptr`: Point
 ): Unit
 fun uniffi_rust_lib_bluebubbles_fn_method_msgreceiver_native_ready(`ptr`: Pointer,`isReady`: Byte,`state`: Pointer,uniffi_out_err: UniffiRustCallStatus, 
 ): Unit
+fun uniffi_rust_lib_bluebubbles_fn_method_msgreceiver_twofa_event(`ptr`: Pointer,`success`: Byte,uniffi_out_err: UniffiRustCallStatus, 
+): Unit
 fun uniffi_rust_lib_bluebubbles_fn_clone_nativepushstate(`ptr`: Pointer,uniffi_out_err: UniffiRustCallStatus, 
 ): Pointer
 fun uniffi_rust_lib_bluebubbles_fn_free_nativepushstate(`ptr`: Pointer,uniffi_out_err: UniffiRustCallStatus, 
 ): Unit
 fun uniffi_rust_lib_bluebubbles_fn_method_nativepushstate_decline_facetime(`ptr`: Pointer,`guid`: RustBuffer.ByValue,uniffi_out_err: UniffiRustCallStatus, 
 ): Unit
+fun uniffi_rust_lib_bluebubbles_fn_method_nativepushstate_get_auth_code(`ptr`: Pointer,`txnid`: RustBuffer.ByValue,uniffi_out_err: UniffiRustCallStatus, 
+): Int
 fun uniffi_rust_lib_bluebubbles_fn_method_nativepushstate_get_ready(`ptr`: Pointer,
 ): Long
 fun uniffi_rust_lib_bluebubbles_fn_method_nativepushstate_get_state(`ptr`: Pointer,uniffi_out_err: UniffiRustCallStatus, 
@@ -955,6 +977,8 @@ fun uniffi_rust_lib_bluebubbles_fn_method_nativepushstate_get_state(`ptr`: Point
 fun uniffi_rust_lib_bluebubbles_fn_method_nativepushstate_publish_status(`ptr`: Pointer,`guid`: RustBuffer.ByValue,uniffi_out_err: UniffiRustCallStatus, 
 ): Unit
 fun uniffi_rust_lib_bluebubbles_fn_method_nativepushstate_start_loop(`ptr`: Pointer,`handler`: Pointer,uniffi_out_err: UniffiRustCallStatus, 
+): Unit
+fun uniffi_rust_lib_bluebubbles_fn_method_nativepushstate_teardown_2fa(`ptr`: Pointer,`action`: RustBuffer.ByValue,`txnid`: RustBuffer.ByValue,uniffi_out_err: UniffiRustCallStatus, 
 ): Unit
 fun uniffi_rust_lib_bluebubbles_fn_func_get_carrier(`handler`: Pointer,`mccmnc`: RustBuffer.ByValue,uniffi_out_err: UniffiRustCallStatus, 
 ): Unit
@@ -1108,7 +1132,13 @@ private fun uniffiCheckApiChecksums(lib: IntegrityCheckingUniffiLib) {
     if (lib.uniffi_rust_lib_bluebubbles_checksum_method_msgreceiver_native_ready() != 22814.toShort()) {
         throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
     }
+    if (lib.uniffi_rust_lib_bluebubbles_checksum_method_msgreceiver_twofa_event() != 20021.toShort()) {
+        throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
+    }
     if (lib.uniffi_rust_lib_bluebubbles_checksum_method_nativepushstate_decline_facetime() != 51777.toShort()) {
+        throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
+    }
+    if (lib.uniffi_rust_lib_bluebubbles_checksum_method_nativepushstate_get_auth_code() != 63817.toShort()) {
         throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
     }
     if (lib.uniffi_rust_lib_bluebubbles_checksum_method_nativepushstate_get_ready() != 59575.toShort()) {
@@ -1121,6 +1151,9 @@ private fun uniffiCheckApiChecksums(lib: IntegrityCheckingUniffiLib) {
         throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
     }
     if (lib.uniffi_rust_lib_bluebubbles_checksum_method_nativepushstate_start_loop() != 19847.toShort()) {
+        throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
+    }
+    if (lib.uniffi_rust_lib_bluebubbles_checksum_method_nativepushstate_teardown_2fa() != 59540.toShort()) {
         throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
     }
 }
@@ -2152,6 +2185,8 @@ public interface MsgReceiver {
     
     fun `nativeReady`(`isReady`: kotlin.Boolean, `state`: NativePushState)
     
+    fun `twofaEvent`(`success`: kotlin.Boolean)
+    
     companion object
 }
 
@@ -2259,6 +2294,17 @@ open class MsgReceiverImpl: Disposable, AutoCloseable, MsgReceiver
     
     
 
+    override fun `twofaEvent`(`success`: kotlin.Boolean)
+        = 
+    callWithPointer {
+    uniffiRustCall() { _status ->
+    UniffiLib.INSTANCE.uniffi_rust_lib_bluebubbles_fn_method_msgreceiver_twofa_event(
+        it, FfiConverterBoolean.lower(`success`),_status)
+}
+    }
+    
+    
+
     
 
     
@@ -2296,6 +2342,18 @@ internal object uniffiCallbackInterfaceMsgReceiver {
             uniffiTraitInterfaceCall(uniffiCallStatus, makeCall, writeReturn)
         }
     }
+    internal object `twofaEvent`: UniffiCallbackInterfaceMsgReceiverMethod2 {
+        override fun callback(`uniffiHandle`: Long,`success`: Byte,`uniffiOutReturn`: Pointer,uniffiCallStatus: UniffiRustCallStatus,) {
+            val uniffiObj = FfiConverterTypeMsgReceiver.handleMap.get(uniffiHandle)
+            val makeCall = { ->
+                uniffiObj.`twofaEvent`(
+                    FfiConverterBoolean.lift(`success`),
+                )
+            }
+            val writeReturn = { _: Unit -> Unit }
+            uniffiTraitInterfaceCall(uniffiCallStatus, makeCall, writeReturn)
+        }
+    }
 
     internal object uniffiFree: UniffiCallbackInterfaceFree {
         override fun callback(handle: Long) {
@@ -2306,6 +2364,7 @@ internal object uniffiCallbackInterfaceMsgReceiver {
     internal var vtable = UniffiVTableCallbackInterfaceMsgReceiver.UniffiByValue(
         `receievedMsg`,
         `nativeReady`,
+        `twofaEvent`,
         uniffiFree,
     )
 
@@ -2448,6 +2507,8 @@ public interface NativePushStateInterface {
     
     fun `declineFacetime`(`guid`: kotlin.String)
     
+    fun `getAuthCode`(`txnid`: kotlin.String): kotlin.UInt
+    
     suspend fun `getReady`(): kotlin.Boolean
     
     fun `getState`(): kotlin.ULong
@@ -2455,6 +2516,8 @@ public interface NativePushStateInterface {
     fun `publishStatus`(`guid`: kotlin.String?)
     
     fun `startLoop`(`handler`: MsgReceiver)
+    
+    fun `teardown2fa`(`action`: kotlin.String, `txnid`: kotlin.String)
     
     companion object
 }
@@ -2552,6 +2615,18 @@ open class NativePushState: Disposable, AutoCloseable, NativePushStateInterface
     
     
 
+    override fun `getAuthCode`(`txnid`: kotlin.String): kotlin.UInt {
+            return FfiConverterUInt.lift(
+    callWithPointer {
+    uniffiRustCall() { _status ->
+    UniffiLib.INSTANCE.uniffi_rust_lib_bluebubbles_fn_method_nativepushstate_get_auth_code(
+        it, FfiConverterString.lower(`txnid`),_status)
+}
+    }
+    )
+    }
+    
+
     
     @Suppress("ASSIGNED_BUT_NEVER_ACCESSED_VARIABLE")
     override suspend fun `getReady`() : kotlin.Boolean {
@@ -2601,6 +2676,17 @@ open class NativePushState: Disposable, AutoCloseable, NativePushStateInterface
     uniffiRustCall() { _status ->
     UniffiLib.INSTANCE.uniffi_rust_lib_bluebubbles_fn_method_nativepushstate_start_loop(
         it, FfiConverterTypeMsgReceiver.lower(`handler`),_status)
+}
+    }
+    
+    
+
+    override fun `teardown2fa`(`action`: kotlin.String, `txnid`: kotlin.String)
+        = 
+    callWithPointer {
+    uniffiRustCall() { _status ->
+    UniffiLib.INSTANCE.uniffi_rust_lib_bluebubbles_fn_method_nativepushstate_teardown_2fa(
+        it, FfiConverterString.lower(`action`),FfiConverterString.lower(`txnid`),_status)
 }
     }
     

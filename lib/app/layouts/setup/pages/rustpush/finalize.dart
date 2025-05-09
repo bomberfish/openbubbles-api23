@@ -66,7 +66,7 @@ class _FinalizePageState extends OptimizedState<FinalizePage> {
                 style: context.theme.textTheme.titleMedium,
               ),
             )),
-            if (!controller.supportsPhoneReg.value)
+            if (!controller.supportsPhoneReg.value && !kIsDesktop)
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
                 child: GestureDetector(

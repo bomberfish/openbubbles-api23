@@ -237,6 +237,15 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   Address dco_decode_address(dynamic raw);
 
   @protected
+  AkData dco_decode_ak_data(dynamic raw);
+
+  @protected
+  ApsAlert dco_decode_aps_alert(dynamic raw);
+
+  @protected
+  ApsData dco_decode_aps_data(dynamic raw);
+
+  @protected
   Attachment dco_decode_attachment(dynamic raw);
 
   @protected
@@ -325,6 +334,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   HwExtra dco_decode_box_autoadd_hw_extra(dynamic raw);
 
   @protected
+  int dco_decode_box_autoadd_i_32(dynamic raw);
+
+  @protected
   PlatformInt64 dco_decode_box_autoadd_i_64(dynamic raw);
 
   @protected
@@ -337,6 +349,16 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   IconChangeMessage dco_decode_box_autoadd_icon_change_message(dynamic raw);
+
+  @protected
+  IdmsCircleMessage dco_decode_box_autoadd_idms_circle_message(dynamic raw);
+
+  @protected
+  IdmsMessage dco_decode_box_autoadd_idms_message(dynamic raw);
+
+  @protected
+  IdmsRequestedSignIn dco_decode_box_autoadd_idms_requested_sign_in(
+      dynamic raw);
 
   @protected
   LetMeInRequest dco_decode_box_autoadd_let_me_in_request(dynamic raw);
@@ -448,6 +470,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   SupportAlert dco_decode_box_autoadd_support_alert(dynamic raw);
 
   @protected
+  TeardownSignIn dco_decode_box_autoadd_teardown_sign_in(dynamic raw);
+
+  @protected
   TextFlags dco_decode_box_autoadd_text_flags(dynamic raw);
 
   @protected
@@ -545,6 +570,15 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   IconChangeMessage dco_decode_icon_change_message(dynamic raw);
+
+  @protected
+  IdmsCircleMessage dco_decode_idms_circle_message(dynamic raw);
+
+  @protected
+  IdmsMessage dco_decode_idms_message(dynamic raw);
+
+  @protected
+  IdmsRequestedSignIn dco_decode_idms_requested_sign_in(dynamic raw);
 
   @protected
   IndexedMessagePart dco_decode_indexed_message_part(dynamic raw);
@@ -770,10 +804,17 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   FTMode? dco_decode_opt_box_autoadd_ft_mode(dynamic raw);
 
   @protected
+  int? dco_decode_opt_box_autoadd_i_32(dynamic raw);
+
+  @protected
   PlatformInt64? dco_decode_opt_box_autoadd_i_64(dynamic raw);
 
   @protected
   IMessagePosterRecord? dco_decode_opt_box_autoadd_i_message_poster_record(
+      dynamic raw);
+
+  @protected
+  IdmsRequestedSignIn? dco_decode_opt_box_autoadd_idms_requested_sign_in(
       dynamic raw);
 
   @protected
@@ -1006,6 +1047,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   SyncStatus dco_decode_sync_status(dynamic raw);
+
+  @protected
+  TeardownSignIn dco_decode_teardown_sign_in(dynamic raw);
 
   @protected
   TextEffect dco_decode_text_effect(dynamic raw);
@@ -1242,6 +1286,15 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   Address sse_decode_address(SseDeserializer deserializer);
 
   @protected
+  AkData sse_decode_ak_data(SseDeserializer deserializer);
+
+  @protected
+  ApsAlert sse_decode_aps_alert(SseDeserializer deserializer);
+
+  @protected
+  ApsData sse_decode_aps_data(SseDeserializer deserializer);
+
+  @protected
   Attachment sse_decode_attachment(SseDeserializer deserializer);
 
   @protected
@@ -1334,6 +1387,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   HwExtra sse_decode_box_autoadd_hw_extra(SseDeserializer deserializer);
 
   @protected
+  int sse_decode_box_autoadd_i_32(SseDeserializer deserializer);
+
+  @protected
   PlatformInt64 sse_decode_box_autoadd_i_64(SseDeserializer deserializer);
 
   @protected
@@ -1346,6 +1402,17 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   IconChangeMessage sse_decode_box_autoadd_icon_change_message(
+      SseDeserializer deserializer);
+
+  @protected
+  IdmsCircleMessage sse_decode_box_autoadd_idms_circle_message(
+      SseDeserializer deserializer);
+
+  @protected
+  IdmsMessage sse_decode_box_autoadd_idms_message(SseDeserializer deserializer);
+
+  @protected
+  IdmsRequestedSignIn sse_decode_box_autoadd_idms_requested_sign_in(
       SseDeserializer deserializer);
 
   @protected
@@ -1479,6 +1546,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       SseDeserializer deserializer);
 
   @protected
+  TeardownSignIn sse_decode_box_autoadd_teardown_sign_in(
+      SseDeserializer deserializer);
+
+  @protected
   TextFlags sse_decode_box_autoadd_text_flags(SseDeserializer deserializer);
 
   @protected
@@ -1582,6 +1653,17 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   IconChangeMessage sse_decode_icon_change_message(
+      SseDeserializer deserializer);
+
+  @protected
+  IdmsCircleMessage sse_decode_idms_circle_message(
+      SseDeserializer deserializer);
+
+  @protected
+  IdmsMessage sse_decode_idms_message(SseDeserializer deserializer);
+
+  @protected
+  IdmsRequestedSignIn sse_decode_idms_requested_sign_in(
       SseDeserializer deserializer);
 
   @protected
@@ -1826,10 +1908,17 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   FTMode? sse_decode_opt_box_autoadd_ft_mode(SseDeserializer deserializer);
 
   @protected
+  int? sse_decode_opt_box_autoadd_i_32(SseDeserializer deserializer);
+
+  @protected
   PlatformInt64? sse_decode_opt_box_autoadd_i_64(SseDeserializer deserializer);
 
   @protected
   IMessagePosterRecord? sse_decode_opt_box_autoadd_i_message_poster_record(
+      SseDeserializer deserializer);
+
+  @protected
+  IdmsRequestedSignIn? sse_decode_opt_box_autoadd_idms_requested_sign_in(
       SseDeserializer deserializer);
 
   @protected
@@ -2095,6 +2184,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   SyncStatus sse_decode_sync_status(SseDeserializer deserializer);
 
   @protected
+  TeardownSignIn sse_decode_teardown_sign_in(SseDeserializer deserializer);
+
+  @protected
   TextEffect sse_decode_text_effect(SseDeserializer deserializer);
 
   @protected
@@ -2338,6 +2430,15 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   void sse_encode_address(Address self, SseSerializer serializer);
 
   @protected
+  void sse_encode_ak_data(AkData self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_aps_alert(ApsAlert self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_aps_data(ApsData self, SseSerializer serializer);
+
+  @protected
   void sse_encode_attachment(Attachment self, SseSerializer serializer);
 
   @protected
@@ -2434,6 +2535,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   void sse_encode_box_autoadd_hw_extra(HwExtra self, SseSerializer serializer);
 
   @protected
+  void sse_encode_box_autoadd_i_32(int self, SseSerializer serializer);
+
+  @protected
   void sse_encode_box_autoadd_i_64(
       PlatformInt64 self, SseSerializer serializer);
 
@@ -2448,6 +2552,18 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   void sse_encode_box_autoadd_icon_change_message(
       IconChangeMessage self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_box_autoadd_idms_circle_message(
+      IdmsCircleMessage self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_box_autoadd_idms_message(
+      IdmsMessage self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_box_autoadd_idms_requested_sign_in(
+      IdmsRequestedSignIn self, SseSerializer serializer);
 
   @protected
   void sse_encode_box_autoadd_let_me_in_request(
@@ -2586,6 +2702,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       SupportAlert self, SseSerializer serializer);
 
   @protected
+  void sse_encode_box_autoadd_teardown_sign_in(
+      TeardownSignIn self, SseSerializer serializer);
+
+  @protected
   void sse_encode_box_autoadd_text_flags(
       TextFlags self, SseSerializer serializer);
 
@@ -2694,6 +2814,17 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   void sse_encode_icon_change_message(
       IconChangeMessage self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_idms_circle_message(
+      IdmsCircleMessage self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_idms_message(IdmsMessage self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_idms_requested_sign_in(
+      IdmsRequestedSignIn self, SseSerializer serializer);
 
   @protected
   void sse_encode_indexed_message_part(
@@ -2951,12 +3082,19 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       FTMode? self, SseSerializer serializer);
 
   @protected
+  void sse_encode_opt_box_autoadd_i_32(int? self, SseSerializer serializer);
+
+  @protected
   void sse_encode_opt_box_autoadd_i_64(
       PlatformInt64? self, SseSerializer serializer);
 
   @protected
   void sse_encode_opt_box_autoadd_i_message_poster_record(
       IMessagePosterRecord? self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_opt_box_autoadd_idms_requested_sign_in(
+      IdmsRequestedSignIn? self, SseSerializer serializer);
 
   @protected
   void sse_encode_opt_box_autoadd_link_meta(
@@ -3219,6 +3357,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void sse_encode_sync_status(SyncStatus self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_teardown_sign_in(
+      TeardownSignIn self, SseSerializer serializer);
 
   @protected
   void sse_encode_text_effect(TextEffect self, SseSerializer serializer);

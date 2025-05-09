@@ -3,7 +3,7 @@ use std::collections::HashMap;
 pub use rustpush::name_photo_sharing::{IMessageNameRecord, IMessagePosterRecord, IMessageNicknameRecord};
 pub use rustpush::{DeleteTarget, MoveToRecycleBinMessage, OperatedChat};
 pub use rustpush::{ShareProfileMessage, SharedPoster, UpdateProfileSharingMessage, UpdateProfileMessage, NSArrayClass, TextFlags, TextEffect, TextFormat, ScheduleMode, SupportAction, NSArray, SupportAlert, PrivateDeviceInfo, PermanentDeleteMessage, NormalMessage, MessageType, UpdateExtensionMessage, ErrorMessage, UnsendMessage, EditMessage, PartExtension, IconChangeMessage, RichLinkImageAttachmentSubstitute, ChangeParticipantMessage, ReactMessage, Reaction, ReactMessageType, RenameMessage, LPLinkMetadata, NSURL, LPIconMetadata, LPImageMetadata, LinkMeta, ExtensionApp, NSDictionaryClass, BalloonLayout, Balloon, IndexedMessagePart, AttachmentType, MacOSConfig, Message, MessageTarget, HardwareConfig, APSConnection, APSConnectionResource, APSState, Attachment, AuthPhone, IDSUserIdentity, MMCSFile, MessageInst, MessagePart, MessageParts, OSConfig, RelayConfig, ResourceState};
-pub use rustpush::{CertifiedContext, PushError, IDSUser, IMClient, ConversationData, ReportMessage, register};
+pub use rustpush::{ApsData, ApsAlert, AkData, IdmsCircleMessage, IdmsRequestedSignIn, TeardownSignIn, IdmsMessage, CertifiedContext, PushError, IDSUser, IMClient, ConversationData, ReportMessage, register};
 pub use icloud_auth::{VerifyBody, TrustedPhoneNumber};
 pub use icloud_auth::{LoginState, AppleAccount};
 pub use rustpush::findmy::{Follow, Address, Location, FoundDevice};
@@ -131,6 +131,56 @@ pub struct DartPhotoPosterLayer {
     pub filename: String,
     pub z_position: f32,
     pub identifier: String,
+}
+
+
+
+#[frb(mirror(ApsAlert))]
+pub struct DartApsAlert {
+    pub title: String,
+    pub body: String,
+    pub sbdy: String,
+    pub defbtn: String,
+    pub albtn: String,
+}
+
+#[frb(mirror(ApsData))]
+pub struct DartApsData {
+    pub alert: ApsAlert,
+}
+
+#[frb(mirror(AkData))]
+pub struct DartAkData {
+    pub lat: f32,
+    pub lng: f32,
+}
+
+#[frb(mirror(IdmsRequestedSignIn))]
+pub struct DartIdmsRequestedSignIn {
+    pub aps: ApsData,
+    pub txnid: String,
+    pub akdata: AkData,
+}
+
+#[frb(mirror(TeardownSignIn))]
+pub struct DartTeardownSignIn {
+    pub prevtxnid: String,
+}
+
+#[frb(mirror(IdmsCircleMessage))]
+pub struct DartIdmsCircleMessage {
+    pub step: u32,
+    pub atxnid: String,
+    pub pake: Option<String>,
+    pub ec: Option<i32>,
+    pub idmsdata: String,
+}
+
+#[frb(mirror(IdmsMessage))]
+pub enum DartIdmsMessage {
+    RequestedSignIn(IdmsRequestedSignIn),
+    TeardownSignIn(TeardownSignIn),
+    CircleRequest(IdmsCircleMessage, Option<IdmsRequestedSignIn>),
 }
 
 #[frb(mirror(PhotoPosterLayout))]

@@ -56,6 +56,11 @@ class APNService : Service(), MsgReceiver {
         }
     }
 
+    override fun twofaEvent(success: Boolean) {
+        AppleAccountLoginHandler.activity?.handleLoginSuccess(success)
+        Log.i("TwoFa event", success.toString())
+    }
+
     override fun receievedMsg(ptr: ULong, retry: ULong) {
         Handler(Looper.getMainLooper()).post {
             if (MainActivity.engine != null) {

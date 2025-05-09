@@ -38,6 +38,7 @@ import com.bluebubbles.messaging.services.system.StartGoogleDuoRequestHandler
 import com.bluebubbles.messaging.services.foreground.StartForegroundServiceHandler
 import com.bluebubbles.messaging.services.foreground.StopForegroundServiceHandler
 import com.bluebubbles.messaging.services.notifications.CreateMissedFaceTimeNotification
+import com.bluebubbles.messaging.services.rustpush.AppleAccountLoginHandler
 import com.bluebubbles.messaging.services.rustpush.GetNativeHandleHandler
 import com.bluebubbles.messaging.services.system.ConversationExemptHandler
 import com.bluebubbles.messaging.services.system.CreateDocumentHandler
@@ -48,9 +49,6 @@ import com.bluebubbles.messaging.services.system.OpenSMSAppHandler
 import com.bluebubbles.messaging.services.system.RecentContactsRequestHandler
 import com.bluebubbles.messaging.services.system.ZenModeSetupHandler
 import com.bluebubbles.messaging.services.system.ZenModeUUIDHandler
-import com.bluebubbles.telephony_plus.receive.SMSObserver
-import com.google.gson.GsonBuilder
-import com.google.gson.ToNumberPolicy
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 
@@ -124,6 +122,7 @@ class MethodCallHandler {
             GetFullResolution.tag -> GetFullResolution().handleMethodCall(call, result, context)
             OpenSMSAppHandler.tag -> OpenSMSAppHandler().handleMethodCall(call, result, context)
             CreateDocumentHandler.tag -> CreateDocumentHandler().handleMethodCall(call, result, context)
+            AppleAccountLoginHandler.tag -> AppleAccountLoginHandler().handleMethodCall(call, result, context)
             "ready" -> { MainActivity.engine_ready = true }
             else -> {
                 val error = "Could not find method call handler for ${call.method}!"

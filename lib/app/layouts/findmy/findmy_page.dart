@@ -31,6 +31,7 @@ import 'package:sliding_up_panel2/sliding_up_panel2.dart';
 import 'package:tuple/tuple.dart';
 import 'package:universal_io/io.dart';
 import 'package:bluebubbles/src/rust/api/api.dart' as api;
+import 'package:url_launcher/url_launcher.dart';
 
 class FindMyPage extends StatefulWidget {
   FindMyPage({super.key, this.defaultFriend});

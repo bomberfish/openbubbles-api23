@@ -90,6 +90,10 @@
             android:theme="@style/Theme.Call"
             android:showOnLockScreen="true"/>
 
+        <activity android:name=".services.rustpush.AuthCodeActivity"
+            android:theme="@style/Theme.Material3.DayNight.Dialog.Alert"
+            android:taskAffinity=".AuthCode"/>
+
         <receiver
             android:name=".PDUReceiver"
             android:exported="true">

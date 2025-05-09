@@ -409,7 +409,7 @@ class CupertinoConversationListState
                                           ?.apply(color: context.theme.colorScheme.onSurface,),
                                     ),
                                   )),
-                              if (!canPnr)
+                              if (!canPnr && !kIsDesktop)
                               Padding(
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 0, vertical: 8),

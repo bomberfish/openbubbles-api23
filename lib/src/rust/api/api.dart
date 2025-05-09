@@ -9,8 +9,8 @@ import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 import 'package:freezed_annotation/freezed_annotation.dart' hide protected;
 part 'api.freezed.dart';
 
-// These functions are ignored because they are not marked as `pub`: `config`, `do_login`, `get_login_config`, `get_phase`, `handle_photostream`, `plist_to_bin`, `plist_to_buf`, `plist_to_string`, `restore`, `setup_push`, `shared_items`, `subscribe_streams`, `wrap_sink`
-// These types are ignored because they are not used by any `pub` functions: `FLUTTER_RUST_BRIDGE_HANDLER`, `GSAConfig`, `InnerPushState`, `NSArrayClass`, `NSArrayIconArray`, `NSArrayImageArray`, `SavedHardwareState`
+// These functions are ignored because they are not marked as `pub`: `config`, `do_login`, `get_login_config`, `get_phase`, `handle_circle`, `handle_photostream`, `plist_to_bin`, `plist_to_buf`, `plist_to_string`, `restore`, `setup_push`, `shared_items`, `subscribe_streams`, `wrap_sink`
+// These types are ignored because they are not used by any `pub` functions: `ActiveCircleSession`, `FLUTTER_RUST_BRIDGE_HANDLER`, `GSAConfig`, `InnerPushState`, `NSArrayClass`, `NSArrayIconArray`, `NSArrayImageArray`, `SavedHardwareState`
 // These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `deref`, `deref`, `eq`, `fmt`, `get_files`, `initialize`, `spawn`
 
 Future<ArcPushState> newPushState({required String dir}) =>
@@ -158,6 +158,16 @@ Future<void> useLinkFor(
     RustLib.instance.api
         .crateApiApiUseLinkFor(state: state, oldUsage: oldUsage, usage: usage);
 
+Future<int> get2FaCode({required ArcPushState state}) =>
+    RustLib.instance.api.crateApiApiGet2FaCode(state: state);
+
+Future<void> teardown2Fa(
+        {required ArcPushState state,
+        required String action,
+        required String txnid}) =>
+    RustLib.instance.api
+        .crateApiApiTeardown2Fa(state: state, action: action, txnid: txnid);
+
 Future<void> answerFtRequest(
         {required ArcPushState state,
         required LetMeInRequest request,
@@ -243,6 +253,10 @@ Future<void> requestHandles(
 Future<void> setStatus({required ArcPushState state, String? newStatus}) =>
     RustLib.instance.api
         .crateApiApiSetStatus(state: state, newStatus: newStatus);
+
+Future<int> approveCircle(
+        {required ArcPushState state, required String txnid}) =>
+    RustLib.instance.api.crateApiApiApproveCircle(state: state, txnid: txnid);
 
 Future<PollResult> recvWait({required ArcPushState state}) =>
     RustLib.instance.api.crateApiApiRecvWait(state: state);
@@ -497,6 +511,80 @@ class Address {
           stateCode == other.stateCode &&
           streetAddress == other.streetAddress &&
           streetName == other.streetName;
+}
+
+class AkData {
+  final double lat;
+  final double lng;
+
+  const AkData({
+    required this.lat,
+    required this.lng,
+  });
+
+  @override
+  int get hashCode => lat.hashCode ^ lng.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is AkData &&
+          runtimeType == other.runtimeType &&
+          lat == other.lat &&
+          lng == other.lng;
+}
+
+class ApsAlert {
+  final String title;
+  final String body;
+  final String sbdy;
+  final String defbtn;
+  final String albtn;
+
+  const ApsAlert({
+    required this.title,
+    required this.body,
+    required this.sbdy,
+    required this.defbtn,
+    required this.albtn,
+  });
+
+  @override
+  int get hashCode =>
+      title.hashCode ^
+      body.hashCode ^
+      sbdy.hashCode ^
+      defbtn.hashCode ^
+      albtn.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is ApsAlert &&
+          runtimeType == other.runtimeType &&
+          title == other.title &&
+          body == other.body &&
+          sbdy == other.sbdy &&
+          defbtn == other.defbtn &&
+          albtn == other.albtn;
+}
+
+class ApsData {
+  final ApsAlert alert;
+
+  const ApsData({
+    required this.alert,
+  });
+
+  @override
+  int get hashCode => alert.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is ApsData &&
+          runtimeType == other.runtimeType &&
+          alert == other.alert;
 }
 
 class Attachment {
@@ -1370,6 +1458,81 @@ class IconChangeMessage {
           runtimeType == other.runtimeType &&
           file == other.file &&
           groupVersion == other.groupVersion;
+}
+
+class IdmsCircleMessage {
+  final int step;
+  final String atxnid;
+  final String? pake;
+  final int? ec;
+  final String idmsdata;
+
+  const IdmsCircleMessage({
+    required this.step,
+    required this.atxnid,
+    this.pake,
+    this.ec,
+    required this.idmsdata,
+  });
+
+  @override
+  int get hashCode =>
+      step.hashCode ^
+      atxnid.hashCode ^
+      pake.hashCode ^
+      ec.hashCode ^
+      idmsdata.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is IdmsCircleMessage &&
+          runtimeType == other.runtimeType &&
+          step == other.step &&
+          atxnid == other.atxnid &&
+          pake == other.pake &&
+          ec == other.ec &&
+          idmsdata == other.idmsdata;
+}
+
+@freezed
+sealed class IdmsMessage with _$IdmsMessage {
+  const IdmsMessage._();
+
+  const factory IdmsMessage.requestedSignIn(
+    IdmsRequestedSignIn field0,
+  ) = IdmsMessage_RequestedSignIn;
+  const factory IdmsMessage.teardownSignIn(
+    TeardownSignIn field0,
+  ) = IdmsMessage_TeardownSignIn;
+  const factory IdmsMessage.circleRequest(
+    IdmsCircleMessage field0, [
+    IdmsRequestedSignIn? field1,
+  ]) = IdmsMessage_CircleRequest;
+}
+
+class IdmsRequestedSignIn {
+  final ApsData aps;
+  final String txnid;
+  final AkData akdata;
+
+  const IdmsRequestedSignIn({
+    required this.aps,
+    required this.txnid,
+    required this.akdata,
+  });
+
+  @override
+  int get hashCode => aps.hashCode ^ txnid.hashCode ^ akdata.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is IdmsRequestedSignIn &&
+          runtimeType == other.runtimeType &&
+          aps == other.aps &&
+          txnid == other.txnid &&
+          akdata == other.akdata;
 }
 
 class IndexedMessagePart {
@@ -2634,6 +2797,12 @@ sealed class PushMessage with _$PushMessage {
   const factory PushMessage.statusUpdate(
     StatusKitMessage field0,
   ) = PushMessage_StatusUpdate;
+  const factory PushMessage.idms(
+    IdmsMessage field0,
+  ) = PushMessage_Idms;
+  const factory PushMessage.twoFaAuthEvent(
+    bool field0,
+  ) = PushMessage_TwoFaAuthEvent;
 }
 
 class ReactMessage {
@@ -3044,6 +3213,24 @@ sealed class SyncStatus with _$SyncStatus {
     required BigInt total,
   }) = SyncStatus_Uploading;
   const factory SyncStatus.syncing() = SyncStatus_Syncing;
+}
+
+class TeardownSignIn {
+  final String prevtxnid;
+
+  const TeardownSignIn({
+    required this.prevtxnid,
+  });
+
+  @override
+  int get hashCode => prevtxnid.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is TeardownSignIn &&
+          runtimeType == other.runtimeType &&
+          prevtxnid == other.prevtxnid;
 }
 
 enum TextEffect {

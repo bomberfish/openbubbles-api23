@@ -3138,6 +3138,561 @@ abstract class FTMessage_RespondedElsewhere extends FTMessage {
 }
 
 /// @nodoc
+mixin _$IdmsMessage {
+  Object get field0 => throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(IdmsRequestedSignIn field0) requestedSignIn,
+    required TResult Function(TeardownSignIn field0) teardownSignIn,
+    required TResult Function(
+            IdmsCircleMessage field0, IdmsRequestedSignIn? field1)
+        circleRequest,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(IdmsRequestedSignIn field0)? requestedSignIn,
+    TResult? Function(TeardownSignIn field0)? teardownSignIn,
+    TResult? Function(IdmsCircleMessage field0, IdmsRequestedSignIn? field1)?
+        circleRequest,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(IdmsRequestedSignIn field0)? requestedSignIn,
+    TResult Function(TeardownSignIn field0)? teardownSignIn,
+    TResult Function(IdmsCircleMessage field0, IdmsRequestedSignIn? field1)?
+        circleRequest,
+    required TResult orElse(),
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(IdmsMessage_RequestedSignIn value)
+        requestedSignIn,
+    required TResult Function(IdmsMessage_TeardownSignIn value) teardownSignIn,
+    required TResult Function(IdmsMessage_CircleRequest value) circleRequest,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(IdmsMessage_RequestedSignIn value)? requestedSignIn,
+    TResult? Function(IdmsMessage_TeardownSignIn value)? teardownSignIn,
+    TResult? Function(IdmsMessage_CircleRequest value)? circleRequest,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(IdmsMessage_RequestedSignIn value)? requestedSignIn,
+    TResult Function(IdmsMessage_TeardownSignIn value)? teardownSignIn,
+    TResult Function(IdmsMessage_CircleRequest value)? circleRequest,
+    required TResult orElse(),
+  }) =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $IdmsMessageCopyWith<$Res> {
+  factory $IdmsMessageCopyWith(
+          IdmsMessage value, $Res Function(IdmsMessage) then) =
+      _$IdmsMessageCopyWithImpl<$Res, IdmsMessage>;
+}
+
+/// @nodoc
+class _$IdmsMessageCopyWithImpl<$Res, $Val extends IdmsMessage>
+    implements $IdmsMessageCopyWith<$Res> {
+  _$IdmsMessageCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of IdmsMessage
+  /// with the given fields replaced by the non-null parameter values.
+}
+
+/// @nodoc
+abstract class _$$IdmsMessage_RequestedSignInImplCopyWith<$Res> {
+  factory _$$IdmsMessage_RequestedSignInImplCopyWith(
+          _$IdmsMessage_RequestedSignInImpl value,
+          $Res Function(_$IdmsMessage_RequestedSignInImpl) then) =
+      __$$IdmsMessage_RequestedSignInImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({IdmsRequestedSignIn field0});
+}
+
+/// @nodoc
+class __$$IdmsMessage_RequestedSignInImplCopyWithImpl<$Res>
+    extends _$IdmsMessageCopyWithImpl<$Res, _$IdmsMessage_RequestedSignInImpl>
+    implements _$$IdmsMessage_RequestedSignInImplCopyWith<$Res> {
+  __$$IdmsMessage_RequestedSignInImplCopyWithImpl(
+      _$IdmsMessage_RequestedSignInImpl _value,
+      $Res Function(_$IdmsMessage_RequestedSignInImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of IdmsMessage
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? field0 = null,
+  }) {
+    return _then(_$IdmsMessage_RequestedSignInImpl(
+      null == field0
+          ? _value.field0
+          : field0 // ignore: cast_nullable_to_non_nullable
+              as IdmsRequestedSignIn,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$IdmsMessage_RequestedSignInImpl extends IdmsMessage_RequestedSignIn {
+  const _$IdmsMessage_RequestedSignInImpl(this.field0) : super._();
+
+  @override
+  final IdmsRequestedSignIn field0;
+
+  @override
+  String toString() {
+    return 'IdmsMessage.requestedSignIn(field0: $field0)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$IdmsMessage_RequestedSignInImpl &&
+            (identical(other.field0, field0) || other.field0 == field0));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, field0);
+
+  /// Create a copy of IdmsMessage
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$IdmsMessage_RequestedSignInImplCopyWith<_$IdmsMessage_RequestedSignInImpl>
+      get copyWith => __$$IdmsMessage_RequestedSignInImplCopyWithImpl<
+          _$IdmsMessage_RequestedSignInImpl>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(IdmsRequestedSignIn field0) requestedSignIn,
+    required TResult Function(TeardownSignIn field0) teardownSignIn,
+    required TResult Function(
+            IdmsCircleMessage field0, IdmsRequestedSignIn? field1)
+        circleRequest,
+  }) {
+    return requestedSignIn(field0);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(IdmsRequestedSignIn field0)? requestedSignIn,
+    TResult? Function(TeardownSignIn field0)? teardownSignIn,
+    TResult? Function(IdmsCircleMessage field0, IdmsRequestedSignIn? field1)?
+        circleRequest,
+  }) {
+    return requestedSignIn?.call(field0);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(IdmsRequestedSignIn field0)? requestedSignIn,
+    TResult Function(TeardownSignIn field0)? teardownSignIn,
+    TResult Function(IdmsCircleMessage field0, IdmsRequestedSignIn? field1)?
+        circleRequest,
+    required TResult orElse(),
+  }) {
+    if (requestedSignIn != null) {
+      return requestedSignIn(field0);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(IdmsMessage_RequestedSignIn value)
+        requestedSignIn,
+    required TResult Function(IdmsMessage_TeardownSignIn value) teardownSignIn,
+    required TResult Function(IdmsMessage_CircleRequest value) circleRequest,
+  }) {
+    return requestedSignIn(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(IdmsMessage_RequestedSignIn value)? requestedSignIn,
+    TResult? Function(IdmsMessage_TeardownSignIn value)? teardownSignIn,
+    TResult? Function(IdmsMessage_CircleRequest value)? circleRequest,
+  }) {
+    return requestedSignIn?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(IdmsMessage_RequestedSignIn value)? requestedSignIn,
+    TResult Function(IdmsMessage_TeardownSignIn value)? teardownSignIn,
+    TResult Function(IdmsMessage_CircleRequest value)? circleRequest,
+    required TResult orElse(),
+  }) {
+    if (requestedSignIn != null) {
+      return requestedSignIn(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class IdmsMessage_RequestedSignIn extends IdmsMessage {
+  const factory IdmsMessage_RequestedSignIn(final IdmsRequestedSignIn field0) =
+      _$IdmsMessage_RequestedSignInImpl;
+  const IdmsMessage_RequestedSignIn._() : super._();
+
+  @override
+  IdmsRequestedSignIn get field0;
+
+  /// Create a copy of IdmsMessage
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$IdmsMessage_RequestedSignInImplCopyWith<_$IdmsMessage_RequestedSignInImpl>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$IdmsMessage_TeardownSignInImplCopyWith<$Res> {
+  factory _$$IdmsMessage_TeardownSignInImplCopyWith(
+          _$IdmsMessage_TeardownSignInImpl value,
+          $Res Function(_$IdmsMessage_TeardownSignInImpl) then) =
+      __$$IdmsMessage_TeardownSignInImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({TeardownSignIn field0});
+}
+
+/// @nodoc
+class __$$IdmsMessage_TeardownSignInImplCopyWithImpl<$Res>
+    extends _$IdmsMessageCopyWithImpl<$Res, _$IdmsMessage_TeardownSignInImpl>
+    implements _$$IdmsMessage_TeardownSignInImplCopyWith<$Res> {
+  __$$IdmsMessage_TeardownSignInImplCopyWithImpl(
+      _$IdmsMessage_TeardownSignInImpl _value,
+      $Res Function(_$IdmsMessage_TeardownSignInImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of IdmsMessage
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? field0 = null,
+  }) {
+    return _then(_$IdmsMessage_TeardownSignInImpl(
+      null == field0
+          ? _value.field0
+          : field0 // ignore: cast_nullable_to_non_nullable
+              as TeardownSignIn,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$IdmsMessage_TeardownSignInImpl extends IdmsMessage_TeardownSignIn {
+  const _$IdmsMessage_TeardownSignInImpl(this.field0) : super._();
+
+  @override
+  final TeardownSignIn field0;
+
+  @override
+  String toString() {
+    return 'IdmsMessage.teardownSignIn(field0: $field0)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$IdmsMessage_TeardownSignInImpl &&
+            (identical(other.field0, field0) || other.field0 == field0));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, field0);
+
+  /// Create a copy of IdmsMessage
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$IdmsMessage_TeardownSignInImplCopyWith<_$IdmsMessage_TeardownSignInImpl>
+      get copyWith => __$$IdmsMessage_TeardownSignInImplCopyWithImpl<
+          _$IdmsMessage_TeardownSignInImpl>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(IdmsRequestedSignIn field0) requestedSignIn,
+    required TResult Function(TeardownSignIn field0) teardownSignIn,
+    required TResult Function(
+            IdmsCircleMessage field0, IdmsRequestedSignIn? field1)
+        circleRequest,
+  }) {
+    return teardownSignIn(field0);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(IdmsRequestedSignIn field0)? requestedSignIn,
+    TResult? Function(TeardownSignIn field0)? teardownSignIn,
+    TResult? Function(IdmsCircleMessage field0, IdmsRequestedSignIn? field1)?
+        circleRequest,
+  }) {
+    return teardownSignIn?.call(field0);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(IdmsRequestedSignIn field0)? requestedSignIn,
+    TResult Function(TeardownSignIn field0)? teardownSignIn,
+    TResult Function(IdmsCircleMessage field0, IdmsRequestedSignIn? field1)?
+        circleRequest,
+    required TResult orElse(),
+  }) {
+    if (teardownSignIn != null) {
+      return teardownSignIn(field0);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(IdmsMessage_RequestedSignIn value)
+        requestedSignIn,
+    required TResult Function(IdmsMessage_TeardownSignIn value) teardownSignIn,
+    required TResult Function(IdmsMessage_CircleRequest value) circleRequest,
+  }) {
+    return teardownSignIn(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(IdmsMessage_RequestedSignIn value)? requestedSignIn,
+    TResult? Function(IdmsMessage_TeardownSignIn value)? teardownSignIn,
+    TResult? Function(IdmsMessage_CircleRequest value)? circleRequest,
+  }) {
+    return teardownSignIn?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(IdmsMessage_RequestedSignIn value)? requestedSignIn,
+    TResult Function(IdmsMessage_TeardownSignIn value)? teardownSignIn,
+    TResult Function(IdmsMessage_CircleRequest value)? circleRequest,
+    required TResult orElse(),
+  }) {
+    if (teardownSignIn != null) {
+      return teardownSignIn(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class IdmsMessage_TeardownSignIn extends IdmsMessage {
+  const factory IdmsMessage_TeardownSignIn(final TeardownSignIn field0) =
+      _$IdmsMessage_TeardownSignInImpl;
+  const IdmsMessage_TeardownSignIn._() : super._();
+
+  @override
+  TeardownSignIn get field0;
+
+  /// Create a copy of IdmsMessage
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$IdmsMessage_TeardownSignInImplCopyWith<_$IdmsMessage_TeardownSignInImpl>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$IdmsMessage_CircleRequestImplCopyWith<$Res> {
+  factory _$$IdmsMessage_CircleRequestImplCopyWith(
+          _$IdmsMessage_CircleRequestImpl value,
+          $Res Function(_$IdmsMessage_CircleRequestImpl) then) =
+      __$$IdmsMessage_CircleRequestImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({IdmsCircleMessage field0, IdmsRequestedSignIn? field1});
+}
+
+/// @nodoc
+class __$$IdmsMessage_CircleRequestImplCopyWithImpl<$Res>
+    extends _$IdmsMessageCopyWithImpl<$Res, _$IdmsMessage_CircleRequestImpl>
+    implements _$$IdmsMessage_CircleRequestImplCopyWith<$Res> {
+  __$$IdmsMessage_CircleRequestImplCopyWithImpl(
+      _$IdmsMessage_CircleRequestImpl _value,
+      $Res Function(_$IdmsMessage_CircleRequestImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of IdmsMessage
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? field0 = null,
+    Object? field1 = freezed,
+  }) {
+    return _then(_$IdmsMessage_CircleRequestImpl(
+      null == field0
+          ? _value.field0
+          : field0 // ignore: cast_nullable_to_non_nullable
+              as IdmsCircleMessage,
+      freezed == field1
+          ? _value.field1
+          : field1 // ignore: cast_nullable_to_non_nullable
+              as IdmsRequestedSignIn?,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$IdmsMessage_CircleRequestImpl extends IdmsMessage_CircleRequest {
+  const _$IdmsMessage_CircleRequestImpl(this.field0, [this.field1]) : super._();
+
+  @override
+  final IdmsCircleMessage field0;
+  @override
+  final IdmsRequestedSignIn? field1;
+
+  @override
+  String toString() {
+    return 'IdmsMessage.circleRequest(field0: $field0, field1: $field1)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$IdmsMessage_CircleRequestImpl &&
+            (identical(other.field0, field0) || other.field0 == field0) &&
+            (identical(other.field1, field1) || other.field1 == field1));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, field0, field1);
+
+  /// Create a copy of IdmsMessage
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$IdmsMessage_CircleRequestImplCopyWith<_$IdmsMessage_CircleRequestImpl>
+      get copyWith => __$$IdmsMessage_CircleRequestImplCopyWithImpl<
+          _$IdmsMessage_CircleRequestImpl>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(IdmsRequestedSignIn field0) requestedSignIn,
+    required TResult Function(TeardownSignIn field0) teardownSignIn,
+    required TResult Function(
+            IdmsCircleMessage field0, IdmsRequestedSignIn? field1)
+        circleRequest,
+  }) {
+    return circleRequest(field0, field1);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(IdmsRequestedSignIn field0)? requestedSignIn,
+    TResult? Function(TeardownSignIn field0)? teardownSignIn,
+    TResult? Function(IdmsCircleMessage field0, IdmsRequestedSignIn? field1)?
+        circleRequest,
+  }) {
+    return circleRequest?.call(field0, field1);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(IdmsRequestedSignIn field0)? requestedSignIn,
+    TResult Function(TeardownSignIn field0)? teardownSignIn,
+    TResult Function(IdmsCircleMessage field0, IdmsRequestedSignIn? field1)?
+        circleRequest,
+    required TResult orElse(),
+  }) {
+    if (circleRequest != null) {
+      return circleRequest(field0, field1);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(IdmsMessage_RequestedSignIn value)
+        requestedSignIn,
+    required TResult Function(IdmsMessage_TeardownSignIn value) teardownSignIn,
+    required TResult Function(IdmsMessage_CircleRequest value) circleRequest,
+  }) {
+    return circleRequest(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(IdmsMessage_RequestedSignIn value)? requestedSignIn,
+    TResult? Function(IdmsMessage_TeardownSignIn value)? teardownSignIn,
+    TResult? Function(IdmsMessage_CircleRequest value)? circleRequest,
+  }) {
+    return circleRequest?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(IdmsMessage_RequestedSignIn value)? requestedSignIn,
+    TResult Function(IdmsMessage_TeardownSignIn value)? teardownSignIn,
+    TResult Function(IdmsMessage_CircleRequest value)? circleRequest,
+    required TResult orElse(),
+  }) {
+    if (circleRequest != null) {
+      return circleRequest(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class IdmsMessage_CircleRequest extends IdmsMessage {
+  const factory IdmsMessage_CircleRequest(final IdmsCircleMessage field0,
+      [final IdmsRequestedSignIn? field1]) = _$IdmsMessage_CircleRequestImpl;
+  const IdmsMessage_CircleRequest._() : super._();
+
+  @override
+  IdmsCircleMessage get field0;
+  IdmsRequestedSignIn? get field1;
+
+  /// Create a copy of IdmsMessage
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$IdmsMessage_CircleRequestImplCopyWith<_$IdmsMessage_CircleRequestImpl>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
 mixin _$LoginState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
@@ -15603,6 +16158,8 @@ mixin _$PushMessage {
     required TResult Function(SharedAlbum field0) newPhotostream,
     required TResult Function(FTMessage field0) faceTime,
     required TResult Function(StatusKitMessage field0) statusUpdate,
+    required TResult Function(IdmsMessage field0) idms,
+    required TResult Function(bool field0) twoFaAuthEvent,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -15613,6 +16170,8 @@ mixin _$PushMessage {
     TResult? Function(SharedAlbum field0)? newPhotostream,
     TResult? Function(FTMessage field0)? faceTime,
     TResult? Function(StatusKitMessage field0)? statusUpdate,
+    TResult? Function(IdmsMessage field0)? idms,
+    TResult? Function(bool field0)? twoFaAuthEvent,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -15623,6 +16182,8 @@ mixin _$PushMessage {
     TResult Function(SharedAlbum field0)? newPhotostream,
     TResult Function(FTMessage field0)? faceTime,
     TResult Function(StatusKitMessage field0)? statusUpdate,
+    TResult Function(IdmsMessage field0)? idms,
+    TResult Function(bool field0)? twoFaAuthEvent,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -15635,6 +16196,8 @@ mixin _$PushMessage {
     required TResult Function(PushMessage_NewPhotostream value) newPhotostream,
     required TResult Function(PushMessage_FaceTime value) faceTime,
     required TResult Function(PushMessage_StatusUpdate value) statusUpdate,
+    required TResult Function(PushMessage_Idms value) idms,
+    required TResult Function(PushMessage_TwoFaAuthEvent value) twoFaAuthEvent,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -15645,6 +16208,8 @@ mixin _$PushMessage {
     TResult? Function(PushMessage_NewPhotostream value)? newPhotostream,
     TResult? Function(PushMessage_FaceTime value)? faceTime,
     TResult? Function(PushMessage_StatusUpdate value)? statusUpdate,
+    TResult? Function(PushMessage_Idms value)? idms,
+    TResult? Function(PushMessage_TwoFaAuthEvent value)? twoFaAuthEvent,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -15655,6 +16220,8 @@ mixin _$PushMessage {
     TResult Function(PushMessage_NewPhotostream value)? newPhotostream,
     TResult Function(PushMessage_FaceTime value)? faceTime,
     TResult Function(PushMessage_StatusUpdate value)? statusUpdate,
+    TResult Function(PushMessage_Idms value)? idms,
+    TResult Function(PushMessage_TwoFaAuthEvent value)? twoFaAuthEvent,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -15757,6 +16324,8 @@ class _$PushMessage_IMessageImpl extends PushMessage_IMessage {
     required TResult Function(SharedAlbum field0) newPhotostream,
     required TResult Function(FTMessage field0) faceTime,
     required TResult Function(StatusKitMessage field0) statusUpdate,
+    required TResult Function(IdmsMessage field0) idms,
+    required TResult Function(bool field0) twoFaAuthEvent,
   }) {
     return iMessage(field0);
   }
@@ -15770,6 +16339,8 @@ class _$PushMessage_IMessageImpl extends PushMessage_IMessage {
     TResult? Function(SharedAlbum field0)? newPhotostream,
     TResult? Function(FTMessage field0)? faceTime,
     TResult? Function(StatusKitMessage field0)? statusUpdate,
+    TResult? Function(IdmsMessage field0)? idms,
+    TResult? Function(bool field0)? twoFaAuthEvent,
   }) {
     return iMessage?.call(field0);
   }
@@ -15783,6 +16354,8 @@ class _$PushMessage_IMessageImpl extends PushMessage_IMessage {
     TResult Function(SharedAlbum field0)? newPhotostream,
     TResult Function(FTMessage field0)? faceTime,
     TResult Function(StatusKitMessage field0)? statusUpdate,
+    TResult Function(IdmsMessage field0)? idms,
+    TResult Function(bool field0)? twoFaAuthEvent,
     required TResult orElse(),
   }) {
     if (iMessage != null) {
@@ -15801,6 +16374,8 @@ class _$PushMessage_IMessageImpl extends PushMessage_IMessage {
     required TResult Function(PushMessage_NewPhotostream value) newPhotostream,
     required TResult Function(PushMessage_FaceTime value) faceTime,
     required TResult Function(PushMessage_StatusUpdate value) statusUpdate,
+    required TResult Function(PushMessage_Idms value) idms,
+    required TResult Function(PushMessage_TwoFaAuthEvent value) twoFaAuthEvent,
   }) {
     return iMessage(this);
   }
@@ -15814,6 +16389,8 @@ class _$PushMessage_IMessageImpl extends PushMessage_IMessage {
     TResult? Function(PushMessage_NewPhotostream value)? newPhotostream,
     TResult? Function(PushMessage_FaceTime value)? faceTime,
     TResult? Function(PushMessage_StatusUpdate value)? statusUpdate,
+    TResult? Function(PushMessage_Idms value)? idms,
+    TResult? Function(PushMessage_TwoFaAuthEvent value)? twoFaAuthEvent,
   }) {
     return iMessage?.call(this);
   }
@@ -15827,6 +16404,8 @@ class _$PushMessage_IMessageImpl extends PushMessage_IMessage {
     TResult Function(PushMessage_NewPhotostream value)? newPhotostream,
     TResult Function(PushMessage_FaceTime value)? faceTime,
     TResult Function(PushMessage_StatusUpdate value)? statusUpdate,
+    TResult Function(PushMessage_Idms value)? idms,
+    TResult Function(PushMessage_TwoFaAuthEvent value)? twoFaAuthEvent,
     required TResult orElse(),
   }) {
     if (iMessage != null) {
@@ -15936,6 +16515,8 @@ class _$PushMessage_SendConfirmImpl extends PushMessage_SendConfirm {
     required TResult Function(SharedAlbum field0) newPhotostream,
     required TResult Function(FTMessage field0) faceTime,
     required TResult Function(StatusKitMessage field0) statusUpdate,
+    required TResult Function(IdmsMessage field0) idms,
+    required TResult Function(bool field0) twoFaAuthEvent,
   }) {
     return sendConfirm(uuid, error);
   }
@@ -15949,6 +16530,8 @@ class _$PushMessage_SendConfirmImpl extends PushMessage_SendConfirm {
     TResult? Function(SharedAlbum field0)? newPhotostream,
     TResult? Function(FTMessage field0)? faceTime,
     TResult? Function(StatusKitMessage field0)? statusUpdate,
+    TResult? Function(IdmsMessage field0)? idms,
+    TResult? Function(bool field0)? twoFaAuthEvent,
   }) {
     return sendConfirm?.call(uuid, error);
   }
@@ -15962,6 +16545,8 @@ class _$PushMessage_SendConfirmImpl extends PushMessage_SendConfirm {
     TResult Function(SharedAlbum field0)? newPhotostream,
     TResult Function(FTMessage field0)? faceTime,
     TResult Function(StatusKitMessage field0)? statusUpdate,
+    TResult Function(IdmsMessage field0)? idms,
+    TResult Function(bool field0)? twoFaAuthEvent,
     required TResult orElse(),
   }) {
     if (sendConfirm != null) {
@@ -15980,6 +16565,8 @@ class _$PushMessage_SendConfirmImpl extends PushMessage_SendConfirm {
     required TResult Function(PushMessage_NewPhotostream value) newPhotostream,
     required TResult Function(PushMessage_FaceTime value) faceTime,
     required TResult Function(PushMessage_StatusUpdate value) statusUpdate,
+    required TResult Function(PushMessage_Idms value) idms,
+    required TResult Function(PushMessage_TwoFaAuthEvent value) twoFaAuthEvent,
   }) {
     return sendConfirm(this);
   }
@@ -15993,6 +16580,8 @@ class _$PushMessage_SendConfirmImpl extends PushMessage_SendConfirm {
     TResult? Function(PushMessage_NewPhotostream value)? newPhotostream,
     TResult? Function(PushMessage_FaceTime value)? faceTime,
     TResult? Function(PushMessage_StatusUpdate value)? statusUpdate,
+    TResult? Function(PushMessage_Idms value)? idms,
+    TResult? Function(PushMessage_TwoFaAuthEvent value)? twoFaAuthEvent,
   }) {
     return sendConfirm?.call(this);
   }
@@ -16006,6 +16595,8 @@ class _$PushMessage_SendConfirmImpl extends PushMessage_SendConfirm {
     TResult Function(PushMessage_NewPhotostream value)? newPhotostream,
     TResult Function(PushMessage_FaceTime value)? faceTime,
     TResult Function(PushMessage_StatusUpdate value)? statusUpdate,
+    TResult Function(PushMessage_Idms value)? idms,
+    TResult Function(PushMessage_TwoFaAuthEvent value)? twoFaAuthEvent,
     required TResult orElse(),
   }) {
     if (sendConfirm != null) {
@@ -16122,6 +16713,8 @@ class _$PushMessage_RegistrationStateImpl
     required TResult Function(SharedAlbum field0) newPhotostream,
     required TResult Function(FTMessage field0) faceTime,
     required TResult Function(StatusKitMessage field0) statusUpdate,
+    required TResult Function(IdmsMessage field0) idms,
+    required TResult Function(bool field0) twoFaAuthEvent,
   }) {
     return registrationState(field0);
   }
@@ -16135,6 +16728,8 @@ class _$PushMessage_RegistrationStateImpl
     TResult? Function(SharedAlbum field0)? newPhotostream,
     TResult? Function(FTMessage field0)? faceTime,
     TResult? Function(StatusKitMessage field0)? statusUpdate,
+    TResult? Function(IdmsMessage field0)? idms,
+    TResult? Function(bool field0)? twoFaAuthEvent,
   }) {
     return registrationState?.call(field0);
   }
@@ -16148,6 +16743,8 @@ class _$PushMessage_RegistrationStateImpl
     TResult Function(SharedAlbum field0)? newPhotostream,
     TResult Function(FTMessage field0)? faceTime,
     TResult Function(StatusKitMessage field0)? statusUpdate,
+    TResult Function(IdmsMessage field0)? idms,
+    TResult Function(bool field0)? twoFaAuthEvent,
     required TResult orElse(),
   }) {
     if (registrationState != null) {
@@ -16166,6 +16763,8 @@ class _$PushMessage_RegistrationStateImpl
     required TResult Function(PushMessage_NewPhotostream value) newPhotostream,
     required TResult Function(PushMessage_FaceTime value) faceTime,
     required TResult Function(PushMessage_StatusUpdate value) statusUpdate,
+    required TResult Function(PushMessage_Idms value) idms,
+    required TResult Function(PushMessage_TwoFaAuthEvent value) twoFaAuthEvent,
   }) {
     return registrationState(this);
   }
@@ -16179,6 +16778,8 @@ class _$PushMessage_RegistrationStateImpl
     TResult? Function(PushMessage_NewPhotostream value)? newPhotostream,
     TResult? Function(PushMessage_FaceTime value)? faceTime,
     TResult? Function(PushMessage_StatusUpdate value)? statusUpdate,
+    TResult? Function(PushMessage_Idms value)? idms,
+    TResult? Function(PushMessage_TwoFaAuthEvent value)? twoFaAuthEvent,
   }) {
     return registrationState?.call(this);
   }
@@ -16192,6 +16793,8 @@ class _$PushMessage_RegistrationStateImpl
     TResult Function(PushMessage_NewPhotostream value)? newPhotostream,
     TResult Function(PushMessage_FaceTime value)? faceTime,
     TResult Function(PushMessage_StatusUpdate value)? statusUpdate,
+    TResult Function(PushMessage_Idms value)? idms,
+    TResult Function(PushMessage_TwoFaAuthEvent value)? twoFaAuthEvent,
     required TResult orElse(),
   }) {
     if (registrationState != null) {
@@ -16293,6 +16896,8 @@ class _$PushMessage_NewPhotostreamImpl extends PushMessage_NewPhotostream {
     required TResult Function(SharedAlbum field0) newPhotostream,
     required TResult Function(FTMessage field0) faceTime,
     required TResult Function(StatusKitMessage field0) statusUpdate,
+    required TResult Function(IdmsMessage field0) idms,
+    required TResult Function(bool field0) twoFaAuthEvent,
   }) {
     return newPhotostream(field0);
   }
@@ -16306,6 +16911,8 @@ class _$PushMessage_NewPhotostreamImpl extends PushMessage_NewPhotostream {
     TResult? Function(SharedAlbum field0)? newPhotostream,
     TResult? Function(FTMessage field0)? faceTime,
     TResult? Function(StatusKitMessage field0)? statusUpdate,
+    TResult? Function(IdmsMessage field0)? idms,
+    TResult? Function(bool field0)? twoFaAuthEvent,
   }) {
     return newPhotostream?.call(field0);
   }
@@ -16319,6 +16926,8 @@ class _$PushMessage_NewPhotostreamImpl extends PushMessage_NewPhotostream {
     TResult Function(SharedAlbum field0)? newPhotostream,
     TResult Function(FTMessage field0)? faceTime,
     TResult Function(StatusKitMessage field0)? statusUpdate,
+    TResult Function(IdmsMessage field0)? idms,
+    TResult Function(bool field0)? twoFaAuthEvent,
     required TResult orElse(),
   }) {
     if (newPhotostream != null) {
@@ -16337,6 +16946,8 @@ class _$PushMessage_NewPhotostreamImpl extends PushMessage_NewPhotostream {
     required TResult Function(PushMessage_NewPhotostream value) newPhotostream,
     required TResult Function(PushMessage_FaceTime value) faceTime,
     required TResult Function(PushMessage_StatusUpdate value) statusUpdate,
+    required TResult Function(PushMessage_Idms value) idms,
+    required TResult Function(PushMessage_TwoFaAuthEvent value) twoFaAuthEvent,
   }) {
     return newPhotostream(this);
   }
@@ -16350,6 +16961,8 @@ class _$PushMessage_NewPhotostreamImpl extends PushMessage_NewPhotostream {
     TResult? Function(PushMessage_NewPhotostream value)? newPhotostream,
     TResult? Function(PushMessage_FaceTime value)? faceTime,
     TResult? Function(PushMessage_StatusUpdate value)? statusUpdate,
+    TResult? Function(PushMessage_Idms value)? idms,
+    TResult? Function(PushMessage_TwoFaAuthEvent value)? twoFaAuthEvent,
   }) {
     return newPhotostream?.call(this);
   }
@@ -16363,6 +16976,8 @@ class _$PushMessage_NewPhotostreamImpl extends PushMessage_NewPhotostream {
     TResult Function(PushMessage_NewPhotostream value)? newPhotostream,
     TResult Function(PushMessage_FaceTime value)? faceTime,
     TResult Function(PushMessage_StatusUpdate value)? statusUpdate,
+    TResult Function(PushMessage_Idms value)? idms,
+    TResult Function(PushMessage_TwoFaAuthEvent value)? twoFaAuthEvent,
     required TResult orElse(),
   }) {
     if (newPhotostream != null) {
@@ -16474,6 +17089,8 @@ class _$PushMessage_FaceTimeImpl extends PushMessage_FaceTime {
     required TResult Function(SharedAlbum field0) newPhotostream,
     required TResult Function(FTMessage field0) faceTime,
     required TResult Function(StatusKitMessage field0) statusUpdate,
+    required TResult Function(IdmsMessage field0) idms,
+    required TResult Function(bool field0) twoFaAuthEvent,
   }) {
     return faceTime(field0);
   }
@@ -16487,6 +17104,8 @@ class _$PushMessage_FaceTimeImpl extends PushMessage_FaceTime {
     TResult? Function(SharedAlbum field0)? newPhotostream,
     TResult? Function(FTMessage field0)? faceTime,
     TResult? Function(StatusKitMessage field0)? statusUpdate,
+    TResult? Function(IdmsMessage field0)? idms,
+    TResult? Function(bool field0)? twoFaAuthEvent,
   }) {
     return faceTime?.call(field0);
   }
@@ -16500,6 +17119,8 @@ class _$PushMessage_FaceTimeImpl extends PushMessage_FaceTime {
     TResult Function(SharedAlbum field0)? newPhotostream,
     TResult Function(FTMessage field0)? faceTime,
     TResult Function(StatusKitMessage field0)? statusUpdate,
+    TResult Function(IdmsMessage field0)? idms,
+    TResult Function(bool field0)? twoFaAuthEvent,
     required TResult orElse(),
   }) {
     if (faceTime != null) {
@@ -16518,6 +17139,8 @@ class _$PushMessage_FaceTimeImpl extends PushMessage_FaceTime {
     required TResult Function(PushMessage_NewPhotostream value) newPhotostream,
     required TResult Function(PushMessage_FaceTime value) faceTime,
     required TResult Function(PushMessage_StatusUpdate value) statusUpdate,
+    required TResult Function(PushMessage_Idms value) idms,
+    required TResult Function(PushMessage_TwoFaAuthEvent value) twoFaAuthEvent,
   }) {
     return faceTime(this);
   }
@@ -16531,6 +17154,8 @@ class _$PushMessage_FaceTimeImpl extends PushMessage_FaceTime {
     TResult? Function(PushMessage_NewPhotostream value)? newPhotostream,
     TResult? Function(PushMessage_FaceTime value)? faceTime,
     TResult? Function(PushMessage_StatusUpdate value)? statusUpdate,
+    TResult? Function(PushMessage_Idms value)? idms,
+    TResult? Function(PushMessage_TwoFaAuthEvent value)? twoFaAuthEvent,
   }) {
     return faceTime?.call(this);
   }
@@ -16544,6 +17169,8 @@ class _$PushMessage_FaceTimeImpl extends PushMessage_FaceTime {
     TResult Function(PushMessage_NewPhotostream value)? newPhotostream,
     TResult Function(PushMessage_FaceTime value)? faceTime,
     TResult Function(PushMessage_StatusUpdate value)? statusUpdate,
+    TResult Function(PushMessage_Idms value)? idms,
+    TResult Function(PushMessage_TwoFaAuthEvent value)? twoFaAuthEvent,
     required TResult orElse(),
   }) {
     if (faceTime != null) {
@@ -16656,6 +17283,8 @@ class _$PushMessage_StatusUpdateImpl extends PushMessage_StatusUpdate {
     required TResult Function(SharedAlbum field0) newPhotostream,
     required TResult Function(FTMessage field0) faceTime,
     required TResult Function(StatusKitMessage field0) statusUpdate,
+    required TResult Function(IdmsMessage field0) idms,
+    required TResult Function(bool field0) twoFaAuthEvent,
   }) {
     return statusUpdate(field0);
   }
@@ -16669,6 +17298,8 @@ class _$PushMessage_StatusUpdateImpl extends PushMessage_StatusUpdate {
     TResult? Function(SharedAlbum field0)? newPhotostream,
     TResult? Function(FTMessage field0)? faceTime,
     TResult? Function(StatusKitMessage field0)? statusUpdate,
+    TResult? Function(IdmsMessage field0)? idms,
+    TResult? Function(bool field0)? twoFaAuthEvent,
   }) {
     return statusUpdate?.call(field0);
   }
@@ -16682,6 +17313,8 @@ class _$PushMessage_StatusUpdateImpl extends PushMessage_StatusUpdate {
     TResult Function(SharedAlbum field0)? newPhotostream,
     TResult Function(FTMessage field0)? faceTime,
     TResult Function(StatusKitMessage field0)? statusUpdate,
+    TResult Function(IdmsMessage field0)? idms,
+    TResult Function(bool field0)? twoFaAuthEvent,
     required TResult orElse(),
   }) {
     if (statusUpdate != null) {
@@ -16700,6 +17333,8 @@ class _$PushMessage_StatusUpdateImpl extends PushMessage_StatusUpdate {
     required TResult Function(PushMessage_NewPhotostream value) newPhotostream,
     required TResult Function(PushMessage_FaceTime value) faceTime,
     required TResult Function(PushMessage_StatusUpdate value) statusUpdate,
+    required TResult Function(PushMessage_Idms value) idms,
+    required TResult Function(PushMessage_TwoFaAuthEvent value) twoFaAuthEvent,
   }) {
     return statusUpdate(this);
   }
@@ -16713,6 +17348,8 @@ class _$PushMessage_StatusUpdateImpl extends PushMessage_StatusUpdate {
     TResult? Function(PushMessage_NewPhotostream value)? newPhotostream,
     TResult? Function(PushMessage_FaceTime value)? faceTime,
     TResult? Function(PushMessage_StatusUpdate value)? statusUpdate,
+    TResult? Function(PushMessage_Idms value)? idms,
+    TResult? Function(PushMessage_TwoFaAuthEvent value)? twoFaAuthEvent,
   }) {
     return statusUpdate?.call(this);
   }
@@ -16726,6 +17363,8 @@ class _$PushMessage_StatusUpdateImpl extends PushMessage_StatusUpdate {
     TResult Function(PushMessage_NewPhotostream value)? newPhotostream,
     TResult Function(PushMessage_FaceTime value)? faceTime,
     TResult Function(PushMessage_StatusUpdate value)? statusUpdate,
+    TResult Function(PushMessage_Idms value)? idms,
+    TResult Function(PushMessage_TwoFaAuthEvent value)? twoFaAuthEvent,
     required TResult orElse(),
   }) {
     if (statusUpdate != null) {
@@ -16746,6 +17385,380 @@ abstract class PushMessage_StatusUpdate extends PushMessage {
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$PushMessage_StatusUpdateImplCopyWith<_$PushMessage_StatusUpdateImpl>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$PushMessage_IdmsImplCopyWith<$Res> {
+  factory _$$PushMessage_IdmsImplCopyWith(_$PushMessage_IdmsImpl value,
+          $Res Function(_$PushMessage_IdmsImpl) then) =
+      __$$PushMessage_IdmsImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({IdmsMessage field0});
+
+  $IdmsMessageCopyWith<$Res> get field0;
+}
+
+/// @nodoc
+class __$$PushMessage_IdmsImplCopyWithImpl<$Res>
+    extends _$PushMessageCopyWithImpl<$Res, _$PushMessage_IdmsImpl>
+    implements _$$PushMessage_IdmsImplCopyWith<$Res> {
+  __$$PushMessage_IdmsImplCopyWithImpl(_$PushMessage_IdmsImpl _value,
+      $Res Function(_$PushMessage_IdmsImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of PushMessage
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? field0 = null,
+  }) {
+    return _then(_$PushMessage_IdmsImpl(
+      null == field0
+          ? _value.field0
+          : field0 // ignore: cast_nullable_to_non_nullable
+              as IdmsMessage,
+    ));
+  }
+
+  /// Create a copy of PushMessage
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $IdmsMessageCopyWith<$Res> get field0 {
+    return $IdmsMessageCopyWith<$Res>(_value.field0, (value) {
+      return _then(_value.copyWith(field0: value));
+    });
+  }
+}
+
+/// @nodoc
+
+class _$PushMessage_IdmsImpl extends PushMessage_Idms {
+  const _$PushMessage_IdmsImpl(this.field0) : super._();
+
+  @override
+  final IdmsMessage field0;
+
+  @override
+  String toString() {
+    return 'PushMessage.idms(field0: $field0)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$PushMessage_IdmsImpl &&
+            (identical(other.field0, field0) || other.field0 == field0));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, field0);
+
+  /// Create a copy of PushMessage
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$PushMessage_IdmsImplCopyWith<_$PushMessage_IdmsImpl> get copyWith =>
+      __$$PushMessage_IdmsImplCopyWithImpl<_$PushMessage_IdmsImpl>(
+          this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(MessageInst field0) iMessage,
+    required TResult Function(String uuid, String? error) sendConfirm,
+    required TResult Function(RegisterState field0) registrationState,
+    required TResult Function(SharedAlbum field0) newPhotostream,
+    required TResult Function(FTMessage field0) faceTime,
+    required TResult Function(StatusKitMessage field0) statusUpdate,
+    required TResult Function(IdmsMessage field0) idms,
+    required TResult Function(bool field0) twoFaAuthEvent,
+  }) {
+    return idms(field0);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(MessageInst field0)? iMessage,
+    TResult? Function(String uuid, String? error)? sendConfirm,
+    TResult? Function(RegisterState field0)? registrationState,
+    TResult? Function(SharedAlbum field0)? newPhotostream,
+    TResult? Function(FTMessage field0)? faceTime,
+    TResult? Function(StatusKitMessage field0)? statusUpdate,
+    TResult? Function(IdmsMessage field0)? idms,
+    TResult? Function(bool field0)? twoFaAuthEvent,
+  }) {
+    return idms?.call(field0);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(MessageInst field0)? iMessage,
+    TResult Function(String uuid, String? error)? sendConfirm,
+    TResult Function(RegisterState field0)? registrationState,
+    TResult Function(SharedAlbum field0)? newPhotostream,
+    TResult Function(FTMessage field0)? faceTime,
+    TResult Function(StatusKitMessage field0)? statusUpdate,
+    TResult Function(IdmsMessage field0)? idms,
+    TResult Function(bool field0)? twoFaAuthEvent,
+    required TResult orElse(),
+  }) {
+    if (idms != null) {
+      return idms(field0);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(PushMessage_IMessage value) iMessage,
+    required TResult Function(PushMessage_SendConfirm value) sendConfirm,
+    required TResult Function(PushMessage_RegistrationState value)
+        registrationState,
+    required TResult Function(PushMessage_NewPhotostream value) newPhotostream,
+    required TResult Function(PushMessage_FaceTime value) faceTime,
+    required TResult Function(PushMessage_StatusUpdate value) statusUpdate,
+    required TResult Function(PushMessage_Idms value) idms,
+    required TResult Function(PushMessage_TwoFaAuthEvent value) twoFaAuthEvent,
+  }) {
+    return idms(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(PushMessage_IMessage value)? iMessage,
+    TResult? Function(PushMessage_SendConfirm value)? sendConfirm,
+    TResult? Function(PushMessage_RegistrationState value)? registrationState,
+    TResult? Function(PushMessage_NewPhotostream value)? newPhotostream,
+    TResult? Function(PushMessage_FaceTime value)? faceTime,
+    TResult? Function(PushMessage_StatusUpdate value)? statusUpdate,
+    TResult? Function(PushMessage_Idms value)? idms,
+    TResult? Function(PushMessage_TwoFaAuthEvent value)? twoFaAuthEvent,
+  }) {
+    return idms?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(PushMessage_IMessage value)? iMessage,
+    TResult Function(PushMessage_SendConfirm value)? sendConfirm,
+    TResult Function(PushMessage_RegistrationState value)? registrationState,
+    TResult Function(PushMessage_NewPhotostream value)? newPhotostream,
+    TResult Function(PushMessage_FaceTime value)? faceTime,
+    TResult Function(PushMessage_StatusUpdate value)? statusUpdate,
+    TResult Function(PushMessage_Idms value)? idms,
+    TResult Function(PushMessage_TwoFaAuthEvent value)? twoFaAuthEvent,
+    required TResult orElse(),
+  }) {
+    if (idms != null) {
+      return idms(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class PushMessage_Idms extends PushMessage {
+  const factory PushMessage_Idms(final IdmsMessage field0) =
+      _$PushMessage_IdmsImpl;
+  const PushMessage_Idms._() : super._();
+
+  IdmsMessage get field0;
+
+  /// Create a copy of PushMessage
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$PushMessage_IdmsImplCopyWith<_$PushMessage_IdmsImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$PushMessage_TwoFaAuthEventImplCopyWith<$Res> {
+  factory _$$PushMessage_TwoFaAuthEventImplCopyWith(
+          _$PushMessage_TwoFaAuthEventImpl value,
+          $Res Function(_$PushMessage_TwoFaAuthEventImpl) then) =
+      __$$PushMessage_TwoFaAuthEventImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({bool field0});
+}
+
+/// @nodoc
+class __$$PushMessage_TwoFaAuthEventImplCopyWithImpl<$Res>
+    extends _$PushMessageCopyWithImpl<$Res, _$PushMessage_TwoFaAuthEventImpl>
+    implements _$$PushMessage_TwoFaAuthEventImplCopyWith<$Res> {
+  __$$PushMessage_TwoFaAuthEventImplCopyWithImpl(
+      _$PushMessage_TwoFaAuthEventImpl _value,
+      $Res Function(_$PushMessage_TwoFaAuthEventImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of PushMessage
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? field0 = null,
+  }) {
+    return _then(_$PushMessage_TwoFaAuthEventImpl(
+      null == field0
+          ? _value.field0
+          : field0 // ignore: cast_nullable_to_non_nullable
+              as bool,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$PushMessage_TwoFaAuthEventImpl extends PushMessage_TwoFaAuthEvent {
+  const _$PushMessage_TwoFaAuthEventImpl(this.field0) : super._();
+
+  @override
+  final bool field0;
+
+  @override
+  String toString() {
+    return 'PushMessage.twoFaAuthEvent(field0: $field0)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$PushMessage_TwoFaAuthEventImpl &&
+            (identical(other.field0, field0) || other.field0 == field0));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, field0);
+
+  /// Create a copy of PushMessage
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$PushMessage_TwoFaAuthEventImplCopyWith<_$PushMessage_TwoFaAuthEventImpl>
+      get copyWith => __$$PushMessage_TwoFaAuthEventImplCopyWithImpl<
+          _$PushMessage_TwoFaAuthEventImpl>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(MessageInst field0) iMessage,
+    required TResult Function(String uuid, String? error) sendConfirm,
+    required TResult Function(RegisterState field0) registrationState,
+    required TResult Function(SharedAlbum field0) newPhotostream,
+    required TResult Function(FTMessage field0) faceTime,
+    required TResult Function(StatusKitMessage field0) statusUpdate,
+    required TResult Function(IdmsMessage field0) idms,
+    required TResult Function(bool field0) twoFaAuthEvent,
+  }) {
+    return twoFaAuthEvent(field0);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(MessageInst field0)? iMessage,
+    TResult? Function(String uuid, String? error)? sendConfirm,
+    TResult? Function(RegisterState field0)? registrationState,
+    TResult? Function(SharedAlbum field0)? newPhotostream,
+    TResult? Function(FTMessage field0)? faceTime,
+    TResult? Function(StatusKitMessage field0)? statusUpdate,
+    TResult? Function(IdmsMessage field0)? idms,
+    TResult? Function(bool field0)? twoFaAuthEvent,
+  }) {
+    return twoFaAuthEvent?.call(field0);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(MessageInst field0)? iMessage,
+    TResult Function(String uuid, String? error)? sendConfirm,
+    TResult Function(RegisterState field0)? registrationState,
+    TResult Function(SharedAlbum field0)? newPhotostream,
+    TResult Function(FTMessage field0)? faceTime,
+    TResult Function(StatusKitMessage field0)? statusUpdate,
+    TResult Function(IdmsMessage field0)? idms,
+    TResult Function(bool field0)? twoFaAuthEvent,
+    required TResult orElse(),
+  }) {
+    if (twoFaAuthEvent != null) {
+      return twoFaAuthEvent(field0);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(PushMessage_IMessage value) iMessage,
+    required TResult Function(PushMessage_SendConfirm value) sendConfirm,
+    required TResult Function(PushMessage_RegistrationState value)
+        registrationState,
+    required TResult Function(PushMessage_NewPhotostream value) newPhotostream,
+    required TResult Function(PushMessage_FaceTime value) faceTime,
+    required TResult Function(PushMessage_StatusUpdate value) statusUpdate,
+    required TResult Function(PushMessage_Idms value) idms,
+    required TResult Function(PushMessage_TwoFaAuthEvent value) twoFaAuthEvent,
+  }) {
+    return twoFaAuthEvent(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(PushMessage_IMessage value)? iMessage,
+    TResult? Function(PushMessage_SendConfirm value)? sendConfirm,
+    TResult? Function(PushMessage_RegistrationState value)? registrationState,
+    TResult? Function(PushMessage_NewPhotostream value)? newPhotostream,
+    TResult? Function(PushMessage_FaceTime value)? faceTime,
+    TResult? Function(PushMessage_StatusUpdate value)? statusUpdate,
+    TResult? Function(PushMessage_Idms value)? idms,
+    TResult? Function(PushMessage_TwoFaAuthEvent value)? twoFaAuthEvent,
+  }) {
+    return twoFaAuthEvent?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(PushMessage_IMessage value)? iMessage,
+    TResult Function(PushMessage_SendConfirm value)? sendConfirm,
+    TResult Function(PushMessage_RegistrationState value)? registrationState,
+    TResult Function(PushMessage_NewPhotostream value)? newPhotostream,
+    TResult Function(PushMessage_FaceTime value)? faceTime,
+    TResult Function(PushMessage_StatusUpdate value)? statusUpdate,
+    TResult Function(PushMessage_Idms value)? idms,
+    TResult Function(PushMessage_TwoFaAuthEvent value)? twoFaAuthEvent,
+    required TResult orElse(),
+  }) {
+    if (twoFaAuthEvent != null) {
+      return twoFaAuthEvent(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class PushMessage_TwoFaAuthEvent extends PushMessage {
+  const factory PushMessage_TwoFaAuthEvent(final bool field0) =
+      _$PushMessage_TwoFaAuthEventImpl;
+  const PushMessage_TwoFaAuthEvent._() : super._();
+
+  bool get field0;
+
+  /// Create a copy of PushMessage
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$PushMessage_TwoFaAuthEventImplCopyWith<_$PushMessage_TwoFaAuthEventImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
 

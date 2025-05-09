@@ -2398,6 +2398,7 @@ class RustPushService extends GetxService {
     markCertified(push);
   }
 
+  bool authing = false;
   Future handleMsgInner(api.PushMessage push) async {
     if (push is api.PushMessage_StatusUpdate) {
       var status = push.field0;
@@ -2407,6 +2408,27 @@ class RustPushService extends GetxService {
       result.save(updateNotifsSilenced: true);
       cvc(result).recipientNotifsSilenced.value = !status.allowed;
       cvc(result).chat.notifsSilenced = !status.allowed; // make sure all our objects are in sync lmao
+      return;
+    }
+
+    if (push is api.PushMessage_TwoFaAuthEvent) {
+      if (push.field0 && authing) {
+        // Success
+        Get.back();
+      }
+      return;
+    }
+
+    if (push is api.PushMessage_Idms) {
+      var message = push.field0;
+      if (message is api.IdmsMessage_RequestedSignIn) {
+        notif.notifySignInRequest(message.field0);
+      } else if (message is api.IdmsMessage_TeardownSignIn) {
+        await mcs.invokeMethod("apple-account-login", {
+          "txnid": message.field0.prevtxnid,
+        });
+      }
+      print("Got idms message");
       return;
     }
 

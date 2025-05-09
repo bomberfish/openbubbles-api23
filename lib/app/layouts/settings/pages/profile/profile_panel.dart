@@ -634,7 +634,7 @@ class _ProfilePanelState extends OptimizedState<ProfilePanel> with WidgetsBindin
                               valueColor: AlwaysStoppedAnimation<Color>(context.theme.colorScheme.primary),
                             )) : Icon(Icons.check, color: context.theme.colorScheme.outline))
                         ),
-                      if (!(accountInfo['can_pnr'] ?? true))
+                      if (!(accountInfo['can_pnr'] ?? true) && !kIsDesktop)
                         SettingsTile(
                           title: "Add your phone number",
                           onTap: () async {
@@ -642,6 +642,41 @@ class _ProfilePanelState extends OptimizedState<ProfilePanel> with WidgetsBindin
                           },
                           trailing: const NextButton(),
                           leading: Icon(Icons.add, color: context.theme.colorScheme.outline),
+                        ),
+                      if ((accountInfo['vetted_aliases'] as List<dynamic>? ?? []).any((a) => (a['Alias'] as String).isEmail))
+                        SettingsTile(
+                          title: "Get a verification code",
+                          onTap: () async {
+                            var code = await api.get2FaCode(state: pushService.state);
+                            await showDialog(
+                              context: context,
+                              builder: (_) {
+                                return AlertDialog(
+                                  actions: [
+                                    TextButton(
+                                      child: Text("OK", style: context.theme.textTheme.bodyLarge!.copyWith(color: context.theme.colorScheme.primary)),
+                                      onPressed: () async {
+                                        Get.back();
+                                      },
+                                    ),
+                                  ],
+                                  content: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Text("Use this code to log into your Apple Account on another device.", style: context.textTheme.bodyLarge,),
+                                      const SizedBox(height: 30,),
+                                      Text(code.toString().padLeft(6, '0'), style: context.textTheme.displaySmall?.copyWith(color: context.textTheme.bodyLarge?.color, letterSpacing: 20),),
+                                      const SizedBox(height: 30,),
+                                      Text("Do not share it with anyone. Apple will never call or text you for this code.", style: context.textTheme.bodyLarge,),
+                                    ],
+                                  ),
+                                  title: Text("Verification code", style: context.theme.textTheme.titleLarge),
+                                  backgroundColor: context.theme.colorScheme.properSurface,
+                                );
+                              }
+                          );
+                          },
+                          trailing: const NextButton(),
                         ),
                       if (!(accountInfo['login_status_message']?.contains("Subscription not active!") ?? false) && ss.settings.deviceIsHosted.value)
                         SettingsTile(

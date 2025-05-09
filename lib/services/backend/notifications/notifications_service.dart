@@ -25,7 +25,7 @@ import 'package:local_notifier/local_notifier.dart';
 import 'package:path/path.dart';
 import 'package:synchronized/synchronized.dart';
 import 'package:timezone/timezone.dart';
-import 'package:universal_html/html.dart' hide File, Platform, Navigator;
+import 'package:universal_html/html.dart' hide File, Platform, Navigator, Text;
 import 'package:universal_io/io.dart';
 import 'package:window_manager/window_manager.dart';
 import 'package:bluebubbles/src/rust/api/api.dart' as api;
@@ -39,6 +39,7 @@ class NotificationsService extends GetxService {
   static const String REMINDER_CHANNEL = "com.bluebubbles.reminders";
   static const String FACETIME_CHANNEL = "com.bluebubbles.incoming_facetimes";
   static const String FOREGROUND_SERVICE_CHANNEL = "com.bluebubbles.foreground_service";
+  static const String AUTH_CODES_CHANNEL = "com.bluebubbles.auth_codes";
 
   static const String NEW_MESSAGE_TAG = "com.bluebubbles.messaging.NEW_MESSAGE_NOTIFICATION";
   static const String NEW_FACETIME_TAG = "com.bluebubbles.messaging.NEW_FACETIME_NOTIFICATION";
@@ -106,6 +107,11 @@ class NotificationsService extends GetxService {
         FOREGROUND_SERVICE_CHANNEL,
         "Foreground Service",
         "Allows BlueBubbles to stay open in the background for notifications if FCM is not being used",
+      );
+      createNotificationChannel(
+        AUTH_CODES_CHANNEL, 
+        "Apple Account login requests", 
+        "Shows Apple Account login requests"
       );
     }
 
@@ -674,6 +680,118 @@ class NotificationsService extends GetxService {
           ),
         ),
       );
+    }
+  }
+
+  Future<void> notifySignInRequest(api.IdmsRequestedSignIn message) async {
+    var title = message.aps.alert.title.replaceAll("Apple ID", "Apple Account");
+    var subtitle = message.aps.alert.body.replaceAll("Apple ID", "Apple Account");
+    var request = await http.dio.get("https://nominatim.openstreetmap.org/reverse?lat=${message.akdata.lat}&lon=${message.akdata.lng}&format=jsonv2&zoom=10");
+
+    String text;
+    var address = request.data["address"];
+    if (address != null) {
+      String? city = address["city"];
+      if (city != null) {
+        String? state = address["state"]?.substring(0, 2).toUpperCase();
+        String? country = address["country_code"];
+        if (state != null) {
+          text = "$city, $state";
+        } else {
+          text = "$city, $country";
+        }
+      } else {
+        text = address["state"] ?? address["country"];
+      }
+    } else {
+      text = request.data["name"];
+    }
+    
+    subtitle = subtitle.replaceAll("%loc%", text);
+
+    if (kIsDesktop) {
+      await showDialog(
+          context: Get.context!,
+          barrierDismissible: false,
+          builder: (context) => AlertDialog(
+            backgroundColor: Get.theme.colorScheme.properSurface,
+            title: Text(title, style: Get.textTheme.titleLarge),
+            content: Text(
+              subtitle,
+              style: Get.textTheme.bodyLarge,
+            ),
+            actions: [
+              TextButton(
+                  onPressed: () {
+                    api.teardown2Fa(state: pushService.state, action: "albtn", txnid: message.txnid);
+                    Get.back();
+                  },
+                  child: Text(message.aps.alert.albtn, style: Get.textTheme.bodyLarge!.copyWith(color: Get.theme.colorScheme.primary))),
+              TextButton(
+                  onPressed: () async {
+                    api.teardown2Fa(state: pushService.state, action: "defbtn", txnid: message.txnid);
+                    Get.back();
+
+                    var code = await api.approveCircle(state: pushService.state, txnid: message.txnid);
+                    pushService.authing = true;
+                    var context = Get.context!;
+                    await showDialog(
+                              context: context,
+                              builder: (_) {
+                                return AlertDialog(
+                                  actions: [
+                                    TextButton(
+                                      child: Text("OK", style: context.theme.textTheme.bodyLarge!.copyWith(color: context.theme.colorScheme.primary)),
+                                      onPressed: () async {
+                                        Get.back();
+                                      },
+                                    ),
+                                  ],
+                                  content: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Text("Use this code to log into your Apple Account on another device.", style: context.textTheme.bodyLarge,),
+                                      const SizedBox(height: 30,),
+                                      Text(code.toString().padLeft(6, '0'), style: context.textTheme.displaySmall?.copyWith(color: context.textTheme.bodyLarge?.color, letterSpacing: 20),),
+                                      const SizedBox(height: 30,),
+                                      Text("Do not share it with anyone. Apple will never call or text you for this code.", style: context.textTheme.bodyLarge,),
+                                    ],
+                                  ),
+                                  title: Text("Verification code", style: context.theme.textTheme.titleLarge),
+                                  backgroundColor: context.theme.colorScheme.properSurface,
+                                );
+                              }
+                          );
+
+                    pushService.authing = false;
+                  },
+                  child: Text(message.aps.alert.defbtn, style: Get.textTheme.bodyLarge!.copyWith(color: Get.theme.colorScheme.primary)))
+            ],
+          ));
+
+      if (socketToast != null) return;
+      socketToast = LocalNotification(
+        title: title,
+        body: subtitle,
+        actions: [],
+      );
+
+      socketToast!.onClick = () async {
+        socketToast = null;
+        await windowManager.show();
+      };
+
+      await socketToast!.show();
+      return;
+    } else {
+      await mcs.invokeMethod("apple-account-login", {
+        "title": title,
+        "body": subtitle,
+        "txnid": message.txnid,
+        "defbtn": message.aps.alert.defbtn,
+        "albtn": message.aps.alert.albtn,
+        "sbdy": message.aps.alert.sbdy,
+      });
     }
   }
 

@@ -6,7 +6,7 @@ use rustpush::get_gateways_for_mccmnc;
 use tokio::{runtime::{Handle, Runtime}, sync::Mutex};
 
 use futures::FutureExt;
-use crate::{api::api::{decline_facetime, get_phase, new_push_state, recv_wait, set_status, PollResult, PushMessage, PushState, RegistrationPhase}, frb_generated::FLUTTER_RUST_BRIDGE_HANDLER, init_logger, RUNTIME};
+use crate::{api::api::{approve_circle, decline_facetime, get_2fa_code, get_phase, new_push_state, recv_wait, set_status, teardown_2fa, PollResult, PushMessage, PushState, RegistrationPhase}, frb_generated::FLUTTER_RUST_BRIDGE_HANDLER, init_logger, RUNTIME};
 
 #[derive(uniffi::Record)] 
 pub struct FileInfo {
@@ -34,6 +34,7 @@ pub static PACKAGER_LOCK: OnceLock<Arc<dyn KotlinFilePackager>> = OnceLock::new(
 pub trait MsgReceiver: Send + Sync + Debug {
     fn receieved_msg(&self, msg: u64, retry: u64);
     fn native_ready(&self, is_ready: bool, state: Arc<NativePushState>);
+    fn twofa_event(&self, success: bool);
 }
 
 #[uniffi::export(with_foreign)]
@@ -86,6 +87,11 @@ impl NativePushState {
                     Ok(yes) => {
                         match yes {
                             PollResult::Cont(Some(msg)) => {
+                                if let PushMessage::TwoFaAuthEvent(event) = &msg {
+                                    handler.twofa_event(*event);
+                                    continue;
+                                }
+
                                 let mut locked_messages = QUEUED_MESSAGES.lock().await;
                                 let key = locked_messages.0;
                                 locked_messages.1.insert(key, msg);
@@ -147,6 +153,28 @@ impl NativePushState {
                 warn!("Failed to decline facetime {e}");
             }
         });
+    }
+
+    pub fn teardown_2fa(&self, action: String, txnid: String) {
+        let state_ref = self.state.clone();
+        RUNTIME.spawn(async move {
+            if let Err(e) = teardown_2fa(&state_ref, action, txnid).await {
+                warn!("Failed to teardown 2fa {e}");
+            }
+        });
+    }
+
+    pub fn get_auth_code(&self, txnid: String) -> u32 {
+        let state_ref = self.state.clone();
+        RUNTIME.block_on(async move {
+            match approve_circle(&state_ref, txnid).await {
+                Ok(e) => e,
+                Err(e) => {
+                    warn!("Failed to get auth code {e}");
+                    0
+                }
+            }
+        })
     }
     
     pub fn publish_status(&self, guid: Option<String>) {
