@@ -733,6 +733,10 @@ class ChatCreatorState extends OptimizedState<ChatCreator> {
                         recorderController: null,
                         initialAttachments: widget.initialAttachments,
                         sendMessage: ({String? effect}) async {
+                          if (selectedContacts.isEmpty) {
+                            showSnackbar("Error!", "Choose a contact before sending this message!");
+                            return;
+                          }
                           if (addressController.text.trim() != "") {
                             showDialog(
                                 context: context,

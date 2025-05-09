@@ -105,7 +105,7 @@ class _SendAnimationState
       await outq.queue(OutgoingItem(type: QueueType.sendAttachment, chat: controller.chat, message: message, customArgs: {"audio": isAudioMessage}));
     }
 
-    if (annotations.string.isNotEmpty || subject.isNotEmpty) {
+    if (annotations.string.trim().isNotEmpty || subject.isNotEmpty) {
       var text = annotations.string;
       final _message = Message(
         text: text.isEmpty && subject.isNotEmpty ? subject : text,
