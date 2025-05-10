@@ -832,6 +832,18 @@ class _ErrorTextState extends CustomState<ErrorText, String, SetupViewController
                         b.add(end);
                         var total = b.toBytes();
 
+                        Map<String, dynamic> deviceInfo = {};
+
+                        var config = await api.getConfigState(state: pushService.state);
+                        if (config != null) {
+                          var info = await api.getDeviceInfo(config: config);
+                          deviceInfo = {
+                            "name": info.name,
+                            "serial": info.serial,
+                            "os_version": info.osVersion,
+                            "encoded_data": info.encodedData != null ? base64Encode(info.encodedData!) : ""
+                          };
+                        }
 
                         // stop stupid automatic cralwers from spamming the webhook
                         var url = dotenv.get('REPORT_ISSUE_WEBHOOK');
@@ -843,8 +855,9 @@ class _ErrorTextState extends CustomState<ErrorText, String, SetupViewController
                                 "content": "Desc: ${details.text}\nEmail: ${participantController.text}\nError: ${controller.error}\nHosted: ${ss.settings.deviceIsHosted.value}",
                                 "username": "Onboarding",
                                 "files[0]": MultipartFile.fromBytes(total, filename: "rustpush-logs.log"),
+                                "files[1]": MultipartFile.fromString(jsonEncode(deviceInfo), filename: "hardware.json"),
                                 if (attachment != null)
-                                "files[1]": MultipartFile.fromBytes(attachment!, filename: "screenshot.png")
+                                "files[2]": MultipartFile.fromBytes(attachment!, filename: "screenshot.png")
                               }),
                           );
 
@@ -866,7 +879,7 @@ class _ErrorTextState extends CustomState<ErrorText, String, SetupViewController
                     ),
                   ],
                   content: Column(children: [
-                    const Text("Logs will be sent to developer for review. Logs may contain personal identifiers and 48 hours of message and chat history. Do not submit logs containing sensitive chats or messages. Your logs will be shared with Discord for storage subject to their Privacy Policy."),
+                    const Text("Logs and Apple device identifiers will be sent to developer for review. Logs may contain personal identifiers and 48 hours of message and chat history. Do not submit logs containing sensitive chats or messages. Your logs will be shared with Discord for storage subject to their Privacy Policy."),
                     const SizedBox(height: 16,),
                     TextField(
                       controller: participantController,
