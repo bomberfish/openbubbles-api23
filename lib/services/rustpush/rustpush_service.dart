@@ -325,10 +325,10 @@ class RustPushBackend implements BackendService {
   }
   
 
-  void markFailedToLogin({bool hw = false}) async {
+  void markFailedToLogin({bool hw = false, bool logout = false}) async {
     Logger.error("markingfailed");
     if (usingRustPush) {
-      await pushService.reset(hw);
+      await pushService.reset(hw, logout);
     }
     ss.settings.finishedSetup.value = false;
     ss.saveSettings();
@@ -3405,8 +3405,8 @@ class RustPushService extends GetxService {
     Logger.info("finishInit");
   }
 
-  Future reset(bool hw) async {
-    await api.resetState(state: state, resetHw: hw);
+  Future reset(bool hw, bool logout) async {
+    await api.resetState(state: state, resetHw: hw, logout: logout);
   }
 
   Future configured() async {

@@ -1189,7 +1189,7 @@ class _SettingsPageState extends OptimizedState<SettingsPage> {
                                                     fs.deleteDB();
                                                     socket.forgetConnection();
                                                     if (usingRustPush) {
-                                                      await pushService.reset(false);
+                                                      await pushService.reset(false, true);
                                                     }
                                                     ss.settings = Settings();
                                                     await ss.settings.saveAsync();
@@ -1228,7 +1228,7 @@ class _SettingsPageState extends OptimizedState<SettingsPage> {
                                                     fs.deleteDB();
                                                     socket.forgetConnection();
                                                     if (usingRustPush) {
-                                                      await pushService.reset(true);
+                                                      await pushService.reset(true, true);
                                                     }
                                                     ss.settings = Settings();
                                                     await ss.settings.saveAsync();

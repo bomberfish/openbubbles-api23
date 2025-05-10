@@ -3901,6 +3901,7 @@ fn wire__crate__api__api__reset_state_impl(
                 flutter_rust_bridge::for_generated::RustAutoOpaqueInner<Arc<PushState>>,
             >>::sse_decode(&mut deserializer);
             let api_reset_hw = <bool>::sse_decode(&mut deserializer);
+            let api_logout = <bool>::sse_decode(&mut deserializer);
             deserializer.end();
             move |context| async move {
                 transform_result_sse::<_, flutter_rust_bridge::for_generated::anyhow::Error>(
@@ -3922,8 +3923,12 @@ fn wire__crate__api__api__reset_state_impl(
                             }
                         }
                         let api_state_guard = api_state_guard.unwrap();
-                        let output_ok =
-                            crate::api::api::reset_state(&*api_state_guard, api_reset_hw).await?;
+                        let output_ok = crate::api::api::reset_state(
+                            &*api_state_guard,
+                            api_reset_hw,
+                            api_logout,
+                        )
+                        .await?;
                         Ok(output_ok)
                     })()
                     .await,

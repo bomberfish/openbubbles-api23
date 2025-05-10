@@ -300,7 +300,9 @@ abstract class RustLibApi extends BaseApi {
   Future<void> crateApiApiResetChannelKeys({required ArcPushState state});
 
   Future<void> crateApiApiResetState(
-      {required ArcPushState state, required bool resetHw});
+      {required ArcPushState state,
+      required bool resetHw,
+      required bool logout});
 
   Future<Attachment> crateApiApiRestoreAttachment({required String data});
 
@@ -2457,13 +2459,16 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @override
   Future<void> crateApiApiResetState(
-      {required ArcPushState state, required bool resetHw}) {
+      {required ArcPushState state,
+      required bool resetHw,
+      required bool logout}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
             state, serializer);
         sse_encode_bool(resetHw, serializer);
+        sse_encode_bool(logout, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
             funcId: 74, port: port_);
       },
@@ -2472,14 +2477,14 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         decodeErrorData: sse_decode_AnyhowException,
       ),
       constMeta: kCrateApiApiResetStateConstMeta,
-      argValues: [state, resetHw],
+      argValues: [state, resetHw, logout],
       apiImpl: this,
     ));
   }
 
   TaskConstMeta get kCrateApiApiResetStateConstMeta => const TaskConstMeta(
         debugName: "reset_state",
-        argNames: ["state", "resetHw"],
+        argNames: ["state", "resetHw", "logout"],
       );
 
   @override

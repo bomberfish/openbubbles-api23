@@ -417,8 +417,12 @@ Future<List<String>> validateCert(
         {required ArcPushState state, required IdsUser user}) =>
     RustLib.instance.api.crateApiApiValidateCert(state: state, user: user);
 
-Future<void> resetState({required ArcPushState state, required bool resetHw}) =>
-    RustLib.instance.api.crateApiApiResetState(state: state, resetHw: resetHw);
+Future<void> resetState(
+        {required ArcPushState state,
+        required bool resetHw,
+        required bool logout}) =>
+    RustLib.instance.api
+        .crateApiApiResetState(state: state, resetHw: resetHw, logout: logout);
 
 Future<void> invalidateIdCache({required ArcPushState state}) =>
     RustLib.instance.api.crateApiApiInvalidateIdCache(state: state);

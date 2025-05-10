@@ -391,7 +391,7 @@ async fn restore(curr_state: &PushState) {
 
         if state.postdata_done.is_none() {
             info!("Updating postdata");
-            let _ = apple_account.update_postdata("Apple Device").await;
+            let _ = apple_account.update_postdata("Apple Device", None, &["icloud", "imessage", "facetime"]).await;
             state.postdata_done = Some(true);
             plist::to_file_xml(inner.conf_dir.join("gsa.plist"), &state).unwrap();
         }
@@ -1578,7 +1578,7 @@ struct GSAConfig {
 }
 
 async fn do_login(conf_dir: &Path, account: &mut AppleAccount<DefaultAnisetteProvider>, cookie: Option<&str>, anisette: &ArcAnisetteClient<DefaultAnisetteProvider>, os_config: &dyn OSConfig) -> anyhow::Result<IDSUser> {
-    account.update_postdata("Apple Device").await?;
+    account.update_postdata("Apple Device", None, &["icloud", "imessage", "facetime"]).await?;
     
     let Some(pet) = account.get_pet() else { return Err(anyhow!("No pet!")) };
     let Some(spd) = &account.spd else { return Err(anyhow!("No spd!")) };
@@ -1746,7 +1746,7 @@ pub async fn validate_cert(state: &Arc<PushState>, user: &IDSUser) -> anyhow::Re
     x
 }
 
-pub async fn reset_state(state: &Arc<PushState>, reset_hw: bool) -> anyhow::Result<()> {
+pub async fn reset_state(state: &Arc<PushState>, reset_hw: bool, logout: bool) -> anyhow::Result<()> {
     // tell any poll to stop
     let inner = state.0.read().await;
     if let Some(cancel) = inner.cancel_poll.lock().await.take() {
@@ -1770,6 +1770,11 @@ pub async fn reset_state(state: &Arc<PushState>, reset_hw: bool) -> anyhow::Resu
     // try deregistering from iMessage, but if it fails we don't really care
     let _ = register(inner.os_config.as_deref().unwrap(), &*conn_state.state.read().await, &[], &mut [], inner.identity.as_ref().unwrap()).await;
     info!("c");
+    if logout {
+        if let Some(account) = &inner.account {
+            let _ = account.lock().await.logout_all("Apple Device").await;
+        }
+    }
     inner.account = None;
     let _ = std::fs::remove_file(inner.conf_dir.join("id.plist"));
     let _ = std::fs::remove_file(inner.conf_dir.join("findmy.plist"));
