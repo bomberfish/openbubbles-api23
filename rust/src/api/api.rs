@@ -1246,20 +1246,33 @@ async fn handle_circle(state: &InnerPushState, signin: &Option<IdmsRequestedSign
 }
 
 pub async fn approve_circle(state: &Arc<PushState>, txnid: String) -> anyhow::Result<u32> {
-    let state = state.0.read().await;
-    let mut circle_lock = state.idms_circle_sessions.lock().await;
+    let state_lock = state.0.read().await;
+    let mut circle_lock = state_lock.idms_circle_sessions.lock().await;
     let Some(item) = circle_lock.iter_mut().find(|a| a.txnid == txnid) else {
-        let account = state.account.as_ref().ok_or(anyhow!("No apple account!")).unwrap().lock().await;
+        let account = state_lock.account.as_ref().ok_or(anyhow!("No apple account!")).unwrap().lock().await;
         let code = account.anisette.lock().await.provider.get_2fa_code().await?;
         return Ok(code);
     };
     let Some(msg) = item.init_message.take() else {
         return Err(anyhow!("Idms init message missing for approve!"));
     };
-    if let Err(e) = item.session.handle_circle_request(&msg).await {
-        return Err(anyhow!("circle error {e}"));
-    }
-    Ok(item.otp)
+    let otp = item.otp;
+    drop(circle_lock);
+    drop(state_lock);
+    let state_ref = state.clone();
+    RUNTIME.spawn(async move {
+        let state = state_ref.0.read().await;
+        let mut circle_lock = state.idms_circle_sessions.lock().await;
+        let Some(item) = circle_lock.iter_mut().find(|a| a.txnid == txnid) else {
+            warn!("Session disappeared??");
+            return
+        };
+        if let Err(e) = item.session.handle_circle_request(&msg).await {
+            warn!("cirlce error {e}");
+            return;
+        }
+    });
+    Ok(otp)
 }
 
 pub async fn recv_wait(state: &Arc<PushState>) -> PollResult {
