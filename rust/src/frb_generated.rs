@@ -5960,6 +5960,7 @@ const _: fn() = || {
         let _: crate::api::api::ApsData = IdmsRequestedSignIn.aps;
         let _: String = IdmsRequestedSignIn.txnid;
         let _: crate::api::api::AkData = IdmsRequestedSignIn.akdata;
+        let _: String = IdmsRequestedSignIn.adsid;
     }
     {
         let IndexedMessagePart = None::<crate::api::api::IndexedMessagePart>.unwrap();
@@ -7699,10 +7700,12 @@ impl SseDecode for crate::api::api::IdmsRequestedSignIn {
         let mut var_aps = <crate::api::api::ApsData>::sse_decode(deserializer);
         let mut var_txnid = <String>::sse_decode(deserializer);
         let mut var_akdata = <crate::api::api::AkData>::sse_decode(deserializer);
+        let mut var_adsid = <String>::sse_decode(deserializer);
         return crate::api::api::IdmsRequestedSignIn {
             aps: var_aps,
             txnid: var_txnid,
             akdata: var_akdata,
+            adsid: var_adsid,
         };
     }
 }
@@ -11377,6 +11380,7 @@ impl flutter_rust_bridge::IntoDart for FrbWrapper<crate::api::api::IdmsRequested
             self.0.aps.into_into_dart().into_dart(),
             self.0.txnid.into_into_dart().into_dart(),
             self.0.akdata.into_into_dart().into_dart(),
+            self.0.adsid.into_into_dart().into_dart(),
         ]
         .into_dart()
     }
@@ -14213,6 +14217,7 @@ impl SseEncode for crate::api::api::IdmsRequestedSignIn {
         <crate::api::api::ApsData>::sse_encode(self.aps, serializer);
         <String>::sse_encode(self.txnid, serializer);
         <crate::api::api::AkData>::sse_encode(self.akdata, serializer);
+        <String>::sse_encode(self.adsid, serializer);
     }
 }
 

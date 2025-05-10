@@ -1159,6 +1159,31 @@ pub enum PollResult {
     Cont(Option<PushMessage>),
 }
 
+// returns false to skip the message because our adsid is wrong
+async fn handle_2fa(state: &InnerPushState, signin: &IdmsRequestedSignIn) -> bool {
+    let Some(account) = state.account.clone() else {
+        warn!("Ignoring circle message for no account!");
+        return false;
+    };
+
+    let mut lock = account.lock().await;
+    if lock.spd.is_none() {
+        // trigger gsa flow
+        lock.get_token("com.apple.gs.idms.pet").await;
+        if lock.spd.is_none() {
+            warn!("Dropping message because GSA flow failed!");
+            return false;
+        }
+    }
+    let adsid = lock.spd.as_ref().unwrap().get("adsid").expect("no adsid???s").as_string().unwrap();
+    if adsid != &signin.adsid {
+        warn!("Dropping 2fa code for account because adsid is wrong {adsid} {}", signin.adsid);
+        return false;
+    }
+    drop(lock);
+    true
+}
+
 async fn handle_circle(state: &InnerPushState, signin: &Option<IdmsRequestedSignIn>, msg: &IdmsCircleMessage) {
     let mut circle_lock = state.idms_circle_sessions.lock().await;
     if !circle_lock.iter().any(|a| a.atxnid == msg.atxnid) {
@@ -1177,6 +1202,10 @@ async fn handle_circle(state: &InnerPushState, signin: &Option<IdmsRequestedSign
         if lock.spd.is_none() {
             // trigger gsa flow
             lock.get_token("com.apple.gs.idms.pet").await;
+            if lock.spd.is_none() {
+                warn!("Dropping message because GSA flow failed!");
+                return;
+            }
         }
         let dsid = lock.spd.as_ref().unwrap().get("DsPrsId").expect("no dsid???s").as_unsigned_integer().unwrap();
         drop(lock);
@@ -1264,12 +1293,19 @@ pub async fn recv_wait(state: &Arc<PushState>) -> PollResult {
                     },
                     Ok(None) => {},
                     Ok(Some(IdmsMessage::CircleRequest(circle, req))) => {
+                        if let Some(req) = &req {
+                            if !handle_2fa(&*recv_path, req).await { return PollResult::Cont(None) }
+                        }
                         debug!("Circle here");
                         handle_circle(&*recv_path, &req, &circle).await;
                         if let Some(req) = req {
                             return PollResult::Cont(Some(PushMessage::Idms(IdmsMessage::RequestedSignIn(req))))
                         }
-                    }
+                    },
+                    Ok(Some(IdmsMessage::RequestedSignIn(s))) => {
+                        if !handle_2fa(&*recv_path, &s).await { return PollResult::Cont(None) }
+                        return PollResult::Cont(Some(PushMessage::Idms(IdmsMessage::RequestedSignIn(s))))
+                    },
                     Ok(Some(msg)) => {
                         return PollResult::Cont(Some(PushMessage::Idms(msg)))
                     }

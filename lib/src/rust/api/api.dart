@@ -9,7 +9,7 @@ import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 import 'package:freezed_annotation/freezed_annotation.dart' hide protected;
 part 'api.freezed.dart';
 
-// These functions are ignored because they are not marked as `pub`: `config`, `do_login`, `get_login_config`, `get_phase`, `handle_circle`, `handle_photostream`, `plist_to_bin`, `plist_to_buf`, `plist_to_string`, `restore`, `setup_push`, `shared_items`, `subscribe_streams`, `wrap_sink`
+// These functions are ignored because they are not marked as `pub`: `config`, `do_login`, `get_login_config`, `get_phase`, `handle_2fa`, `handle_circle`, `handle_photostream`, `plist_to_bin`, `plist_to_buf`, `plist_to_string`, `restore`, `setup_push`, `shared_items`, `subscribe_streams`, `wrap_sink`
 // These types are ignored because they are not used by any `pub` functions: `ActiveCircleSession`, `FLUTTER_RUST_BRIDGE_HANDLER`, `GSAConfig`, `InnerPushState`, `NSArrayClass`, `NSArrayIconArray`, `NSArrayImageArray`, `SavedHardwareState`
 // These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `deref`, `deref`, `eq`, `fmt`, `get_files`, `initialize`, `spawn`
 
@@ -1519,15 +1519,18 @@ class IdmsRequestedSignIn {
   final ApsData aps;
   final String txnid;
   final AkData akdata;
+  final String adsid;
 
   const IdmsRequestedSignIn({
     required this.aps,
     required this.txnid,
     required this.akdata,
+    required this.adsid,
   });
 
   @override
-  int get hashCode => aps.hashCode ^ txnid.hashCode ^ akdata.hashCode;
+  int get hashCode =>
+      aps.hashCode ^ txnid.hashCode ^ akdata.hashCode ^ adsid.hashCode;
 
   @override
   bool operator ==(Object other) =>
@@ -1536,7 +1539,8 @@ class IdmsRequestedSignIn {
           runtimeType == other.runtimeType &&
           aps == other.aps &&
           txnid == other.txnid &&
-          akdata == other.akdata;
+          akdata == other.akdata &&
+          adsid == other.adsid;
 }
 
 class IndexedMessagePart {

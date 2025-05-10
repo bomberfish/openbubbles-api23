@@ -4749,12 +4749,13 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   IdmsRequestedSignIn dco_decode_idms_requested_sign_in(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     final arr = raw as List<dynamic>;
-    if (arr.length != 3)
-      throw Exception('unexpected arr length: expect 3 but see ${arr.length}');
+    if (arr.length != 4)
+      throw Exception('unexpected arr length: expect 4 but see ${arr.length}');
     return IdmsRequestedSignIn(
       aps: dco_decode_aps_data(arr[0]),
       txnid: dco_decode_String(arr[1]),
       akdata: dco_decode_ak_data(arr[2]),
+      adsid: dco_decode_String(arr[3]),
     );
   }
 
@@ -8142,8 +8143,9 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     var var_aps = sse_decode_aps_data(deserializer);
     var var_txnid = sse_decode_String(deserializer);
     var var_akdata = sse_decode_ak_data(deserializer);
+    var var_adsid = sse_decode_String(deserializer);
     return IdmsRequestedSignIn(
-        aps: var_aps, txnid: var_txnid, akdata: var_akdata);
+        aps: var_aps, txnid: var_txnid, akdata: var_akdata, adsid: var_adsid);
   }
 
   @protected
@@ -11766,6 +11768,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     sse_encode_aps_data(self.aps, serializer);
     sse_encode_String(self.txnid, serializer);
     sse_encode_ak_data(self.akdata, serializer);
+    sse_encode_String(self.adsid, serializer);
   }
 
   @protected

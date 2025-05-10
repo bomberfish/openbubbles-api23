@@ -160,6 +160,7 @@ pub struct DartIdmsRequestedSignIn {
     pub aps: ApsData,
     pub txnid: String,
     pub akdata: AkData,
+    pub adsid: String,
 }
 
 #[frb(mirror(TeardownSignIn))]
