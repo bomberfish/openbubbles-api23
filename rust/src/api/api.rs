@@ -1379,12 +1379,12 @@ pub async fn send(state: &Arc<PushState>, mut msg: MessageInst) -> anyhow::Resul
     if !matches!(state.get_phase().await, RegistrationPhase::Registered) {
         panic!("Wrong phase! (send)")
     }
-    println!("sending_1");
+    info!("sending_1 {msg}");
     let state_cpy = state.clone();
     let inner = state.0.read().await;
-    println!("sending_2");
+    info!("sending_2");
     let result = inner.client.as_ref().unwrap().send(&mut msg).await?;
-    println!("send_finish");
+    info!("send_finish");
 
     if let Some(handle) = result.handle {
         let uuid = msg.id.clone();

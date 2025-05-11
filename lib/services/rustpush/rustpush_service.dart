@@ -2591,6 +2591,9 @@ class RustPushService extends GetxService {
       }
       if (state is api.RegisterState_Failed && !notifiedFailed) {
         notif.createRegisterFailed(state.retryWait == null);
+        if (state.retryWait == null) {
+          (backend as RustPushBackend).markFailedToLogin(hw: false);
+        }
         notifiedFailed = true;
       }
       return;
