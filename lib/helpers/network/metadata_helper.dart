@@ -118,8 +118,9 @@ class MetadataHelper {
       meta.title = 'Invalid SSL Certificate';
       meta.description = ex.message;
     } catch (ex, stack) {
-      meta.title = ex.toString();
+      // meta.title = ex.toString();
       Logger.error('Failed to manually get metadata!', error: ex, trace: stack);
+      rethrow;
     }
 
     return meta;
