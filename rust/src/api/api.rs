@@ -179,14 +179,15 @@ pub struct InnerPushState {
     pub conf_dir: PathBuf,
     pub os_config: Option<JoinedOSConfig>,
     pub account: Option<Arc<Mutex<AppleAccount<DefaultAnisetteProvider>>>>,
-    pub cancel_poll: Mutex<Option<Sender<()>>>,
+    pub cancel_poll: mpsc::Sender<()>,
     pub identity: Option<IDSNGMIdentity>,
     pub local_messages: Mutex<mpsc::Receiver<PushMessage>>,
     pub local_broadcast: mpsc::Sender<PushMessage>,
     pub reg_state: Option<Mutex<watch::Receiver<ResourceState>>>,
+    pub cancel_poll_recv: Mutex<mpsc::Receiver<()>>,
 }
 
-struct ActiveCircleSession {
+pub struct ActiveCircleSession {
     session: CircleServerSession<DefaultAnisetteProvider>,
     atxnid: String,
     txnid: String,
@@ -201,6 +202,7 @@ pub async fn new_push_state(dir: String) -> Arc<PushState> {
     let dir = PathBuf::from_str(&dir).unwrap();
     init_logger(&dir);
     let (sender, recv) = mpsc::channel(999);
+    let (cancel_send, cancel_recv) = mpsc::channel(1);
     // flutter_rust_bridge::setup_default_user_utils();
     let state = PushState(RwLock::new(InnerPushState {
         anisette: None,
@@ -217,12 +219,13 @@ pub async fn new_push_state(dir: String) -> Arc<PushState> {
         conf_dir: dir,
         os_config: None,
         account: None,
-        cancel_poll: Mutex::new(None),
+        cancel_poll: cancel_send,
         identity: None,
         local_broadcast: sender,
         local_messages: Mutex::new(recv),
         idms_client: None,
         idms_circle_sessions: Mutex::new(vec![]),
+        cancel_poll_recv: Mutex::new(cancel_recv),
     }));
     restore(&state).await;
     Arc::new(state)
@@ -373,6 +376,10 @@ async fn restore(curr_state: &PushState) {
             println!("updated keys!!!");
             std::fs::write(&id_path, plist_to_string(&updated_keys).unwrap()).unwrap();
         })).await);
+
+    if let Ok(mut lock) = inner.cancel_poll_recv.try_lock() {
+        let _ = lock.try_recv();
+    }
     
     if needs_rereg {
         // mark rereg
@@ -515,6 +522,10 @@ pub async fn register_ids(state: &Arc<PushState>, users: &Vec<IDSUser>) -> anyho
     inner.client = Some(IMClient::new(conn_state, users, inner.identity.clone().unwrap(), &[&MADRID_SERVICE, &MULTIPLEX_SERVICE, &FACETIME_SERVICE, &VIDEO_SERVICE], inner.conf_dir.join("id_cache.plist"), inner.os_config.as_ref().unwrap().config(), Box::new(move |updated_keys| {
         std::fs::write(&id_path, plist_to_string(&updated_keys).unwrap()).unwrap();
     })).await);
+
+    if let Ok(mut lock) = inner.cancel_poll_recv.try_lock() {
+        let _ = lock.try_recv();
+    }
 
     inner.reg_state = Some(Mutex::new(inner.client.as_ref().unwrap().identity.resource_state.subscribe()));
 
@@ -1276,13 +1287,15 @@ pub async fn approve_circle(state: &Arc<PushState>, txnid: String) -> anyhow::Re
 }
 
 pub async fn recv_wait(state: &Arc<PushState>) -> PollResult {
+    let recv_path = state.0.read().await;
+    let mut cancel_recv = recv_path.cancel_poll_recv.lock().await;
+    if cancel_recv.try_recv().is_ok() {
+        return PollResult::Stop;
+    }
     if !matches!(state.get_phase().await, RegistrationPhase::Registered) {
         panic!("Wrong phase! (recv_wait)")
     }
-    let (send, recv) = oneshot::channel();
-    let recv_path = state.0.read().await;
     let mut local_lock = recv_path.local_messages.lock().await;
-    *recv_path.cancel_poll.lock().await = Some(send);
     let mut inq_lock = recv_path.inq_queue.as_ref().unwrap().lock().await;
     let mut reg_state = recv_path.reg_state.as_ref().unwrap().lock().await;
     select! {
@@ -1347,7 +1360,6 @@ pub async fn recv_wait(state: &Arc<PushState>) -> PollResult {
                 }
             }
             let msg = recv_path.client.as_ref().expect("no client??/").handle(msg).await;
-            *recv_path.cancel_poll.lock().await = None;
             let msg = match msg {
                 Ok(Some(msg)) => Some(PushMessage::IMessage(msg)),
                 Ok(None) => None,
@@ -1363,13 +1375,14 @@ pub async fn recv_wait(state: &Arc<PushState>) -> PollResult {
             drop(inq_lock);
             drop(reg_state);
             drop(local_lock);
+            drop(cancel_recv);
             drop(recv_path);
             PollResult::Cont(Some(PushMessage::RegistrationState(get_regstate(state).await.unwrap())))
         }
         reader = local_lock.recv() => {
             PollResult::Cont(Some(reader.unwrap()))
         },
-        _cancel = recv => {
+        _cancel = cancel_recv.recv() => {
             PollResult::Stop
         }
     }
@@ -1798,9 +1811,7 @@ pub async fn validate_cert(state: &Arc<PushState>, user: &IDSUser) -> anyhow::Re
 pub async fn reset_state(state: &Arc<PushState>, reset_hw: bool, logout: bool) -> anyhow::Result<()> {
     // tell any poll to stop
     let inner = state.0.read().await;
-    if let Some(cancel) = inner.cancel_poll.lock().await.take() {
-        cancel.send(()).unwrap();
-    }
+    let _ = inner.cancel_poll.try_send(());
     drop(inner);
     let mut inner = state.0.write().await;
     info!("a");

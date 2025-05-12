@@ -161,7 +161,8 @@ class ActionHandler extends GetxService {
   Future<void> sendMessage(Chat c, Message m, Message? selected, String? r) async {
     final completer = Completer<void>();
     if (r == null) {
-      backend.sendMessage(c, m).then((newMessage) async {
+      // timeout here, don't timeout attachments, because attachments can go on forever
+      backend.sendMessage(c, m).timeout(const Duration(minutes: 5)).then((newMessage) async {
         try {
           await matchMessageWithExisting(c, m.guid!, newMessage, existing: m);
         } catch (ex) {
@@ -182,7 +183,7 @@ class ActionHandler extends GetxService {
         completer.completeError(error);
       });
     } else {
-      backend.sendTapback(c, selected!, r, m.associatedMessagePart).then((newMessage) async {
+      backend.sendTapback(c, selected!, r, m.associatedMessagePart).timeout(const Duration(minutes: 5)).then((newMessage) async {
         try {
           await matchMessageWithExisting(c, m.guid!, newMessage, existing: m);
         } catch (ex) {

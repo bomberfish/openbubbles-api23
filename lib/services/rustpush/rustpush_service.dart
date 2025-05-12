@@ -783,7 +783,7 @@ class RustPushBackend implements BackendService {
     api.LinkMeta? linkMeta;
     try {
       if (m.fullText.replaceAll("\n", " ").hasUrl && !MetadataHelper.mapIsNotEmpty(m.metadata) && !m.hasApplePayloadData) {
-        var metadata = await MetadataHelper.fetchMetadata(m);
+        var metadata = await MetadataHelper.fetchMetadata(m).timeout(const Duration(seconds: 15));
         
         if (MetadataHelper.isNotEmpty(metadata)) {
           m.metadata = metadata!.toJson();
@@ -795,7 +795,7 @@ class RustPushBackend implements BackendService {
 
           var uri = Uri.parse(m.url!).replace(path: "/favicon.ico");
           var iconUrl = uri.toString();
-          final response = await http.dio.get(iconUrl, options: Options(responseType: ResponseType.bytes));
+          final response = await http.dio.get(iconUrl, options: Options(responseType: ResponseType.bytes, receiveTimeout: const Duration(seconds: 15)));
           if (response.statusCode == 200) {
             var contentType = response.headers.value('content-type')!;
             // some sites don't send favicons for the favicon
@@ -811,7 +811,7 @@ class RustPushBackend implements BackendService {
           if (metadata.image != null) {
             imagemeta = api.LPImageMetadata(size: "{0, 0}", url: api.NSURL(base: "\$null", relative: metadata.image!), version: 1);
 
-            final response = await http.dio.get(metadata.image!, options: Options(responseType: ResponseType.bytes));
+            final response = await http.dio.get(metadata.image!, options: Options(responseType: ResponseType.bytes, receiveTimeout: const Duration(seconds: 15)));
             var contentType = response.headers.value('content-type')!;
 
             image = api.RichLinkImageAttachmentSubstitute(mimeType: contentType, richLinkImageAttachmentSubstituteIndex: BigInt.from(attachments.length));
