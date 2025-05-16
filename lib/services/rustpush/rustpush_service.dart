@@ -2704,7 +2704,8 @@ class RustPushService extends GetxService {
     if (myMsg.message is api.Message_Error) {
       var message = myMsg.message as api.Message_Error;
       var mistakeFor = Message.findOne(guid: message.field0.forUuid);
-      if (mistakeFor == null) return; // multiple errors will likely come in, at which point guid will be bad.
+      // if we've been delivered, well :shrug: probably some stray device complaining 
+      if (mistakeFor == null || mistakeFor.isDelivered) return; // multiple errors will likely come in, at which point guid will be bad.
       // do not flag 300 error messages for self handles
       var myHandles = (await api.getHandles(state: pushService.state));
       if (!myHandles.contains(myMsg.sender)) return;

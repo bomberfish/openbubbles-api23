@@ -10,6 +10,7 @@ import 'package:bluebubbles/app/layouts/conversation_view/widgets/message/misc/t
 import 'package:bluebubbles/app/wrappers/stateful_boilerplate.dart';
 import 'package:bluebubbles/helpers/helpers.dart';
 import 'package:bluebubbles/database/models.dart';
+import 'package:bluebubbles/services/rustpush/rustpush_service.dart';
 import 'package:bluebubbles/services/services.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
@@ -99,6 +100,7 @@ class _SendAnimationState
         expressiveSendStyleId: effectId,
         payloadData: payload,
         balloonBundleId: payload?.bundleId,
+        stagingGuid: payload != null ? uuid.v4().toUpperCase() : null,
       );
       message.generateTempGuid();
       message.attachments.first!.guid = message.guid;

@@ -1671,7 +1671,7 @@ async fn do_login(conf_dir: &Path, account: &mut AppleAccount<DefaultAnisettePro
         let id_path = conf_dir.join("findmy.plist");
         std::fs::write(id_path, plist_to_string(&findmy).unwrap()).unwrap();
     } else {
-        return Err(anyhow!("missing findmy tokens!"));
+        warn!("missing findmy tokens!");
     }
 
     let shared_streams = SharedStreamsState::new(dsid.clone(), &mobileme);
@@ -1679,7 +1679,7 @@ async fn do_login(conf_dir: &Path, account: &mut AppleAccount<DefaultAnisettePro
         let id_path = conf_dir.join("sharedstreams.plist");
         std::fs::write(id_path, plist_to_string(&shared_streams).unwrap()).unwrap(); 
     } else {
-        return Err(anyhow!("missing shared streams tokens!"));
+        warn!("missing shared streams tokens!");
     }
 
     let cloudkitstate = CloudKitState::new(dsid.clone(), &mobileme);
@@ -1687,7 +1687,7 @@ async fn do_login(conf_dir: &Path, account: &mut AppleAccount<DefaultAnisettePro
         let id_path = conf_dir.join("cloudkit.plist");
         std::fs::write(id_path, plist_to_string(&cloudkitstate).unwrap()).unwrap();
     } else {
-        return Err(anyhow!("Missing cloudkit tokens!"));
+        warn!("missing cloudkit tokens!");
     }
 
     debug!("Spd finish parse");

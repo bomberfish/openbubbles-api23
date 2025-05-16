@@ -69,6 +69,8 @@ class CreateIncomingMessageNotification: MethodCallHandlerImpl() {
             notificationManager.cancel(Constants.newMessageNotificationTag, notificationId)
         }
 
+        PushShareTargetsHandler().pushShareTarget(context, chatTitle, chatGuid, chatIcon)
+
         val channelId = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             val channelId = if (notifyAnyways) {
                 "com.bluebubbles.new_messages.$chatGuid.notify_anyways"
@@ -110,7 +112,6 @@ class CreateIncomingMessageNotification: MethodCallHandlerImpl() {
             }
             .setImportant(true)
             .build()
-        PushShareTargetsHandler().pushShareTarget(context, chatTitle, chatGuid, chatIcon)
 
         // get or create a messaging style
         val style = if (chatNotification != null) NotificationCompat.MessagingStyle.extractMessagingStyleFromNotification(chatNotification.notification)!! else NotificationCompat.MessagingStyle(Person.Builder().setName("You").build())
