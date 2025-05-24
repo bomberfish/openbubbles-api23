@@ -4,7 +4,9 @@
     package="com.bluebubbles.messaging">
 
     <queries>
-        <package android:name="com.example.openbubblesextension" />
+        <intent>
+            <action android:name="com.openbubbles.messaging.MadridExtensionService" />
+        </intent>
     </queries>
 
     <!--
