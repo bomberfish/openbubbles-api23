@@ -169,11 +169,12 @@ packages:
   audio_waveforms:
     dependency: "direct main"
     description:
-      name: audio_waveforms
-      sha256: "9fbd314cd4f67e8964df960548ea3b56f829716879527caafb8f3d76ee7e6bf0"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.1.1"
+      path: "."
+      ref: main
+      resolved-ref: e0914b2705631b4a7869b0acf18d4fe028b60d23
+      url: "https://github.com/SimformSolutionsPvtLtd/audio_waveforms"
+    source: git
+    version: "2.0.0"
   auto_size_text:
     dependency: "direct main"
     description:

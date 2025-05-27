@@ -103,8 +103,10 @@ class _TextFieldSuffixState extends OptimizedState<TextFieldSuffix> {
                       return;
                     }
                     await widget.recorderController!.record(
-                      sampleRate: 44100,
-                      bitRate: 320000,
+                      recorderSettings: const RecorderSettings(
+                        sampleRate: 44100,
+                        bitRate: 320000,
+                      )
                     );
                   } else {
                     late final String? path;
