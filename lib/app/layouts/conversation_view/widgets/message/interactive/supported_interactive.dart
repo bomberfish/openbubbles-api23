@@ -66,6 +66,7 @@ class _SupportedInteractiveState extends OptimizedState<SupportedInteractive> wi
         height: 250,
         child: forcedDead ? const SizedBox.shrink() : RepaintBoundary(
           child: AndroidView(
+            key: ValueKey(data.toString()),
           viewType: "extension-live",
           layoutDirection: TextDirection.ltr,
           creationParams: data,
