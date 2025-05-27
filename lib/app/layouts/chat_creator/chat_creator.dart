@@ -80,6 +80,13 @@ class ChatCreatorState extends OptimizedState<ChatCreator> {
   void initState() {
     super.initState();
 
+    // submit when they go to write a message
+    messageNode.addListener(() {
+      if (messageNode.hasFocus && addressController.text.trim() != "") {
+        addressOnSubmitted();
+      }
+    });
+
     addressController.addListener(() {
       _debounce?.cancel();
       Logger.debug("right app");
