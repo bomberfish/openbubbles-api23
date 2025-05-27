@@ -113,10 +113,12 @@ class _PickedAttachmentsHolderState extends OptimizedState<PickedAttachmentsHold
                     color: iOS ? context.theme.colorScheme.properSurface : null,
                     child: Stack(
                     children: [
-                      SupportedInteractive(
-                        data: appData, 
-                        content: widget.controller!.pickedApp.value!.$1,
-                        guid: null,
+                      AbsorbPointer(
+                        child: SupportedInteractive(
+                          data: appData, 
+                          content: widget.controller!.pickedApp.value!.$1,
+                          guid: null,
+                        ),
                       ),
                       if (appData.icon != null && widget.controller!.pickedApp.value!.$1 != null)
                         Positioned(
