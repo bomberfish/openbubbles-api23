@@ -163,7 +163,7 @@ class _AppleIdLoginState extends OptimizedState<AppleIdLogin> {
                                         Align(
                                           alignment: Alignment.center,
                                           child: Text(
-                                            "Warning: OpenBubbles is not an officially supported Apple product.\n\n${RustPushBBUtils.modelToUser(devInfo.name)}\nS/N: ${devInfo.serial}\nmacOS ${devInfo.osVersion}",
+                                            "Warning: Do not contact Apple support for help with OpenBubbles. For assistance, join our Discord from our website.\n\n${RustPushBBUtils.modelToUser(devInfo.name)}\nS/N: ${devInfo.serial}\nmacOS ${devInfo.osVersion}",
                                             textAlign: TextAlign.center,
                                             style: Get.textTheme.bodySmall,
                                           )
