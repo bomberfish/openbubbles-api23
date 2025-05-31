@@ -118,6 +118,7 @@ class ExtensionService extends GetxService {
     var payload = data.payloadData!.appData![0];
     var myMap = payload.toNative(null);
     myMap["messageGuid"] = data.guid;
+    myMap["userCount"] = data.chat.target!.participants.length + 1;
     await mcs.invokeMethod("extension-template-tap", myMap);
   }
 
@@ -164,7 +165,17 @@ class ExtensionService extends GetxService {
 
     var old = Message.findOne(guid: args["messageGuid"])!;
 
-    var message = await backend.updateMessage(old.chat.target!, old, payload);
+    PlatformFile? file;
+    if (args["imageBase64"] != null) {
+      var decoded = base64Decode(args["imageBase64"]);
+      file = PlatformFile(
+        name: "jpeg-image.jpeg",
+        size: decoded.length,
+        bytes: decoded,
+      );
+    }
+
+    var message = await backend.updateMessage(old.chat.target!, old, payload, file);
     inq.queue(IncomingItem(
       chat: old.chat.target!,
       message: message,

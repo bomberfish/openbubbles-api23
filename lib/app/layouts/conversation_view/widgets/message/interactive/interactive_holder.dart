@@ -124,10 +124,11 @@ class _InteractiveHolderState extends CustomState<InteractiveHolder, void, Messa
               url = payloadData!.urlData!.first.url ?? payloadData!.urlData!.first.originalUrl;
             } else {
               url = payloadData!.appData!.first.url;
-            }
-            if (url != null && url.startsWith("data:")) {
-              es.engageApp(message);
-            }
+              if (url != null && es.isAppSupported(payloadData!.appData!.first.appId!)) {
+                es.engageApp(message);
+                return;
+              }
+            } 
             if (message.interactiveText == "Live Location") return; // better way to handle this?
             if (url != null && Uri.tryParse(url) != null) {
               await launchUrl(

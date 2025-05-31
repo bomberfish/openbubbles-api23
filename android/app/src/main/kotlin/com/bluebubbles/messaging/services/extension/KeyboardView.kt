@@ -5,6 +5,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Handler
 import android.os.RemoteException
+import android.util.Log
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.RemoteViews
@@ -17,7 +18,7 @@ import com.bluebubbles.messaging.MainActivity
 import com.bluebubbles.messaging.services.backend_ui_interop.MethodCallHandler
 import io.flutter.plugin.platform.PlatformView
 
-internal class KeyboardView(val context: Context, id: Int, val appId: Int) :
+internal class KeyboardView(val context: Context, id: Int, val appId: Int, val userCount: Int) :
     PlatformView {
     private val content: FrameLayout = FrameLayout(context)
 
@@ -25,24 +26,28 @@ internal class KeyboardView(val context: Context, id: Int, val appId: Int) :
 
     private val connection: MadridExtensionConnection = MadridExtensionConnection.bind(appId, context) {
         it.extension?.let { ext ->
-            val view = ext.keyboardOpened(object : IViewUpdateCallback.Stub() {
-                override fun updateView(views: RemoteViews?) {
-                    Handler(context.mainLooper).post {
-                        newViews(views!!)
+            try {
+                val view = ext.keyboardOpened(object : IViewUpdateCallback.Stub() {
+                    override fun updateView(views: RemoteViews?) {
+                        Handler(context.mainLooper).post {
+                            newViews(views!!)
+                        }
                     }
-                }
-            }, object : IKeyboardHandle.Stub() {
-                override fun addMessage(message: MadridMessage?) {
-                    if (message == null)
-                        throw RemoteException("Message cannot be null!")
-                    Handler(context.mainLooper).post {
-                        val myMsg = MadridMessageUtil.toMap(message)
-                        myMsg["appId"] = appId;
-                        MethodCallHandler.invokeMethod("extension-add-message", myMsg)
+                }, object : IKeyboardHandle.Stub() {
+                    override fun addMessage(message: MadridMessage?) {
+                        if (message == null)
+                            throw RemoteException("Message cannot be null!")
+                        Handler(context.mainLooper).post {
+                            val myMsg = MadridMessageUtil.toMap(message)
+                            myMsg["appId"] = appId;
+                            MethodCallHandler.invokeMethod("extension-add-message", myMsg)
+                        }
                     }
-                }
-            })
-            newViews(view)
+                }, userCount)
+                newViews(view)
+            } catch (e: RemoteException) {
+                Log.e("Extensions", "Failed to get keyboard view $e")
+            }
         }
     }
 

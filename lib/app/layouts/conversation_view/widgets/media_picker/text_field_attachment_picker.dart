@@ -293,6 +293,7 @@ class AttachmentPickerState extends OptimizedState<AttachmentPicker> {
           layoutDirection: TextDirection.ltr,
           creationParams: {
             "app-id": currentApp!.appId,
+            "user-count": controller.chat.participants.length + 1,
           },
           creationParamsCodec: const StandardMessageCodec(),
         )

@@ -8,6 +8,7 @@ import io.flutter.plugin.platform.PlatformViewFactory
 class LiveExtensionFactory : PlatformViewFactory(StandardMessageCodec.INSTANCE) {
     override fun create(context: Context, viewId: Int, args: Any?): PlatformView {
         val creationParams = args as Map<String?, Any?>
-        return LiveExtension(context, viewId, creationParams)
+        val userCount = creationParams["user-count"] as Int
+        return LiveExtension(context, viewId, creationParams, userCount)
     }
 }

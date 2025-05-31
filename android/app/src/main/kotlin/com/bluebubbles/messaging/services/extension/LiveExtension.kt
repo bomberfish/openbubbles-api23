@@ -5,6 +5,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Handler
 import android.os.RemoteException
+import android.util.Log
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.RemoteViews
@@ -20,7 +21,7 @@ import com.bluebubbles.messaging.services.backend_ui_interop.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.platform.PlatformView
 
-internal class LiveExtension(val context: Context, id: Int, val data: Map<String?, Any?>) :
+internal class LiveExtension(val context: Context, id: Int, val data: Map<String?, Any?>, val userCount: Int) :
     PlatformView {
     private val content: FrameLayout = FrameLayout(context)
 
@@ -55,14 +56,18 @@ internal class LiveExtension(val context: Context, id: Int, val data: Map<String
             ) {
                 it.unbind(context)
             }
-            val view = ext.getLiveView(object : IViewUpdateCallback.Stub() {
-                override fun updateView(views: RemoteViews?) {
-                    Handler(context.mainLooper).post {
-                        newViews(views!!)
+            try {
+                val view = ext.getLiveView(object : IViewUpdateCallback.Stub() {
+                    override fun updateView(views: RemoteViews?) {
+                        Handler(context.mainLooper).post {
+                            newViews(views!!)
+                        }
                     }
-                }
-            }, message, handle)
-            newViews(view)
+                }, message, handle, userCount)
+                newViews(view)
+            } catch (e: RemoteException) {
+                Log.e("Extensions", "Failed to get live view $e")
+            }
         }
     }
 

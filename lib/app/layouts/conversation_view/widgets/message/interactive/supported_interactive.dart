@@ -62,6 +62,7 @@ class _SupportedInteractiveState extends OptimizedState<SupportedInteractive> wi
     if (widget.data.isLive == true) {
       var data = widget.data.toNative(null);
       data["messageGuid"] = widget.guid;
+      data["user-count"] = cm.activeChat!.chat.participants.length + 1;
       return SizedBox(
         height: 250,
         child: forcedDead ? const SizedBox.shrink() : RepaintBoundary(

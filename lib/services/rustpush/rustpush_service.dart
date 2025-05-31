@@ -28,6 +28,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rust_bridge/flutter_rust_bridge.dart';
 import 'package:get/get.dart';
 import 'package:in_app_purchase_android/billing_client_wrappers.dart';
+import 'package:mime_type/mime_type.dart';
 import 'package:path/path.dart';
 import 'package:slugify/slugify.dart';
 import 'package:supercharged/supercharged.dart';
@@ -1059,7 +1060,40 @@ class RustPushBackend implements BackendService {
 
   @override
   Future<Message> updateMessage(
-        Chat chat, Message old, PayloadData newData) async {
+        Chat chat, Message old, PayloadData newData, PlatformFile? newImage) async {
+    api.Attachment? attachment;
+    if (newImage != null) {
+      String data = await DefaultAssetBundle.of(Get.context!).loadString("assets/rustpush/uti-map.json");
+      final utiMap = jsonDecode(data);
+      var att = Attachment(
+        isOutgoing: true,
+        mimeType: mime(newImage.path ?? newImage.name),
+        uti: utiMap[mime(newImage.path ?? newImage.name)] ?? "public.data",
+        bytes: newImage.bytes,
+        transferName: newImage.name,
+        totalBytes: newImage.size,
+        sourcePath: newImage.path,
+        guid: uuid.v4().toString(),
+      );
+      await att.writeToDisk();
+      var stream = api.uploadAttachment(
+          state: pushService.state,
+          path: att.getFile().path!,
+          mime: att.mimeType ?? "application/octet-stream",
+          uti: att.uti ?? "public.data",
+          name: att.transferName!);
+      await for (final event in stream) {
+        if (event.attachment != null) {
+          Logger.info("upload finish");
+          attachment = event.attachment;
+          att.metadata = {"rustpush": await api.saveAttachment(att: attachment!)};
+        } else {
+          Logger.info("upload progress ${event.prog} of ${event.total}");
+        }
+      }
+      File(att.path).deleteSync();
+    }
+
     var msg = await api.newMsg(
         state: pushService.state,
         conversation: await chat.getConversationData(),
@@ -1071,7 +1105,9 @@ class RustPushBackend implements BackendService {
             reaction: api.ReactMessageType.extension_(
               spec: pushService.dataToApp(newData),
               body: api.MessageParts(field0: [
-                api.IndexedMessagePart(part_: api.MessagePart.object(newData.appData![0].ldText ?? ""))
+                api.IndexedMessagePart(part_: api.MessagePart.object(newData.appData![0].ldText ?? "")),
+                if (attachment != null)
+                api.IndexedMessagePart(part_: api.MessagePart.attachment(attachment)),
               ])
             ))));
     await sendMsg(msg);
@@ -1656,7 +1692,8 @@ class RustPushService extends GetxService {
 
           final original = messages.firstWhere((msg) => (msg.stagingGuid ?? msg.guid) != myMsg.id);
           
-          attributedBodyData = (original.attributedBody[0], original.text!, original.dbAttachments);
+          // allow updating image
+          attributedBodyData = (attributedBodyData.$3.isEmpty ? original.attributedBody[0] : attributedBodyData.$1, original.text!, attributedBodyData.$3.isEmpty ? original.dbAttachments : attributedBodyData.$3);
           es.amkToLatest[msg.field0.toUuid] = myMsg.id; // we are latest
 
           if (chat != null && cm.activeChat?.chat.guid == chat.guid) {

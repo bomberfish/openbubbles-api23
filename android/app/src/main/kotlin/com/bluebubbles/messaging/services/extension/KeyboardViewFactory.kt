@@ -9,6 +9,7 @@ class KeyboardViewFactory : PlatformViewFactory(StandardMessageCodec.INSTANCE) {
     override fun create(context: Context, viewId: Int, args: Any?): PlatformView {
         val creationParams = args as Map<String?, Any?>
         val appId = creationParams["app-id"] as Int;
-        return KeyboardView(context, viewId, appId)
+        val userCount = creationParams["user-count"] as Int
+        return KeyboardView(context, viewId, appId, userCount)
     }
 }

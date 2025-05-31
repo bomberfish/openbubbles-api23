@@ -24,6 +24,7 @@ class TemplateTapHandler: MethodCallHandlerImpl() {
         val message = MadridMessageUtil.fromCall(call)
 
         val appId: Int = call.argument("appId")!!
+        val userCount: Int = call.argument("userCount")!!
         MessageViewRegistry.registered.add(message.session)
         MadridExtensionConnection.bind(appId, context) {
             var handle = MessageViewHandle(
@@ -34,7 +35,7 @@ class TemplateTapHandler: MethodCallHandlerImpl() {
             ) {
                 it.unbind(context)
             }
-            it.extension?.didTapTemplate(message, handle)
+            it.extension?.didTapTemplate(message, handle, userCount)
             handle.markDead()
             result.success(null)
         }
