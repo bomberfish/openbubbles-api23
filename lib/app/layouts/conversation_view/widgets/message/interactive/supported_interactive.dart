@@ -59,7 +59,7 @@ class _SupportedInteractiveState extends OptimizedState<SupportedInteractive> wi
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    if (widget.data.isLive == true) {
+    if (widget.data.isLive == true && widget.data.appId != null && es.isAppAvailable(widget.data.appId!)) {
       var data = widget.data.toNative(null);
       data["messageGuid"] = widget.guid;
       data["user-count"] = cm.activeChat!.chat.participants.length + 1;

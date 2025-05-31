@@ -124,7 +124,7 @@ class _InteractiveHolderState extends CustomState<InteractiveHolder, void, Messa
               url = payloadData!.urlData!.first.url ?? payloadData!.urlData!.first.originalUrl;
             } else {
               url = payloadData!.appData!.first.url;
-              if (url != null && es.isAppSupported(payloadData!.appData!.first.appId!)) {
+            if (url != null && payloadData!.appData!.first.appId != null && es.isAppSupported(payloadData!.appData!.first.appId!)) {
                 es.engageApp(message);
                 return;
               }

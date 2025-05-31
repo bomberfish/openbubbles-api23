@@ -97,6 +97,10 @@ class ExtensionService extends GetxService {
     return guid;
   }
 
+  bool isAppAvailable(int app) {
+    return es.cachedStatus.firstWhereOrNull((i) => i.appId == app)?.available != null;
+  }
+
   bool isAppSupported(int app) {
     return cachedStatus.any((a) => a.appId == app);
   }
