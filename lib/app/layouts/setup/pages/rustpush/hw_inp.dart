@@ -505,21 +505,9 @@ class HwInpState extends OptimizedState<HwInp> {
                 const TextSpan(
                   text: "This device has no access to your Apple account or messages."
                 ),
-              ] : hosted ? [
-                const TextSpan(
-                  text: "To activate iMessage, Apple requires a physical iDevice to validate your sign in."
-                ),
               ] : [
                 const TextSpan(
-                  text: "To activate iMessage, Apple requires a physical iDevice to validate your sign in. "
-                ),
-                TextSpan(
-                  text: 'Learn how to activate OpenBubbles.',
-                  style: const TextStyle(color: Colors.blue),
-                  recognizer: TapGestureRecognizer()
-                    ..onTap = () {
-                      launchUrl(Uri.parse("https://openbubbles.app/macos"), mode: LaunchMode.externalApplication);
-                  },
+                  text: "To activate iMessage, Apple requires a physical iDevice to validate your sign in. Bring your own or use one of ours."
                 ),
               ]
             ),
@@ -768,6 +756,20 @@ class HwInpState extends OptimizedState<HwInp> {
                             ),
                           ),
                         ),
+                        if (!stagingNonInp && !hosted)
+                        Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.fromLTRB(3, 12, 3, 5),
+                          child: GestureDetector(
+                            onTap: () {
+                              launchUrl(Uri.parse("https://openbubbles.app/macos"), mode: LaunchMode.externalApplication);
+                            },
+                            child: Text(
+                              'Learn how to get a code',
+                              style: context.theme.textTheme.bodySmall!.apply(color: Colors.blue),
+                            ),
+                          ),
+                        ),
                         if (!stagingNonInp && stagingInfo == null)
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 3, vertical: 5),
@@ -953,10 +955,36 @@ class HwInpState extends OptimizedState<HwInp> {
       var state = await api.getDeviceInfoState(state: pushService.state);
       controller.supportsPhoneReg.value = state.name.contains("iPhone") || state.name.contains("iPod") || state.name.contains("iPad");
       // controller.updatePhoneReg();
-      
-      controller.pageController.nextPage(
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeInOut,
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => AlertDialog(
+          title: const Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.security,
+                size: 40,
+                color: Colors.blue,
+              ),
+              SizedBox(height: 12),
+              Text("You're in control"),
+            ],
+          ),
+          content: const Text('A new Apple device will appear on your Apple Account.\n\nAll keys and account credentials are generated and stored locally on this device. The new device does not have any access to your Apple Account or Messages.'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                controller.pageController.nextPage(
+                  duration: const Duration(milliseconds: 300),
+                  curve: Curves.easeInOut,
+                );
+              },
+              child: const Text('Next'),
+            ),
+          ],
+        ),
       );
     } catch (e) {
       if (e is AnyhowException) {

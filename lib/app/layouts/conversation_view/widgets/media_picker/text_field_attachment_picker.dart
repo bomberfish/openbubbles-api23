@@ -181,7 +181,7 @@ class AttachmentPickerState extends OptimizedState<AttachmentPicker> {
     if(!controller.chat.isIMessage) return;
     for (var app in es.cachedStatus) {
       if (app.available == null) return;
-      iconsList.add({
+      iconsList.insert(0, {
         "logo": base64Decode(app.available!.icon),
         "text": app.available!.name,
         "handle": () {

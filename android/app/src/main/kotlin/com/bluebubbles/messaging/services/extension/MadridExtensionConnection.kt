@@ -29,6 +29,9 @@ class MadridExtensionConnection(val bound: (ext: MadridExtensionConnection) -> U
         fun bind(appId: Int, context: Context, bound: (ext: MadridExtensionConnection) -> Unit): MadridExtensionConnection {
             val connection = MadridExtensionConnection(bound)
             val app = ExtensionRegistry.map[appId]!!
+            if (!app.validateService(context)) {
+                throw Exception("Bad service!")
+            }
             val intent = Intent()
             intent.component = app.getServiceName()
             intent.action = IMadridExtension::class.java.name

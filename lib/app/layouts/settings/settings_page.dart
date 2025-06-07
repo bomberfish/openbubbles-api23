@@ -1137,7 +1137,7 @@ class _SettingsPageState extends OptimizedState<SettingsPage> {
                                           materialIcon: Icons.laptop,
                                           containerColor: Colors.red[700],
                                         ),
-                                        title: "Change hardware",
+                                        title: "Change Apple Hardware",
                                         subtitle: "Keep messages and change hardware",
                                       ),
                                     if (!kIsWeb)

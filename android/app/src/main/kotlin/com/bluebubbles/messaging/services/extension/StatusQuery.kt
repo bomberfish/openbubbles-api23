@@ -68,6 +68,10 @@ class StatusQuery: MethodCallHandlerImpl() {
             )
 
             try {
+                if (!extension.value.validateService(context)) {
+                    myItems.add(myMap)
+                    continue
+                }
                 val name = packageManager.getApplicationLabel(packageManager.getApplicationInfo(extension.value.appPackage, 0))
                 val resources = packageManager.getResourcesForApplication(extension.value.appPackage)
 
