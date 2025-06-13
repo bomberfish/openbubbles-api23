@@ -200,6 +200,11 @@ class _MessageHolderState extends CustomState<MessageHolder, void, MessageWidget
     if (message.itemType == 5 && message.subject != null) {
       return const SizedBox.shrink();
     }
+    if ((message.hasApplePayloadData
+          || message.isLegacyUrlPreview
+          || message.isInteractive) && message.amkSessionId != null && !es.getLatest(message.amkSessionId!).contains(message.stagingGuid ?? message.guid)) {
+      return const SizedBox.shrink();
+    }
     return AnimatedPadding(
       duration: const Duration(milliseconds: 100),
       padding: message.guid!.contains("temp") ? EdgeInsets.zero : EdgeInsets.only(

@@ -178,7 +178,7 @@ const List<double> lightMatrix = <double>[
 ];
 
 Future<void> showOutgoingFaceTimeOverlay(RxString callState, String desc, String caller, List<String> targets, Uint8List? chatIcon, String link, String? posterPath) async {
-  api.SimplifiedPoster? poster;
+  api.SimplifiedIncomingCallPoster? poster;
   Map<String, ui.Image> images = {};
 
   // loading the poster can take a second, don't let them get too eager
@@ -202,7 +202,7 @@ Future<void> showOutgoingFaceTimeOverlay(RxString callState, String desc, String
       var data = await File("$posterPath.jpg").readAsBytes();
       print("Parsing file");
       poster = await api.fromPosterSave(poster: data);
-      images = await loadPosterImages(posterPath, poster);
+      images = await loadPosterImages(posterPath, poster.poster);
     }
 
     // If we are somehow already showing an overlay for this call, close it
@@ -236,7 +236,7 @@ Future<void> showOutgoingFaceTimeOverlay(RxString callState, String desc, String
               )
             ),
             if (poster != null)
-            ImagePoster(poster: poster, images: images, name: desc, desc: hasEnded ? "Not Available" : "Ringing...",),
+            ImagePoster(poster: poster.poster, images: images, name: desc, desc: hasEnded ? "Not Available" : "Ringing...",),
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

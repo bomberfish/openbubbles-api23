@@ -4914,6 +4914,8 @@ mixin _$Message {
         updateProfileSharing,
     required TResult Function(ShareProfileMessage field0) shareProfile,
     required TResult Function() notifyAnyways,
+    required TResult Function(SetTranscriptBackgroundMessage field0)
+        setTranscriptBackground,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -4944,6 +4946,8 @@ mixin _$Message {
     TResult? Function(UpdateProfileSharingMessage field0)? updateProfileSharing,
     TResult? Function(ShareProfileMessage field0)? shareProfile,
     TResult? Function()? notifyAnyways,
+    TResult? Function(SetTranscriptBackgroundMessage field0)?
+        setTranscriptBackground,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -4974,6 +4978,8 @@ mixin _$Message {
     TResult Function(UpdateProfileSharingMessage field0)? updateProfileSharing,
     TResult Function(ShareProfileMessage field0)? shareProfile,
     TResult Function()? notifyAnyways,
+    TResult Function(SetTranscriptBackgroundMessage field0)?
+        setTranscriptBackground,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -5010,6 +5016,8 @@ mixin _$Message {
         updateProfileSharing,
     required TResult Function(Message_ShareProfile value) shareProfile,
     required TResult Function(Message_NotifyAnyways value) notifyAnyways,
+    required TResult Function(Message_SetTranscriptBackground value)
+        setTranscriptBackground,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -5040,6 +5048,8 @@ mixin _$Message {
     TResult? Function(Message_UpdateProfileSharing value)? updateProfileSharing,
     TResult? Function(Message_ShareProfile value)? shareProfile,
     TResult? Function(Message_NotifyAnyways value)? notifyAnyways,
+    TResult? Function(Message_SetTranscriptBackground value)?
+        setTranscriptBackground,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -5070,6 +5080,8 @@ mixin _$Message {
     TResult Function(Message_UpdateProfileSharing value)? updateProfileSharing,
     TResult Function(Message_ShareProfile value)? shareProfile,
     TResult Function(Message_NotifyAnyways value)? notifyAnyways,
+    TResult Function(Message_SetTranscriptBackground value)?
+        setTranscriptBackground,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -5192,6 +5204,8 @@ class _$Message_MessageImpl extends Message_Message {
         updateProfileSharing,
     required TResult Function(ShareProfileMessage field0) shareProfile,
     required TResult Function() notifyAnyways,
+    required TResult Function(SetTranscriptBackgroundMessage field0)
+        setTranscriptBackground,
   }) {
     return message(field0);
   }
@@ -5225,6 +5239,8 @@ class _$Message_MessageImpl extends Message_Message {
     TResult? Function(UpdateProfileSharingMessage field0)? updateProfileSharing,
     TResult? Function(ShareProfileMessage field0)? shareProfile,
     TResult? Function()? notifyAnyways,
+    TResult? Function(SetTranscriptBackgroundMessage field0)?
+        setTranscriptBackground,
   }) {
     return message?.call(field0);
   }
@@ -5258,6 +5274,8 @@ class _$Message_MessageImpl extends Message_Message {
     TResult Function(UpdateProfileSharingMessage field0)? updateProfileSharing,
     TResult Function(ShareProfileMessage field0)? shareProfile,
     TResult Function()? notifyAnyways,
+    TResult Function(SetTranscriptBackgroundMessage field0)?
+        setTranscriptBackground,
     required TResult orElse(),
   }) {
     if (message != null) {
@@ -5300,6 +5318,8 @@ class _$Message_MessageImpl extends Message_Message {
         updateProfileSharing,
     required TResult Function(Message_ShareProfile value) shareProfile,
     required TResult Function(Message_NotifyAnyways value) notifyAnyways,
+    required TResult Function(Message_SetTranscriptBackground value)
+        setTranscriptBackground,
   }) {
     return message(this);
   }
@@ -5333,6 +5353,8 @@ class _$Message_MessageImpl extends Message_Message {
     TResult? Function(Message_UpdateProfileSharing value)? updateProfileSharing,
     TResult? Function(Message_ShareProfile value)? shareProfile,
     TResult? Function(Message_NotifyAnyways value)? notifyAnyways,
+    TResult? Function(Message_SetTranscriptBackground value)?
+        setTranscriptBackground,
   }) {
     return message?.call(this);
   }
@@ -5366,6 +5388,8 @@ class _$Message_MessageImpl extends Message_Message {
     TResult Function(Message_UpdateProfileSharing value)? updateProfileSharing,
     TResult Function(Message_ShareProfile value)? shareProfile,
     TResult Function(Message_NotifyAnyways value)? notifyAnyways,
+    TResult Function(Message_SetTranscriptBackground value)?
+        setTranscriptBackground,
     required TResult orElse(),
   }) {
     if (message != null) {
@@ -5487,6 +5511,8 @@ class _$Message_RenameMessageImpl extends Message_RenameMessage {
         updateProfileSharing,
     required TResult Function(ShareProfileMessage field0) shareProfile,
     required TResult Function() notifyAnyways,
+    required TResult Function(SetTranscriptBackgroundMessage field0)
+        setTranscriptBackground,
   }) {
     return renameMessage(field0);
   }
@@ -5520,6 +5546,8 @@ class _$Message_RenameMessageImpl extends Message_RenameMessage {
     TResult? Function(UpdateProfileSharingMessage field0)? updateProfileSharing,
     TResult? Function(ShareProfileMessage field0)? shareProfile,
     TResult? Function()? notifyAnyways,
+    TResult? Function(SetTranscriptBackgroundMessage field0)?
+        setTranscriptBackground,
   }) {
     return renameMessage?.call(field0);
   }
@@ -5553,6 +5581,8 @@ class _$Message_RenameMessageImpl extends Message_RenameMessage {
     TResult Function(UpdateProfileSharingMessage field0)? updateProfileSharing,
     TResult Function(ShareProfileMessage field0)? shareProfile,
     TResult Function()? notifyAnyways,
+    TResult Function(SetTranscriptBackgroundMessage field0)?
+        setTranscriptBackground,
     required TResult orElse(),
   }) {
     if (renameMessage != null) {
@@ -5595,6 +5625,8 @@ class _$Message_RenameMessageImpl extends Message_RenameMessage {
         updateProfileSharing,
     required TResult Function(Message_ShareProfile value) shareProfile,
     required TResult Function(Message_NotifyAnyways value) notifyAnyways,
+    required TResult Function(Message_SetTranscriptBackground value)
+        setTranscriptBackground,
   }) {
     return renameMessage(this);
   }
@@ -5628,6 +5660,8 @@ class _$Message_RenameMessageImpl extends Message_RenameMessage {
     TResult? Function(Message_UpdateProfileSharing value)? updateProfileSharing,
     TResult? Function(Message_ShareProfile value)? shareProfile,
     TResult? Function(Message_NotifyAnyways value)? notifyAnyways,
+    TResult? Function(Message_SetTranscriptBackground value)?
+        setTranscriptBackground,
   }) {
     return renameMessage?.call(this);
   }
@@ -5661,6 +5695,8 @@ class _$Message_RenameMessageImpl extends Message_RenameMessage {
     TResult Function(Message_UpdateProfileSharing value)? updateProfileSharing,
     TResult Function(Message_ShareProfile value)? shareProfile,
     TResult Function(Message_NotifyAnyways value)? notifyAnyways,
+    TResult Function(Message_SetTranscriptBackground value)?
+        setTranscriptBackground,
     required TResult orElse(),
   }) {
     if (renameMessage != null) {
@@ -5783,6 +5819,8 @@ class _$Message_ChangeParticipantsImpl extends Message_ChangeParticipants {
         updateProfileSharing,
     required TResult Function(ShareProfileMessage field0) shareProfile,
     required TResult Function() notifyAnyways,
+    required TResult Function(SetTranscriptBackgroundMessage field0)
+        setTranscriptBackground,
   }) {
     return changeParticipants(field0);
   }
@@ -5816,6 +5854,8 @@ class _$Message_ChangeParticipantsImpl extends Message_ChangeParticipants {
     TResult? Function(UpdateProfileSharingMessage field0)? updateProfileSharing,
     TResult? Function(ShareProfileMessage field0)? shareProfile,
     TResult? Function()? notifyAnyways,
+    TResult? Function(SetTranscriptBackgroundMessage field0)?
+        setTranscriptBackground,
   }) {
     return changeParticipants?.call(field0);
   }
@@ -5849,6 +5889,8 @@ class _$Message_ChangeParticipantsImpl extends Message_ChangeParticipants {
     TResult Function(UpdateProfileSharingMessage field0)? updateProfileSharing,
     TResult Function(ShareProfileMessage field0)? shareProfile,
     TResult Function()? notifyAnyways,
+    TResult Function(SetTranscriptBackgroundMessage field0)?
+        setTranscriptBackground,
     required TResult orElse(),
   }) {
     if (changeParticipants != null) {
@@ -5891,6 +5933,8 @@ class _$Message_ChangeParticipantsImpl extends Message_ChangeParticipants {
         updateProfileSharing,
     required TResult Function(Message_ShareProfile value) shareProfile,
     required TResult Function(Message_NotifyAnyways value) notifyAnyways,
+    required TResult Function(Message_SetTranscriptBackground value)
+        setTranscriptBackground,
   }) {
     return changeParticipants(this);
   }
@@ -5924,6 +5968,8 @@ class _$Message_ChangeParticipantsImpl extends Message_ChangeParticipants {
     TResult? Function(Message_UpdateProfileSharing value)? updateProfileSharing,
     TResult? Function(Message_ShareProfile value)? shareProfile,
     TResult? Function(Message_NotifyAnyways value)? notifyAnyways,
+    TResult? Function(Message_SetTranscriptBackground value)?
+        setTranscriptBackground,
   }) {
     return changeParticipants?.call(this);
   }
@@ -5957,6 +6003,8 @@ class _$Message_ChangeParticipantsImpl extends Message_ChangeParticipants {
     TResult Function(Message_UpdateProfileSharing value)? updateProfileSharing,
     TResult Function(Message_ShareProfile value)? shareProfile,
     TResult Function(Message_NotifyAnyways value)? notifyAnyways,
+    TResult Function(Message_SetTranscriptBackground value)?
+        setTranscriptBackground,
     required TResult orElse(),
   }) {
     if (changeParticipants != null) {
@@ -6076,6 +6124,8 @@ class _$Message_ReactImpl extends Message_React {
         updateProfileSharing,
     required TResult Function(ShareProfileMessage field0) shareProfile,
     required TResult Function() notifyAnyways,
+    required TResult Function(SetTranscriptBackgroundMessage field0)
+        setTranscriptBackground,
   }) {
     return react(field0);
   }
@@ -6109,6 +6159,8 @@ class _$Message_ReactImpl extends Message_React {
     TResult? Function(UpdateProfileSharingMessage field0)? updateProfileSharing,
     TResult? Function(ShareProfileMessage field0)? shareProfile,
     TResult? Function()? notifyAnyways,
+    TResult? Function(SetTranscriptBackgroundMessage field0)?
+        setTranscriptBackground,
   }) {
     return react?.call(field0);
   }
@@ -6142,6 +6194,8 @@ class _$Message_ReactImpl extends Message_React {
     TResult Function(UpdateProfileSharingMessage field0)? updateProfileSharing,
     TResult Function(ShareProfileMessage field0)? shareProfile,
     TResult Function()? notifyAnyways,
+    TResult Function(SetTranscriptBackgroundMessage field0)?
+        setTranscriptBackground,
     required TResult orElse(),
   }) {
     if (react != null) {
@@ -6184,6 +6238,8 @@ class _$Message_ReactImpl extends Message_React {
         updateProfileSharing,
     required TResult Function(Message_ShareProfile value) shareProfile,
     required TResult Function(Message_NotifyAnyways value) notifyAnyways,
+    required TResult Function(Message_SetTranscriptBackground value)
+        setTranscriptBackground,
   }) {
     return react(this);
   }
@@ -6217,6 +6273,8 @@ class _$Message_ReactImpl extends Message_React {
     TResult? Function(Message_UpdateProfileSharing value)? updateProfileSharing,
     TResult? Function(Message_ShareProfile value)? shareProfile,
     TResult? Function(Message_NotifyAnyways value)? notifyAnyways,
+    TResult? Function(Message_SetTranscriptBackground value)?
+        setTranscriptBackground,
   }) {
     return react?.call(this);
   }
@@ -6250,6 +6308,8 @@ class _$Message_ReactImpl extends Message_React {
     TResult Function(Message_UpdateProfileSharing value)? updateProfileSharing,
     TResult Function(Message_ShareProfile value)? shareProfile,
     TResult Function(Message_NotifyAnyways value)? notifyAnyways,
+    TResult Function(Message_SetTranscriptBackground value)?
+        setTranscriptBackground,
     required TResult orElse(),
   }) {
     if (react != null) {
@@ -6341,6 +6401,8 @@ class _$Message_DeliveredImpl extends Message_Delivered {
         updateProfileSharing,
     required TResult Function(ShareProfileMessage field0) shareProfile,
     required TResult Function() notifyAnyways,
+    required TResult Function(SetTranscriptBackgroundMessage field0)
+        setTranscriptBackground,
   }) {
     return delivered();
   }
@@ -6374,6 +6436,8 @@ class _$Message_DeliveredImpl extends Message_Delivered {
     TResult? Function(UpdateProfileSharingMessage field0)? updateProfileSharing,
     TResult? Function(ShareProfileMessage field0)? shareProfile,
     TResult? Function()? notifyAnyways,
+    TResult? Function(SetTranscriptBackgroundMessage field0)?
+        setTranscriptBackground,
   }) {
     return delivered?.call();
   }
@@ -6407,6 +6471,8 @@ class _$Message_DeliveredImpl extends Message_Delivered {
     TResult Function(UpdateProfileSharingMessage field0)? updateProfileSharing,
     TResult Function(ShareProfileMessage field0)? shareProfile,
     TResult Function()? notifyAnyways,
+    TResult Function(SetTranscriptBackgroundMessage field0)?
+        setTranscriptBackground,
     required TResult orElse(),
   }) {
     if (delivered != null) {
@@ -6449,6 +6515,8 @@ class _$Message_DeliveredImpl extends Message_Delivered {
         updateProfileSharing,
     required TResult Function(Message_ShareProfile value) shareProfile,
     required TResult Function(Message_NotifyAnyways value) notifyAnyways,
+    required TResult Function(Message_SetTranscriptBackground value)
+        setTranscriptBackground,
   }) {
     return delivered(this);
   }
@@ -6482,6 +6550,8 @@ class _$Message_DeliveredImpl extends Message_Delivered {
     TResult? Function(Message_UpdateProfileSharing value)? updateProfileSharing,
     TResult? Function(Message_ShareProfile value)? shareProfile,
     TResult? Function(Message_NotifyAnyways value)? notifyAnyways,
+    TResult? Function(Message_SetTranscriptBackground value)?
+        setTranscriptBackground,
   }) {
     return delivered?.call(this);
   }
@@ -6515,6 +6585,8 @@ class _$Message_DeliveredImpl extends Message_Delivered {
     TResult Function(Message_UpdateProfileSharing value)? updateProfileSharing,
     TResult Function(Message_ShareProfile value)? shareProfile,
     TResult Function(Message_NotifyAnyways value)? notifyAnyways,
+    TResult Function(Message_SetTranscriptBackground value)?
+        setTranscriptBackground,
     required TResult orElse(),
   }) {
     if (delivered != null) {
@@ -6598,6 +6670,8 @@ class _$Message_ReadImpl extends Message_Read {
         updateProfileSharing,
     required TResult Function(ShareProfileMessage field0) shareProfile,
     required TResult Function() notifyAnyways,
+    required TResult Function(SetTranscriptBackgroundMessage field0)
+        setTranscriptBackground,
   }) {
     return read();
   }
@@ -6631,6 +6705,8 @@ class _$Message_ReadImpl extends Message_Read {
     TResult? Function(UpdateProfileSharingMessage field0)? updateProfileSharing,
     TResult? Function(ShareProfileMessage field0)? shareProfile,
     TResult? Function()? notifyAnyways,
+    TResult? Function(SetTranscriptBackgroundMessage field0)?
+        setTranscriptBackground,
   }) {
     return read?.call();
   }
@@ -6664,6 +6740,8 @@ class _$Message_ReadImpl extends Message_Read {
     TResult Function(UpdateProfileSharingMessage field0)? updateProfileSharing,
     TResult Function(ShareProfileMessage field0)? shareProfile,
     TResult Function()? notifyAnyways,
+    TResult Function(SetTranscriptBackgroundMessage field0)?
+        setTranscriptBackground,
     required TResult orElse(),
   }) {
     if (read != null) {
@@ -6706,6 +6784,8 @@ class _$Message_ReadImpl extends Message_Read {
         updateProfileSharing,
     required TResult Function(Message_ShareProfile value) shareProfile,
     required TResult Function(Message_NotifyAnyways value) notifyAnyways,
+    required TResult Function(Message_SetTranscriptBackground value)
+        setTranscriptBackground,
   }) {
     return read(this);
   }
@@ -6739,6 +6819,8 @@ class _$Message_ReadImpl extends Message_Read {
     TResult? Function(Message_UpdateProfileSharing value)? updateProfileSharing,
     TResult? Function(Message_ShareProfile value)? shareProfile,
     TResult? Function(Message_NotifyAnyways value)? notifyAnyways,
+    TResult? Function(Message_SetTranscriptBackground value)?
+        setTranscriptBackground,
   }) {
     return read?.call(this);
   }
@@ -6772,6 +6854,8 @@ class _$Message_ReadImpl extends Message_Read {
     TResult Function(Message_UpdateProfileSharing value)? updateProfileSharing,
     TResult Function(Message_ShareProfile value)? shareProfile,
     TResult Function(Message_NotifyAnyways value)? notifyAnyways,
+    TResult Function(Message_SetTranscriptBackground value)?
+        setTranscriptBackground,
     required TResult orElse(),
   }) {
     if (read != null) {
@@ -6855,6 +6939,8 @@ class _$Message_TypingImpl extends Message_Typing {
         updateProfileSharing,
     required TResult Function(ShareProfileMessage field0) shareProfile,
     required TResult Function() notifyAnyways,
+    required TResult Function(SetTranscriptBackgroundMessage field0)
+        setTranscriptBackground,
   }) {
     return typing();
   }
@@ -6888,6 +6974,8 @@ class _$Message_TypingImpl extends Message_Typing {
     TResult? Function(UpdateProfileSharingMessage field0)? updateProfileSharing,
     TResult? Function(ShareProfileMessage field0)? shareProfile,
     TResult? Function()? notifyAnyways,
+    TResult? Function(SetTranscriptBackgroundMessage field0)?
+        setTranscriptBackground,
   }) {
     return typing?.call();
   }
@@ -6921,6 +7009,8 @@ class _$Message_TypingImpl extends Message_Typing {
     TResult Function(UpdateProfileSharingMessage field0)? updateProfileSharing,
     TResult Function(ShareProfileMessage field0)? shareProfile,
     TResult Function()? notifyAnyways,
+    TResult Function(SetTranscriptBackgroundMessage field0)?
+        setTranscriptBackground,
     required TResult orElse(),
   }) {
     if (typing != null) {
@@ -6963,6 +7053,8 @@ class _$Message_TypingImpl extends Message_Typing {
         updateProfileSharing,
     required TResult Function(Message_ShareProfile value) shareProfile,
     required TResult Function(Message_NotifyAnyways value) notifyAnyways,
+    required TResult Function(Message_SetTranscriptBackground value)
+        setTranscriptBackground,
   }) {
     return typing(this);
   }
@@ -6996,6 +7088,8 @@ class _$Message_TypingImpl extends Message_Typing {
     TResult? Function(Message_UpdateProfileSharing value)? updateProfileSharing,
     TResult? Function(Message_ShareProfile value)? shareProfile,
     TResult? Function(Message_NotifyAnyways value)? notifyAnyways,
+    TResult? Function(Message_SetTranscriptBackground value)?
+        setTranscriptBackground,
   }) {
     return typing?.call(this);
   }
@@ -7029,6 +7123,8 @@ class _$Message_TypingImpl extends Message_Typing {
     TResult Function(Message_UpdateProfileSharing value)? updateProfileSharing,
     TResult Function(Message_ShareProfile value)? shareProfile,
     TResult Function(Message_NotifyAnyways value)? notifyAnyways,
+    TResult Function(Message_SetTranscriptBackground value)?
+        setTranscriptBackground,
     required TResult orElse(),
   }) {
     if (typing != null) {
@@ -7140,6 +7236,8 @@ class _$Message_UnsendImpl extends Message_Unsend {
         updateProfileSharing,
     required TResult Function(ShareProfileMessage field0) shareProfile,
     required TResult Function() notifyAnyways,
+    required TResult Function(SetTranscriptBackgroundMessage field0)
+        setTranscriptBackground,
   }) {
     return unsend(field0);
   }
@@ -7173,6 +7271,8 @@ class _$Message_UnsendImpl extends Message_Unsend {
     TResult? Function(UpdateProfileSharingMessage field0)? updateProfileSharing,
     TResult? Function(ShareProfileMessage field0)? shareProfile,
     TResult? Function()? notifyAnyways,
+    TResult? Function(SetTranscriptBackgroundMessage field0)?
+        setTranscriptBackground,
   }) {
     return unsend?.call(field0);
   }
@@ -7206,6 +7306,8 @@ class _$Message_UnsendImpl extends Message_Unsend {
     TResult Function(UpdateProfileSharingMessage field0)? updateProfileSharing,
     TResult Function(ShareProfileMessage field0)? shareProfile,
     TResult Function()? notifyAnyways,
+    TResult Function(SetTranscriptBackgroundMessage field0)?
+        setTranscriptBackground,
     required TResult orElse(),
   }) {
     if (unsend != null) {
@@ -7248,6 +7350,8 @@ class _$Message_UnsendImpl extends Message_Unsend {
         updateProfileSharing,
     required TResult Function(Message_ShareProfile value) shareProfile,
     required TResult Function(Message_NotifyAnyways value) notifyAnyways,
+    required TResult Function(Message_SetTranscriptBackground value)
+        setTranscriptBackground,
   }) {
     return unsend(this);
   }
@@ -7281,6 +7385,8 @@ class _$Message_UnsendImpl extends Message_Unsend {
     TResult? Function(Message_UpdateProfileSharing value)? updateProfileSharing,
     TResult? Function(Message_ShareProfile value)? shareProfile,
     TResult? Function(Message_NotifyAnyways value)? notifyAnyways,
+    TResult? Function(Message_SetTranscriptBackground value)?
+        setTranscriptBackground,
   }) {
     return unsend?.call(this);
   }
@@ -7314,6 +7420,8 @@ class _$Message_UnsendImpl extends Message_Unsend {
     TResult Function(Message_UpdateProfileSharing value)? updateProfileSharing,
     TResult Function(Message_ShareProfile value)? shareProfile,
     TResult Function(Message_NotifyAnyways value)? notifyAnyways,
+    TResult Function(Message_SetTranscriptBackground value)?
+        setTranscriptBackground,
     required TResult orElse(),
   }) {
     if (unsend != null) {
@@ -7433,6 +7541,8 @@ class _$Message_EditImpl extends Message_Edit {
         updateProfileSharing,
     required TResult Function(ShareProfileMessage field0) shareProfile,
     required TResult Function() notifyAnyways,
+    required TResult Function(SetTranscriptBackgroundMessage field0)
+        setTranscriptBackground,
   }) {
     return edit(field0);
   }
@@ -7466,6 +7576,8 @@ class _$Message_EditImpl extends Message_Edit {
     TResult? Function(UpdateProfileSharingMessage field0)? updateProfileSharing,
     TResult? Function(ShareProfileMessage field0)? shareProfile,
     TResult? Function()? notifyAnyways,
+    TResult? Function(SetTranscriptBackgroundMessage field0)?
+        setTranscriptBackground,
   }) {
     return edit?.call(field0);
   }
@@ -7499,6 +7611,8 @@ class _$Message_EditImpl extends Message_Edit {
     TResult Function(UpdateProfileSharingMessage field0)? updateProfileSharing,
     TResult Function(ShareProfileMessage field0)? shareProfile,
     TResult Function()? notifyAnyways,
+    TResult Function(SetTranscriptBackgroundMessage field0)?
+        setTranscriptBackground,
     required TResult orElse(),
   }) {
     if (edit != null) {
@@ -7541,6 +7655,8 @@ class _$Message_EditImpl extends Message_Edit {
         updateProfileSharing,
     required TResult Function(Message_ShareProfile value) shareProfile,
     required TResult Function(Message_NotifyAnyways value) notifyAnyways,
+    required TResult Function(Message_SetTranscriptBackground value)
+        setTranscriptBackground,
   }) {
     return edit(this);
   }
@@ -7574,6 +7690,8 @@ class _$Message_EditImpl extends Message_Edit {
     TResult? Function(Message_UpdateProfileSharing value)? updateProfileSharing,
     TResult? Function(Message_ShareProfile value)? shareProfile,
     TResult? Function(Message_NotifyAnyways value)? notifyAnyways,
+    TResult? Function(Message_SetTranscriptBackground value)?
+        setTranscriptBackground,
   }) {
     return edit?.call(this);
   }
@@ -7607,6 +7725,8 @@ class _$Message_EditImpl extends Message_Edit {
     TResult Function(Message_UpdateProfileSharing value)? updateProfileSharing,
     TResult Function(Message_ShareProfile value)? shareProfile,
     TResult Function(Message_NotifyAnyways value)? notifyAnyways,
+    TResult Function(Message_SetTranscriptBackground value)?
+        setTranscriptBackground,
     required TResult orElse(),
   }) {
     if (edit != null) {
@@ -7726,6 +7846,8 @@ class _$Message_IconChangeImpl extends Message_IconChange {
         updateProfileSharing,
     required TResult Function(ShareProfileMessage field0) shareProfile,
     required TResult Function() notifyAnyways,
+    required TResult Function(SetTranscriptBackgroundMessage field0)
+        setTranscriptBackground,
   }) {
     return iconChange(field0);
   }
@@ -7759,6 +7881,8 @@ class _$Message_IconChangeImpl extends Message_IconChange {
     TResult? Function(UpdateProfileSharingMessage field0)? updateProfileSharing,
     TResult? Function(ShareProfileMessage field0)? shareProfile,
     TResult? Function()? notifyAnyways,
+    TResult? Function(SetTranscriptBackgroundMessage field0)?
+        setTranscriptBackground,
   }) {
     return iconChange?.call(field0);
   }
@@ -7792,6 +7916,8 @@ class _$Message_IconChangeImpl extends Message_IconChange {
     TResult Function(UpdateProfileSharingMessage field0)? updateProfileSharing,
     TResult Function(ShareProfileMessage field0)? shareProfile,
     TResult Function()? notifyAnyways,
+    TResult Function(SetTranscriptBackgroundMessage field0)?
+        setTranscriptBackground,
     required TResult orElse(),
   }) {
     if (iconChange != null) {
@@ -7834,6 +7960,8 @@ class _$Message_IconChangeImpl extends Message_IconChange {
         updateProfileSharing,
     required TResult Function(Message_ShareProfile value) shareProfile,
     required TResult Function(Message_NotifyAnyways value) notifyAnyways,
+    required TResult Function(Message_SetTranscriptBackground value)
+        setTranscriptBackground,
   }) {
     return iconChange(this);
   }
@@ -7867,6 +7995,8 @@ class _$Message_IconChangeImpl extends Message_IconChange {
     TResult? Function(Message_UpdateProfileSharing value)? updateProfileSharing,
     TResult? Function(Message_ShareProfile value)? shareProfile,
     TResult? Function(Message_NotifyAnyways value)? notifyAnyways,
+    TResult? Function(Message_SetTranscriptBackground value)?
+        setTranscriptBackground,
   }) {
     return iconChange?.call(this);
   }
@@ -7900,6 +8030,8 @@ class _$Message_IconChangeImpl extends Message_IconChange {
     TResult Function(Message_UpdateProfileSharing value)? updateProfileSharing,
     TResult Function(Message_ShareProfile value)? shareProfile,
     TResult Function(Message_NotifyAnyways value)? notifyAnyways,
+    TResult Function(Message_SetTranscriptBackground value)?
+        setTranscriptBackground,
     required TResult orElse(),
   }) {
     if (iconChange != null) {
@@ -7992,6 +8124,8 @@ class _$Message_StopTypingImpl extends Message_StopTyping {
         updateProfileSharing,
     required TResult Function(ShareProfileMessage field0) shareProfile,
     required TResult Function() notifyAnyways,
+    required TResult Function(SetTranscriptBackgroundMessage field0)
+        setTranscriptBackground,
   }) {
     return stopTyping();
   }
@@ -8025,6 +8159,8 @@ class _$Message_StopTypingImpl extends Message_StopTyping {
     TResult? Function(UpdateProfileSharingMessage field0)? updateProfileSharing,
     TResult? Function(ShareProfileMessage field0)? shareProfile,
     TResult? Function()? notifyAnyways,
+    TResult? Function(SetTranscriptBackgroundMessage field0)?
+        setTranscriptBackground,
   }) {
     return stopTyping?.call();
   }
@@ -8058,6 +8194,8 @@ class _$Message_StopTypingImpl extends Message_StopTyping {
     TResult Function(UpdateProfileSharingMessage field0)? updateProfileSharing,
     TResult Function(ShareProfileMessage field0)? shareProfile,
     TResult Function()? notifyAnyways,
+    TResult Function(SetTranscriptBackgroundMessage field0)?
+        setTranscriptBackground,
     required TResult orElse(),
   }) {
     if (stopTyping != null) {
@@ -8100,6 +8238,8 @@ class _$Message_StopTypingImpl extends Message_StopTyping {
         updateProfileSharing,
     required TResult Function(Message_ShareProfile value) shareProfile,
     required TResult Function(Message_NotifyAnyways value) notifyAnyways,
+    required TResult Function(Message_SetTranscriptBackground value)
+        setTranscriptBackground,
   }) {
     return stopTyping(this);
   }
@@ -8133,6 +8273,8 @@ class _$Message_StopTypingImpl extends Message_StopTyping {
     TResult? Function(Message_UpdateProfileSharing value)? updateProfileSharing,
     TResult? Function(Message_ShareProfile value)? shareProfile,
     TResult? Function(Message_NotifyAnyways value)? notifyAnyways,
+    TResult? Function(Message_SetTranscriptBackground value)?
+        setTranscriptBackground,
   }) {
     return stopTyping?.call(this);
   }
@@ -8166,6 +8308,8 @@ class _$Message_StopTypingImpl extends Message_StopTyping {
     TResult Function(Message_UpdateProfileSharing value)? updateProfileSharing,
     TResult Function(Message_ShareProfile value)? shareProfile,
     TResult Function(Message_NotifyAnyways value)? notifyAnyways,
+    TResult Function(Message_SetTranscriptBackground value)?
+        setTranscriptBackground,
     required TResult orElse(),
   }) {
     if (stopTyping != null) {
@@ -8279,6 +8423,8 @@ class _$Message_EnableSmsActivationImpl extends Message_EnableSmsActivation {
         updateProfileSharing,
     required TResult Function(ShareProfileMessage field0) shareProfile,
     required TResult Function() notifyAnyways,
+    required TResult Function(SetTranscriptBackgroundMessage field0)
+        setTranscriptBackground,
   }) {
     return enableSmsActivation(field0);
   }
@@ -8312,6 +8458,8 @@ class _$Message_EnableSmsActivationImpl extends Message_EnableSmsActivation {
     TResult? Function(UpdateProfileSharingMessage field0)? updateProfileSharing,
     TResult? Function(ShareProfileMessage field0)? shareProfile,
     TResult? Function()? notifyAnyways,
+    TResult? Function(SetTranscriptBackgroundMessage field0)?
+        setTranscriptBackground,
   }) {
     return enableSmsActivation?.call(field0);
   }
@@ -8345,6 +8493,8 @@ class _$Message_EnableSmsActivationImpl extends Message_EnableSmsActivation {
     TResult Function(UpdateProfileSharingMessage field0)? updateProfileSharing,
     TResult Function(ShareProfileMessage field0)? shareProfile,
     TResult Function()? notifyAnyways,
+    TResult Function(SetTranscriptBackgroundMessage field0)?
+        setTranscriptBackground,
     required TResult orElse(),
   }) {
     if (enableSmsActivation != null) {
@@ -8387,6 +8537,8 @@ class _$Message_EnableSmsActivationImpl extends Message_EnableSmsActivation {
         updateProfileSharing,
     required TResult Function(Message_ShareProfile value) shareProfile,
     required TResult Function(Message_NotifyAnyways value) notifyAnyways,
+    required TResult Function(Message_SetTranscriptBackground value)
+        setTranscriptBackground,
   }) {
     return enableSmsActivation(this);
   }
@@ -8420,6 +8572,8 @@ class _$Message_EnableSmsActivationImpl extends Message_EnableSmsActivation {
     TResult? Function(Message_UpdateProfileSharing value)? updateProfileSharing,
     TResult? Function(Message_ShareProfile value)? shareProfile,
     TResult? Function(Message_NotifyAnyways value)? notifyAnyways,
+    TResult? Function(Message_SetTranscriptBackground value)?
+        setTranscriptBackground,
   }) {
     return enableSmsActivation?.call(this);
   }
@@ -8453,6 +8607,8 @@ class _$Message_EnableSmsActivationImpl extends Message_EnableSmsActivation {
     TResult Function(Message_UpdateProfileSharing value)? updateProfileSharing,
     TResult Function(Message_ShareProfile value)? shareProfile,
     TResult Function(Message_NotifyAnyways value)? notifyAnyways,
+    TResult Function(Message_SetTranscriptBackground value)?
+        setTranscriptBackground,
     required TResult orElse(),
   }) {
     if (enableSmsActivation != null) {
@@ -8548,6 +8704,8 @@ class _$Message_MessageReadOnDeviceImpl extends Message_MessageReadOnDevice {
         updateProfileSharing,
     required TResult Function(ShareProfileMessage field0) shareProfile,
     required TResult Function() notifyAnyways,
+    required TResult Function(SetTranscriptBackgroundMessage field0)
+        setTranscriptBackground,
   }) {
     return messageReadOnDevice();
   }
@@ -8581,6 +8739,8 @@ class _$Message_MessageReadOnDeviceImpl extends Message_MessageReadOnDevice {
     TResult? Function(UpdateProfileSharingMessage field0)? updateProfileSharing,
     TResult? Function(ShareProfileMessage field0)? shareProfile,
     TResult? Function()? notifyAnyways,
+    TResult? Function(SetTranscriptBackgroundMessage field0)?
+        setTranscriptBackground,
   }) {
     return messageReadOnDevice?.call();
   }
@@ -8614,6 +8774,8 @@ class _$Message_MessageReadOnDeviceImpl extends Message_MessageReadOnDevice {
     TResult Function(UpdateProfileSharingMessage field0)? updateProfileSharing,
     TResult Function(ShareProfileMessage field0)? shareProfile,
     TResult Function()? notifyAnyways,
+    TResult Function(SetTranscriptBackgroundMessage field0)?
+        setTranscriptBackground,
     required TResult orElse(),
   }) {
     if (messageReadOnDevice != null) {
@@ -8656,6 +8818,8 @@ class _$Message_MessageReadOnDeviceImpl extends Message_MessageReadOnDevice {
         updateProfileSharing,
     required TResult Function(Message_ShareProfile value) shareProfile,
     required TResult Function(Message_NotifyAnyways value) notifyAnyways,
+    required TResult Function(Message_SetTranscriptBackground value)
+        setTranscriptBackground,
   }) {
     return messageReadOnDevice(this);
   }
@@ -8689,6 +8853,8 @@ class _$Message_MessageReadOnDeviceImpl extends Message_MessageReadOnDevice {
     TResult? Function(Message_UpdateProfileSharing value)? updateProfileSharing,
     TResult? Function(Message_ShareProfile value)? shareProfile,
     TResult? Function(Message_NotifyAnyways value)? notifyAnyways,
+    TResult? Function(Message_SetTranscriptBackground value)?
+        setTranscriptBackground,
   }) {
     return messageReadOnDevice?.call(this);
   }
@@ -8722,6 +8888,8 @@ class _$Message_MessageReadOnDeviceImpl extends Message_MessageReadOnDevice {
     TResult Function(Message_UpdateProfileSharing value)? updateProfileSharing,
     TResult Function(Message_ShareProfile value)? shareProfile,
     TResult Function(Message_NotifyAnyways value)? notifyAnyways,
+    TResult Function(Message_SetTranscriptBackground value)?
+        setTranscriptBackground,
     required TResult orElse(),
   }) {
     if (messageReadOnDevice != null) {
@@ -8836,6 +9004,8 @@ class _$Message_SmsConfirmSentImpl extends Message_SmsConfirmSent {
         updateProfileSharing,
     required TResult Function(ShareProfileMessage field0) shareProfile,
     required TResult Function() notifyAnyways,
+    required TResult Function(SetTranscriptBackgroundMessage field0)
+        setTranscriptBackground,
   }) {
     return smsConfirmSent(field0);
   }
@@ -8869,6 +9039,8 @@ class _$Message_SmsConfirmSentImpl extends Message_SmsConfirmSent {
     TResult? Function(UpdateProfileSharingMessage field0)? updateProfileSharing,
     TResult? Function(ShareProfileMessage field0)? shareProfile,
     TResult? Function()? notifyAnyways,
+    TResult? Function(SetTranscriptBackgroundMessage field0)?
+        setTranscriptBackground,
   }) {
     return smsConfirmSent?.call(field0);
   }
@@ -8902,6 +9074,8 @@ class _$Message_SmsConfirmSentImpl extends Message_SmsConfirmSent {
     TResult Function(UpdateProfileSharingMessage field0)? updateProfileSharing,
     TResult Function(ShareProfileMessage field0)? shareProfile,
     TResult Function()? notifyAnyways,
+    TResult Function(SetTranscriptBackgroundMessage field0)?
+        setTranscriptBackground,
     required TResult orElse(),
   }) {
     if (smsConfirmSent != null) {
@@ -8944,6 +9118,8 @@ class _$Message_SmsConfirmSentImpl extends Message_SmsConfirmSent {
         updateProfileSharing,
     required TResult Function(Message_ShareProfile value) shareProfile,
     required TResult Function(Message_NotifyAnyways value) notifyAnyways,
+    required TResult Function(Message_SetTranscriptBackground value)
+        setTranscriptBackground,
   }) {
     return smsConfirmSent(this);
   }
@@ -8977,6 +9153,8 @@ class _$Message_SmsConfirmSentImpl extends Message_SmsConfirmSent {
     TResult? Function(Message_UpdateProfileSharing value)? updateProfileSharing,
     TResult? Function(Message_ShareProfile value)? shareProfile,
     TResult? Function(Message_NotifyAnyways value)? notifyAnyways,
+    TResult? Function(Message_SetTranscriptBackground value)?
+        setTranscriptBackground,
   }) {
     return smsConfirmSent?.call(this);
   }
@@ -9010,6 +9188,8 @@ class _$Message_SmsConfirmSentImpl extends Message_SmsConfirmSent {
     TResult Function(Message_UpdateProfileSharing value)? updateProfileSharing,
     TResult Function(Message_ShareProfile value)? shareProfile,
     TResult Function(Message_NotifyAnyways value)? notifyAnyways,
+    TResult Function(Message_SetTranscriptBackground value)?
+        setTranscriptBackground,
     required TResult orElse(),
   }) {
     if (smsConfirmSent != null) {
@@ -9102,6 +9282,8 @@ class _$Message_MarkUnreadImpl extends Message_MarkUnread {
         updateProfileSharing,
     required TResult Function(ShareProfileMessage field0) shareProfile,
     required TResult Function() notifyAnyways,
+    required TResult Function(SetTranscriptBackgroundMessage field0)
+        setTranscriptBackground,
   }) {
     return markUnread();
   }
@@ -9135,6 +9317,8 @@ class _$Message_MarkUnreadImpl extends Message_MarkUnread {
     TResult? Function(UpdateProfileSharingMessage field0)? updateProfileSharing,
     TResult? Function(ShareProfileMessage field0)? shareProfile,
     TResult? Function()? notifyAnyways,
+    TResult? Function(SetTranscriptBackgroundMessage field0)?
+        setTranscriptBackground,
   }) {
     return markUnread?.call();
   }
@@ -9168,6 +9352,8 @@ class _$Message_MarkUnreadImpl extends Message_MarkUnread {
     TResult Function(UpdateProfileSharingMessage field0)? updateProfileSharing,
     TResult Function(ShareProfileMessage field0)? shareProfile,
     TResult Function()? notifyAnyways,
+    TResult Function(SetTranscriptBackgroundMessage field0)?
+        setTranscriptBackground,
     required TResult orElse(),
   }) {
     if (markUnread != null) {
@@ -9210,6 +9396,8 @@ class _$Message_MarkUnreadImpl extends Message_MarkUnread {
         updateProfileSharing,
     required TResult Function(Message_ShareProfile value) shareProfile,
     required TResult Function(Message_NotifyAnyways value) notifyAnyways,
+    required TResult Function(Message_SetTranscriptBackground value)
+        setTranscriptBackground,
   }) {
     return markUnread(this);
   }
@@ -9243,6 +9431,8 @@ class _$Message_MarkUnreadImpl extends Message_MarkUnread {
     TResult? Function(Message_UpdateProfileSharing value)? updateProfileSharing,
     TResult? Function(Message_ShareProfile value)? shareProfile,
     TResult? Function(Message_NotifyAnyways value)? notifyAnyways,
+    TResult? Function(Message_SetTranscriptBackground value)?
+        setTranscriptBackground,
   }) {
     return markUnread?.call(this);
   }
@@ -9276,6 +9466,8 @@ class _$Message_MarkUnreadImpl extends Message_MarkUnread {
     TResult Function(Message_UpdateProfileSharing value)? updateProfileSharing,
     TResult Function(Message_ShareProfile value)? shareProfile,
     TResult Function(Message_NotifyAnyways value)? notifyAnyways,
+    TResult Function(Message_SetTranscriptBackground value)?
+        setTranscriptBackground,
     required TResult orElse(),
   }) {
     if (markUnread != null) {
@@ -9362,6 +9554,8 @@ class _$Message_PeerCacheInvalidateImpl extends Message_PeerCacheInvalidate {
         updateProfileSharing,
     required TResult Function(ShareProfileMessage field0) shareProfile,
     required TResult Function() notifyAnyways,
+    required TResult Function(SetTranscriptBackgroundMessage field0)
+        setTranscriptBackground,
   }) {
     return peerCacheInvalidate();
   }
@@ -9395,6 +9589,8 @@ class _$Message_PeerCacheInvalidateImpl extends Message_PeerCacheInvalidate {
     TResult? Function(UpdateProfileSharingMessage field0)? updateProfileSharing,
     TResult? Function(ShareProfileMessage field0)? shareProfile,
     TResult? Function()? notifyAnyways,
+    TResult? Function(SetTranscriptBackgroundMessage field0)?
+        setTranscriptBackground,
   }) {
     return peerCacheInvalidate?.call();
   }
@@ -9428,6 +9624,8 @@ class _$Message_PeerCacheInvalidateImpl extends Message_PeerCacheInvalidate {
     TResult Function(UpdateProfileSharingMessage field0)? updateProfileSharing,
     TResult Function(ShareProfileMessage field0)? shareProfile,
     TResult Function()? notifyAnyways,
+    TResult Function(SetTranscriptBackgroundMessage field0)?
+        setTranscriptBackground,
     required TResult orElse(),
   }) {
     if (peerCacheInvalidate != null) {
@@ -9470,6 +9668,8 @@ class _$Message_PeerCacheInvalidateImpl extends Message_PeerCacheInvalidate {
         updateProfileSharing,
     required TResult Function(Message_ShareProfile value) shareProfile,
     required TResult Function(Message_NotifyAnyways value) notifyAnyways,
+    required TResult Function(Message_SetTranscriptBackground value)
+        setTranscriptBackground,
   }) {
     return peerCacheInvalidate(this);
   }
@@ -9503,6 +9703,8 @@ class _$Message_PeerCacheInvalidateImpl extends Message_PeerCacheInvalidate {
     TResult? Function(Message_UpdateProfileSharing value)? updateProfileSharing,
     TResult? Function(Message_ShareProfile value)? shareProfile,
     TResult? Function(Message_NotifyAnyways value)? notifyAnyways,
+    TResult? Function(Message_SetTranscriptBackground value)?
+        setTranscriptBackground,
   }) {
     return peerCacheInvalidate?.call(this);
   }
@@ -9536,6 +9738,8 @@ class _$Message_PeerCacheInvalidateImpl extends Message_PeerCacheInvalidate {
     TResult Function(Message_UpdateProfileSharing value)? updateProfileSharing,
     TResult Function(Message_ShareProfile value)? shareProfile,
     TResult Function(Message_NotifyAnyways value)? notifyAnyways,
+    TResult Function(Message_SetTranscriptBackground value)?
+        setTranscriptBackground,
     required TResult orElse(),
   }) {
     if (peerCacheInvalidate != null) {
@@ -9650,6 +9854,8 @@ class _$Message_UpdateExtensionImpl extends Message_UpdateExtension {
         updateProfileSharing,
     required TResult Function(ShareProfileMessage field0) shareProfile,
     required TResult Function() notifyAnyways,
+    required TResult Function(SetTranscriptBackgroundMessage field0)
+        setTranscriptBackground,
   }) {
     return updateExtension(field0);
   }
@@ -9683,6 +9889,8 @@ class _$Message_UpdateExtensionImpl extends Message_UpdateExtension {
     TResult? Function(UpdateProfileSharingMessage field0)? updateProfileSharing,
     TResult? Function(ShareProfileMessage field0)? shareProfile,
     TResult? Function()? notifyAnyways,
+    TResult? Function(SetTranscriptBackgroundMessage field0)?
+        setTranscriptBackground,
   }) {
     return updateExtension?.call(field0);
   }
@@ -9716,6 +9924,8 @@ class _$Message_UpdateExtensionImpl extends Message_UpdateExtension {
     TResult Function(UpdateProfileSharingMessage field0)? updateProfileSharing,
     TResult Function(ShareProfileMessage field0)? shareProfile,
     TResult Function()? notifyAnyways,
+    TResult Function(SetTranscriptBackgroundMessage field0)?
+        setTranscriptBackground,
     required TResult orElse(),
   }) {
     if (updateExtension != null) {
@@ -9758,6 +9968,8 @@ class _$Message_UpdateExtensionImpl extends Message_UpdateExtension {
         updateProfileSharing,
     required TResult Function(Message_ShareProfile value) shareProfile,
     required TResult Function(Message_NotifyAnyways value) notifyAnyways,
+    required TResult Function(Message_SetTranscriptBackground value)
+        setTranscriptBackground,
   }) {
     return updateExtension(this);
   }
@@ -9791,6 +10003,8 @@ class _$Message_UpdateExtensionImpl extends Message_UpdateExtension {
     TResult? Function(Message_UpdateProfileSharing value)? updateProfileSharing,
     TResult? Function(Message_ShareProfile value)? shareProfile,
     TResult? Function(Message_NotifyAnyways value)? notifyAnyways,
+    TResult? Function(Message_SetTranscriptBackground value)?
+        setTranscriptBackground,
   }) {
     return updateExtension?.call(this);
   }
@@ -9824,6 +10038,8 @@ class _$Message_UpdateExtensionImpl extends Message_UpdateExtension {
     TResult Function(Message_UpdateProfileSharing value)? updateProfileSharing,
     TResult Function(Message_ShareProfile value)? shareProfile,
     TResult Function(Message_NotifyAnyways value)? notifyAnyways,
+    TResult Function(Message_SetTranscriptBackground value)?
+        setTranscriptBackground,
     required TResult orElse(),
   }) {
     if (updateExtension != null) {
@@ -9943,6 +10159,8 @@ class _$Message_ErrorImpl extends Message_Error {
         updateProfileSharing,
     required TResult Function(ShareProfileMessage field0) shareProfile,
     required TResult Function() notifyAnyways,
+    required TResult Function(SetTranscriptBackgroundMessage field0)
+        setTranscriptBackground,
   }) {
     return error(field0);
   }
@@ -9976,6 +10194,8 @@ class _$Message_ErrorImpl extends Message_Error {
     TResult? Function(UpdateProfileSharingMessage field0)? updateProfileSharing,
     TResult? Function(ShareProfileMessage field0)? shareProfile,
     TResult? Function()? notifyAnyways,
+    TResult? Function(SetTranscriptBackgroundMessage field0)?
+        setTranscriptBackground,
   }) {
     return error?.call(field0);
   }
@@ -10009,6 +10229,8 @@ class _$Message_ErrorImpl extends Message_Error {
     TResult Function(UpdateProfileSharingMessage field0)? updateProfileSharing,
     TResult Function(ShareProfileMessage field0)? shareProfile,
     TResult Function()? notifyAnyways,
+    TResult Function(SetTranscriptBackgroundMessage field0)?
+        setTranscriptBackground,
     required TResult orElse(),
   }) {
     if (error != null) {
@@ -10051,6 +10273,8 @@ class _$Message_ErrorImpl extends Message_Error {
         updateProfileSharing,
     required TResult Function(Message_ShareProfile value) shareProfile,
     required TResult Function(Message_NotifyAnyways value) notifyAnyways,
+    required TResult Function(Message_SetTranscriptBackground value)
+        setTranscriptBackground,
   }) {
     return error(this);
   }
@@ -10084,6 +10308,8 @@ class _$Message_ErrorImpl extends Message_Error {
     TResult? Function(Message_UpdateProfileSharing value)? updateProfileSharing,
     TResult? Function(Message_ShareProfile value)? shareProfile,
     TResult? Function(Message_NotifyAnyways value)? notifyAnyways,
+    TResult? Function(Message_SetTranscriptBackground value)?
+        setTranscriptBackground,
   }) {
     return error?.call(this);
   }
@@ -10117,6 +10343,8 @@ class _$Message_ErrorImpl extends Message_Error {
     TResult Function(Message_UpdateProfileSharing value)? updateProfileSharing,
     TResult Function(Message_ShareProfile value)? shareProfile,
     TResult Function(Message_NotifyAnyways value)? notifyAnyways,
+    TResult Function(Message_SetTranscriptBackground value)?
+        setTranscriptBackground,
     required TResult orElse(),
   }) {
     if (error != null) {
@@ -10238,6 +10466,8 @@ class _$Message_MoveToRecycleBinImpl extends Message_MoveToRecycleBin {
         updateProfileSharing,
     required TResult Function(ShareProfileMessage field0) shareProfile,
     required TResult Function() notifyAnyways,
+    required TResult Function(SetTranscriptBackgroundMessage field0)
+        setTranscriptBackground,
   }) {
     return moveToRecycleBin(field0);
   }
@@ -10271,6 +10501,8 @@ class _$Message_MoveToRecycleBinImpl extends Message_MoveToRecycleBin {
     TResult? Function(UpdateProfileSharingMessage field0)? updateProfileSharing,
     TResult? Function(ShareProfileMessage field0)? shareProfile,
     TResult? Function()? notifyAnyways,
+    TResult? Function(SetTranscriptBackgroundMessage field0)?
+        setTranscriptBackground,
   }) {
     return moveToRecycleBin?.call(field0);
   }
@@ -10304,6 +10536,8 @@ class _$Message_MoveToRecycleBinImpl extends Message_MoveToRecycleBin {
     TResult Function(UpdateProfileSharingMessage field0)? updateProfileSharing,
     TResult Function(ShareProfileMessage field0)? shareProfile,
     TResult Function()? notifyAnyways,
+    TResult Function(SetTranscriptBackgroundMessage field0)?
+        setTranscriptBackground,
     required TResult orElse(),
   }) {
     if (moveToRecycleBin != null) {
@@ -10346,6 +10580,8 @@ class _$Message_MoveToRecycleBinImpl extends Message_MoveToRecycleBin {
         updateProfileSharing,
     required TResult Function(Message_ShareProfile value) shareProfile,
     required TResult Function(Message_NotifyAnyways value) notifyAnyways,
+    required TResult Function(Message_SetTranscriptBackground value)
+        setTranscriptBackground,
   }) {
     return moveToRecycleBin(this);
   }
@@ -10379,6 +10615,8 @@ class _$Message_MoveToRecycleBinImpl extends Message_MoveToRecycleBin {
     TResult? Function(Message_UpdateProfileSharing value)? updateProfileSharing,
     TResult? Function(Message_ShareProfile value)? shareProfile,
     TResult? Function(Message_NotifyAnyways value)? notifyAnyways,
+    TResult? Function(Message_SetTranscriptBackground value)?
+        setTranscriptBackground,
   }) {
     return moveToRecycleBin?.call(this);
   }
@@ -10412,6 +10650,8 @@ class _$Message_MoveToRecycleBinImpl extends Message_MoveToRecycleBin {
     TResult Function(Message_UpdateProfileSharing value)? updateProfileSharing,
     TResult Function(Message_ShareProfile value)? shareProfile,
     TResult Function(Message_NotifyAnyways value)? notifyAnyways,
+    TResult Function(Message_SetTranscriptBackground value)?
+        setTranscriptBackground,
     required TResult orElse(),
   }) {
     if (moveToRecycleBin != null) {
@@ -10532,6 +10772,8 @@ class _$Message_RecoverChatImpl extends Message_RecoverChat {
         updateProfileSharing,
     required TResult Function(ShareProfileMessage field0) shareProfile,
     required TResult Function() notifyAnyways,
+    required TResult Function(SetTranscriptBackgroundMessage field0)
+        setTranscriptBackground,
   }) {
     return recoverChat(field0);
   }
@@ -10565,6 +10807,8 @@ class _$Message_RecoverChatImpl extends Message_RecoverChat {
     TResult? Function(UpdateProfileSharingMessage field0)? updateProfileSharing,
     TResult? Function(ShareProfileMessage field0)? shareProfile,
     TResult? Function()? notifyAnyways,
+    TResult? Function(SetTranscriptBackgroundMessage field0)?
+        setTranscriptBackground,
   }) {
     return recoverChat?.call(field0);
   }
@@ -10598,6 +10842,8 @@ class _$Message_RecoverChatImpl extends Message_RecoverChat {
     TResult Function(UpdateProfileSharingMessage field0)? updateProfileSharing,
     TResult Function(ShareProfileMessage field0)? shareProfile,
     TResult Function()? notifyAnyways,
+    TResult Function(SetTranscriptBackgroundMessage field0)?
+        setTranscriptBackground,
     required TResult orElse(),
   }) {
     if (recoverChat != null) {
@@ -10640,6 +10886,8 @@ class _$Message_RecoverChatImpl extends Message_RecoverChat {
         updateProfileSharing,
     required TResult Function(Message_ShareProfile value) shareProfile,
     required TResult Function(Message_NotifyAnyways value) notifyAnyways,
+    required TResult Function(Message_SetTranscriptBackground value)
+        setTranscriptBackground,
   }) {
     return recoverChat(this);
   }
@@ -10673,6 +10921,8 @@ class _$Message_RecoverChatImpl extends Message_RecoverChat {
     TResult? Function(Message_UpdateProfileSharing value)? updateProfileSharing,
     TResult? Function(Message_ShareProfile value)? shareProfile,
     TResult? Function(Message_NotifyAnyways value)? notifyAnyways,
+    TResult? Function(Message_SetTranscriptBackground value)?
+        setTranscriptBackground,
   }) {
     return recoverChat?.call(this);
   }
@@ -10706,6 +10956,8 @@ class _$Message_RecoverChatImpl extends Message_RecoverChat {
     TResult Function(Message_UpdateProfileSharing value)? updateProfileSharing,
     TResult Function(Message_ShareProfile value)? shareProfile,
     TResult Function(Message_NotifyAnyways value)? notifyAnyways,
+    TResult Function(Message_SetTranscriptBackground value)?
+        setTranscriptBackground,
     required TResult orElse(),
   }) {
     if (recoverChat != null) {
@@ -10828,6 +11080,8 @@ class _$Message_PermanentDeleteImpl extends Message_PermanentDelete {
         updateProfileSharing,
     required TResult Function(ShareProfileMessage field0) shareProfile,
     required TResult Function() notifyAnyways,
+    required TResult Function(SetTranscriptBackgroundMessage field0)
+        setTranscriptBackground,
   }) {
     return permanentDelete(field0);
   }
@@ -10861,6 +11115,8 @@ class _$Message_PermanentDeleteImpl extends Message_PermanentDelete {
     TResult? Function(UpdateProfileSharingMessage field0)? updateProfileSharing,
     TResult? Function(ShareProfileMessage field0)? shareProfile,
     TResult? Function()? notifyAnyways,
+    TResult? Function(SetTranscriptBackgroundMessage field0)?
+        setTranscriptBackground,
   }) {
     return permanentDelete?.call(field0);
   }
@@ -10894,6 +11150,8 @@ class _$Message_PermanentDeleteImpl extends Message_PermanentDelete {
     TResult Function(UpdateProfileSharingMessage field0)? updateProfileSharing,
     TResult Function(ShareProfileMessage field0)? shareProfile,
     TResult Function()? notifyAnyways,
+    TResult Function(SetTranscriptBackgroundMessage field0)?
+        setTranscriptBackground,
     required TResult orElse(),
   }) {
     if (permanentDelete != null) {
@@ -10936,6 +11194,8 @@ class _$Message_PermanentDeleteImpl extends Message_PermanentDelete {
         updateProfileSharing,
     required TResult Function(Message_ShareProfile value) shareProfile,
     required TResult Function(Message_NotifyAnyways value) notifyAnyways,
+    required TResult Function(Message_SetTranscriptBackground value)
+        setTranscriptBackground,
   }) {
     return permanentDelete(this);
   }
@@ -10969,6 +11229,8 @@ class _$Message_PermanentDeleteImpl extends Message_PermanentDelete {
     TResult? Function(Message_UpdateProfileSharing value)? updateProfileSharing,
     TResult? Function(Message_ShareProfile value)? shareProfile,
     TResult? Function(Message_NotifyAnyways value)? notifyAnyways,
+    TResult? Function(Message_SetTranscriptBackground value)?
+        setTranscriptBackground,
   }) {
     return permanentDelete?.call(this);
   }
@@ -11002,6 +11264,8 @@ class _$Message_PermanentDeleteImpl extends Message_PermanentDelete {
     TResult Function(Message_UpdateProfileSharing value)? updateProfileSharing,
     TResult Function(Message_ShareProfile value)? shareProfile,
     TResult Function(Message_NotifyAnyways value)? notifyAnyways,
+    TResult Function(Message_SetTranscriptBackground value)?
+        setTranscriptBackground,
     required TResult orElse(),
   }) {
     if (permanentDelete != null) {
@@ -11094,6 +11358,8 @@ class _$Message_UnscheduleImpl extends Message_Unschedule {
         updateProfileSharing,
     required TResult Function(ShareProfileMessage field0) shareProfile,
     required TResult Function() notifyAnyways,
+    required TResult Function(SetTranscriptBackgroundMessage field0)
+        setTranscriptBackground,
   }) {
     return unschedule();
   }
@@ -11127,6 +11393,8 @@ class _$Message_UnscheduleImpl extends Message_Unschedule {
     TResult? Function(UpdateProfileSharingMessage field0)? updateProfileSharing,
     TResult? Function(ShareProfileMessage field0)? shareProfile,
     TResult? Function()? notifyAnyways,
+    TResult? Function(SetTranscriptBackgroundMessage field0)?
+        setTranscriptBackground,
   }) {
     return unschedule?.call();
   }
@@ -11160,6 +11428,8 @@ class _$Message_UnscheduleImpl extends Message_Unschedule {
     TResult Function(UpdateProfileSharingMessage field0)? updateProfileSharing,
     TResult Function(ShareProfileMessage field0)? shareProfile,
     TResult Function()? notifyAnyways,
+    TResult Function(SetTranscriptBackgroundMessage field0)?
+        setTranscriptBackground,
     required TResult orElse(),
   }) {
     if (unschedule != null) {
@@ -11202,6 +11472,8 @@ class _$Message_UnscheduleImpl extends Message_Unschedule {
         updateProfileSharing,
     required TResult Function(Message_ShareProfile value) shareProfile,
     required TResult Function(Message_NotifyAnyways value) notifyAnyways,
+    required TResult Function(Message_SetTranscriptBackground value)
+        setTranscriptBackground,
   }) {
     return unschedule(this);
   }
@@ -11235,6 +11507,8 @@ class _$Message_UnscheduleImpl extends Message_Unschedule {
     TResult? Function(Message_UpdateProfileSharing value)? updateProfileSharing,
     TResult? Function(Message_ShareProfile value)? shareProfile,
     TResult? Function(Message_NotifyAnyways value)? notifyAnyways,
+    TResult? Function(Message_SetTranscriptBackground value)?
+        setTranscriptBackground,
   }) {
     return unschedule?.call(this);
   }
@@ -11268,6 +11542,8 @@ class _$Message_UnscheduleImpl extends Message_Unschedule {
     TResult Function(Message_UpdateProfileSharing value)? updateProfileSharing,
     TResult Function(Message_ShareProfile value)? shareProfile,
     TResult Function(Message_NotifyAnyways value)? notifyAnyways,
+    TResult Function(Message_SetTranscriptBackground value)?
+        setTranscriptBackground,
     required TResult orElse(),
   }) {
     if (unschedule != null) {
@@ -11380,6 +11656,8 @@ class _$Message_UpdateProfileImpl extends Message_UpdateProfile {
         updateProfileSharing,
     required TResult Function(ShareProfileMessage field0) shareProfile,
     required TResult Function() notifyAnyways,
+    required TResult Function(SetTranscriptBackgroundMessage field0)
+        setTranscriptBackground,
   }) {
     return updateProfile(field0);
   }
@@ -11413,6 +11691,8 @@ class _$Message_UpdateProfileImpl extends Message_UpdateProfile {
     TResult? Function(UpdateProfileSharingMessage field0)? updateProfileSharing,
     TResult? Function(ShareProfileMessage field0)? shareProfile,
     TResult? Function()? notifyAnyways,
+    TResult? Function(SetTranscriptBackgroundMessage field0)?
+        setTranscriptBackground,
   }) {
     return updateProfile?.call(field0);
   }
@@ -11446,6 +11726,8 @@ class _$Message_UpdateProfileImpl extends Message_UpdateProfile {
     TResult Function(UpdateProfileSharingMessage field0)? updateProfileSharing,
     TResult Function(ShareProfileMessage field0)? shareProfile,
     TResult Function()? notifyAnyways,
+    TResult Function(SetTranscriptBackgroundMessage field0)?
+        setTranscriptBackground,
     required TResult orElse(),
   }) {
     if (updateProfile != null) {
@@ -11488,6 +11770,8 @@ class _$Message_UpdateProfileImpl extends Message_UpdateProfile {
         updateProfileSharing,
     required TResult Function(Message_ShareProfile value) shareProfile,
     required TResult Function(Message_NotifyAnyways value) notifyAnyways,
+    required TResult Function(Message_SetTranscriptBackground value)
+        setTranscriptBackground,
   }) {
     return updateProfile(this);
   }
@@ -11521,6 +11805,8 @@ class _$Message_UpdateProfileImpl extends Message_UpdateProfile {
     TResult? Function(Message_UpdateProfileSharing value)? updateProfileSharing,
     TResult? Function(Message_ShareProfile value)? shareProfile,
     TResult? Function(Message_NotifyAnyways value)? notifyAnyways,
+    TResult? Function(Message_SetTranscriptBackground value)?
+        setTranscriptBackground,
   }) {
     return updateProfile?.call(this);
   }
@@ -11554,6 +11840,8 @@ class _$Message_UpdateProfileImpl extends Message_UpdateProfile {
     TResult Function(Message_UpdateProfileSharing value)? updateProfileSharing,
     TResult Function(Message_ShareProfile value)? shareProfile,
     TResult Function(Message_NotifyAnyways value)? notifyAnyways,
+    TResult Function(Message_SetTranscriptBackground value)?
+        setTranscriptBackground,
     required TResult orElse(),
   }) {
     if (updateProfile != null) {
@@ -11677,6 +11965,8 @@ class _$Message_UpdateProfileSharingImpl extends Message_UpdateProfileSharing {
         updateProfileSharing,
     required TResult Function(ShareProfileMessage field0) shareProfile,
     required TResult Function() notifyAnyways,
+    required TResult Function(SetTranscriptBackgroundMessage field0)
+        setTranscriptBackground,
   }) {
     return updateProfileSharing(field0);
   }
@@ -11710,6 +12000,8 @@ class _$Message_UpdateProfileSharingImpl extends Message_UpdateProfileSharing {
     TResult? Function(UpdateProfileSharingMessage field0)? updateProfileSharing,
     TResult? Function(ShareProfileMessage field0)? shareProfile,
     TResult? Function()? notifyAnyways,
+    TResult? Function(SetTranscriptBackgroundMessage field0)?
+        setTranscriptBackground,
   }) {
     return updateProfileSharing?.call(field0);
   }
@@ -11743,6 +12035,8 @@ class _$Message_UpdateProfileSharingImpl extends Message_UpdateProfileSharing {
     TResult Function(UpdateProfileSharingMessage field0)? updateProfileSharing,
     TResult Function(ShareProfileMessage field0)? shareProfile,
     TResult Function()? notifyAnyways,
+    TResult Function(SetTranscriptBackgroundMessage field0)?
+        setTranscriptBackground,
     required TResult orElse(),
   }) {
     if (updateProfileSharing != null) {
@@ -11785,6 +12079,8 @@ class _$Message_UpdateProfileSharingImpl extends Message_UpdateProfileSharing {
         updateProfileSharing,
     required TResult Function(Message_ShareProfile value) shareProfile,
     required TResult Function(Message_NotifyAnyways value) notifyAnyways,
+    required TResult Function(Message_SetTranscriptBackground value)
+        setTranscriptBackground,
   }) {
     return updateProfileSharing(this);
   }
@@ -11818,6 +12114,8 @@ class _$Message_UpdateProfileSharingImpl extends Message_UpdateProfileSharing {
     TResult? Function(Message_UpdateProfileSharing value)? updateProfileSharing,
     TResult? Function(Message_ShareProfile value)? shareProfile,
     TResult? Function(Message_NotifyAnyways value)? notifyAnyways,
+    TResult? Function(Message_SetTranscriptBackground value)?
+        setTranscriptBackground,
   }) {
     return updateProfileSharing?.call(this);
   }
@@ -11851,6 +12149,8 @@ class _$Message_UpdateProfileSharingImpl extends Message_UpdateProfileSharing {
     TResult Function(Message_UpdateProfileSharing value)? updateProfileSharing,
     TResult Function(Message_ShareProfile value)? shareProfile,
     TResult Function(Message_NotifyAnyways value)? notifyAnyways,
+    TResult Function(Message_SetTranscriptBackground value)?
+        setTranscriptBackground,
     required TResult orElse(),
   }) {
     if (updateProfileSharing != null) {
@@ -11974,6 +12274,8 @@ class _$Message_ShareProfileImpl extends Message_ShareProfile {
         updateProfileSharing,
     required TResult Function(ShareProfileMessage field0) shareProfile,
     required TResult Function() notifyAnyways,
+    required TResult Function(SetTranscriptBackgroundMessage field0)
+        setTranscriptBackground,
   }) {
     return shareProfile(field0);
   }
@@ -12007,6 +12309,8 @@ class _$Message_ShareProfileImpl extends Message_ShareProfile {
     TResult? Function(UpdateProfileSharingMessage field0)? updateProfileSharing,
     TResult? Function(ShareProfileMessage field0)? shareProfile,
     TResult? Function()? notifyAnyways,
+    TResult? Function(SetTranscriptBackgroundMessage field0)?
+        setTranscriptBackground,
   }) {
     return shareProfile?.call(field0);
   }
@@ -12040,6 +12344,8 @@ class _$Message_ShareProfileImpl extends Message_ShareProfile {
     TResult Function(UpdateProfileSharingMessage field0)? updateProfileSharing,
     TResult Function(ShareProfileMessage field0)? shareProfile,
     TResult Function()? notifyAnyways,
+    TResult Function(SetTranscriptBackgroundMessage field0)?
+        setTranscriptBackground,
     required TResult orElse(),
   }) {
     if (shareProfile != null) {
@@ -12082,6 +12388,8 @@ class _$Message_ShareProfileImpl extends Message_ShareProfile {
         updateProfileSharing,
     required TResult Function(Message_ShareProfile value) shareProfile,
     required TResult Function(Message_NotifyAnyways value) notifyAnyways,
+    required TResult Function(Message_SetTranscriptBackground value)
+        setTranscriptBackground,
   }) {
     return shareProfile(this);
   }
@@ -12115,6 +12423,8 @@ class _$Message_ShareProfileImpl extends Message_ShareProfile {
     TResult? Function(Message_UpdateProfileSharing value)? updateProfileSharing,
     TResult? Function(Message_ShareProfile value)? shareProfile,
     TResult? Function(Message_NotifyAnyways value)? notifyAnyways,
+    TResult? Function(Message_SetTranscriptBackground value)?
+        setTranscriptBackground,
   }) {
     return shareProfile?.call(this);
   }
@@ -12148,6 +12458,8 @@ class _$Message_ShareProfileImpl extends Message_ShareProfile {
     TResult Function(Message_UpdateProfileSharing value)? updateProfileSharing,
     TResult Function(Message_ShareProfile value)? shareProfile,
     TResult Function(Message_NotifyAnyways value)? notifyAnyways,
+    TResult Function(Message_SetTranscriptBackground value)?
+        setTranscriptBackground,
     required TResult orElse(),
   }) {
     if (shareProfile != null) {
@@ -12242,6 +12554,8 @@ class _$Message_NotifyAnywaysImpl extends Message_NotifyAnyways {
         updateProfileSharing,
     required TResult Function(ShareProfileMessage field0) shareProfile,
     required TResult Function() notifyAnyways,
+    required TResult Function(SetTranscriptBackgroundMessage field0)
+        setTranscriptBackground,
   }) {
     return notifyAnyways();
   }
@@ -12275,6 +12589,8 @@ class _$Message_NotifyAnywaysImpl extends Message_NotifyAnyways {
     TResult? Function(UpdateProfileSharingMessage field0)? updateProfileSharing,
     TResult? Function(ShareProfileMessage field0)? shareProfile,
     TResult? Function()? notifyAnyways,
+    TResult? Function(SetTranscriptBackgroundMessage field0)?
+        setTranscriptBackground,
   }) {
     return notifyAnyways?.call();
   }
@@ -12308,6 +12624,8 @@ class _$Message_NotifyAnywaysImpl extends Message_NotifyAnyways {
     TResult Function(UpdateProfileSharingMessage field0)? updateProfileSharing,
     TResult Function(ShareProfileMessage field0)? shareProfile,
     TResult Function()? notifyAnyways,
+    TResult Function(SetTranscriptBackgroundMessage field0)?
+        setTranscriptBackground,
     required TResult orElse(),
   }) {
     if (notifyAnyways != null) {
@@ -12350,6 +12668,8 @@ class _$Message_NotifyAnywaysImpl extends Message_NotifyAnyways {
         updateProfileSharing,
     required TResult Function(Message_ShareProfile value) shareProfile,
     required TResult Function(Message_NotifyAnyways value) notifyAnyways,
+    required TResult Function(Message_SetTranscriptBackground value)
+        setTranscriptBackground,
   }) {
     return notifyAnyways(this);
   }
@@ -12383,6 +12703,8 @@ class _$Message_NotifyAnywaysImpl extends Message_NotifyAnyways {
     TResult? Function(Message_UpdateProfileSharing value)? updateProfileSharing,
     TResult? Function(Message_ShareProfile value)? shareProfile,
     TResult? Function(Message_NotifyAnyways value)? notifyAnyways,
+    TResult? Function(Message_SetTranscriptBackground value)?
+        setTranscriptBackground,
   }) {
     return notifyAnyways?.call(this);
   }
@@ -12416,6 +12738,8 @@ class _$Message_NotifyAnywaysImpl extends Message_NotifyAnyways {
     TResult Function(Message_UpdateProfileSharing value)? updateProfileSharing,
     TResult Function(Message_ShareProfile value)? shareProfile,
     TResult Function(Message_NotifyAnyways value)? notifyAnyways,
+    TResult Function(Message_SetTranscriptBackground value)?
+        setTranscriptBackground,
     required TResult orElse(),
   }) {
     if (notifyAnyways != null) {
@@ -12428,6 +12752,331 @@ class _$Message_NotifyAnywaysImpl extends Message_NotifyAnyways {
 abstract class Message_NotifyAnyways extends Message {
   const factory Message_NotifyAnyways() = _$Message_NotifyAnywaysImpl;
   const Message_NotifyAnyways._() : super._();
+}
+
+/// @nodoc
+abstract class _$$Message_SetTranscriptBackgroundImplCopyWith<$Res> {
+  factory _$$Message_SetTranscriptBackgroundImplCopyWith(
+          _$Message_SetTranscriptBackgroundImpl value,
+          $Res Function(_$Message_SetTranscriptBackgroundImpl) then) =
+      __$$Message_SetTranscriptBackgroundImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({SetTranscriptBackgroundMessage field0});
+
+  $SetTranscriptBackgroundMessageCopyWith<$Res> get field0;
+}
+
+/// @nodoc
+class __$$Message_SetTranscriptBackgroundImplCopyWithImpl<$Res>
+    extends _$MessageCopyWithImpl<$Res, _$Message_SetTranscriptBackgroundImpl>
+    implements _$$Message_SetTranscriptBackgroundImplCopyWith<$Res> {
+  __$$Message_SetTranscriptBackgroundImplCopyWithImpl(
+      _$Message_SetTranscriptBackgroundImpl _value,
+      $Res Function(_$Message_SetTranscriptBackgroundImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of Message
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? field0 = null,
+  }) {
+    return _then(_$Message_SetTranscriptBackgroundImpl(
+      null == field0
+          ? _value.field0
+          : field0 // ignore: cast_nullable_to_non_nullable
+              as SetTranscriptBackgroundMessage,
+    ));
+  }
+
+  /// Create a copy of Message
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $SetTranscriptBackgroundMessageCopyWith<$Res> get field0 {
+    return $SetTranscriptBackgroundMessageCopyWith<$Res>(_value.field0,
+        (value) {
+      return _then(_value.copyWith(field0: value));
+    });
+  }
+}
+
+/// @nodoc
+
+class _$Message_SetTranscriptBackgroundImpl
+    extends Message_SetTranscriptBackground {
+  const _$Message_SetTranscriptBackgroundImpl(this.field0) : super._();
+
+  @override
+  final SetTranscriptBackgroundMessage field0;
+
+  @override
+  String toString() {
+    return 'Message.setTranscriptBackground(field0: $field0)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$Message_SetTranscriptBackgroundImpl &&
+            (identical(other.field0, field0) || other.field0 == field0));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, field0);
+
+  /// Create a copy of Message
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$Message_SetTranscriptBackgroundImplCopyWith<
+          _$Message_SetTranscriptBackgroundImpl>
+      get copyWith => __$$Message_SetTranscriptBackgroundImplCopyWithImpl<
+          _$Message_SetTranscriptBackgroundImpl>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(NormalMessage field0) message,
+    required TResult Function(RenameMessage field0) renameMessage,
+    required TResult Function(ChangeParticipantMessage field0)
+        changeParticipants,
+    required TResult Function(ReactMessage field0) react,
+    required TResult Function() delivered,
+    required TResult Function() read,
+    required TResult Function() typing,
+    required TResult Function(UnsendMessage field0) unsend,
+    required TResult Function(EditMessage field0) edit,
+    required TResult Function(IconChangeMessage field0) iconChange,
+    required TResult Function() stopTyping,
+    required TResult Function(bool field0) enableSmsActivation,
+    required TResult Function() messageReadOnDevice,
+    required TResult Function(bool field0) smsConfirmSent,
+    required TResult Function() markUnread,
+    required TResult Function() peerCacheInvalidate,
+    required TResult Function(UpdateExtensionMessage field0) updateExtension,
+    required TResult Function(ErrorMessage field0) error,
+    required TResult Function(MoveToRecycleBinMessage field0) moveToRecycleBin,
+    required TResult Function(OperatedChat field0) recoverChat,
+    required TResult Function(PermanentDeleteMessage field0) permanentDelete,
+    required TResult Function() unschedule,
+    required TResult Function(UpdateProfileMessage field0) updateProfile,
+    required TResult Function(UpdateProfileSharingMessage field0)
+        updateProfileSharing,
+    required TResult Function(ShareProfileMessage field0) shareProfile,
+    required TResult Function() notifyAnyways,
+    required TResult Function(SetTranscriptBackgroundMessage field0)
+        setTranscriptBackground,
+  }) {
+    return setTranscriptBackground(field0);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(NormalMessage field0)? message,
+    TResult? Function(RenameMessage field0)? renameMessage,
+    TResult? Function(ChangeParticipantMessage field0)? changeParticipants,
+    TResult? Function(ReactMessage field0)? react,
+    TResult? Function()? delivered,
+    TResult? Function()? read,
+    TResult? Function()? typing,
+    TResult? Function(UnsendMessage field0)? unsend,
+    TResult? Function(EditMessage field0)? edit,
+    TResult? Function(IconChangeMessage field0)? iconChange,
+    TResult? Function()? stopTyping,
+    TResult? Function(bool field0)? enableSmsActivation,
+    TResult? Function()? messageReadOnDevice,
+    TResult? Function(bool field0)? smsConfirmSent,
+    TResult? Function()? markUnread,
+    TResult? Function()? peerCacheInvalidate,
+    TResult? Function(UpdateExtensionMessage field0)? updateExtension,
+    TResult? Function(ErrorMessage field0)? error,
+    TResult? Function(MoveToRecycleBinMessage field0)? moveToRecycleBin,
+    TResult? Function(OperatedChat field0)? recoverChat,
+    TResult? Function(PermanentDeleteMessage field0)? permanentDelete,
+    TResult? Function()? unschedule,
+    TResult? Function(UpdateProfileMessage field0)? updateProfile,
+    TResult? Function(UpdateProfileSharingMessage field0)? updateProfileSharing,
+    TResult? Function(ShareProfileMessage field0)? shareProfile,
+    TResult? Function()? notifyAnyways,
+    TResult? Function(SetTranscriptBackgroundMessage field0)?
+        setTranscriptBackground,
+  }) {
+    return setTranscriptBackground?.call(field0);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(NormalMessage field0)? message,
+    TResult Function(RenameMessage field0)? renameMessage,
+    TResult Function(ChangeParticipantMessage field0)? changeParticipants,
+    TResult Function(ReactMessage field0)? react,
+    TResult Function()? delivered,
+    TResult Function()? read,
+    TResult Function()? typing,
+    TResult Function(UnsendMessage field0)? unsend,
+    TResult Function(EditMessage field0)? edit,
+    TResult Function(IconChangeMessage field0)? iconChange,
+    TResult Function()? stopTyping,
+    TResult Function(bool field0)? enableSmsActivation,
+    TResult Function()? messageReadOnDevice,
+    TResult Function(bool field0)? smsConfirmSent,
+    TResult Function()? markUnread,
+    TResult Function()? peerCacheInvalidate,
+    TResult Function(UpdateExtensionMessage field0)? updateExtension,
+    TResult Function(ErrorMessage field0)? error,
+    TResult Function(MoveToRecycleBinMessage field0)? moveToRecycleBin,
+    TResult Function(OperatedChat field0)? recoverChat,
+    TResult Function(PermanentDeleteMessage field0)? permanentDelete,
+    TResult Function()? unschedule,
+    TResult Function(UpdateProfileMessage field0)? updateProfile,
+    TResult Function(UpdateProfileSharingMessage field0)? updateProfileSharing,
+    TResult Function(ShareProfileMessage field0)? shareProfile,
+    TResult Function()? notifyAnyways,
+    TResult Function(SetTranscriptBackgroundMessage field0)?
+        setTranscriptBackground,
+    required TResult orElse(),
+  }) {
+    if (setTranscriptBackground != null) {
+      return setTranscriptBackground(field0);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(Message_Message value) message,
+    required TResult Function(Message_RenameMessage value) renameMessage,
+    required TResult Function(Message_ChangeParticipants value)
+        changeParticipants,
+    required TResult Function(Message_React value) react,
+    required TResult Function(Message_Delivered value) delivered,
+    required TResult Function(Message_Read value) read,
+    required TResult Function(Message_Typing value) typing,
+    required TResult Function(Message_Unsend value) unsend,
+    required TResult Function(Message_Edit value) edit,
+    required TResult Function(Message_IconChange value) iconChange,
+    required TResult Function(Message_StopTyping value) stopTyping,
+    required TResult Function(Message_EnableSmsActivation value)
+        enableSmsActivation,
+    required TResult Function(Message_MessageReadOnDevice value)
+        messageReadOnDevice,
+    required TResult Function(Message_SmsConfirmSent value) smsConfirmSent,
+    required TResult Function(Message_MarkUnread value) markUnread,
+    required TResult Function(Message_PeerCacheInvalidate value)
+        peerCacheInvalidate,
+    required TResult Function(Message_UpdateExtension value) updateExtension,
+    required TResult Function(Message_Error value) error,
+    required TResult Function(Message_MoveToRecycleBin value) moveToRecycleBin,
+    required TResult Function(Message_RecoverChat value) recoverChat,
+    required TResult Function(Message_PermanentDelete value) permanentDelete,
+    required TResult Function(Message_Unschedule value) unschedule,
+    required TResult Function(Message_UpdateProfile value) updateProfile,
+    required TResult Function(Message_UpdateProfileSharing value)
+        updateProfileSharing,
+    required TResult Function(Message_ShareProfile value) shareProfile,
+    required TResult Function(Message_NotifyAnyways value) notifyAnyways,
+    required TResult Function(Message_SetTranscriptBackground value)
+        setTranscriptBackground,
+  }) {
+    return setTranscriptBackground(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(Message_Message value)? message,
+    TResult? Function(Message_RenameMessage value)? renameMessage,
+    TResult? Function(Message_ChangeParticipants value)? changeParticipants,
+    TResult? Function(Message_React value)? react,
+    TResult? Function(Message_Delivered value)? delivered,
+    TResult? Function(Message_Read value)? read,
+    TResult? Function(Message_Typing value)? typing,
+    TResult? Function(Message_Unsend value)? unsend,
+    TResult? Function(Message_Edit value)? edit,
+    TResult? Function(Message_IconChange value)? iconChange,
+    TResult? Function(Message_StopTyping value)? stopTyping,
+    TResult? Function(Message_EnableSmsActivation value)? enableSmsActivation,
+    TResult? Function(Message_MessageReadOnDevice value)? messageReadOnDevice,
+    TResult? Function(Message_SmsConfirmSent value)? smsConfirmSent,
+    TResult? Function(Message_MarkUnread value)? markUnread,
+    TResult? Function(Message_PeerCacheInvalidate value)? peerCacheInvalidate,
+    TResult? Function(Message_UpdateExtension value)? updateExtension,
+    TResult? Function(Message_Error value)? error,
+    TResult? Function(Message_MoveToRecycleBin value)? moveToRecycleBin,
+    TResult? Function(Message_RecoverChat value)? recoverChat,
+    TResult? Function(Message_PermanentDelete value)? permanentDelete,
+    TResult? Function(Message_Unschedule value)? unschedule,
+    TResult? Function(Message_UpdateProfile value)? updateProfile,
+    TResult? Function(Message_UpdateProfileSharing value)? updateProfileSharing,
+    TResult? Function(Message_ShareProfile value)? shareProfile,
+    TResult? Function(Message_NotifyAnyways value)? notifyAnyways,
+    TResult? Function(Message_SetTranscriptBackground value)?
+        setTranscriptBackground,
+  }) {
+    return setTranscriptBackground?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(Message_Message value)? message,
+    TResult Function(Message_RenameMessage value)? renameMessage,
+    TResult Function(Message_ChangeParticipants value)? changeParticipants,
+    TResult Function(Message_React value)? react,
+    TResult Function(Message_Delivered value)? delivered,
+    TResult Function(Message_Read value)? read,
+    TResult Function(Message_Typing value)? typing,
+    TResult Function(Message_Unsend value)? unsend,
+    TResult Function(Message_Edit value)? edit,
+    TResult Function(Message_IconChange value)? iconChange,
+    TResult Function(Message_StopTyping value)? stopTyping,
+    TResult Function(Message_EnableSmsActivation value)? enableSmsActivation,
+    TResult Function(Message_MessageReadOnDevice value)? messageReadOnDevice,
+    TResult Function(Message_SmsConfirmSent value)? smsConfirmSent,
+    TResult Function(Message_MarkUnread value)? markUnread,
+    TResult Function(Message_PeerCacheInvalidate value)? peerCacheInvalidate,
+    TResult Function(Message_UpdateExtension value)? updateExtension,
+    TResult Function(Message_Error value)? error,
+    TResult Function(Message_MoveToRecycleBin value)? moveToRecycleBin,
+    TResult Function(Message_RecoverChat value)? recoverChat,
+    TResult Function(Message_PermanentDelete value)? permanentDelete,
+    TResult Function(Message_Unschedule value)? unschedule,
+    TResult Function(Message_UpdateProfile value)? updateProfile,
+    TResult Function(Message_UpdateProfileSharing value)? updateProfileSharing,
+    TResult Function(Message_ShareProfile value)? shareProfile,
+    TResult Function(Message_NotifyAnyways value)? notifyAnyways,
+    TResult Function(Message_SetTranscriptBackground value)?
+        setTranscriptBackground,
+    required TResult orElse(),
+  }) {
+    if (setTranscriptBackground != null) {
+      return setTranscriptBackground(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class Message_SetTranscriptBackground extends Message {
+  const factory Message_SetTranscriptBackground(
+          final SetTranscriptBackgroundMessage field0) =
+      _$Message_SetTranscriptBackgroundImpl;
+  const Message_SetTranscriptBackground._() : super._();
+
+  SetTranscriptBackgroundMessage get field0;
+
+  /// Create a copy of Message
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$Message_SetTranscriptBackgroundImplCopyWith<
+          _$Message_SetTranscriptBackgroundImpl>
+      get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
@@ -14769,6 +15418,8 @@ mixin _$PosterType {
     required TResult Function(MonogramData data, PosterColor background)
         monogram,
     required TResult Function(MemojiData data, PosterColor background) memoji,
+    required TResult Function(TranscriptDynamicUserData data) transcriptDynamic,
+    required TResult Function(List<PosterColor> colors) transcriptGradient,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -14776,6 +15427,8 @@ mixin _$PosterType {
     TResult? Function(List<PosterAsset> assets)? photo,
     TResult? Function(MonogramData data, PosterColor background)? monogram,
     TResult? Function(MemojiData data, PosterColor background)? memoji,
+    TResult? Function(TranscriptDynamicUserData data)? transcriptDynamic,
+    TResult? Function(List<PosterColor> colors)? transcriptGradient,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -14783,6 +15436,8 @@ mixin _$PosterType {
     TResult Function(List<PosterAsset> assets)? photo,
     TResult Function(MonogramData data, PosterColor background)? monogram,
     TResult Function(MemojiData data, PosterColor background)? memoji,
+    TResult Function(TranscriptDynamicUserData data)? transcriptDynamic,
+    TResult Function(List<PosterColor> colors)? transcriptGradient,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -14791,6 +15446,10 @@ mixin _$PosterType {
     required TResult Function(PosterType_Photo value) photo,
     required TResult Function(PosterType_Monogram value) monogram,
     required TResult Function(PosterType_Memoji value) memoji,
+    required TResult Function(PosterType_TranscriptDynamic value)
+        transcriptDynamic,
+    required TResult Function(PosterType_TranscriptGradient value)
+        transcriptGradient,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -14798,6 +15457,8 @@ mixin _$PosterType {
     TResult? Function(PosterType_Photo value)? photo,
     TResult? Function(PosterType_Monogram value)? monogram,
     TResult? Function(PosterType_Memoji value)? memoji,
+    TResult? Function(PosterType_TranscriptDynamic value)? transcriptDynamic,
+    TResult? Function(PosterType_TranscriptGradient value)? transcriptGradient,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -14805,6 +15466,8 @@ mixin _$PosterType {
     TResult Function(PosterType_Photo value)? photo,
     TResult Function(PosterType_Monogram value)? monogram,
     TResult Function(PosterType_Memoji value)? memoji,
+    TResult Function(PosterType_TranscriptDynamic value)? transcriptDynamic,
+    TResult Function(PosterType_TranscriptGradient value)? transcriptGradient,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -14912,6 +15575,8 @@ class _$PosterType_PhotoImpl extends PosterType_Photo {
     required TResult Function(MonogramData data, PosterColor background)
         monogram,
     required TResult Function(MemojiData data, PosterColor background) memoji,
+    required TResult Function(TranscriptDynamicUserData data) transcriptDynamic,
+    required TResult Function(List<PosterColor> colors) transcriptGradient,
   }) {
     return photo(assets);
   }
@@ -14922,6 +15587,8 @@ class _$PosterType_PhotoImpl extends PosterType_Photo {
     TResult? Function(List<PosterAsset> assets)? photo,
     TResult? Function(MonogramData data, PosterColor background)? monogram,
     TResult? Function(MemojiData data, PosterColor background)? memoji,
+    TResult? Function(TranscriptDynamicUserData data)? transcriptDynamic,
+    TResult? Function(List<PosterColor> colors)? transcriptGradient,
   }) {
     return photo?.call(assets);
   }
@@ -14932,6 +15599,8 @@ class _$PosterType_PhotoImpl extends PosterType_Photo {
     TResult Function(List<PosterAsset> assets)? photo,
     TResult Function(MonogramData data, PosterColor background)? monogram,
     TResult Function(MemojiData data, PosterColor background)? memoji,
+    TResult Function(TranscriptDynamicUserData data)? transcriptDynamic,
+    TResult Function(List<PosterColor> colors)? transcriptGradient,
     required TResult orElse(),
   }) {
     if (photo != null) {
@@ -14946,6 +15615,10 @@ class _$PosterType_PhotoImpl extends PosterType_Photo {
     required TResult Function(PosterType_Photo value) photo,
     required TResult Function(PosterType_Monogram value) monogram,
     required TResult Function(PosterType_Memoji value) memoji,
+    required TResult Function(PosterType_TranscriptDynamic value)
+        transcriptDynamic,
+    required TResult Function(PosterType_TranscriptGradient value)
+        transcriptGradient,
   }) {
     return photo(this);
   }
@@ -14956,6 +15629,8 @@ class _$PosterType_PhotoImpl extends PosterType_Photo {
     TResult? Function(PosterType_Photo value)? photo,
     TResult? Function(PosterType_Monogram value)? monogram,
     TResult? Function(PosterType_Memoji value)? memoji,
+    TResult? Function(PosterType_TranscriptDynamic value)? transcriptDynamic,
+    TResult? Function(PosterType_TranscriptGradient value)? transcriptGradient,
   }) {
     return photo?.call(this);
   }
@@ -14966,6 +15641,8 @@ class _$PosterType_PhotoImpl extends PosterType_Photo {
     TResult Function(PosterType_Photo value)? photo,
     TResult Function(PosterType_Monogram value)? monogram,
     TResult Function(PosterType_Memoji value)? memoji,
+    TResult Function(PosterType_TranscriptDynamic value)? transcriptDynamic,
+    TResult Function(PosterType_TranscriptGradient value)? transcriptGradient,
     required TResult orElse(),
   }) {
     if (photo != null) {
@@ -15073,6 +15750,8 @@ class _$PosterType_MonogramImpl extends PosterType_Monogram {
     required TResult Function(MonogramData data, PosterColor background)
         monogram,
     required TResult Function(MemojiData data, PosterColor background) memoji,
+    required TResult Function(TranscriptDynamicUserData data) transcriptDynamic,
+    required TResult Function(List<PosterColor> colors) transcriptGradient,
   }) {
     return monogram(data, background);
   }
@@ -15083,6 +15762,8 @@ class _$PosterType_MonogramImpl extends PosterType_Monogram {
     TResult? Function(List<PosterAsset> assets)? photo,
     TResult? Function(MonogramData data, PosterColor background)? monogram,
     TResult? Function(MemojiData data, PosterColor background)? memoji,
+    TResult? Function(TranscriptDynamicUserData data)? transcriptDynamic,
+    TResult? Function(List<PosterColor> colors)? transcriptGradient,
   }) {
     return monogram?.call(data, background);
   }
@@ -15093,6 +15774,8 @@ class _$PosterType_MonogramImpl extends PosterType_Monogram {
     TResult Function(List<PosterAsset> assets)? photo,
     TResult Function(MonogramData data, PosterColor background)? monogram,
     TResult Function(MemojiData data, PosterColor background)? memoji,
+    TResult Function(TranscriptDynamicUserData data)? transcriptDynamic,
+    TResult Function(List<PosterColor> colors)? transcriptGradient,
     required TResult orElse(),
   }) {
     if (monogram != null) {
@@ -15107,6 +15790,10 @@ class _$PosterType_MonogramImpl extends PosterType_Monogram {
     required TResult Function(PosterType_Photo value) photo,
     required TResult Function(PosterType_Monogram value) monogram,
     required TResult Function(PosterType_Memoji value) memoji,
+    required TResult Function(PosterType_TranscriptDynamic value)
+        transcriptDynamic,
+    required TResult Function(PosterType_TranscriptGradient value)
+        transcriptGradient,
   }) {
     return monogram(this);
   }
@@ -15117,6 +15804,8 @@ class _$PosterType_MonogramImpl extends PosterType_Monogram {
     TResult? Function(PosterType_Photo value)? photo,
     TResult? Function(PosterType_Monogram value)? monogram,
     TResult? Function(PosterType_Memoji value)? memoji,
+    TResult? Function(PosterType_TranscriptDynamic value)? transcriptDynamic,
+    TResult? Function(PosterType_TranscriptGradient value)? transcriptGradient,
   }) {
     return monogram?.call(this);
   }
@@ -15127,6 +15816,8 @@ class _$PosterType_MonogramImpl extends PosterType_Monogram {
     TResult Function(PosterType_Photo value)? photo,
     TResult Function(PosterType_Monogram value)? monogram,
     TResult Function(PosterType_Memoji value)? memoji,
+    TResult Function(PosterType_TranscriptDynamic value)? transcriptDynamic,
+    TResult Function(PosterType_TranscriptGradient value)? transcriptGradient,
     required TResult orElse(),
   }) {
     if (monogram != null) {
@@ -15235,6 +15926,8 @@ class _$PosterType_MemojiImpl extends PosterType_Memoji {
     required TResult Function(MonogramData data, PosterColor background)
         monogram,
     required TResult Function(MemojiData data, PosterColor background) memoji,
+    required TResult Function(TranscriptDynamicUserData data) transcriptDynamic,
+    required TResult Function(List<PosterColor> colors) transcriptGradient,
   }) {
     return memoji(data, background);
   }
@@ -15245,6 +15938,8 @@ class _$PosterType_MemojiImpl extends PosterType_Memoji {
     TResult? Function(List<PosterAsset> assets)? photo,
     TResult? Function(MonogramData data, PosterColor background)? monogram,
     TResult? Function(MemojiData data, PosterColor background)? memoji,
+    TResult? Function(TranscriptDynamicUserData data)? transcriptDynamic,
+    TResult? Function(List<PosterColor> colors)? transcriptGradient,
   }) {
     return memoji?.call(data, background);
   }
@@ -15255,6 +15950,8 @@ class _$PosterType_MemojiImpl extends PosterType_Memoji {
     TResult Function(List<PosterAsset> assets)? photo,
     TResult Function(MonogramData data, PosterColor background)? monogram,
     TResult Function(MemojiData data, PosterColor background)? memoji,
+    TResult Function(TranscriptDynamicUserData data)? transcriptDynamic,
+    TResult Function(List<PosterColor> colors)? transcriptGradient,
     required TResult orElse(),
   }) {
     if (memoji != null) {
@@ -15269,6 +15966,10 @@ class _$PosterType_MemojiImpl extends PosterType_Memoji {
     required TResult Function(PosterType_Photo value) photo,
     required TResult Function(PosterType_Monogram value) monogram,
     required TResult Function(PosterType_Memoji value) memoji,
+    required TResult Function(PosterType_TranscriptDynamic value)
+        transcriptDynamic,
+    required TResult Function(PosterType_TranscriptGradient value)
+        transcriptGradient,
   }) {
     return memoji(this);
   }
@@ -15279,6 +15980,8 @@ class _$PosterType_MemojiImpl extends PosterType_Memoji {
     TResult? Function(PosterType_Photo value)? photo,
     TResult? Function(PosterType_Monogram value)? monogram,
     TResult? Function(PosterType_Memoji value)? memoji,
+    TResult? Function(PosterType_TranscriptDynamic value)? transcriptDynamic,
+    TResult? Function(PosterType_TranscriptGradient value)? transcriptGradient,
   }) {
     return memoji?.call(this);
   }
@@ -15289,6 +15992,8 @@ class _$PosterType_MemojiImpl extends PosterType_Memoji {
     TResult Function(PosterType_Photo value)? photo,
     TResult Function(PosterType_Monogram value)? monogram,
     TResult Function(PosterType_Memoji value)? memoji,
+    TResult Function(PosterType_TranscriptDynamic value)? transcriptDynamic,
+    TResult Function(PosterType_TranscriptGradient value)? transcriptGradient,
     required TResult orElse(),
   }) {
     if (memoji != null) {
@@ -15312,6 +16017,354 @@ abstract class PosterType_Memoji extends PosterType {
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$PosterType_MemojiImplCopyWith<_$PosterType_MemojiImpl> get copyWith =>
       throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$PosterType_TranscriptDynamicImplCopyWith<$Res> {
+  factory _$$PosterType_TranscriptDynamicImplCopyWith(
+          _$PosterType_TranscriptDynamicImpl value,
+          $Res Function(_$PosterType_TranscriptDynamicImpl) then) =
+      __$$PosterType_TranscriptDynamicImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({TranscriptDynamicUserData data});
+}
+
+/// @nodoc
+class __$$PosterType_TranscriptDynamicImplCopyWithImpl<$Res>
+    extends _$PosterTypeCopyWithImpl<$Res, _$PosterType_TranscriptDynamicImpl>
+    implements _$$PosterType_TranscriptDynamicImplCopyWith<$Res> {
+  __$$PosterType_TranscriptDynamicImplCopyWithImpl(
+      _$PosterType_TranscriptDynamicImpl _value,
+      $Res Function(_$PosterType_TranscriptDynamicImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of PosterType
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? data = null,
+  }) {
+    return _then(_$PosterType_TranscriptDynamicImpl(
+      data: null == data
+          ? _value.data
+          : data // ignore: cast_nullable_to_non_nullable
+              as TranscriptDynamicUserData,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$PosterType_TranscriptDynamicImpl extends PosterType_TranscriptDynamic {
+  const _$PosterType_TranscriptDynamicImpl({required this.data}) : super._();
+
+  @override
+  final TranscriptDynamicUserData data;
+
+  @override
+  String toString() {
+    return 'PosterType.transcriptDynamic(data: $data)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$PosterType_TranscriptDynamicImpl &&
+            (identical(other.data, data) || other.data == data));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, data);
+
+  /// Create a copy of PosterType
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$PosterType_TranscriptDynamicImplCopyWith<
+          _$PosterType_TranscriptDynamicImpl>
+      get copyWith => __$$PosterType_TranscriptDynamicImplCopyWithImpl<
+          _$PosterType_TranscriptDynamicImpl>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(List<PosterAsset> assets) photo,
+    required TResult Function(MonogramData data, PosterColor background)
+        monogram,
+    required TResult Function(MemojiData data, PosterColor background) memoji,
+    required TResult Function(TranscriptDynamicUserData data) transcriptDynamic,
+    required TResult Function(List<PosterColor> colors) transcriptGradient,
+  }) {
+    return transcriptDynamic(data);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(List<PosterAsset> assets)? photo,
+    TResult? Function(MonogramData data, PosterColor background)? monogram,
+    TResult? Function(MemojiData data, PosterColor background)? memoji,
+    TResult? Function(TranscriptDynamicUserData data)? transcriptDynamic,
+    TResult? Function(List<PosterColor> colors)? transcriptGradient,
+  }) {
+    return transcriptDynamic?.call(data);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(List<PosterAsset> assets)? photo,
+    TResult Function(MonogramData data, PosterColor background)? monogram,
+    TResult Function(MemojiData data, PosterColor background)? memoji,
+    TResult Function(TranscriptDynamicUserData data)? transcriptDynamic,
+    TResult Function(List<PosterColor> colors)? transcriptGradient,
+    required TResult orElse(),
+  }) {
+    if (transcriptDynamic != null) {
+      return transcriptDynamic(data);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(PosterType_Photo value) photo,
+    required TResult Function(PosterType_Monogram value) monogram,
+    required TResult Function(PosterType_Memoji value) memoji,
+    required TResult Function(PosterType_TranscriptDynamic value)
+        transcriptDynamic,
+    required TResult Function(PosterType_TranscriptGradient value)
+        transcriptGradient,
+  }) {
+    return transcriptDynamic(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(PosterType_Photo value)? photo,
+    TResult? Function(PosterType_Monogram value)? monogram,
+    TResult? Function(PosterType_Memoji value)? memoji,
+    TResult? Function(PosterType_TranscriptDynamic value)? transcriptDynamic,
+    TResult? Function(PosterType_TranscriptGradient value)? transcriptGradient,
+  }) {
+    return transcriptDynamic?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(PosterType_Photo value)? photo,
+    TResult Function(PosterType_Monogram value)? monogram,
+    TResult Function(PosterType_Memoji value)? memoji,
+    TResult Function(PosterType_TranscriptDynamic value)? transcriptDynamic,
+    TResult Function(PosterType_TranscriptGradient value)? transcriptGradient,
+    required TResult orElse(),
+  }) {
+    if (transcriptDynamic != null) {
+      return transcriptDynamic(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class PosterType_TranscriptDynamic extends PosterType {
+  const factory PosterType_TranscriptDynamic(
+          {required final TranscriptDynamicUserData data}) =
+      _$PosterType_TranscriptDynamicImpl;
+  const PosterType_TranscriptDynamic._() : super._();
+
+  TranscriptDynamicUserData get data;
+
+  /// Create a copy of PosterType
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$PosterType_TranscriptDynamicImplCopyWith<
+          _$PosterType_TranscriptDynamicImpl>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$PosterType_TranscriptGradientImplCopyWith<$Res> {
+  factory _$$PosterType_TranscriptGradientImplCopyWith(
+          _$PosterType_TranscriptGradientImpl value,
+          $Res Function(_$PosterType_TranscriptGradientImpl) then) =
+      __$$PosterType_TranscriptGradientImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({List<PosterColor> colors});
+}
+
+/// @nodoc
+class __$$PosterType_TranscriptGradientImplCopyWithImpl<$Res>
+    extends _$PosterTypeCopyWithImpl<$Res, _$PosterType_TranscriptGradientImpl>
+    implements _$$PosterType_TranscriptGradientImplCopyWith<$Res> {
+  __$$PosterType_TranscriptGradientImplCopyWithImpl(
+      _$PosterType_TranscriptGradientImpl _value,
+      $Res Function(_$PosterType_TranscriptGradientImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of PosterType
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? colors = null,
+  }) {
+    return _then(_$PosterType_TranscriptGradientImpl(
+      colors: null == colors
+          ? _value._colors
+          : colors // ignore: cast_nullable_to_non_nullable
+              as List<PosterColor>,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$PosterType_TranscriptGradientImpl
+    extends PosterType_TranscriptGradient {
+  const _$PosterType_TranscriptGradientImpl(
+      {required final List<PosterColor> colors})
+      : _colors = colors,
+        super._();
+
+  final List<PosterColor> _colors;
+  @override
+  List<PosterColor> get colors {
+    if (_colors is EqualUnmodifiableListView) return _colors;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_colors);
+  }
+
+  @override
+  String toString() {
+    return 'PosterType.transcriptGradient(colors: $colors)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$PosterType_TranscriptGradientImpl &&
+            const DeepCollectionEquality().equals(other._colors, _colors));
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(_colors));
+
+  /// Create a copy of PosterType
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$PosterType_TranscriptGradientImplCopyWith<
+          _$PosterType_TranscriptGradientImpl>
+      get copyWith => __$$PosterType_TranscriptGradientImplCopyWithImpl<
+          _$PosterType_TranscriptGradientImpl>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(List<PosterAsset> assets) photo,
+    required TResult Function(MonogramData data, PosterColor background)
+        monogram,
+    required TResult Function(MemojiData data, PosterColor background) memoji,
+    required TResult Function(TranscriptDynamicUserData data) transcriptDynamic,
+    required TResult Function(List<PosterColor> colors) transcriptGradient,
+  }) {
+    return transcriptGradient(colors);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(List<PosterAsset> assets)? photo,
+    TResult? Function(MonogramData data, PosterColor background)? monogram,
+    TResult? Function(MemojiData data, PosterColor background)? memoji,
+    TResult? Function(TranscriptDynamicUserData data)? transcriptDynamic,
+    TResult? Function(List<PosterColor> colors)? transcriptGradient,
+  }) {
+    return transcriptGradient?.call(colors);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(List<PosterAsset> assets)? photo,
+    TResult Function(MonogramData data, PosterColor background)? monogram,
+    TResult Function(MemojiData data, PosterColor background)? memoji,
+    TResult Function(TranscriptDynamicUserData data)? transcriptDynamic,
+    TResult Function(List<PosterColor> colors)? transcriptGradient,
+    required TResult orElse(),
+  }) {
+    if (transcriptGradient != null) {
+      return transcriptGradient(colors);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(PosterType_Photo value) photo,
+    required TResult Function(PosterType_Monogram value) monogram,
+    required TResult Function(PosterType_Memoji value) memoji,
+    required TResult Function(PosterType_TranscriptDynamic value)
+        transcriptDynamic,
+    required TResult Function(PosterType_TranscriptGradient value)
+        transcriptGradient,
+  }) {
+    return transcriptGradient(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(PosterType_Photo value)? photo,
+    TResult? Function(PosterType_Monogram value)? monogram,
+    TResult? Function(PosterType_Memoji value)? memoji,
+    TResult? Function(PosterType_TranscriptDynamic value)? transcriptDynamic,
+    TResult? Function(PosterType_TranscriptGradient value)? transcriptGradient,
+  }) {
+    return transcriptGradient?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(PosterType_Photo value)? photo,
+    TResult Function(PosterType_Monogram value)? monogram,
+    TResult Function(PosterType_Memoji value)? memoji,
+    TResult Function(PosterType_TranscriptDynamic value)? transcriptDynamic,
+    TResult Function(PosterType_TranscriptGradient value)? transcriptGradient,
+    required TResult orElse(),
+  }) {
+    if (transcriptGradient != null) {
+      return transcriptGradient(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class PosterType_TranscriptGradient extends PosterType {
+  const factory PosterType_TranscriptGradient(
+          {required final List<PosterColor> colors}) =
+      _$PosterType_TranscriptGradientImpl;
+  const PosterType_TranscriptGradient._() : super._();
+
+  List<PosterColor> get colors;
+
+  /// Create a copy of PosterType
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$PosterType_TranscriptGradientImplCopyWith<
+          _$PosterType_TranscriptGradientImpl>
+      get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
@@ -19964,6 +21017,677 @@ abstract class RegisterState_Failed extends RegisterState {
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$RegisterState_FailedImplCopyWith<_$RegisterState_FailedImpl>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+mixin _$SetTranscriptBackgroundMessage {
+  int get aid => throw _privateConstructorUsedError;
+  int get bid => throw _privateConstructorUsedError;
+  String get chatId => throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(int aid, int bid, String chatId, bool remove)
+        remove,
+    required TResult Function(
+            int aid,
+            int bid,
+            String chatId,
+            String objectId,
+            int payloadVersion,
+            String backgroundId,
+            String url,
+            String signature,
+            String key,
+            int status)
+        set_,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(int aid, int bid, String chatId, bool remove)? remove,
+    TResult? Function(
+            int aid,
+            int bid,
+            String chatId,
+            String objectId,
+            int payloadVersion,
+            String backgroundId,
+            String url,
+            String signature,
+            String key,
+            int status)?
+        set_,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(int aid, int bid, String chatId, bool remove)? remove,
+    TResult Function(
+            int aid,
+            int bid,
+            String chatId,
+            String objectId,
+            int payloadVersion,
+            String backgroundId,
+            String url,
+            String signature,
+            String key,
+            int status)?
+        set_,
+    required TResult orElse(),
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(SetTranscriptBackgroundMessage_Remove value)
+        remove,
+    required TResult Function(SetTranscriptBackgroundMessage_Set value) set_,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(SetTranscriptBackgroundMessage_Remove value)? remove,
+    TResult? Function(SetTranscriptBackgroundMessage_Set value)? set_,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(SetTranscriptBackgroundMessage_Remove value)? remove,
+    TResult Function(SetTranscriptBackgroundMessage_Set value)? set_,
+    required TResult orElse(),
+  }) =>
+      throw _privateConstructorUsedError;
+
+  /// Create a copy of SetTranscriptBackgroundMessage
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $SetTranscriptBackgroundMessageCopyWith<SetTranscriptBackgroundMessage>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $SetTranscriptBackgroundMessageCopyWith<$Res> {
+  factory $SetTranscriptBackgroundMessageCopyWith(
+          SetTranscriptBackgroundMessage value,
+          $Res Function(SetTranscriptBackgroundMessage) then) =
+      _$SetTranscriptBackgroundMessageCopyWithImpl<$Res,
+          SetTranscriptBackgroundMessage>;
+  @useResult
+  $Res call({int aid, int bid, String chatId});
+}
+
+/// @nodoc
+class _$SetTranscriptBackgroundMessageCopyWithImpl<$Res,
+        $Val extends SetTranscriptBackgroundMessage>
+    implements $SetTranscriptBackgroundMessageCopyWith<$Res> {
+  _$SetTranscriptBackgroundMessageCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of SetTranscriptBackgroundMessage
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? aid = null,
+    Object? bid = null,
+    Object? chatId = null,
+  }) {
+    return _then(_value.copyWith(
+      aid: null == aid
+          ? _value.aid
+          : aid // ignore: cast_nullable_to_non_nullable
+              as int,
+      bid: null == bid
+          ? _value.bid
+          : bid // ignore: cast_nullable_to_non_nullable
+              as int,
+      chatId: null == chatId
+          ? _value.chatId
+          : chatId // ignore: cast_nullable_to_non_nullable
+              as String,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$SetTranscriptBackgroundMessage_RemoveImplCopyWith<$Res>
+    implements $SetTranscriptBackgroundMessageCopyWith<$Res> {
+  factory _$$SetTranscriptBackgroundMessage_RemoveImplCopyWith(
+          _$SetTranscriptBackgroundMessage_RemoveImpl value,
+          $Res Function(_$SetTranscriptBackgroundMessage_RemoveImpl) then) =
+      __$$SetTranscriptBackgroundMessage_RemoveImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({int aid, int bid, String chatId, bool remove});
+}
+
+/// @nodoc
+class __$$SetTranscriptBackgroundMessage_RemoveImplCopyWithImpl<$Res>
+    extends _$SetTranscriptBackgroundMessageCopyWithImpl<$Res,
+        _$SetTranscriptBackgroundMessage_RemoveImpl>
+    implements _$$SetTranscriptBackgroundMessage_RemoveImplCopyWith<$Res> {
+  __$$SetTranscriptBackgroundMessage_RemoveImplCopyWithImpl(
+      _$SetTranscriptBackgroundMessage_RemoveImpl _value,
+      $Res Function(_$SetTranscriptBackgroundMessage_RemoveImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of SetTranscriptBackgroundMessage
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? aid = null,
+    Object? bid = null,
+    Object? chatId = null,
+    Object? remove = null,
+  }) {
+    return _then(_$SetTranscriptBackgroundMessage_RemoveImpl(
+      aid: null == aid
+          ? _value.aid
+          : aid // ignore: cast_nullable_to_non_nullable
+              as int,
+      bid: null == bid
+          ? _value.bid
+          : bid // ignore: cast_nullable_to_non_nullable
+              as int,
+      chatId: null == chatId
+          ? _value.chatId
+          : chatId // ignore: cast_nullable_to_non_nullable
+              as String,
+      remove: null == remove
+          ? _value.remove
+          : remove // ignore: cast_nullable_to_non_nullable
+              as bool,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$SetTranscriptBackgroundMessage_RemoveImpl
+    extends SetTranscriptBackgroundMessage_Remove {
+  const _$SetTranscriptBackgroundMessage_RemoveImpl(
+      {required this.aid,
+      required this.bid,
+      required this.chatId,
+      required this.remove})
+      : super._();
+
+  @override
+  final int aid;
+  @override
+  final int bid;
+  @override
+  final String chatId;
+  @override
+  final bool remove;
+
+  @override
+  String toString() {
+    return 'SetTranscriptBackgroundMessage.remove(aid: $aid, bid: $bid, chatId: $chatId, remove: $remove)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$SetTranscriptBackgroundMessage_RemoveImpl &&
+            (identical(other.aid, aid) || other.aid == aid) &&
+            (identical(other.bid, bid) || other.bid == bid) &&
+            (identical(other.chatId, chatId) || other.chatId == chatId) &&
+            (identical(other.remove, remove) || other.remove == remove));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, aid, bid, chatId, remove);
+
+  /// Create a copy of SetTranscriptBackgroundMessage
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$SetTranscriptBackgroundMessage_RemoveImplCopyWith<
+          _$SetTranscriptBackgroundMessage_RemoveImpl>
+      get copyWith => __$$SetTranscriptBackgroundMessage_RemoveImplCopyWithImpl<
+          _$SetTranscriptBackgroundMessage_RemoveImpl>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(int aid, int bid, String chatId, bool remove)
+        remove,
+    required TResult Function(
+            int aid,
+            int bid,
+            String chatId,
+            String objectId,
+            int payloadVersion,
+            String backgroundId,
+            String url,
+            String signature,
+            String key,
+            int status)
+        set_,
+  }) {
+    return remove(aid, bid, chatId, this.remove);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(int aid, int bid, String chatId, bool remove)? remove,
+    TResult? Function(
+            int aid,
+            int bid,
+            String chatId,
+            String objectId,
+            int payloadVersion,
+            String backgroundId,
+            String url,
+            String signature,
+            String key,
+            int status)?
+        set_,
+  }) {
+    return remove?.call(aid, bid, chatId, this.remove);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(int aid, int bid, String chatId, bool remove)? remove,
+    TResult Function(
+            int aid,
+            int bid,
+            String chatId,
+            String objectId,
+            int payloadVersion,
+            String backgroundId,
+            String url,
+            String signature,
+            String key,
+            int status)?
+        set_,
+    required TResult orElse(),
+  }) {
+    if (remove != null) {
+      return remove(aid, bid, chatId, this.remove);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(SetTranscriptBackgroundMessage_Remove value)
+        remove,
+    required TResult Function(SetTranscriptBackgroundMessage_Set value) set_,
+  }) {
+    return remove(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(SetTranscriptBackgroundMessage_Remove value)? remove,
+    TResult? Function(SetTranscriptBackgroundMessage_Set value)? set_,
+  }) {
+    return remove?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(SetTranscriptBackgroundMessage_Remove value)? remove,
+    TResult Function(SetTranscriptBackgroundMessage_Set value)? set_,
+    required TResult orElse(),
+  }) {
+    if (remove != null) {
+      return remove(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class SetTranscriptBackgroundMessage_Remove
+    extends SetTranscriptBackgroundMessage {
+  const factory SetTranscriptBackgroundMessage_Remove(
+          {required final int aid,
+          required final int bid,
+          required final String chatId,
+          required final bool remove}) =
+      _$SetTranscriptBackgroundMessage_RemoveImpl;
+  const SetTranscriptBackgroundMessage_Remove._() : super._();
+
+  @override
+  int get aid;
+  @override
+  int get bid;
+  @override
+  String get chatId;
+  bool get remove;
+
+  /// Create a copy of SetTranscriptBackgroundMessage
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$SetTranscriptBackgroundMessage_RemoveImplCopyWith<
+          _$SetTranscriptBackgroundMessage_RemoveImpl>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$SetTranscriptBackgroundMessage_SetImplCopyWith<$Res>
+    implements $SetTranscriptBackgroundMessageCopyWith<$Res> {
+  factory _$$SetTranscriptBackgroundMessage_SetImplCopyWith(
+          _$SetTranscriptBackgroundMessage_SetImpl value,
+          $Res Function(_$SetTranscriptBackgroundMessage_SetImpl) then) =
+      __$$SetTranscriptBackgroundMessage_SetImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {int aid,
+      int bid,
+      String chatId,
+      String objectId,
+      int payloadVersion,
+      String backgroundId,
+      String url,
+      String signature,
+      String key,
+      int status});
+}
+
+/// @nodoc
+class __$$SetTranscriptBackgroundMessage_SetImplCopyWithImpl<$Res>
+    extends _$SetTranscriptBackgroundMessageCopyWithImpl<$Res,
+        _$SetTranscriptBackgroundMessage_SetImpl>
+    implements _$$SetTranscriptBackgroundMessage_SetImplCopyWith<$Res> {
+  __$$SetTranscriptBackgroundMessage_SetImplCopyWithImpl(
+      _$SetTranscriptBackgroundMessage_SetImpl _value,
+      $Res Function(_$SetTranscriptBackgroundMessage_SetImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of SetTranscriptBackgroundMessage
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? aid = null,
+    Object? bid = null,
+    Object? chatId = null,
+    Object? objectId = null,
+    Object? payloadVersion = null,
+    Object? backgroundId = null,
+    Object? url = null,
+    Object? signature = null,
+    Object? key = null,
+    Object? status = null,
+  }) {
+    return _then(_$SetTranscriptBackgroundMessage_SetImpl(
+      aid: null == aid
+          ? _value.aid
+          : aid // ignore: cast_nullable_to_non_nullable
+              as int,
+      bid: null == bid
+          ? _value.bid
+          : bid // ignore: cast_nullable_to_non_nullable
+              as int,
+      chatId: null == chatId
+          ? _value.chatId
+          : chatId // ignore: cast_nullable_to_non_nullable
+              as String,
+      objectId: null == objectId
+          ? _value.objectId
+          : objectId // ignore: cast_nullable_to_non_nullable
+              as String,
+      payloadVersion: null == payloadVersion
+          ? _value.payloadVersion
+          : payloadVersion // ignore: cast_nullable_to_non_nullable
+              as int,
+      backgroundId: null == backgroundId
+          ? _value.backgroundId
+          : backgroundId // ignore: cast_nullable_to_non_nullable
+              as String,
+      url: null == url
+          ? _value.url
+          : url // ignore: cast_nullable_to_non_nullable
+              as String,
+      signature: null == signature
+          ? _value.signature
+          : signature // ignore: cast_nullable_to_non_nullable
+              as String,
+      key: null == key
+          ? _value.key
+          : key // ignore: cast_nullable_to_non_nullable
+              as String,
+      status: null == status
+          ? _value.status
+          : status // ignore: cast_nullable_to_non_nullable
+              as int,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$SetTranscriptBackgroundMessage_SetImpl
+    extends SetTranscriptBackgroundMessage_Set {
+  const _$SetTranscriptBackgroundMessage_SetImpl(
+      {required this.aid,
+      required this.bid,
+      required this.chatId,
+      required this.objectId,
+      required this.payloadVersion,
+      required this.backgroundId,
+      required this.url,
+      required this.signature,
+      required this.key,
+      required this.status})
+      : super._();
+
+  @override
+  final int aid;
+  @override
+  final int bid;
+  @override
+  final String chatId;
+  @override
+  final String objectId;
+  @override
+  final int payloadVersion;
+  @override
+  final String backgroundId;
+  @override
+  final String url;
+  @override
+  final String signature;
+  @override
+  final String key;
+  @override
+  final int status;
+
+  @override
+  String toString() {
+    return 'SetTranscriptBackgroundMessage.set_(aid: $aid, bid: $bid, chatId: $chatId, objectId: $objectId, payloadVersion: $payloadVersion, backgroundId: $backgroundId, url: $url, signature: $signature, key: $key, status: $status)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$SetTranscriptBackgroundMessage_SetImpl &&
+            (identical(other.aid, aid) || other.aid == aid) &&
+            (identical(other.bid, bid) || other.bid == bid) &&
+            (identical(other.chatId, chatId) || other.chatId == chatId) &&
+            (identical(other.objectId, objectId) ||
+                other.objectId == objectId) &&
+            (identical(other.payloadVersion, payloadVersion) ||
+                other.payloadVersion == payloadVersion) &&
+            (identical(other.backgroundId, backgroundId) ||
+                other.backgroundId == backgroundId) &&
+            (identical(other.url, url) || other.url == url) &&
+            (identical(other.signature, signature) ||
+                other.signature == signature) &&
+            (identical(other.key, key) || other.key == key) &&
+            (identical(other.status, status) || other.status == status));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, aid, bid, chatId, objectId,
+      payloadVersion, backgroundId, url, signature, key, status);
+
+  /// Create a copy of SetTranscriptBackgroundMessage
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$SetTranscriptBackgroundMessage_SetImplCopyWith<
+          _$SetTranscriptBackgroundMessage_SetImpl>
+      get copyWith => __$$SetTranscriptBackgroundMessage_SetImplCopyWithImpl<
+          _$SetTranscriptBackgroundMessage_SetImpl>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(int aid, int bid, String chatId, bool remove)
+        remove,
+    required TResult Function(
+            int aid,
+            int bid,
+            String chatId,
+            String objectId,
+            int payloadVersion,
+            String backgroundId,
+            String url,
+            String signature,
+            String key,
+            int status)
+        set_,
+  }) {
+    return set_(aid, bid, chatId, objectId, payloadVersion, backgroundId, url,
+        signature, key, status);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(int aid, int bid, String chatId, bool remove)? remove,
+    TResult? Function(
+            int aid,
+            int bid,
+            String chatId,
+            String objectId,
+            int payloadVersion,
+            String backgroundId,
+            String url,
+            String signature,
+            String key,
+            int status)?
+        set_,
+  }) {
+    return set_?.call(aid, bid, chatId, objectId, payloadVersion, backgroundId,
+        url, signature, key, status);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(int aid, int bid, String chatId, bool remove)? remove,
+    TResult Function(
+            int aid,
+            int bid,
+            String chatId,
+            String objectId,
+            int payloadVersion,
+            String backgroundId,
+            String url,
+            String signature,
+            String key,
+            int status)?
+        set_,
+    required TResult orElse(),
+  }) {
+    if (set_ != null) {
+      return set_(aid, bid, chatId, objectId, payloadVersion, backgroundId, url,
+          signature, key, status);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(SetTranscriptBackgroundMessage_Remove value)
+        remove,
+    required TResult Function(SetTranscriptBackgroundMessage_Set value) set_,
+  }) {
+    return set_(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(SetTranscriptBackgroundMessage_Remove value)? remove,
+    TResult? Function(SetTranscriptBackgroundMessage_Set value)? set_,
+  }) {
+    return set_?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(SetTranscriptBackgroundMessage_Remove value)? remove,
+    TResult Function(SetTranscriptBackgroundMessage_Set value)? set_,
+    required TResult orElse(),
+  }) {
+    if (set_ != null) {
+      return set_(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class SetTranscriptBackgroundMessage_Set
+    extends SetTranscriptBackgroundMessage {
+  const factory SetTranscriptBackgroundMessage_Set(
+      {required final int aid,
+      required final int bid,
+      required final String chatId,
+      required final String objectId,
+      required final int payloadVersion,
+      required final String backgroundId,
+      required final String url,
+      required final String signature,
+      required final String key,
+      required final int status}) = _$SetTranscriptBackgroundMessage_SetImpl;
+  const SetTranscriptBackgroundMessage_Set._() : super._();
+
+  @override
+  int get aid;
+  @override
+  int get bid;
+  @override
+  String get chatId;
+  String get objectId;
+  int get payloadVersion;
+  String get backgroundId;
+  String get url;
+  String get signature;
+  String get key;
+  int get status;
+
+  /// Create a copy of SetTranscriptBackgroundMessage
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$SetTranscriptBackgroundMessage_SetImplCopyWith<
+          _$SetTranscriptBackgroundMessage_SetImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
 

@@ -167,15 +167,15 @@ class _ProfilePanelState extends OptimizedState<ProfilePanel> with WidgetsBindin
             }
           );
 
-          api.SimplifiedPoster? poster;
+          api.SimplifiedIncomingCallPoster? poster;
           if (ss.settings.userPosterPath.value != null && !kIsDesktop) {
             var data = await File("${ss.settings.userPosterPath.value!}.jpg").readAsBytes();
             print("Parsing file");
             poster = await api.fromPosterSave(poster: data);
           }
 
-          if (poster != null && poster.type is api.PosterType_Photo) {
-            var photo = poster.type as api.PosterType_Photo;
+          if (poster != null && poster.poster.type is api.PosterType_Photo) {
+            var photo = poster.poster.type as api.PosterType_Photo;
             for (var asset in photo.assets) {
               Map<String, Uint8List> entries = {};
               for (var file in asset.files.entries) {
@@ -186,8 +186,8 @@ class _ProfilePanelState extends OptimizedState<ProfilePanel> with WidgetsBindin
             }
           }
 
-          if (poster != null && poster.type is api.PosterType_Memoji) {
-            var photo = poster.type as api.PosterType_Memoji;
+          if (poster != null && poster.poster.type is api.PosterType_Memoji) {
+            var photo = poster.poster.type as api.PosterType_Memoji;
             photo.data.avatarImageData = await File("${ss.settings.userPosterPath.value!}/memoji_orig.heic").readAsBytes();
           }
 

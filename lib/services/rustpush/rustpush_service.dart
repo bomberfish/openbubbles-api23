@@ -378,7 +378,7 @@ class RustPushBackend implements BackendService {
       participants: formattedHandles,
       usingHandle: handle,
       isRpSms: service == "SMS",
-      senderIsKnown: true,
+      senderIsKnown: formattedHandles.any((handle) => !(handle.contact?.isShared ?? true)),
     );
     chat.save(); //save for reflectMessage
     if (message != null) {
@@ -1694,7 +1694,14 @@ class RustPushService extends GetxService {
           
           // allow updating image
           attributedBodyData = (attributedBodyData.$3.isEmpty ? original.attributedBody[0] : attributedBodyData.$1, original.text!, attributedBodyData.$3.isEmpty ? original.dbAttachments : attributedBodyData.$3);
-          es.amkToLatest[msg.field0.toUuid] = myMsg.id; // we are latest
+          var tag = es.getLatest(msg.field0.toUuid);
+          // updates cached value; we are latest
+          if (tag.firstOrNull != myMsg.id) {
+            tag.insert(0, myMsg.id);
+            if (tag.length > 3) {
+              tag.removeAt(3);
+            }
+          }
 
           if (chat != null && cm.activeChat?.chat.guid == chat.guid) {
             ms(original.chat.target!.guid).updateMessage(original);
@@ -2169,7 +2176,7 @@ class RustPushService extends GetxService {
       if (fetch.poster != null && !kIsDesktop) {
         var decoded = await api.parsePoster(poster: fetch.poster!);
         try {
-          posterPath = await savePoster(decoded, name: otherHandle.displayName);
+          posterPath = await savePoster(decoded);
         } catch (e, t) {
           Logger.error("Could not decode other poster", error: e, trace: t); 
         }
@@ -2232,12 +2239,10 @@ class RustPushService extends GetxService {
     }
   }
 
-  Future<String> savePoster(api.SimplifiedPoster decoded, {String? name}) async {
-    int number = Random().nextInt(9999999);
-
+  Future<void> savePosterData(api.SimplifiedPoster poster, int number) async {
     String appDocPath = fs.appDocDir.path;
-    if (decoded.type is api.PosterType_Photo) {
-      var photo = decoded.type as api.PosterType_Photo;
+    if (poster.type is api.PosterType_Photo) {
+      var photo = poster.type as api.PosterType_Photo;
       for (var asset in photo.assets) {
         Map<String, Uint8List> entries = {};
         for (var file in asset.files.entries) {
@@ -2257,8 +2262,8 @@ class RustPushService extends GetxService {
       }
     }
 
-    if (decoded.type is api.PosterType_Memoji) {
-      var memoji = decoded.type as api.PosterType_Memoji;
+    if (poster.type is api.PosterType_Memoji) {
+      var memoji = poster.type as api.PosterType_Memoji;
       File f = File("$appDocPath/avatars/you/poster-$number/memoji_orig.heic");
       if (!(await f.exists())) {
         await f.create(recursive: true);
@@ -2268,6 +2273,14 @@ class RustPushService extends GetxService {
       await mcs.invokeMethod("decode-heif", {"file": f.path, "output": "$appDocPath/avatars/you/poster-$number/memoji.png"});
       memoji.data.avatarImageData = Uint8List(0);
     }
+  }
+
+  Future<String> savePoster(api.SimplifiedIncomingCallPoster decoded) async {
+    int number = Random().nextInt(9999999);
+
+    String appDocPath = fs.appDocDir.path;
+
+    savePosterData(decoded.poster, number);
 
     var save = await api.parsePosterSave(poster: decoded);
     File file = File("$appDocPath/avatars/you/poster-$number.jpg");
@@ -2554,12 +2567,12 @@ class RustPushService extends GetxService {
           var poster = handle.getPoster();
           if (poster != null && !kIsDesktop) {
             var loaded = await api.fromPosterSave(poster: await File("$poster.jpg").readAsBytes());
-            var images = await loadPosterImages(poster, loaded);
+            var images = await loadPosterImages(poster, loaded.poster);
 
             var recorder = ui.PictureRecorder();
             var canvas = Canvas(recorder);
 
-            var painter = PosterPainter(poster: loaded, images: images, name: handle.displayName);
+            var painter = PosterPainter(poster: loaded.poster, images: images, name: handle.displayName);
 
             Map<dynamic, dynamic> results = await mcs.invokeMethod("get-full-resolution");
 

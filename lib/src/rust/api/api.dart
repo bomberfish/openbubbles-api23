@@ -50,19 +50,44 @@ Future<JoinedOsConfig> configFromRelay(
 Future<String?> validateRelay({required ArcPushState state}) =>
     RustLib.instance.api.crateApiApiValidateRelay(state: state);
 
-Future<SimplifiedPoster> parsePoster({required IMessagePosterRecord poster}) =>
+Future<SimplifiedTranscriptPoster> parseTranscriptPoster(
+        {required List<int> payload}) =>
+    RustLib.instance.api.crateApiApiParseTranscriptPoster(payload: payload);
+
+Future<Uint8List> packTranscriptPoster(
+        {required SimplifiedTranscriptPoster payload}) =>
+    RustLib.instance.api.crateApiApiPackTranscriptPoster(payload: payload);
+
+Future<SimplifiedIncomingCallPoster> parsePoster(
+        {required IMessagePosterRecord poster}) =>
     RustLib.instance.api.crateApiApiParsePoster(poster: poster);
 
-Future<IMessagePosterRecord> fromPoster({required SimplifiedPoster poster}) =>
+Future<IMessagePosterRecord> fromPoster(
+        {required SimplifiedIncomingCallPoster poster}) =>
     RustLib.instance.api.crateApiApiFromPoster(poster: poster);
 
-SimplifiedPoster clonePoster({required SimplifiedPoster poster}) =>
+SimplifiedIncomingCallPoster clonePoster(
+        {required SimplifiedIncomingCallPoster poster}) =>
     RustLib.instance.api.crateApiApiClonePoster(poster: poster);
 
-Future<Uint8List> parsePosterSave({required SimplifiedPoster poster}) =>
+SimplifiedTranscriptPoster cloneTranscriptPoster(
+        {required SimplifiedTranscriptPoster poster}) =>
+    RustLib.instance.api.crateApiApiCloneTranscriptPoster(poster: poster);
+
+Future<Uint8List> transcriptPosterSave(
+        {required SimplifiedTranscriptPoster poster}) =>
+    RustLib.instance.api.crateApiApiTranscriptPosterSave(poster: poster);
+
+Future<SimplifiedTranscriptPoster> fromTranscriptPosterSave(
+        {required List<int> poster}) =>
+    RustLib.instance.api.crateApiApiFromTranscriptPosterSave(poster: poster);
+
+Future<Uint8List> parsePosterSave(
+        {required SimplifiedIncomingCallPoster poster}) =>
     RustLib.instance.api.crateApiApiParsePosterSave(poster: poster);
 
-Future<SimplifiedPoster> fromPosterSave({required List<int> poster}) =>
+Future<SimplifiedIncomingCallPoster> fromPosterSave(
+        {required List<int> poster}) =>
     RustLib.instance.api.crateApiApiFromPosterSave(poster: poster);
 
 Future<DeviceInfo> getDeviceInfoState({required ArcPushState state}) =>
@@ -1927,6 +1952,9 @@ sealed class Message with _$Message {
     ShareProfileMessage field0,
   ) = Message_ShareProfile;
   const factory Message.notifyAnyways() = Message_NotifyAnyways;
+  const factory Message.setTranscriptBackground(
+    SetTranscriptBackgroundMessage field0,
+  ) = Message_SetTranscriptBackground;
 }
 
 class MessageInst {
@@ -2589,6 +2617,12 @@ class PosterColor {
           red == other.red;
 }
 
+enum PosterRole {
+  prPosterRoleBackdrop,
+  prPosterRoleIncomingCall,
+  ;
+}
+
 @freezed
 sealed class PosterType with _$PosterType {
   const PosterType._();
@@ -2604,6 +2638,12 @@ sealed class PosterType with _$PosterType {
     required MemojiData data,
     required PosterColor background,
   }) = PosterType_Memoji;
+  const factory PosterType.transcriptDynamic({
+    required TranscriptDynamicUserData data,
+  }) = PosterType_TranscriptDynamic;
+  const factory PosterType.transcriptGradient({
+    required List<PosterColor> colors,
+  }) = PosterType_TranscriptGradient;
 }
 
 class PRPosterColor {
@@ -2999,6 +3039,31 @@ class ScheduleMode {
           schedule == other.schedule;
 }
 
+@freezed
+sealed class SetTranscriptBackgroundMessage
+    with _$SetTranscriptBackgroundMessage {
+  const SetTranscriptBackgroundMessage._();
+
+  const factory SetTranscriptBackgroundMessage.remove({
+    required int aid,
+    required int bid,
+    required String chatId,
+    required bool remove,
+  }) = SetTranscriptBackgroundMessage_Remove;
+  const factory SetTranscriptBackgroundMessage.set_({
+    required int aid,
+    required int bid,
+    required String chatId,
+    required String objectId,
+    required int payloadVersion,
+    required String backgroundId,
+    required String url,
+    required String signature,
+    required String key,
+    required int status,
+  }) = SetTranscriptBackgroundMessage_Set;
+}
+
 class ShareProfileMessage {
   final Uint8List cloudKitDecryptionRecordKey;
   final String cloudKitRecordKey;
@@ -3102,35 +3167,74 @@ class SharedPoster {
           messageTag == other.messageTag;
 }
 
-class SimplifiedPoster {
+class SimplifiedIncomingCallPoster {
+  final SimplifiedPoster poster;
   final WallpaperMetadata textMetadata;
-  final PRPosterTitleStyleConfiguration titleConfiguration;
-  PosterType type;
   Uint8List lowRes;
 
-  SimplifiedPoster({
+  SimplifiedIncomingCallPoster({
+    required this.poster,
     required this.textMetadata,
-    required this.titleConfiguration,
-    required this.type,
     required this.lowRes,
   });
 
   @override
+  int get hashCode => poster.hashCode ^ textMetadata.hashCode ^ lowRes.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is SimplifiedIncomingCallPoster &&
+          runtimeType == other.runtimeType &&
+          poster == other.poster &&
+          textMetadata == other.textMetadata &&
+          lowRes == other.lowRes;
+}
+
+class SimplifiedPoster {
+  final PRPosterTitleStyleConfiguration titleConfiguration;
+  PosterType type;
+  final PosterRole role;
+
+  SimplifiedPoster({
+    required this.titleConfiguration,
+    required this.type,
+    required this.role,
+  });
+
+  @override
   int get hashCode =>
-      textMetadata.hashCode ^
-      titleConfiguration.hashCode ^
-      type.hashCode ^
-      lowRes.hashCode;
+      titleConfiguration.hashCode ^ type.hashCode ^ role.hashCode;
 
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is SimplifiedPoster &&
           runtimeType == other.runtimeType &&
-          textMetadata == other.textMetadata &&
           titleConfiguration == other.titleConfiguration &&
           type == other.type &&
-          lowRes == other.lowRes;
+          role == other.role;
+}
+
+class SimplifiedTranscriptPoster {
+  final WatchBackground watch;
+  final SimplifiedPoster poster;
+
+  const SimplifiedTranscriptPoster({
+    required this.watch,
+    required this.poster,
+  });
+
+  @override
+  int get hashCode => watch.hashCode ^ poster.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is SimplifiedTranscriptPoster &&
+          runtimeType == other.runtimeType &&
+          watch == other.watch &&
+          poster == other.poster;
 }
 
 @freezed
@@ -3294,6 +3398,24 @@ sealed class TextFormat with _$TextFormat {
   const factory TextFormat.effect(
     TextEffect field0,
   ) = TextFormat_Effect;
+}
+
+class TranscriptDynamicUserData {
+  final String identifier;
+
+  const TranscriptDynamicUserData({
+    required this.identifier,
+  });
+
+  @override
+  int get hashCode => identifier.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is TranscriptDynamicUserData &&
+          runtimeType == other.runtimeType &&
+          identifier == other.identifier;
 }
 
 class TransferProgress {
@@ -3508,4 +3630,35 @@ class WallpaperMetadata {
           fontWeightKey == other.fontWeightKey &&
           isVerticalKey == other.isVerticalKey &&
           typeKey == other.typeKey;
+}
+
+class WatchBackground {
+  final bool isHighKey;
+  final double luminance;
+  final Uint8List backgroundImageData;
+  final String extensionIdentifier;
+
+  const WatchBackground({
+    required this.isHighKey,
+    required this.luminance,
+    required this.backgroundImageData,
+    required this.extensionIdentifier,
+  });
+
+  @override
+  int get hashCode =>
+      isHighKey.hashCode ^
+      luminance.hashCode ^
+      backgroundImageData.hashCode ^
+      extensionIdentifier.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is WatchBackground &&
+          runtimeType == other.runtimeType &&
+          isHighKey == other.isHighKey &&
+          luminance == other.luminance &&
+          backgroundImageData == other.backgroundImageData &&
+          extensionIdentifier == other.extensionIdentifier;
 }

@@ -716,27 +716,68 @@ pub async fn validate_relay(state: &Arc<PushState>) -> anyhow::Result<Option<Str
     })
 }
 
-pub fn parse_poster(poster: IMessagePosterRecord) -> anyhow::Result<SimplifiedPoster> {
-    Ok(SimplifiedPoster::from_poster(&poster)?)
+pub fn parse_transcript_poster(payload: Vec<u8>) -> anyhow::Result<SimplifiedTranscriptPoster> {
+    Ok(SimplifiedTranscriptPoster::parse_payload(&payload)?)
 }
 
-pub fn from_poster(mut poster: SimplifiedPoster) -> anyhow::Result<IMessagePosterRecord> {
+pub fn pack_transcript_poster(mut payload: SimplifiedTranscriptPoster) -> anyhow::Result<Vec<u8>> {
+    Ok(payload.to_payload()?)
+}
+
+pub fn parse_poster(poster: IMessagePosterRecord) -> anyhow::Result<SimplifiedIncomingCallPoster> {
+    Ok(SimplifiedIncomingCallPoster::from_poster(&poster)?)
+}
+
+pub fn from_poster(mut poster: SimplifiedIncomingCallPoster) -> anyhow::Result<IMessagePosterRecord> {
     Ok(poster.to_poster()?)
 }
 
 // simple round trip to rust clones object
 #[frb(sync)]
-pub fn clone_poster(poster: SimplifiedPoster) -> anyhow::Result<SimplifiedPoster> {
+pub fn clone_poster(poster: SimplifiedIncomingCallPoster) -> anyhow::Result<SimplifiedIncomingCallPoster> {
     Ok(poster)
 }
 
-pub fn parse_poster_save(poster: SimplifiedPoster) -> anyhow::Result<Vec<u8>> {
+#[frb(sync)]
+pub fn clone_transcript_poster(poster: SimplifiedTranscriptPoster) -> anyhow::Result<SimplifiedTranscriptPoster> {
+    Ok(poster)
+}
+
+pub fn transcript_poster_save(poster: SimplifiedTranscriptPoster) -> anyhow::Result<Vec<u8>> {
     Ok(plist_to_bin(&poster)?)
 }
 
-pub fn from_poster_save(poster: Vec<u8>) -> anyhow::Result<SimplifiedPoster> {
+pub fn from_transcript_poster_save(poster: Vec<u8>) -> anyhow::Result<SimplifiedTranscriptPoster> {
     debug!("Before");
     let got = plist::from_bytes(&poster)?;
+    debug!("After");
+    Ok(got)
+}
+
+pub fn parse_poster_save(poster: SimplifiedIncomingCallPoster) -> anyhow::Result<Vec<u8>> {
+    Ok(plist_to_bin(&poster)?)
+}
+
+pub fn from_poster_save(poster: Vec<u8>) -> anyhow::Result<SimplifiedIncomingCallPoster> {
+    debug!("Before");
+    let got = match plist::from_bytes(&poster) {
+        Ok(poster) => poster,
+        Err(_) => {
+            let result: SimplifiedPoster = plist::from_bytes(&poster)?;
+
+            #[derive(Deserialize)]
+            struct Extras {
+                text_metadata: WallpaperMetadata,
+                low_res: Data,
+            }
+            let extras: Extras = plist::from_bytes(&poster)?;
+            SimplifiedIncomingCallPoster {
+                poster: result,
+                text_metadata: extras.text_metadata,
+                low_res: extras.low_res.into(),
+            }
+        }
+    };
     debug!("After");
     Ok(got)
 }

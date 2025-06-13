@@ -90,7 +90,13 @@ class _InteractiveHolderState extends CustomState<InteractiveHolder, void, Messa
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    if (message.amkSessionId != null && es.getLatest(message.amkSessionId!) != (message.stagingGuid ?? message.guid)) {
+    if (message.amkSessionId != null && es.getLatest(message.amkSessionId!).firstOrNull != (message.stagingGuid ?? message.guid)) {
+      var latestItems = es.getLatest(message.amkSessionId!);
+
+      if (!latestItems.contains(message.stagingGuid ?? message.guid)) {
+        return const SizedBox.shrink();
+      }
+
       var appData = payloadData!.appData!.first;
       return Padding(
         padding: EdgeInsets.only(left: message.isFromMe! ? 0 : 10, right: message.isFromMe! ? 10 : 0, top: 10, bottom: 10),

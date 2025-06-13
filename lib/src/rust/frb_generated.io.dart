@@ -449,6 +449,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   ScheduleMode dco_decode_box_autoadd_schedule_mode(dynamic raw);
 
   @protected
+  SetTranscriptBackgroundMessage
+      dco_decode_box_autoadd_set_transcript_background_message(dynamic raw);
+
+  @protected
   ShareProfileMessage dco_decode_box_autoadd_share_profile_message(dynamic raw);
 
   @protected
@@ -458,7 +462,12 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   SharedPoster dco_decode_box_autoadd_shared_poster(dynamic raw);
 
   @protected
-  SimplifiedPoster dco_decode_box_autoadd_simplified_poster(dynamic raw);
+  SimplifiedIncomingCallPoster
+      dco_decode_box_autoadd_simplified_incoming_call_poster(dynamic raw);
+
+  @protected
+  SimplifiedTranscriptPoster
+      dco_decode_box_autoadd_simplified_transcript_poster(dynamic raw);
 
   @protected
   StatusKitMessage dco_decode_box_autoadd_status_kit_message(dynamic raw);
@@ -477,6 +486,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   TextFormat dco_decode_box_autoadd_text_format(dynamic raw);
+
+  @protected
+  TranscriptDynamicUserData dco_decode_box_autoadd_transcript_dynamic_user_data(
+      dynamic raw);
 
   @protected
   BigInt dco_decode_box_autoadd_u_64(dynamic raw);
@@ -623,6 +636,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   List<PosterAsset> dco_decode_list_poster_asset(dynamic raw);
+
+  @protected
+  List<PosterColor> dco_decode_list_poster_color(dynamic raw);
 
   @protected
   Float64List dco_decode_list_prim_f_64_strict(dynamic raw);
@@ -921,6 +937,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   PosterColor dco_decode_poster_color(dynamic raw);
 
   @protected
+  PosterRole dco_decode_poster_role(dynamic raw);
+
+  @protected
   PosterType dco_decode_poster_type(dynamic raw);
 
   @protected
@@ -1022,6 +1041,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   ScheduleMode dco_decode_schedule_mode(dynamic raw);
 
   @protected
+  SetTranscriptBackgroundMessage dco_decode_set_transcript_background_message(
+      dynamic raw);
+
+  @protected
   ShareProfileMessage dco_decode_share_profile_message(dynamic raw);
 
   @protected
@@ -1031,7 +1054,15 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   SharedPoster dco_decode_shared_poster(dynamic raw);
 
   @protected
+  SimplifiedIncomingCallPoster dco_decode_simplified_incoming_call_poster(
+      dynamic raw);
+
+  @protected
   SimplifiedPoster dco_decode_simplified_poster(dynamic raw);
+
+  @protected
+  SimplifiedTranscriptPoster dco_decode_simplified_transcript_poster(
+      dynamic raw);
 
   @protected
   StatusKitMessage dco_decode_status_kit_message(dynamic raw);
@@ -1059,6 +1090,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   TextFormat dco_decode_text_format(dynamic raw);
+
+  @protected
+  TranscriptDynamicUserData dco_decode_transcript_dynamic_user_data(
+      dynamic raw);
 
   @protected
   TransferProgress dco_decode_transfer_progress(dynamic raw);
@@ -1099,6 +1134,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   WallpaperMetadata dco_decode_wallpaper_metadata(dynamic raw);
+
+  @protected
+  WatchBackground dco_decode_watch_background(dynamic raw);
 
   @protected
   AnyhowException sse_decode_AnyhowException(SseDeserializer deserializer);
@@ -1519,6 +1557,11 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       SseDeserializer deserializer);
 
   @protected
+  SetTranscriptBackgroundMessage
+      sse_decode_box_autoadd_set_transcript_background_message(
+          SseDeserializer deserializer);
+
+  @protected
   ShareProfileMessage sse_decode_box_autoadd_share_profile_message(
       SseDeserializer deserializer);
 
@@ -1530,8 +1573,14 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       SseDeserializer deserializer);
 
   @protected
-  SimplifiedPoster sse_decode_box_autoadd_simplified_poster(
-      SseDeserializer deserializer);
+  SimplifiedIncomingCallPoster
+      sse_decode_box_autoadd_simplified_incoming_call_poster(
+          SseDeserializer deserializer);
+
+  @protected
+  SimplifiedTranscriptPoster
+      sse_decode_box_autoadd_simplified_transcript_poster(
+          SseDeserializer deserializer);
 
   @protected
   StatusKitMessage sse_decode_box_autoadd_status_kit_message(
@@ -1554,6 +1603,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   TextFormat sse_decode_box_autoadd_text_format(SseDeserializer deserializer);
+
+  @protected
+  TranscriptDynamicUserData sse_decode_box_autoadd_transcript_dynamic_user_data(
+      SseDeserializer deserializer);
 
   @protected
   BigInt sse_decode_box_autoadd_u_64(SseDeserializer deserializer);
@@ -1714,6 +1767,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   List<PosterAsset> sse_decode_list_poster_asset(SseDeserializer deserializer);
+
+  @protected
+  List<PosterColor> sse_decode_list_poster_color(SseDeserializer deserializer);
 
   @protected
   Float64List sse_decode_list_prim_f_64_strict(SseDeserializer deserializer);
@@ -2044,6 +2100,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   PosterColor sse_decode_poster_color(SseDeserializer deserializer);
 
   @protected
+  PosterRole sse_decode_poster_role(SseDeserializer deserializer);
+
+  @protected
   PosterType sse_decode_poster_type(SseDeserializer deserializer);
 
   @protected
@@ -2155,6 +2214,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   ScheduleMode sse_decode_schedule_mode(SseDeserializer deserializer);
 
   @protected
+  SetTranscriptBackgroundMessage sse_decode_set_transcript_background_message(
+      SseDeserializer deserializer);
+
+  @protected
   ShareProfileMessage sse_decode_share_profile_message(
       SseDeserializer deserializer);
 
@@ -2165,7 +2228,15 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   SharedPoster sse_decode_shared_poster(SseDeserializer deserializer);
 
   @protected
+  SimplifiedIncomingCallPoster sse_decode_simplified_incoming_call_poster(
+      SseDeserializer deserializer);
+
+  @protected
   SimplifiedPoster sse_decode_simplified_poster(SseDeserializer deserializer);
+
+  @protected
+  SimplifiedTranscriptPoster sse_decode_simplified_transcript_poster(
+      SseDeserializer deserializer);
 
   @protected
   StatusKitMessage sse_decode_status_kit_message(SseDeserializer deserializer);
@@ -2194,6 +2265,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   TextFormat sse_decode_text_format(SseDeserializer deserializer);
+
+  @protected
+  TranscriptDynamicUserData sse_decode_transcript_dynamic_user_data(
+      SseDeserializer deserializer);
 
   @protected
   TransferProgress sse_decode_transfer_progress(SseDeserializer deserializer);
@@ -2237,6 +2312,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   WallpaperMetadata sse_decode_wallpaper_metadata(SseDeserializer deserializer);
+
+  @protected
+  WatchBackground sse_decode_watch_background(SseDeserializer deserializer);
 
   @protected
   void sse_encode_AnyhowException(
@@ -2674,6 +2752,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       ScheduleMode self, SseSerializer serializer);
 
   @protected
+  void sse_encode_box_autoadd_set_transcript_background_message(
+      SetTranscriptBackgroundMessage self, SseSerializer serializer);
+
+  @protected
   void sse_encode_box_autoadd_share_profile_message(
       ShareProfileMessage self, SseSerializer serializer);
 
@@ -2686,8 +2768,12 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       SharedPoster self, SseSerializer serializer);
 
   @protected
-  void sse_encode_box_autoadd_simplified_poster(
-      SimplifiedPoster self, SseSerializer serializer);
+  void sse_encode_box_autoadd_simplified_incoming_call_poster(
+      SimplifiedIncomingCallPoster self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_box_autoadd_simplified_transcript_poster(
+      SimplifiedTranscriptPoster self, SseSerializer serializer);
 
   @protected
   void sse_encode_box_autoadd_status_kit_message(
@@ -2712,6 +2798,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   void sse_encode_box_autoadd_text_format(
       TextFormat self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_box_autoadd_transcript_dynamic_user_data(
+      TranscriptDynamicUserData self, SseSerializer serializer);
 
   @protected
   void sse_encode_box_autoadd_u_64(BigInt self, SseSerializer serializer);
@@ -2878,6 +2968,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   void sse_encode_list_poster_asset(
       List<PosterAsset> self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_list_poster_color(
+      List<PosterColor> self, SseSerializer serializer);
 
   @protected
   void sse_encode_list_prim_f_64_strict(
@@ -3222,6 +3316,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   void sse_encode_poster_color(PosterColor self, SseSerializer serializer);
 
   @protected
+  void sse_encode_poster_role(PosterRole self, SseSerializer serializer);
+
+  @protected
   void sse_encode_poster_type(PosterType self, SseSerializer serializer);
 
   @protected
@@ -3328,6 +3425,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   void sse_encode_schedule_mode(ScheduleMode self, SseSerializer serializer);
 
   @protected
+  void sse_encode_set_transcript_background_message(
+      SetTranscriptBackgroundMessage self, SseSerializer serializer);
+
+  @protected
   void sse_encode_share_profile_message(
       ShareProfileMessage self, SseSerializer serializer);
 
@@ -3338,8 +3439,16 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   void sse_encode_shared_poster(SharedPoster self, SseSerializer serializer);
 
   @protected
+  void sse_encode_simplified_incoming_call_poster(
+      SimplifiedIncomingCallPoster self, SseSerializer serializer);
+
+  @protected
   void sse_encode_simplified_poster(
       SimplifiedPoster self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_simplified_transcript_poster(
+      SimplifiedTranscriptPoster self, SseSerializer serializer);
 
   @protected
   void sse_encode_status_kit_message(
@@ -3370,6 +3479,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void sse_encode_text_format(TextFormat self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_transcript_dynamic_user_data(
+      TranscriptDynamicUserData self, SseSerializer serializer);
 
   @protected
   void sse_encode_transfer_progress(
@@ -3415,6 +3528,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   void sse_encode_wallpaper_metadata(
       WallpaperMetadata self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_watch_background(
+      WatchBackground self, SseSerializer serializer);
 }
 
 // Section: wire_class

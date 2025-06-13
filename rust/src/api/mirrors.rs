@@ -2,7 +2,7 @@ use std::collections::HashMap;
 
 pub use rustpush::name_photo_sharing::{IMessageNameRecord, IMessagePosterRecord, IMessageNicknameRecord};
 pub use rustpush::{DeleteTarget, MoveToRecycleBinMessage, OperatedChat};
-pub use rustpush::{ShareProfileMessage, SharedPoster, UpdateProfileSharingMessage, UpdateProfileMessage, NSArrayClass, TextFlags, TextEffect, TextFormat, ScheduleMode, SupportAction, NSArray, SupportAlert, PrivateDeviceInfo, PermanentDeleteMessage, NormalMessage, MessageType, UpdateExtensionMessage, ErrorMessage, UnsendMessage, EditMessage, PartExtension, IconChangeMessage, RichLinkImageAttachmentSubstitute, ChangeParticipantMessage, ReactMessage, Reaction, ReactMessageType, RenameMessage, LPLinkMetadata, NSURL, LPIconMetadata, LPImageMetadata, LinkMeta, ExtensionApp, NSDictionaryClass, BalloonLayout, Balloon, IndexedMessagePart, AttachmentType, MacOSConfig, Message, MessageTarget, HardwareConfig, APSConnection, APSConnectionResource, APSState, Attachment, AuthPhone, IDSUserIdentity, MMCSFile, MessageInst, MessagePart, MessageParts, OSConfig, RelayConfig, ResourceState};
+pub use rustpush::{SetTranscriptBackgroundMessage, ShareProfileMessage, SharedPoster, UpdateProfileSharingMessage, UpdateProfileMessage, NSArrayClass, TextFlags, TextEffect, TextFormat, ScheduleMode, SupportAction, NSArray, SupportAlert, PrivateDeviceInfo, PermanentDeleteMessage, NormalMessage, MessageType, UpdateExtensionMessage, ErrorMessage, UnsendMessage, EditMessage, PartExtension, IconChangeMessage, RichLinkImageAttachmentSubstitute, ChangeParticipantMessage, ReactMessage, Reaction, ReactMessageType, RenameMessage, LPLinkMetadata, NSURL, LPIconMetadata, LPImageMetadata, LinkMeta, ExtensionApp, NSDictionaryClass, BalloonLayout, Balloon, IndexedMessagePart, AttachmentType, MacOSConfig, Message, MessageTarget, HardwareConfig, APSConnection, APSConnectionResource, APSState, Attachment, AuthPhone, IDSUserIdentity, MMCSFile, MessageInst, MessagePart, MessageParts, OSConfig, RelayConfig, ResourceState};
 pub use rustpush::{ApsData, ApsAlert, AkData, IdmsCircleMessage, IdmsRequestedSignIn, TeardownSignIn, IdmsMessage, CertifiedContext, PushError, IDSUser, IMClient, ConversationData, ReportMessage, register};
 pub use icloud_auth::{VerifyBody, TrustedPhoneNumber};
 pub use icloud_auth::{LoginState, AppleAccount};
@@ -10,7 +10,7 @@ pub use rustpush::findmy::{Follow, Address, Location, FoundDevice};
 pub use rustpush::facetime::{FTSession, FTMode, FTParticipant, FTMember, LetMeInRequest, FTMessage};
 pub use rustpush::facetime::facetimep::{ConversationParticipant, ConversationLink};
 pub use rustpush::statuskit::{StatusKitPersonalConfig, StatusKitMessage};
-pub use rustpush::posterkit::{UIColor, PRPosterContentMaterialStyle, PosterAsset, PRPosterSystemTimeFontConfiguration, PRPosterColor, PRPosterTitleStyleConfiguration, WallpaperMetadata, PosterColor, PhotoPosterContentsFrame, PhotoPosterContentsSize, PhotoPosterLayer, PhotoPosterLayout, PhotoPosterProperties, PhotoPosterContents, MonogramData, MemojiData, PosterType, SimplifiedPoster};
+pub use rustpush::posterkit::{TranscriptDynamicUserData, WatchBackground, SimplifiedTranscriptPoster, SimplifiedIncomingCallPoster, PosterRole, UIColor, PRPosterContentMaterialStyle, PosterAsset, PRPosterSystemTimeFontConfiguration, PRPosterColor, PRPosterTitleStyleConfiguration, WallpaperMetadata, PosterColor, PhotoPosterContentsFrame, PhotoPosterContentsSize, PhotoPosterLayer, PhotoPosterLayout, PhotoPosterProperties, PhotoPosterContents, MonogramData, MemojiData, PosterType, SimplifiedPoster};
 
 
 #[frb(non_opaque, mirror(PRPosterContentMaterialStyle))]
@@ -246,6 +246,35 @@ pub struct DartPosterAsset {
     pub uuid: String,
 }
 
+#[frb(mirror(TranscriptDynamicUserData))]
+pub struct DartTranscriptDynamicUserData {
+    pub identifier: String,
+}
+
+#[frb(mirror(SetTranscriptBackgroundMessage))]
+pub enum DartSetTranscriptBackgroundMessage {
+    Remove {
+        aid: u32,
+        bid: u32, // sequence number
+        chat_id: String,
+
+        remove: bool,
+    },
+    Set {
+        aid: u32,
+        bid: u32, // sequence number
+        chat_id: String,
+        
+        object_id: String,
+        payload_version: u32,
+        background_id: String,
+        url: String,
+        signature: String,
+        key: String,
+        status: u32,
+    }
+}
+
 #[frb(mirror(PosterType))]
 pub enum DartPosterType {
     // com.apple.PhotosUIPrivate.PhotosPosterProvider
@@ -259,6 +288,12 @@ pub enum DartPosterType {
     Memoji {
         data: MemojiData,
         background: PosterColor,
+    },
+    TranscriptDynamic {
+        data: TranscriptDynamicUserData,
+    },
+    TranscriptGradient {
+        colors: Vec<PosterColor>,
     },
 }
 
@@ -275,14 +310,40 @@ pub struct DartWallpaperMetadata {
     pub type_key: String,
 }
 
+#[frb(mirror(PosterRole))]
+pub enum DartPosterRole {
+    PRPosterRoleBackdrop,
+    PRPosterRoleIncomingCall,
+}
+
+#[frb(non_opaque, mirror(SimplifiedIncomingCallPoster))]
+pub struct DartSimplifiedIncomingCallPoster {
+    pub poster: SimplifiedPoster,
+    pub text_metadata: WallpaperMetadata,
+    #[frb(non_final)]
+    pub low_res: Vec<u8>,
+}
+
+#[frb(non_opaque, mirror(WatchBackground))]
+pub struct DartWatchBackground {
+    pub is_high_key: bool,
+    pub luminance: f64,
+    pub background_image_data: Vec<u8>,
+    pub extension_identifier: String,
+}
+
+#[frb(non_opaque, mirror(SimplifiedTranscriptPoster))]
+pub struct DartSimplifiedTranscriptPoster {
+    pub watch: WatchBackground,
+    pub poster: SimplifiedPoster,
+}
+
 #[frb(non_opaque, mirror(SimplifiedPoster))]
 pub struct DartSimplifiedPoster {
-    pub text_metadata: WallpaperMetadata,
     pub title_configuration: PRPosterTitleStyleConfiguration,
     #[frb(non_final)]
     pub r#type: PosterType,
-    #[frb(non_final)]
-    pub low_res: Vec<u8>,
+    pub role: PosterRole,
 }
 
 #[repr(C)]
@@ -836,6 +897,7 @@ pub enum DartMessage {
     UpdateProfileSharing(UpdateProfileSharingMessage),
     ShareProfile(ShareProfileMessage),
     NotifyAnyways,
+    SetTranscriptBackground(SetTranscriptBackgroundMessage),
 }
 
 #[frb(mirror(MessageTarget))]

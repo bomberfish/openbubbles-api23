@@ -51,7 +51,7 @@ class ProfileScaffoldState
 
   final ScrollController iosScrollController = ScrollController();
 
-  api.SimplifiedPoster? poster;
+  api.SimplifiedIncomingCallPoster? poster;
   Map<String, ui.Image>? images;
 
   FragmentShader? shader;
@@ -135,7 +135,7 @@ class ProfileScaffoldState
     var data = await File("${posterPath!}.jpg").readAsBytes();
     print("Parsing file");
     poster = await api.fromPosterSave(poster: data);
-    images = await loadPosterImages(posterPath!, poster!);
+    images = await loadPosterImages(posterPath!, poster!.poster);
     setState(() { loaded = true; });
   }
 
@@ -197,7 +197,7 @@ class ProfileScaffoldState
                               ),
                               child: ClipRect(
                                 child: ImagePoster(poster: 
-                                  poster!, 
+                                  poster!.poster, 
                                   images: images!,
                                 ),
                               ),
@@ -241,13 +241,13 @@ class ProfileScaffoldState
                                   minimumSize: Size.zero,
                                 ),
                                 onPressed: () async {
-                                  api.SimplifiedPoster usePoster;
+                                  api.SimplifiedIncomingCallPoster usePoster;
                                   if (poster != null) {
                                     usePoster = api.clonePoster(poster: poster!);
                                   } else {
                                     var randomColor = Color((math.Random().nextDouble() * 0xFFFFFF).toInt()).withOpacity(1.0);
                                     var initials = widget.handle != null ? widget.handle!.initials ?? 'A' : "${ss.settings.firstName.value?.substring(0, 1) ?? 'A'}${ss.settings.lastName.value?.substring(0, 1) ?? ''}".toUpperCase();
-                                    usePoster = api.SimplifiedPoster(
+                                    usePoster = api.SimplifiedIncomingCallPoster(
                                       textMetadata: api.WallpaperMetadata(
                                         fontColorKey: const api.PosterColor(alpha: 0.5, blue: 1, green: 1, red: 1), 
                                         fontNameKey: ".SFUI-Regular_wdth_opsz110000_GRAD_wght1900000", 
@@ -256,44 +256,47 @@ class ProfileScaffoldState
                                         isVerticalKey: false, 
                                         typeKey: "com.apple.ContactsUI.MonogramPosterExtension",
                                       ),
-                                      titleConfiguration: api.PRPosterTitleStyleConfiguration(
-                                        alternateDateEnabled: false, 
-                                        contentsLuminence: 0, 
-                                        groupName: "PREditingLook", 
-                                        preferredTitleAlignment: 0, 
-                                        preferredTitleLayout: 0, 
-                                        timeFontConfiguration: api.PRPosterSystemTimeFontConfiguration(
-                                          isSystemItem: true, 
-                                          timeFontIdentifier: "PRTimeFontIdentifierSFPro", 
-                                          weight: 400,
-                                        ), 
-                                        titleColor: api.PRPosterColor(
-                                          preferredStyle: 2, 
-                                          identifier: "vibrantMaterialColor", 
-                                          suggested: false, 
-                                          color: api.UIColor.grayscaleAlphaColorSpace(colorComponents: 2, white: 1, alpha: 0.5, bin: base64Decode("MSAwLjU="), colorSpace: 4, class_: "PRPosterColor"),
-                                        ), 
-                                        titleContentStyle: Uint8List.fromList([]), 
-                                        userConfigured: false,
-                                        timeNumberingSystem: api.nsNull(),
-                                        titleStyle: api.PRPosterContentMaterialStyle.prPosterContentDiscreteColorsStyle(
-                                          variation: 0, 
-                                          colors: [colorToUIColor(saturateColor(randomColor))], 
-                                          vibrant: true, 
-                                          supportsVariation: true, 
-                                          needsToResolveVariation: false
-                                          )
-                                      ),
-                                      lowRes: Uint8List(0), // Todo
-                                      type: api.PosterType.monogram(
-                                        data: api.MonogramData(
-                                          topBackgroundColorDescription: colorToPosterColor(randomColor), 
-                                          backgroundColorDescription: colorToPosterColor(randomColor), 
-                                          initials: initials, 
-                                          monogramSupportedForName: true
-                                        ), 
-                                        background: colorToPosterColor(randomColor),
-                                      )
+                                      poster: api.SimplifiedPoster(
+                                        role: api.PosterRole.prPosterRoleIncomingCall,
+                                        titleConfiguration: api.PRPosterTitleStyleConfiguration(
+                                          alternateDateEnabled: false, 
+                                          contentsLuminence: 0, 
+                                          groupName: "PREditingLook", 
+                                          preferredTitleAlignment: 0, 
+                                          preferredTitleLayout: 0, 
+                                          timeFontConfiguration: api.PRPosterSystemTimeFontConfiguration(
+                                            isSystemItem: true, 
+                                            timeFontIdentifier: "PRTimeFontIdentifierSFPro", 
+                                            weight: 400,
+                                          ), 
+                                          titleColor: api.PRPosterColor(
+                                            preferredStyle: 2, 
+                                            identifier: "vibrantMaterialColor", 
+                                            suggested: false, 
+                                            color: api.UIColor.grayscaleAlphaColorSpace(colorComponents: 2, white: 1, alpha: 0.5, bin: base64Decode("MSAwLjU="), colorSpace: 4, class_: "PRPosterColor"),
+                                          ), 
+                                          titleContentStyle: Uint8List.fromList([]), 
+                                          userConfigured: false,
+                                          timeNumberingSystem: api.nsNull(),
+                                          titleStyle: api.PRPosterContentMaterialStyle.prPosterContentDiscreteColorsStyle(
+                                            variation: 0, 
+                                            colors: [colorToUIColor(saturateColor(randomColor))], 
+                                            vibrant: true, 
+                                            supportsVariation: true, 
+                                            needsToResolveVariation: false
+                                            )
+                                        ),
+                                        type: api.PosterType.monogram(
+                                          data: api.MonogramData(
+                                            topBackgroundColorDescription: colorToPosterColor(randomColor), 
+                                            backgroundColorDescription: colorToPosterColor(randomColor), 
+                                            initials: initials, 
+                                            monogramSupportedForName: true
+                                          ), 
+                                          background: colorToPosterColor(randomColor),
+                                        )
+                                      ), 
+                                      lowRes: Uint8List(0),
                                     );
                                   }
                                   Navigator.of(context).push(
@@ -336,7 +339,7 @@ class ProfileScaffoldState
                                       child: Padding(
                                         padding: const EdgeInsets.symmetric(horizontal: 10),
                                         child: Center(
-                                          child: poster != null ? posterText(poster!, 40, widget.handle?.displayName ?? ss.settings.userName.value, color: false) : 
+                                          child: poster != null ? posterText(poster!.poster, 40, widget.handle?.displayName ?? ss.settings.userName.value, color: false) : 
                                           Text(
                                             widget.handle?.displayName ?? ss.settings.userName.value, 
                                             textAlign: TextAlign.center,

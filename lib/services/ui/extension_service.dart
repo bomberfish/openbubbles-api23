@@ -73,10 +73,10 @@ class ExtensionService extends GetxService {
 
   List<App> cachedStatus = [];
 
-  Map<String, String?> amkToLatest = {};
+  Map<String, List<String?>> amkToLatest = {};
   List<String> suppressingSessions = [];
 
-  String? getLatest(String amk) {
+  List<String?> getLatest(String amk) {
     if (amkToLatest.containsKey(amk)) {
       return amkToLatest[amk]!;
     }
@@ -84,17 +84,15 @@ class ExtensionService extends GetxService {
     final query = (Database.messages.query(Message_.amkSessionId.equals(amk))
             ..order(Message_.dateCreated, flags: Order.descending))
           .build();
-          query.limit = 1;
+          query.limit = 3;
 
       final messages = query.find();
       query.close();
     
-    String? guid;
-    if (messages.isNotEmpty) {
-      guid = messages[0].stagingGuid ?? messages[0].guid;
-    }
-    amkToLatest[amk] = guid;
-    return guid;
+
+    var results = messages.map((i) => i.stagingGuid ?? i.guid).toList();
+    amkToLatest[amk] = results;
+    return results;
   }
 
   bool isAppAvailable(int app) {
