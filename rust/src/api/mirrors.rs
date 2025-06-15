@@ -251,19 +251,21 @@ pub struct DartTranscriptDynamicUserData {
     pub identifier: String,
 }
 
-#[frb(mirror(SetTranscriptBackgroundMessage))]
+#[frb(type_64bit_int, mirror(SetTranscriptBackgroundMessage))]
 pub enum DartSetTranscriptBackgroundMessage {
     Remove {
         aid: u32,
         bid: u32, // sequence number
-        chat_id: String,
+        #[frb(non_final)]
+        chat_id: Option<String>,
 
         remove: bool,
     },
     Set {
         aid: u32,
         bid: u32, // sequence number
-        chat_id: String,
+        #[frb(non_final)]
+        chat_id: Option<String>,
         
         object_id: String,
         payload_version: u32,
@@ -271,7 +273,7 @@ pub enum DartSetTranscriptBackgroundMessage {
         url: String,
         signature: String,
         key: String,
-        status: u32,
+        file_size: usize,
     }
 }
 
@@ -334,6 +336,7 @@ pub struct DartWatchBackground {
 
 #[frb(non_opaque, mirror(SimplifiedTranscriptPoster))]
 pub struct DartSimplifiedTranscriptPoster {
+    #[frb(non_final)]
     pub watch: WatchBackground,
     pub poster: SimplifiedPoster,
 }

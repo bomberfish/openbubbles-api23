@@ -45,6 +45,7 @@ import com.bluebubbles.messaging.services.system.CreateDocumentHandler
 import com.bluebubbles.messaging.services.system.GetFullResolution
 import com.bluebubbles.messaging.services.system.GetZenMode
 import com.bluebubbles.messaging.services.system.HeifDecoder
+import com.bluebubbles.messaging.services.system.HeifEncoder
 import com.bluebubbles.messaging.services.system.OpenSMSAppHandler
 import com.bluebubbles.messaging.services.system.RecentContactsRequestHandler
 import com.bluebubbles.messaging.services.system.ZenModeSetupHandler
@@ -123,6 +124,7 @@ class MethodCallHandler {
             OpenSMSAppHandler.tag -> OpenSMSAppHandler().handleMethodCall(call, result, context)
             CreateDocumentHandler.tag -> CreateDocumentHandler().handleMethodCall(call, result, context)
             AppleAccountLoginHandler.tag -> AppleAccountLoginHandler().handleMethodCall(call, result, context)
+            HeifEncoder.tag -> HeifEncoder().handleMethodCall(call, result, context)
             "ready" -> { MainActivity.engine_ready = true }
             else -> {
                 val error = "Could not find method call handler for ${call.method}!"

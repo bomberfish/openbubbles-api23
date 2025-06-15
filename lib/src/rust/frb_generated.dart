@@ -6554,21 +6554,21 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         return SetTranscriptBackgroundMessage_Remove(
           aid: dco_decode_u_32(raw[1]),
           bid: dco_decode_u_32(raw[2]),
-          chatId: dco_decode_String(raw[3]),
+          chatId: dco_decode_opt_String(raw[3]),
           remove: dco_decode_bool(raw[4]),
         );
       case 1:
         return SetTranscriptBackgroundMessage_Set(
           aid: dco_decode_u_32(raw[1]),
           bid: dco_decode_u_32(raw[2]),
-          chatId: dco_decode_String(raw[3]),
+          chatId: dco_decode_opt_String(raw[3]),
           objectId: dco_decode_String(raw[4]),
           payloadVersion: dco_decode_u_32(raw[5]),
           backgroundId: dco_decode_String(raw[6]),
           url: dco_decode_String(raw[7]),
           signature: dco_decode_String(raw[8]),
           key: dco_decode_String(raw[9]),
-          status: dco_decode_u_32(raw[10]),
+          fileSize: dco_decode_usize(raw[10]),
         );
       default:
         throw Exception("unreachable");
@@ -10427,21 +10427,21 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       case 0:
         var var_aid = sse_decode_u_32(deserializer);
         var var_bid = sse_decode_u_32(deserializer);
-        var var_chatId = sse_decode_String(deserializer);
+        var var_chatId = sse_decode_opt_String(deserializer);
         var var_remove = sse_decode_bool(deserializer);
         return SetTranscriptBackgroundMessage_Remove(
             aid: var_aid, bid: var_bid, chatId: var_chatId, remove: var_remove);
       case 1:
         var var_aid = sse_decode_u_32(deserializer);
         var var_bid = sse_decode_u_32(deserializer);
-        var var_chatId = sse_decode_String(deserializer);
+        var var_chatId = sse_decode_opt_String(deserializer);
         var var_objectId = sse_decode_String(deserializer);
         var var_payloadVersion = sse_decode_u_32(deserializer);
         var var_backgroundId = sse_decode_String(deserializer);
         var var_url = sse_decode_String(deserializer);
         var var_signature = sse_decode_String(deserializer);
         var var_key = sse_decode_String(deserializer);
-        var var_status = sse_decode_u_32(deserializer);
+        var var_fileSize = sse_decode_usize(deserializer);
         return SetTranscriptBackgroundMessage_Set(
             aid: var_aid,
             bid: var_bid,
@@ -10452,7 +10452,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             url: var_url,
             signature: var_signature,
             key: var_key,
-            status: var_status);
+            fileSize: var_fileSize);
       default:
         throw UnimplementedError('');
     }
@@ -13854,7 +13854,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         sse_encode_i_32(0, serializer);
         sse_encode_u_32(aid, serializer);
         sse_encode_u_32(bid, serializer);
-        sse_encode_String(chatId, serializer);
+        sse_encode_opt_String(chatId, serializer);
         sse_encode_bool(remove, serializer);
       case SetTranscriptBackgroundMessage_Set(
           aid: final aid,
@@ -13866,19 +13866,19 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           url: final url,
           signature: final signature,
           key: final key,
-          status: final status
+          fileSize: final fileSize
         ):
         sse_encode_i_32(1, serializer);
         sse_encode_u_32(aid, serializer);
         sse_encode_u_32(bid, serializer);
-        sse_encode_String(chatId, serializer);
+        sse_encode_opt_String(chatId, serializer);
         sse_encode_String(objectId, serializer);
         sse_encode_u_32(payloadVersion, serializer);
         sse_encode_String(backgroundId, serializer);
         sse_encode_String(url, serializer);
         sse_encode_String(signature, serializer);
         sse_encode_String(key, serializer);
-        sse_encode_u_32(status, serializer);
+        sse_encode_usize(fileSize, serializer);
       default:
         throw UnimplementedError('');
     }

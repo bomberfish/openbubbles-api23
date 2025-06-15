@@ -21024,56 +21024,56 @@ abstract class RegisterState_Failed extends RegisterState {
 mixin _$SetTranscriptBackgroundMessage {
   int get aid => throw _privateConstructorUsedError;
   int get bid => throw _privateConstructorUsedError;
-  String get chatId => throw _privateConstructorUsedError;
+  String? get chatId => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(int aid, int bid, String chatId, bool remove)
+    required TResult Function(int aid, int bid, String? chatId, bool remove)
         remove,
     required TResult Function(
             int aid,
             int bid,
-            String chatId,
+            String? chatId,
             String objectId,
             int payloadVersion,
             String backgroundId,
             String url,
             String signature,
             String key,
-            int status)
+            BigInt fileSize)
         set_,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(int aid, int bid, String chatId, bool remove)? remove,
+    TResult? Function(int aid, int bid, String? chatId, bool remove)? remove,
     TResult? Function(
             int aid,
             int bid,
-            String chatId,
+            String? chatId,
             String objectId,
             int payloadVersion,
             String backgroundId,
             String url,
             String signature,
             String key,
-            int status)?
+            BigInt fileSize)?
         set_,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(int aid, int bid, String chatId, bool remove)? remove,
+    TResult Function(int aid, int bid, String? chatId, bool remove)? remove,
     TResult Function(
             int aid,
             int bid,
-            String chatId,
+            String? chatId,
             String objectId,
             int payloadVersion,
             String backgroundId,
             String url,
             String signature,
             String key,
-            int status)?
+            BigInt fileSize)?
         set_,
     required TResult orElse(),
   }) =>
@@ -21114,7 +21114,7 @@ abstract class $SetTranscriptBackgroundMessageCopyWith<$Res> {
       _$SetTranscriptBackgroundMessageCopyWithImpl<$Res,
           SetTranscriptBackgroundMessage>;
   @useResult
-  $Res call({int aid, int bid, String chatId});
+  $Res call({int aid, int bid, String? chatId});
 }
 
 /// @nodoc
@@ -21135,7 +21135,7 @@ class _$SetTranscriptBackgroundMessageCopyWithImpl<$Res,
   $Res call({
     Object? aid = null,
     Object? bid = null,
-    Object? chatId = null,
+    Object? chatId = freezed,
   }) {
     return _then(_value.copyWith(
       aid: null == aid
@@ -21146,10 +21146,10 @@ class _$SetTranscriptBackgroundMessageCopyWithImpl<$Res,
           ? _value.bid
           : bid // ignore: cast_nullable_to_non_nullable
               as int,
-      chatId: null == chatId
+      chatId: freezed == chatId
           ? _value.chatId
           : chatId // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
     ) as $Val);
   }
 }
@@ -21163,7 +21163,7 @@ abstract class _$$SetTranscriptBackgroundMessage_RemoveImplCopyWith<$Res>
       __$$SetTranscriptBackgroundMessage_RemoveImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({int aid, int bid, String chatId, bool remove});
+  $Res call({int aid, int bid, String? chatId, bool remove});
 }
 
 /// @nodoc
@@ -21183,7 +21183,7 @@ class __$$SetTranscriptBackgroundMessage_RemoveImplCopyWithImpl<$Res>
   $Res call({
     Object? aid = null,
     Object? bid = null,
-    Object? chatId = null,
+    Object? chatId = freezed,
     Object? remove = null,
   }) {
     return _then(_$SetTranscriptBackgroundMessage_RemoveImpl(
@@ -21195,10 +21195,10 @@ class __$$SetTranscriptBackgroundMessage_RemoveImplCopyWithImpl<$Res>
           ? _value.bid
           : bid // ignore: cast_nullable_to_non_nullable
               as int,
-      chatId: null == chatId
+      chatId: freezed == chatId
           ? _value.chatId
           : chatId // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       remove: null == remove
           ? _value.remove
           : remove // ignore: cast_nullable_to_non_nullable
@@ -21212,10 +21212,7 @@ class __$$SetTranscriptBackgroundMessage_RemoveImplCopyWithImpl<$Res>
 class _$SetTranscriptBackgroundMessage_RemoveImpl
     extends SetTranscriptBackgroundMessage_Remove {
   const _$SetTranscriptBackgroundMessage_RemoveImpl(
-      {required this.aid,
-      required this.bid,
-      required this.chatId,
-      required this.remove})
+      {required this.aid, required this.bid, this.chatId, required this.remove})
       : super._();
 
   @override
@@ -21223,7 +21220,7 @@ class _$SetTranscriptBackgroundMessage_RemoveImpl
   @override
   final int bid;
   @override
-  final String chatId;
+  final String? chatId;
   @override
   final bool remove;
 
@@ -21259,19 +21256,19 @@ class _$SetTranscriptBackgroundMessage_RemoveImpl
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(int aid, int bid, String chatId, bool remove)
+    required TResult Function(int aid, int bid, String? chatId, bool remove)
         remove,
     required TResult Function(
             int aid,
             int bid,
-            String chatId,
+            String? chatId,
             String objectId,
             int payloadVersion,
             String backgroundId,
             String url,
             String signature,
             String key,
-            int status)
+            BigInt fileSize)
         set_,
   }) {
     return remove(aid, bid, chatId, this.remove);
@@ -21280,18 +21277,18 @@ class _$SetTranscriptBackgroundMessage_RemoveImpl
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(int aid, int bid, String chatId, bool remove)? remove,
+    TResult? Function(int aid, int bid, String? chatId, bool remove)? remove,
     TResult? Function(
             int aid,
             int bid,
-            String chatId,
+            String? chatId,
             String objectId,
             int payloadVersion,
             String backgroundId,
             String url,
             String signature,
             String key,
-            int status)?
+            BigInt fileSize)?
         set_,
   }) {
     return remove?.call(aid, bid, chatId, this.remove);
@@ -21300,18 +21297,18 @@ class _$SetTranscriptBackgroundMessage_RemoveImpl
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(int aid, int bid, String chatId, bool remove)? remove,
+    TResult Function(int aid, int bid, String? chatId, bool remove)? remove,
     TResult Function(
             int aid,
             int bid,
-            String chatId,
+            String? chatId,
             String objectId,
             int payloadVersion,
             String backgroundId,
             String url,
             String signature,
             String key,
-            int status)?
+            BigInt fileSize)?
         set_,
     required TResult orElse(),
   }) {
@@ -21359,7 +21356,7 @@ abstract class SetTranscriptBackgroundMessage_Remove
   const factory SetTranscriptBackgroundMessage_Remove(
           {required final int aid,
           required final int bid,
-          required final String chatId,
+          final String? chatId,
           required final bool remove}) =
       _$SetTranscriptBackgroundMessage_RemoveImpl;
   const SetTranscriptBackgroundMessage_Remove._() : super._();
@@ -21369,7 +21366,7 @@ abstract class SetTranscriptBackgroundMessage_Remove
   @override
   int get bid;
   @override
-  String get chatId;
+  String? get chatId;
   bool get remove;
 
   /// Create a copy of SetTranscriptBackgroundMessage
@@ -21393,14 +21390,14 @@ abstract class _$$SetTranscriptBackgroundMessage_SetImplCopyWith<$Res>
   $Res call(
       {int aid,
       int bid,
-      String chatId,
+      String? chatId,
       String objectId,
       int payloadVersion,
       String backgroundId,
       String url,
       String signature,
       String key,
-      int status});
+      BigInt fileSize});
 }
 
 /// @nodoc
@@ -21420,14 +21417,14 @@ class __$$SetTranscriptBackgroundMessage_SetImplCopyWithImpl<$Res>
   $Res call({
     Object? aid = null,
     Object? bid = null,
-    Object? chatId = null,
+    Object? chatId = freezed,
     Object? objectId = null,
     Object? payloadVersion = null,
     Object? backgroundId = null,
     Object? url = null,
     Object? signature = null,
     Object? key = null,
-    Object? status = null,
+    Object? fileSize = null,
   }) {
     return _then(_$SetTranscriptBackgroundMessage_SetImpl(
       aid: null == aid
@@ -21438,10 +21435,10 @@ class __$$SetTranscriptBackgroundMessage_SetImplCopyWithImpl<$Res>
           ? _value.bid
           : bid // ignore: cast_nullable_to_non_nullable
               as int,
-      chatId: null == chatId
+      chatId: freezed == chatId
           ? _value.chatId
           : chatId // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       objectId: null == objectId
           ? _value.objectId
           : objectId // ignore: cast_nullable_to_non_nullable
@@ -21466,10 +21463,10 @@ class __$$SetTranscriptBackgroundMessage_SetImplCopyWithImpl<$Res>
           ? _value.key
           : key // ignore: cast_nullable_to_non_nullable
               as String,
-      status: null == status
-          ? _value.status
-          : status // ignore: cast_nullable_to_non_nullable
-              as int,
+      fileSize: null == fileSize
+          ? _value.fileSize
+          : fileSize // ignore: cast_nullable_to_non_nullable
+              as BigInt,
     ));
   }
 }
@@ -21481,14 +21478,14 @@ class _$SetTranscriptBackgroundMessage_SetImpl
   const _$SetTranscriptBackgroundMessage_SetImpl(
       {required this.aid,
       required this.bid,
-      required this.chatId,
+      this.chatId,
       required this.objectId,
       required this.payloadVersion,
       required this.backgroundId,
       required this.url,
       required this.signature,
       required this.key,
-      required this.status})
+      required this.fileSize})
       : super._();
 
   @override
@@ -21496,7 +21493,7 @@ class _$SetTranscriptBackgroundMessage_SetImpl
   @override
   final int bid;
   @override
-  final String chatId;
+  final String? chatId;
   @override
   final String objectId;
   @override
@@ -21510,11 +21507,11 @@ class _$SetTranscriptBackgroundMessage_SetImpl
   @override
   final String key;
   @override
-  final int status;
+  final BigInt fileSize;
 
   @override
   String toString() {
-    return 'SetTranscriptBackgroundMessage.set_(aid: $aid, bid: $bid, chatId: $chatId, objectId: $objectId, payloadVersion: $payloadVersion, backgroundId: $backgroundId, url: $url, signature: $signature, key: $key, status: $status)';
+    return 'SetTranscriptBackgroundMessage.set_(aid: $aid, bid: $bid, chatId: $chatId, objectId: $objectId, payloadVersion: $payloadVersion, backgroundId: $backgroundId, url: $url, signature: $signature, key: $key, fileSize: $fileSize)';
   }
 
   @override
@@ -21535,12 +21532,13 @@ class _$SetTranscriptBackgroundMessage_SetImpl
             (identical(other.signature, signature) ||
                 other.signature == signature) &&
             (identical(other.key, key) || other.key == key) &&
-            (identical(other.status, status) || other.status == status));
+            (identical(other.fileSize, fileSize) ||
+                other.fileSize == fileSize));
   }
 
   @override
   int get hashCode => Object.hash(runtimeType, aid, bid, chatId, objectId,
-      payloadVersion, backgroundId, url, signature, key, status);
+      payloadVersion, backgroundId, url, signature, key, fileSize);
 
   /// Create a copy of SetTranscriptBackgroundMessage
   /// with the given fields replaced by the non-null parameter values.
@@ -21555,67 +21553,67 @@ class _$SetTranscriptBackgroundMessage_SetImpl
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(int aid, int bid, String chatId, bool remove)
+    required TResult Function(int aid, int bid, String? chatId, bool remove)
         remove,
     required TResult Function(
             int aid,
             int bid,
-            String chatId,
+            String? chatId,
             String objectId,
             int payloadVersion,
             String backgroundId,
             String url,
             String signature,
             String key,
-            int status)
+            BigInt fileSize)
         set_,
   }) {
     return set_(aid, bid, chatId, objectId, payloadVersion, backgroundId, url,
-        signature, key, status);
+        signature, key, fileSize);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(int aid, int bid, String chatId, bool remove)? remove,
+    TResult? Function(int aid, int bid, String? chatId, bool remove)? remove,
     TResult? Function(
             int aid,
             int bid,
-            String chatId,
+            String? chatId,
             String objectId,
             int payloadVersion,
             String backgroundId,
             String url,
             String signature,
             String key,
-            int status)?
+            BigInt fileSize)?
         set_,
   }) {
     return set_?.call(aid, bid, chatId, objectId, payloadVersion, backgroundId,
-        url, signature, key, status);
+        url, signature, key, fileSize);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(int aid, int bid, String chatId, bool remove)? remove,
+    TResult Function(int aid, int bid, String? chatId, bool remove)? remove,
     TResult Function(
             int aid,
             int bid,
-            String chatId,
+            String? chatId,
             String objectId,
             int payloadVersion,
             String backgroundId,
             String url,
             String signature,
             String key,
-            int status)?
+            BigInt fileSize)?
         set_,
     required TResult orElse(),
   }) {
     if (set_ != null) {
       return set_(aid, bid, chatId, objectId, payloadVersion, backgroundId, url,
-          signature, key, status);
+          signature, key, fileSize);
     }
     return orElse();
   }
@@ -21656,16 +21654,17 @@ class _$SetTranscriptBackgroundMessage_SetImpl
 abstract class SetTranscriptBackgroundMessage_Set
     extends SetTranscriptBackgroundMessage {
   const factory SetTranscriptBackgroundMessage_Set(
-      {required final int aid,
-      required final int bid,
-      required final String chatId,
-      required final String objectId,
-      required final int payloadVersion,
-      required final String backgroundId,
-      required final String url,
-      required final String signature,
-      required final String key,
-      required final int status}) = _$SetTranscriptBackgroundMessage_SetImpl;
+          {required final int aid,
+          required final int bid,
+          final String? chatId,
+          required final String objectId,
+          required final int payloadVersion,
+          required final String backgroundId,
+          required final String url,
+          required final String signature,
+          required final String key,
+          required final BigInt fileSize}) =
+      _$SetTranscriptBackgroundMessage_SetImpl;
   const SetTranscriptBackgroundMessage_Set._() : super._();
 
   @override
@@ -21673,14 +21672,14 @@ abstract class SetTranscriptBackgroundMessage_Set
   @override
   int get bid;
   @override
-  String get chatId;
+  String? get chatId;
   String get objectId;
   int get payloadVersion;
   String get backgroundId;
   String get url;
   String get signature;
   String get key;
-  int get status;
+  BigInt get fileSize;
 
   /// Create a copy of SetTranscriptBackgroundMessage
   /// with the given fields replaced by the non-null parameter values.

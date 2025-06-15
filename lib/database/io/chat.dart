@@ -402,6 +402,9 @@ class Chat {
   // true means this is a routing stub; we only hold SMS bridging information, not messages
   bool isRoutingStub = false;
 
+  String? transcriptPosterPath;
+  int transcriptBackgroundVersion = 1;
+
   @Backlink('chat')
   final messages = ToMany<Message>();
 
@@ -542,6 +545,8 @@ class Chat {
     bool updateShareZenMode = false,
     bool updateDateNotifiedAnyways = false,
     bool updateSenderIsKnown = false,
+    bool updateTranscriptPosterPath = false,
+    bool updateTranscriptBackgroundVersion = false,
   }) {
     if (kIsWeb) return this;
     Database.runInTransaction(TxMode.write, () {
@@ -631,6 +636,12 @@ class Chat {
       }
       if (!updateSenderIsKnown) {
         senderIsKnown = existing?.senderIsKnown ?? senderIsKnown;
+      }
+      if (!updateTranscriptPosterPath) {
+        transcriptPosterPath = existing?.transcriptPosterPath ?? transcriptPosterPath;
+      }
+      if (!updateTranscriptBackgroundVersion) {
+        transcriptBackgroundVersion = existing?.transcriptBackgroundVersion ?? transcriptBackgroundVersion;
       }
 
       /// Save the chat and add the participants
@@ -1293,6 +1304,31 @@ class Chat {
 
   /// Finds a chat - only use this method on Flutter Web!!!
   static Future<Chat?> findOneWeb({String? guid, String? chatIdentifier}) async {
+    return null;
+  }
+
+  static Chat? findByHandle(String handle) {
+    final query = (Database.chats.query()
+          ..linkMany(Chat_.handles, Handle_.address.oneOf([handle])))
+            .build();
+    final results = query.find();
+    query.close();
+
+    return results.firstWhereOrNull((res) => res.handles.length == 1);
+  }
+
+  static Chat? findByRustGuid(String guid) {
+    final direct = Chat.findOne(guid: guid);
+    if (direct != null) return direct;
+
+    // prioritize finding by related GUID
+    final query = Database.chats.query(Chat_.guidRefs.containsElement(guid)).build();
+    final results = query.find();
+    query.close();
+    if (results.isNotEmpty) {
+      // we found one!
+      return results[0];
+    }
     return null;
   }
 

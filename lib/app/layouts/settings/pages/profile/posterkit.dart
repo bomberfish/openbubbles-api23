@@ -13,6 +13,7 @@ import 'package:palette_generator/palette_generator.dart';
 import 'package:bluebubbles/src/rust/api/api.dart' as api;
 import 'dart:ui' as ui;
 import 'package:image/image.dart' as img;
+import 'dart:math' as math;
 
 Future<ui.Image> decodeImageFromBytes(Uint8List bytes) async {
   final codec = await ui.instantiateImageCodec(bytes);
@@ -215,6 +216,62 @@ class _ImagePosterState extends State<ImagePoster> {
               child: const SizedBox.expand(),
             );
   }
+}
+
+Future restorePoster(api.SimplifiedPoster? poster, String posterPath) async {
+  if (poster == null) return;
+
+  if (poster.type is api.PosterType_Photo) {
+    var photo = poster.type as api.PosterType_Photo;
+    for (var asset in photo.assets) {
+      Map<String, Uint8List> entries = {};
+      for (var file in asset.files.entries) {
+        File f = pushService.fileForAsset(posterPath, asset, file.key);
+        entries[file.key] = await f.readAsBytes();
+      }
+      asset.files = entries;
+    }
+  }
+
+  if (poster.type is api.PosterType_Memoji) {
+    var photo = poster.type as api.PosterType_Memoji;
+    photo.data.avatarImageData = await File("$posterPath/memoji_orig.heic").readAsBytes();
+  }
+}
+
+api.SimplifiedPoster createNewPoster(api.PosterType type, Color randomColor, api.PosterRole role) {
+  return api.SimplifiedPoster(
+    role: role,
+    titleConfiguration: api.PRPosterTitleStyleConfiguration(
+      alternateDateEnabled: false, 
+      contentsLuminence: 0, 
+      groupName: "PREditingLook", 
+      preferredTitleAlignment: 0, 
+      preferredTitleLayout: 0, 
+      timeFontConfiguration: api.PRPosterSystemTimeFontConfiguration(
+        isSystemItem: true, 
+        timeFontIdentifier: "PRTimeFontIdentifierSFPro", 
+        weight: 400,
+      ), 
+      titleColor: api.PRPosterColor(
+        preferredStyle: 2, 
+        identifier: "vibrantMaterialColor", 
+        suggested: false, 
+        color: api.UIColor.grayscaleAlphaColorSpace(colorComponents: 2, white: 1, alpha: 0.5, bin: base64Decode("MSAwLjU="), colorSpace: 4, class_: "PRPosterColor"),
+      ), 
+      titleContentStyle: Uint8List.fromList([]), 
+      userConfigured: false,
+      timeNumberingSystem: api.nsNull(),
+      titleStyle: api.PRPosterContentMaterialStyle.prPosterContentDiscreteColorsStyle(
+        variation: 0, 
+        colors: [colorToUIColor(saturateColor(randomColor))], 
+        vibrant: true, 
+        supportsVariation: true, 
+        needsToResolveVariation: false
+        )
+    ),
+    type: type,
+  );
 }
 
 Future<Uint8List> imageToJpeg(ui.Image image) async {

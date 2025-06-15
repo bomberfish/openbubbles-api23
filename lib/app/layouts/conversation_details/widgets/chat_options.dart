@@ -2,7 +2,10 @@ import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:bluebubbles/app/layouts/conversation_details/dialogs/chat_sync_dialog.dart';
 import 'package:bluebubbles/app/layouts/conversation_details/dialogs/timeframe_picker.dart';
 import 'package:bluebubbles/app/layouts/conversation_view/widgets/message/reply/reply_thread_popup.dart';
+import 'package:bluebubbles/app/layouts/settings/pages/profile/poster_edit.dart';
+import 'package:bluebubbles/app/layouts/settings/pages/profile/posterkit.dart';
 import 'package:bluebubbles/app/wrappers/stateful_boilerplate.dart';
+import 'package:bluebubbles/app/wrappers/theme_switcher.dart';
 import 'package:bluebubbles/helpers/helpers.dart';
 import 'package:bluebubbles/app/layouts/settings/widgets/settings_widgets.dart';
 import 'package:bluebubbles/app/layouts/settings/pages/theming/avatar/avatar_crop.dart';
@@ -19,6 +22,8 @@ import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 import 'package:universal_io/io.dart';
 import 'package:bluebubbles/services/network/backend_service.dart';
+import 'package:bluebubbles/src/rust/api/api.dart' as api;
+import 'dart:math' as math;
 
 class ChatOptions extends StatefulWidget {
   const ChatOptions({super.key, required this.chat});
@@ -127,6 +132,67 @@ class _ChatOptionsState extends OptimizedState<ChatOptions> {
                       } else {
                         Get.to(() => AvatarCrop(chat: chat));
                       }
+                    },
+                  ),
+                SettingsTile(
+                    title: chat.transcriptPosterPath != null ? "Change Chat Background" : "Set Chat Background",
+                    trailing: Padding(
+                      padding: const EdgeInsets.only(right: 15.0),
+                      child: Icon(
+                        ss.settings.skin.value == Skins.iOS ? CupertinoIcons.photo : Icons.photo,
+                      ),
+                    ),
+                    onTap: () {
+                      var randomColor = Color((math.Random().nextDouble() * 0xFFFFFF).toInt()).withOpacity(1.0);
+                      Navigator.of(context).push(
+                        ThemeSwitcher.buildPageRoute(
+                          builder: (context) => PosterEdit(transcriptPoster: cvc(chat).backgroundPoster.value ?? api.SimplifiedTranscriptPoster(
+                              poster: createNewPoster(api.PosterType.monogram(
+                                data: api.MonogramData(
+                                  topBackgroundColorDescription: colorToPosterColor(randomColor), 
+                                  backgroundColorDescription: colorToPosterColor(randomColor), 
+                                  initials: "A", 
+                                  monogramSupportedForName: true
+                                ), 
+                                background: colorToPosterColor(randomColor),
+                              ), randomColor, api.PosterRole.prPosterRoleBackdrop), 
+                              watch: api.WatchBackground(isHighKey: false, luminance: 0, backgroundImageData: Uint8List(0), extensionIdentifier: "com.apple.ContactsUI.MonogramPosterExtension")
+                            ), 
+                            activePath: chat.transcriptPosterPath, 
+                            posterEdited: (newPath) async {
+                              if (chat.transcriptPosterPath != newPath && chat.transcriptPosterPath != null) {
+                                await pushService.deletePoster(chat.transcriptPosterPath!);
+                              }
+                              
+                              chat.transcriptPosterPath = newPath;
+                              chat.save(updateTranscriptPosterPath: true);
+                              cvc(chat).updatePoster();
+                              setState(() { });
+                              await pushService.updateChatPoster(chat);
+                            },),
+                        ),
+                      );
+                    },
+                  ),
+                  if (chat.transcriptPosterPath != null)
+                  SettingsTile(
+                    title: "Remove Chat Background",
+                    trailing: Padding(
+                      padding: const EdgeInsets.only(right: 15.0),
+                      child: Icon(
+                        ss.settings.skin.value == Skins.iOS ? CupertinoIcons.clear : Icons.clear,
+                      ),
+                    ),
+                    onTap: () async {
+                      if (chat.transcriptPosterPath != null) {
+                        await pushService.deletePoster(chat.transcriptPosterPath!);
+                      }
+                      
+                      chat.transcriptPosterPath = null;
+                      chat.save(updateTranscriptPosterPath: true);
+                      cvc(chat).updatePoster();
+                      setState(() { });
+                      await pushService.updateChatPoster(chat);
                     },
                   ),
                 if (iOS)

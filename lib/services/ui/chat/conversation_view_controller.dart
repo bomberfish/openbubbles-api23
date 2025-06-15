@@ -3,6 +3,7 @@ import 'dart:isolate';
 
 import 'package:audio_waveforms/audio_waveforms.dart';
 import 'package:bluebubbles/app/components/custom_text_editing_controllers.dart';
+import 'package:bluebubbles/app/layouts/settings/pages/profile/posterkit.dart';
 import 'package:bluebubbles/app/wrappers/stateful_boilerplate.dart';
 import 'package:bluebubbles/database/models.dart';
 import 'package:bluebubbles/services/services.dart';
@@ -16,6 +17,8 @@ import 'package:metadata_fetch/metadata_fetch.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:tuple/tuple.dart';
 import 'package:universal_io/io.dart';
+import 'package:bluebubbles/src/rust/api/api.dart' as api;
+import 'dart:ui' as ui;
 
 ConversationViewController cvc(Chat chat, {String? tag}) => Get.isRegistered<ConversationViewController>(tag: tag ?? chat.guid)
 ? Get.find<ConversationViewController>(tag: tag ?? chat.guid) : Get.put(ConversationViewController(chat, tag_: tag), tag: tag ?? chat.guid);
@@ -96,6 +99,9 @@ class ConversationViewController extends StatefulController with GetSingleTicker
   Future<void> Function(Tuple7<List<PlatformFile>, AttributedBody, String, String?, int?, String?, PayloadData?>, bool, DateTime?)? sendFunc;
   bool isProcessingImage = false;
 
+  final Rxn<api.SimplifiedTranscriptPoster> backgroundPoster = Rxn<api.SimplifiedTranscriptPoster>(null);
+  Map<String, ui.Image> images = {};
+
   final RxBool reportJunkAvailable = false.obs;
 
   void updateContactInfo() {
@@ -170,6 +176,18 @@ class ConversationViewController extends StatefulController with GetSingleTicker
         _subjectWasLastFocused = true;
       }
     });
+    updatePoster();
+  }
+
+  void updatePoster() async {
+    if (chat.transcriptPosterPath == null) {
+      backgroundPoster.value = null;
+      return;
+    }
+    var data = await File("${chat.transcriptPosterPath}.jpg").readAsBytes();
+    var poster = await api.fromTranscriptPosterSave(poster: data);
+    images = await loadPosterImages(chat.transcriptPosterPath!, poster.poster);
+    backgroundPoster.value = poster;
   }
 
   @override

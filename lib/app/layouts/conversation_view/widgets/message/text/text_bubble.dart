@@ -1,8 +1,11 @@
+import 'dart:ui';
+
 import 'package:bluebubbles/app/wrappers/stateful_boilerplate.dart';
 import 'package:bluebubbles/helpers/helpers.dart';
 import 'package:bluebubbles/database/models.dart';
 import 'package:bluebubbles/services/services.dart';
 import 'package:collection/collection.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:simple_animations/simple_animations.dart';
@@ -89,97 +92,127 @@ class _TextBubbleState extends CustomState<TextBubble, void, MessageWidgetContro
     return bubbleColors;
   }
 
+    // simulate apple's saturatioon
+  static const List<double> darkMatrix = <double>[
+    1.385, -0.56, -0.112, 0.0, 0.3, //
+    -0.315, 1.14, -0.112, 0.0, 0.3, //
+    -0.315, -0.56, 1.588, 0.0, 0.3, //
+    0.0, 0.0, 0.0, 1.0, 0.0
+  ];
+
+  static const List<double> lightMatrix = <double>[
+    1.74, -0.4, -0.17, 0.0, 0.0, //
+    -0.26, 1.6, -0.17, 0.0, 0.0, //
+    -0.26, -0.4, 1.83, 0.0, 0.0, //
+    0.0, 0.0, 0.0, 1.0, 0.0
+  ];
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      constraints: BoxConstraints(
-        maxWidth: message.isBigEmoji ? ns.width(context) : ns.width(context) * MessageWidgetController.maxBubbleSizeFactor - 40 - (message.dateScheduled != null ? 4 : 0),
-        minHeight: 40 - (message.dateScheduled != null ? 4 : 0),
-      ),
-      padding: EdgeInsets.symmetric(vertical: 10 - (message.dateScheduled != null ? 4 : 0), horizontal: 15 - (message.dateScheduled != null ? 4 : 0))
-        .add(EdgeInsets.only(
-          left: message.dateScheduled != null && message.isBigEmoji ? -8 : message.isFromMe! || message.isBigEmoji ? 0 : 10,
-          right: message.isFromMe! && (!message.isBigEmoji) ? 10 : 0
-        )),
-      color: message.isFromMe! && !message.isBigEmoji && message.dateScheduled == null
-          ? (selected ? context.theme.colorScheme.tertiaryContainer : context.theme.colorScheme.primary)
-          : null,
-      decoration: message.isFromMe! || message.isBigEmoji ? null : BoxDecoration(
-        gradient: LinearGradient(
-          begin: AlignmentDirectional.bottomCenter,
-          end: AlignmentDirectional.topCenter,
-          colors: getBubbleColors(),
+    return Obx(() {
+      var translucentMode = controller.cvController?.backgroundPoster.value != null;
+      var child = Container(
+        constraints: BoxConstraints(
+          maxWidth: message.isBigEmoji ? ns.width(context) : ns.width(context) * MessageWidgetController.maxBubbleSizeFactor - 40 - (message.dateScheduled != null ? 4 : 0),
+          minHeight: 40 - (message.dateScheduled != null ? 4 : 0),
         ),
-      ),
-      // alignment: Alignment.center,
-      child: FutureBuilder<List<InlineSpan>>(
-        future: buildEnrichedMessageSpans(
-          context,
-          part,
-          message,
-          colorOverride: message.dateScheduled != null ? context.theme.colorScheme.primary :
+        padding: EdgeInsets.symmetric(vertical: 10 - (message.dateScheduled != null ? 4 : 0), horizontal: 15 - (message.dateScheduled != null ? 4 : 0))
+          .add(EdgeInsets.only(
+            left: message.dateScheduled != null && message.isBigEmoji ? -8 : message.isFromMe! || message.isBigEmoji ? 0 : 10,
+            right: message.isFromMe! && (!message.isBigEmoji) ? 10 : 0
+          )),
+        color: message.isFromMe! && !message.isBigEmoji && message.dateScheduled == null
+            ? (selected ? context.theme.colorScheme.tertiaryContainer : context.theme.colorScheme.primary)
+            : null,
+        decoration: message.isFromMe! || message.isBigEmoji ? null : BoxDecoration(
+          gradient: LinearGradient(
+            begin: AlignmentDirectional.bottomCenter,
+            end: AlignmentDirectional.topCenter,
+            colors: getBubbleColors().map((c) => c.withOpacity(translucentMode ? 0.7 : 1)).toList(),
+          ),
+        ),
+        // alignment: Alignment.center,
+        child: FutureBuilder<List<InlineSpan>>(
+          future: buildEnrichedMessageSpans(
+            context,
+            part,
+            message,
+            colorOverride: message.dateScheduled != null ? context.theme.colorScheme.primary :
+                selected ? context.theme.colorScheme.onTertiaryContainer
+                : ss.settings.colorfulBubbles.value && !message.isFromMe!
+                ? getBubbleColors().first.oppositeLightenOrDarken(75) : null,
+            hideBodyText: widget.subjectOnly,
+          ),
+          initialData: buildMessageSpans(
+            context,
+            part,
+            message,
+            colorOverride: message.dateScheduled != null ? context.theme.colorScheme.primary :
               selected ? context.theme.colorScheme.onTertiaryContainer
-              : ss.settings.colorfulBubbles.value && !message.isFromMe!
-              ? getBubbleColors().first.oppositeLightenOrDarken(75) : null,
-          hideBodyText: widget.subjectOnly,
-        ),
-        initialData: buildMessageSpans(
-          context,
-          part,
-          message,
-          colorOverride: message.dateScheduled != null ? context.theme.colorScheme.primary :
-            selected ? context.theme.colorScheme.onTertiaryContainer
-              : ss.settings.colorfulBubbles.value && !message.isFromMe!
-              ? getBubbleColors().first.oppositeLightenOrDarken(75) : null,
-          hideBodyText: widget.subjectOnly,
-        ),
-        builder: (context, snapshot) {
-          if (snapshot.error != null) {
-            Logger.error("Render error", error: snapshot.error, trace: snapshot.stackTrace);
-          }
-          if (snapshot.data != null) {
-            if (effect == MessageEffect.gentle) {
-              return CustomAnimationBuilder<Movie>(
-                control: anim,
-                tween: tween,
-                duration: const Duration(milliseconds: 1800),
-                animationStatusListener: (status) {
-                  if (status == AnimationStatus.completed) {
-                    setState(() {
-                      anim = Control.stop;
-                    });
-                  }
-                },
-                builder: (context, anim, child) {
-                  final value1 = anim.get("size");
-                  return Transform.scale(
-                    scale: value1,
-                    alignment: Alignment.center,
-                    child: child
-                  );
-                },
-                child: RichText(
-                  text: TextSpan(
-                    children: snapshot.data!,
+                : ss.settings.colorfulBubbles.value && !message.isFromMe!
+                ? getBubbleColors().first.oppositeLightenOrDarken(75) : null,
+            hideBodyText: widget.subjectOnly,
+          ),
+          builder: (context, snapshot) {
+            if (snapshot.error != null) {
+              Logger.error("Render error", error: snapshot.error, trace: snapshot.stackTrace);
+            }
+            if (snapshot.data != null) {
+              if (effect == MessageEffect.gentle) {
+                return CustomAnimationBuilder<Movie>(
+                  control: anim,
+                  tween: tween,
+                  duration: const Duration(milliseconds: 1800),
+                  animationStatusListener: (status) {
+                    if (status == AnimationStatus.completed) {
+                      setState(() {
+                        anim = Control.stop;
+                      });
+                    }
+                  },
+                  builder: (context, anim, child) {
+                    final value1 = anim.get("size");
+                    return Transform.scale(
+                      scale: value1,
+                      alignment: Alignment.center,
+                      child: child
+                    );
+                  },
+                  child: RichText(
+                    text: TextSpan(
+                      children: snapshot.data!,
+                    ),
                   ),
+                );
+              }
+              return Center(
+                widthFactor: 1,
+                child: Padding(
+                  padding: message.fullText.length == 1 ? const EdgeInsets.only(left: 3, right: 3) : EdgeInsets.zero,
+                  child: RichText(
+                    text: TextSpan(
+                      children: snapshot.data!,
+                    ),
+                  )
                 ),
               );
             }
-            return Center(
-              widthFactor: 1,
-              child: Padding(
-                padding: message.fullText.length == 1 ? const EdgeInsets.only(left: 3, right: 3) : EdgeInsets.zero,
-                child: RichText(
-                  text: TextSpan(
-                    children: snapshot.data!,
-                  ),
-                )
-              ),
-            );
+            return const SizedBox.shrink();
           }
-          return const SizedBox.shrink();
-        }
-      ),
-    );
+        ),
+      );
+      if (translucentMode) {
+        return BackdropFilter(
+          filter: ImageFilter.compose(
+              outer: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
+              inner: ColorFilter.matrix(
+                CupertinoTheme.maybeBrightnessOf(context) == Brightness.dark ? darkMatrix : lightMatrix,
+              )),
+          child: child
+        );
+      } else {
+        return child;
+      }
+    });
   }
 }

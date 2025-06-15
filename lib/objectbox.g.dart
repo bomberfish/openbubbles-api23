@@ -112,7 +112,7 @@ final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
       id: const obx_int.IdUid(3, 9017250848141753702),
       name: 'Chat',
-      lastPropertyId: const obx_int.IdUid(41, 7342392293130604386),
+      lastPropertyId: const obx_int.IdUid(43, 9027611778744022691),
       flags: 0,
       properties: <obx_int.ModelProperty>[
         obx_int.ModelProperty(
@@ -290,6 +290,16 @@ final _entities = <obx_int.ModelEntity>[
             id: const obx_int.IdUid(41, 7342392293130604386),
             name: 'isRoutingStub',
             type: 1,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(42, 4361624812823479978),
+            name: 'transcriptPosterPath',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(43, 9027611778744022691),
+            name: 'transcriptBackgroundVersion',
+            type: 6,
             flags: 0)
       ],
       relations: <obx_int.ModelRelation>[
@@ -1164,7 +1174,10 @@ obx_int.ModelDefinition getObjectBoxModel() {
           final textFieldAnnotationsOffset = object.textFieldAnnotations == null
               ? null
               : fbb.writeString(object.textFieldAnnotations!);
-          fbb.startTable(42);
+          final transcriptPosterPathOffset = object.transcriptPosterPath == null
+              ? null
+              : fbb.writeString(object.transcriptPosterPath!);
+          fbb.startTable(44);
           fbb.addInt64(0, object.id ?? 0);
           fbb.addOffset(2, guidOffset);
           fbb.addOffset(4, chatIdentifierOffset);
@@ -1201,6 +1214,8 @@ obx_int.ModelDefinition getObjectBoxModel() {
           fbb.addInt64(38, object.zenModeIsShared);
           fbb.addBool(39, object.senderIsKnown);
           fbb.addBool(40, object.isRoutingStub);
+          fbb.addOffset(41, transcriptPosterPathOffset);
+          fbb.addInt64(42, object.transcriptBackgroundVersion);
           fbb.finish(fbb.endTable());
           return object.id ?? 0;
         },
@@ -1326,7 +1341,12 @@ obx_int.ModelDefinition getObjectBoxModel() {
             ..groupVersion =
                 const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 60)
             ..apnTitle = const fb.StringReader(asciiOptimization: true)
-                .vTableGetNullable(buffer, rootOffset, 64);
+                .vTableGetNullable(buffer, rootOffset, 64)
+            ..transcriptPosterPath =
+                const fb.StringReader(asciiOptimization: true)
+                    .vTableGetNullable(buffer, rootOffset, 86)
+            ..transcriptBackgroundVersion =
+                const fb.Int64Reader().vTableGet(buffer, rootOffset, 88, 0);
           obx_int.InternalToManyAccess.setRelInfo<Chat>(object.handles, store,
               obx_int.RelInfo<Chat>.toMany(1, object.id!));
           obx_int.InternalToManyAccess.setRelInfo<Chat>(
@@ -2231,6 +2251,14 @@ class Chat_ {
   /// See [Chat.isRoutingStub].
   static final isRoutingStub =
       obx.QueryBooleanProperty<Chat>(_entities[1].properties[34]);
+
+  /// See [Chat.transcriptPosterPath].
+  static final transcriptPosterPath =
+      obx.QueryStringProperty<Chat>(_entities[1].properties[35]);
+
+  /// See [Chat.transcriptBackgroundVersion].
+  static final transcriptBackgroundVersion =
+      obx.QueryIntegerProperty<Chat>(_entities[1].properties[36]);
 
   /// see [Chat.handles]
   static final handles =

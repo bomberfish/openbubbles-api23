@@ -247,7 +247,7 @@ Future<void> showOutgoingFaceTimeOverlay(RxString callState, String desc, String
                 if (poster == null)
                 const SizedBox(height: 20,),
                 if (poster == null)
-                Text(desc, style: context.theme.textTheme.displayMedium,),
+                Text(desc, style: context.theme.textTheme.displayMedium, textAlign: TextAlign.center,),
                 if (poster == null)
                 const SizedBox(height: 20,),
                 if (poster == null)

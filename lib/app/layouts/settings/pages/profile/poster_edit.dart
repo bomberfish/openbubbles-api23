@@ -62,10 +62,12 @@ class AvailableFont {
 }
 
 class PosterEdit extends StatefulWidget {
-  final api.SimplifiedIncomingCallPoster poster;
-  final void Function() posterEdited;
+  final api.SimplifiedIncomingCallPoster? poster;
+  final api.SimplifiedTranscriptPoster? transcriptPoster;
+  final void Function(String newPath) posterEdited;
   final Handle? handle;
-  const PosterEdit({Key? key, required this.poster, required this.posterEdited, this.handle});
+  final String? activePath;
+  const PosterEdit({Key? key, this.poster, this.transcriptPoster, required this.posterEdited, this.handle, this.activePath});
 
   @override
   State<StatefulWidget> createState() => PosterEditState();
@@ -80,11 +82,14 @@ class PosterEditState
   Map<String, Image>? images;
   Map<String, double> opacities = {};
   api.SimplifiedIncomingCallPoster? currentPoster;
+  api.SimplifiedTranscriptPoster? currentTranscriptPoster;
 
   api.PhotoPosterContentsFrame? backgroundFrame;
 
-  api.SimplifiedIncomingCallPoster get callPoster => currentPoster ?? widget.poster;
-  api.SimplifiedPoster get poster => callPoster.poster;
+  api.SimplifiedIncomingCallPoster? get callPoster => currentPoster ?? widget.poster;
+  api.SimplifiedTranscriptPoster? get transcriptPoster => currentTranscriptPoster ?? widget.transcriptPoster;
+
+  api.SimplifiedPoster get poster => callPoster?.poster ?? transcriptPoster!.poster;
 
   bool deletingColors = false;
   late AnimationController _drawerAnimationController;
@@ -92,11 +97,9 @@ class PosterEditState
 
   final TextEditingController monogramController = TextEditingController();
 
-  // currently active poster
-  String? get activePath => widget.handle != null ? widget.handle!.getPoster() : ss.settings.userPosterPath.value;
 
   String? ownedPosterPath; // a path this page "owns", when it closes, it should be deleted
-  String get posterPath => ownedPosterPath ?? activePath!;  
+  String get posterPath => ownedPosterPath ?? widget.activePath!;  
 
   Future makeNewPoster() async {
     if (ownedPosterPath != null) {
@@ -177,7 +180,7 @@ class PosterEditState
       eventDispatcher.emit('theme-update', null);
     }
 
-    if (activePath == null) {
+    if (widget.activePath == null) {
       makeNewPoster();
     }
 
@@ -306,7 +309,7 @@ class PosterEditState
     print(contains);
     double value = contains ? 1 : 0;
 
-    if (value != (opacities["background"] ?? 1)) {
+    if (value != (opacities["background"] ?? 1) && asset.contents.layers.length > 1) {
       opacities["background"] = value;
       setState(() { });
     }
@@ -415,7 +418,23 @@ class PosterEditState
   }
 
   void updateFontName() {
-    callPoster.textMetadata.fontNameKey = availableFonts[poster.titleConfiguration.timeFontConfiguration.timeFontIdentifier]?.name(poster.titleConfiguration.timeFontConfiguration.weight) ?? ".SFUI-Medium";
+    callPoster?.textMetadata.fontNameKey = availableFonts[poster.titleConfiguration.timeFontConfiguration.timeFontIdentifier]?.name(poster.titleConfiguration.timeFontConfiguration.weight) ?? ".SFUI-Medium";
+  }
+
+  void updatePoster(api.SimplifiedPoster newPoster) {
+    if (callPoster != null) {
+      currentPoster = api.SimplifiedIncomingCallPoster(
+        poster: newPoster, 
+        textMetadata: callPoster!.textMetadata, 
+        lowRes: Uint8List(0),
+      );
+    }
+    if (transcriptPoster != null) {
+      currentTranscriptPoster = api.SimplifiedTranscriptPoster(
+        watch: transcriptPoster!.watch, 
+        poster: newPoster
+      );
+    }
   }
 
   @override
@@ -477,6 +496,7 @@ class PosterEditState
               ),
               if (poster.type is api.PosterType_Photo)
               buildViewer((poster.type as api.PosterType_Photo).assets[0], (layer) => (poster.type as api.PosterType_Photo).assets[0].contents.properties.portraitLayout.clockLayerOrder != "ClockAboveBackground" || !layer.identifier.startsWith("foreground")),
+              if (callPoster != null)
               Positioned(
                 left: 16,
                 right: 16,
@@ -561,49 +581,45 @@ class PosterEditState
 
                                   var randomColor = Color((math.Random().nextDouble() * 0xFFFFFF).toInt()).withOpacity(1.0);
                                   var initials = widget.handle != null ? widget.handle!.initials ?? 'A' : "${ss.settings.firstName.value?.substring(0, 1) ?? 'A'}${ss.settings.lastName.value?.substring(0, 1) ?? ''}".toUpperCase();
-                                  var newPoster = api.SimplifiedIncomingCallPoster(
-                                    poster: api.SimplifiedPoster(
-                                      titleConfiguration: api.PRPosterTitleStyleConfiguration(
-                                        alternateDateEnabled: false, 
-                                        contentsLuminence: 0, 
-                                        groupName: "PREditingLook", 
-                                        preferredTitleAlignment: 0, 
-                                        preferredTitleLayout: 0, 
-                                        timeFontConfiguration: poster.titleConfiguration.timeFontConfiguration, 
-                                        titleColor: api.PRPosterColor(
-                                          preferredStyle: 2, 
-                                          identifier: "vibrantMaterialColor", 
-                                          suggested: false, 
-                                          color: api.UIColor.grayscaleAlphaColorSpace(colorComponents: 2, white: 1, alpha: 0.5, bin: base64Decode("MSAwLjU="), colorSpace: 4, class_: "PRPosterColor"),
-                                        ), 
-                                        titleContentStyle: Uint8List.fromList([]), 
-                                        userConfigured: false,
-                                        timeNumberingSystem: api.nsNull(),
-                                        titleStyle: api.PRPosterContentMaterialStyle.prPosterContentDiscreteColorsStyle(
-                                          variation: 0, 
-                                          colors: [colorToUIColor(saturateColor(randomColor))], 
-                                          vibrant: true, 
-                                          supportsVariation: true, 
-                                          needsToResolveVariation: false
-                                          )
-                                      ),
-                                      type: api.PosterType.monogram(
-                                        data: api.MonogramData(
-                                          topBackgroundColorDescription: colorToPosterColor(randomColor), 
-                                          backgroundColorDescription: colorToPosterColor(randomColor), 
-                                          initials: initials, 
-                                          monogramSupportedForName: true
-                                        ), 
-                                        background: colorToPosterColor(randomColor),
-                                      ),
-                                      role: poster.role,
-                                    ), 
-                                    textMetadata: callPoster.textMetadata, 
-                                    lowRes: Uint8List(0),
+                                  var newPoster = api.SimplifiedPoster(
+                                    titleConfiguration: api.PRPosterTitleStyleConfiguration(
+                                      alternateDateEnabled: false, 
+                                      contentsLuminence: 0, 
+                                      groupName: "PREditingLook", 
+                                      preferredTitleAlignment: 0, 
+                                      preferredTitleLayout: 0, 
+                                      timeFontConfiguration: poster.titleConfiguration.timeFontConfiguration, 
+                                      titleColor: api.PRPosterColor(
+                                        preferredStyle: 2, 
+                                        identifier: "vibrantMaterialColor", 
+                                        suggested: false, 
+                                        color: api.UIColor.grayscaleAlphaColorSpace(colorComponents: 2, white: 1, alpha: 0.5, bin: base64Decode("MSAwLjU="), colorSpace: 4, class_: "PRPosterColor"),
+                                      ), 
+                                      titleContentStyle: Uint8List.fromList([]), 
+                                      userConfigured: false,
+                                      timeNumberingSystem: api.nsNull(),
+                                      titleStyle: api.PRPosterContentMaterialStyle.prPosterContentDiscreteColorsStyle(
+                                        variation: 0, 
+                                        colors: [colorToUIColor(saturateColor(randomColor))], 
+                                        vibrant: true, 
+                                        supportsVariation: true, 
+                                        needsToResolveVariation: false
+                                        )
+                                    ),
+                                    type: api.PosterType.monogram(
+                                      data: api.MonogramData(
+                                        topBackgroundColorDescription: colorToPosterColor(randomColor), 
+                                        backgroundColorDescription: colorToPosterColor(randomColor), 
+                                        initials: initials, 
+                                        monogramSupportedForName: true
+                                      ), 
+                                      background: colorToPosterColor(randomColor),
+                                    ),
+                                    role: poster.role,
                                   );
                                   monogramController.text = initials;
                                   setState(() {
-                                    currentPoster = newPoster;
+                                    updatePoster(newPoster);
                                   });
                                 },
                               ),
@@ -736,39 +752,35 @@ class PosterEditState
                         uuid: assetUuid
                       );
 
-                      var newPoster = api.SimplifiedIncomingCallPoster(
-                        poster: api.SimplifiedPoster(
-                          titleConfiguration: api.PRPosterTitleStyleConfiguration(
-                            alternateDateEnabled: false, 
-                            contentsLuminence: 0, 
-                            groupName: "PREditingLook", 
-                            preferredTitleAlignment: 0, 
-                            preferredTitleLayout: 0, 
-                            timeFontConfiguration: poster.titleConfiguration.timeFontConfiguration, 
-                            titleColor: api.PRPosterColor(
-                              preferredStyle: 2, 
-                              identifier: "vibrantMaterialColor", 
-                              suggested: false, 
-                              color: api.UIColor.grayscaleAlphaColorSpace(colorComponents: 2, white: 1, alpha: 0.5, bin: base64Decode("MSAwLjU="), colorSpace: 4, class_: "PRPosterColor"),
-                            ), 
-                            titleContentStyle: Uint8List.fromList([]), 
-                            userConfigured: false,
-                            timeNumberingSystem: api.nsNull(),
-                            titleStyle: api.PRPosterContentMaterialStyle.prPosterContentDiscreteColorsStyle(
-                              variation: 0, 
-                              colors: [colorToUIColor(vibrant ?? Colors.black)], 
-                              vibrant: true, 
-                              supportsVariation: true, 
-                              needsToResolveVariation: false
-                              )
-                          ),
-                          type: api.PosterType.photo(assets: [
-                            asset
-                          ]),
-                          role: poster.role,
-                        ), 
-                        textMetadata: callPoster.textMetadata, 
-                        lowRes: Uint8List(0)
+                      var newPoster = api.SimplifiedPoster(
+                        titleConfiguration: api.PRPosterTitleStyleConfiguration(
+                          alternateDateEnabled: false, 
+                          contentsLuminence: 0, 
+                          groupName: "PREditingLook", 
+                          preferredTitleAlignment: 0, 
+                          preferredTitleLayout: 0, 
+                          timeFontConfiguration: poster.titleConfiguration.timeFontConfiguration, 
+                          titleColor: api.PRPosterColor(
+                            preferredStyle: 2, 
+                            identifier: "vibrantMaterialColor", 
+                            suggested: false, 
+                            color: api.UIColor.grayscaleAlphaColorSpace(colorComponents: 2, white: 1, alpha: 0.5, bin: base64Decode("MSAwLjU="), colorSpace: 4, class_: "PRPosterColor"),
+                          ), 
+                          titleContentStyle: Uint8List.fromList([]), 
+                          userConfigured: false,
+                          timeNumberingSystem: api.nsNull(),
+                          titleStyle: api.PRPosterContentMaterialStyle.prPosterContentDiscreteColorsStyle(
+                            variation: 0, 
+                            colors: [colorToUIColor(vibrant ?? Colors.black)], 
+                            vibrant: true, 
+                            supportsVariation: true, 
+                            needsToResolveVariation: false
+                            )
+                        ),
+                        type: api.PosterType.photo(assets: [
+                          asset
+                        ]),
+                        role: poster.role,
                       );
 
                       var recorder2 = ui.PictureRecorder();
@@ -789,6 +801,11 @@ class PosterEditState
 
                       var file = pushService.fileForAsset(posterPath, asset, "portrait-layer_background-backfill.HEIC");
                       await file.writeAsBytes(paddedJpgBytes);
+
+                      await mcs.invokeMethod("encode-heif", {
+                        "file": file.path,
+                        "output": file.path
+                      });
 
                       var file2 = pushService.fileForAsset(posterPath, asset, "portrait-layer_background.HEIC");
                       await file2.writeAsBytes(data!.buffer.asUint8List()); // format doesn't matter because we re-crop before upload
@@ -812,7 +829,7 @@ class PosterEditState
                           x: 0,
                           y: 0,
                         );
-                        currentPoster = newPoster;
+                        updatePoster(newPoster);
                       });
                       } catch(e, s) {
                         Get.back();
@@ -883,8 +900,7 @@ class PosterEditState
                       var image = await picture.toImage(padded.width.round(), padded.height.round());
                       var jpgBytes = await imageToJpeg(image);
 
-                      Uint8List thumbnail;
-                      {
+                      if (callPoster != null) {
                         var recorder = ui.PictureRecorder();
                         var canvas = Canvas(recorder);
                         var outputSize = const Size(410, 667);
@@ -896,7 +912,27 @@ class PosterEditState
                         var picture = recorder.endRecording();
                         
                         var image = await picture.toImage(outputSize.width.round(), outputSize.height.round());
-                        thumbnail = await imageToJpeg(image);
+                        callPoster!.lowRes = await imageToJpeg(image);
+                      }
+
+                      if (transcriptPoster != null) {
+                        var recorder = ui.PictureRecorder();
+                        var canvas = Canvas(recorder);
+                        var outputSize = const Size(820, 1003);
+                        applyCenterCropTransform(canvas: canvas, inputSize: visible.size, outputSize: outputSize);
+                        canvas.translate(-visible.topLeft.dx, -(visible.topLeft.dy - topPadding));
+
+                        drawAsset(images, canvas, asset, opacities);
+                        
+                        var picture = recorder.endRecording();
+                        
+                        var image = await picture.toImage(outputSize.width.round(), outputSize.height.round());
+                        transcriptPoster!.watch = api.WatchBackground(
+                          isHighKey: false, 
+                          luminance: 0, 
+                          backgroundImageData: (await image.toByteData(format: ImageByteFormat.png))!.buffer.asUint8List(), 
+                          extensionIdentifier: "com.apple.PhotosUIPrivate.PhotosPosterProvider"
+                        );
                       }
                       
                       var layout = asset.contents.properties.portraitLayout;
@@ -921,22 +957,45 @@ class PosterEditState
                         File("${file.path}.png").deleteSync();
                       }
 
+                      await mcs.invokeMethod("encode-heif", {
+                        "file": file.path,
+                        "output": file.path,
+                      });
+
                       await FileImage(file).evict();
 
-                      callPoster.lowRes = thumbnail;
                     } else if (poster.type is api.PosterType_Monogram) {
                       var type = poster.type as api.PosterType_Monogram;
-                      var recorder = ui.PictureRecorder();
-                      var canvas = Canvas(recorder);
-                      var outputSize = const Size(410, 667);
 
-                      drawMonogram(poster.type as api.PosterType_Monogram, outputSize, canvas);
+                      if (callPoster != null) {
+                        var recorder = ui.PictureRecorder();
+                        var canvas = Canvas(recorder);
+                        var outputSize = const Size(410, 667);
+                        drawMonogram(poster.type as api.PosterType_Monogram, outputSize, canvas);
                       
-                      var picture = recorder.endRecording();
+                        var picture = recorder.endRecording();
+                        
+                        var image = await picture.toImage(outputSize.width.round(), outputSize.height.round());
+                        Uint8List thumbnail = await imageToJpeg(image);
+                        callPoster!.lowRes = thumbnail;
+                      }
+
+                      if (transcriptPoster != null) {
+                        var recorder = ui.PictureRecorder();
+                        var canvas = Canvas(recorder);
+                        var outputSize = const Size(820, 1003);
+                        drawMonogram(poster.type as api.PosterType_Monogram, outputSize, canvas);
                       
-                      var image = await picture.toImage(outputSize.width.round(), outputSize.height.round());
-                      Uint8List thumbnail = await imageToJpeg(image);
-                      callPoster.lowRes = thumbnail;
+                        var picture = recorder.endRecording();
+                        
+                        var image = await picture.toImage(outputSize.width.round(), outputSize.height.round());
+                        transcriptPoster!.watch = api.WatchBackground(
+                          isHighKey: false, 
+                          luminance: 0, 
+                          backgroundImageData: (await image.toByteData(format: ImageByteFormat.png))!.buffer.asUint8List(), 
+                          extensionIdentifier: "com.apple.ContactsUI.MonogramPosterExtension"
+                        );
+                      }
 
                       var profile = await drawMonogramProfile(type);
                       if (widget.handle == null || widget.handle!.contact != null) {
@@ -989,22 +1048,11 @@ class PosterEditState
                       }
                     }
 
-                    var save = await api.parsePosterSave(poster: callPoster);
+                    var save = callPoster != null ? await api.parsePosterSave(poster: callPoster!) : await api.transcriptPosterSave(poster: transcriptPoster!);
                     await File("$posterPath.jpg").writeAsBytes(save);
 
-                    if (activePath != posterPath && activePath != null) {
-                      await pushService.deletePoster(activePath!);
-                    }
-
-                    if (widget.handle != null) {
-                      widget.handle!.setPoster(posterPath);
-                    } else {
-                      ss.settings.userPosterPath.value = posterPath;
-                      await ss.saveSettings();
-                    }
-
+                    widget.posterEdited(posterPath);
                     ownedPosterPath = null;
-                    widget.posterEdited();
                     } catch(e, s) {
                       Get.back();
                       showSnackbar("Error", "Failed to update profile! $e");
@@ -1121,7 +1169,7 @@ class PosterEditState
                                 onChanged: (val) {
                                   setState(() {
                                     poster.titleConfiguration.timeFontConfiguration.weight = val;
-                                    callPoster.textMetadata.fontWeightKey = val.roundToDouble();
+                                    callPoster?.textMetadata.fontWeightKey = val.roundToDouble();
                                     updateFontName();
                                   });
                                 },

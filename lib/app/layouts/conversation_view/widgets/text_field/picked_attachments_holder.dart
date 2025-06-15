@@ -137,7 +137,7 @@ class _PickedAttachmentsHolderState extends OptimizedState<PickedAttachmentsHold
                           right: 7,
                           child: TextButton(
                             style: TextButton.styleFrom(
-                              backgroundColor: context.theme.colorScheme.outline,
+                              backgroundColor: Get.context!.theme.colorScheme.outline,
                               shape: const CircleBorder(),
                               padding: const EdgeInsets.all(0),
                               maximumSize: const Size(32, 32),

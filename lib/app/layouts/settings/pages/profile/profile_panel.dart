@@ -174,22 +174,7 @@ class _ProfilePanelState extends OptimizedState<ProfilePanel> with WidgetsBindin
             poster = await api.fromPosterSave(poster: data);
           }
 
-          if (poster != null && poster.poster.type is api.PosterType_Photo) {
-            var photo = poster.poster.type as api.PosterType_Photo;
-            for (var asset in photo.assets) {
-              Map<String, Uint8List> entries = {};
-              for (var file in asset.files.entries) {
-                File f = pushService.fileForAsset(ss.settings.userPosterPath.value!, asset, file.key);
-                entries[file.key] = await f.readAsBytes();
-              }
-              asset.files = entries;
-            }
-          }
-
-          if (poster != null && poster.poster.type is api.PosterType_Memoji) {
-            var photo = poster.poster.type as api.PosterType_Memoji;
-            photo.data.avatarImageData = await File("${ss.settings.userPosterPath.value!}/memoji_orig.heic").readAsBytes();
-          }
+          await restorePoster(poster?.poster, ss.settings.userPosterPath.value!);
 
           api.ShareProfileMessage message;
           try {

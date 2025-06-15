@@ -30,6 +30,7 @@ import 'package:get/get.dart';
 import 'package:in_app_purchase_android/billing_client_wrappers.dart';
 import 'package:mime_type/mime_type.dart';
 import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:slugify/slugify.dart';
 import 'package:supercharged/supercharged.dart';
 import 'package:tuple/tuple.dart';
@@ -2294,6 +2295,25 @@ class RustPushService extends GetxService {
     return "$appDocPath/avatars/you/poster-$number";
   }
 
+  Future<String> saveTranscriptPoster(api.SimplifiedTranscriptPoster decoded) async {
+    int number = Random().nextInt(9999999);
+
+    String appDocPath = fs.appDocDir.path;
+
+    savePosterData(decoded.poster, number);
+
+    var save = await api.transcriptPosterSave(poster: decoded);
+    File file = File("$appDocPath/avatars/you/poster-$number.jpg");
+    if (!(await file.exists())) {
+      await file.create(recursive: true);
+    }
+    await file.writeAsBytes(save);
+
+    Logger.info("Wrote poster $appDocPath/avatars/you/poster-$number");
+
+    return "$appDocPath/avatars/you/poster-$number";
+  }
+
   Future invalidatePeerCaches() async {
     var myHandles = (await api.getHandles(state: pushService.state));
     // loop through recent chats (1 day or newer)
@@ -2685,6 +2705,71 @@ class RustPushService extends GetxService {
       }
       return;
     }
+    if (myMsg.message is api.Message_SetTranscriptBackground) {
+      var innerMsg = myMsg.message as api.Message_SetTranscriptBackground;
+
+      Chat? chat;
+
+      if (innerMsg.field0.chatId != null) {
+        if (innerMsg.field0.chatId!.contains("+") || innerMsg.field0.chatId!.contains("@")) {
+          chat = Chat.findByHandle(innerMsg.field0.chatId!);
+        } else {
+          chat = Chat.findByRustGuid(innerMsg.field0.chatId!)!;
+        }
+      } else {
+        chat = Chat.findByHandle(RustPushBBUtils.rustHandleToBB(myMsg.sender!).address);
+      }
+
+      if (chat == null) return null;
+
+      if (innerMsg.field0 is api.SetTranscriptBackgroundMessage_Set) {
+        var value = innerMsg.field0 as api.SetTranscriptBackgroundMessage_Set;
+
+        var path = "${(await getApplicationCacheDirectory()).path}/${Random().nextInt(9999999)}";
+        var stream = api.downloadMmcs(state: pushService.state, attachment: api.MMCSFile(
+          signature: base64.decode(value.signature), 
+          object: value.objectId, 
+          url: value.url, 
+          key: base64.decode(value.key).sublist(1), 
+          size: 0,
+        ), path: path);
+        try {
+          await for (final event in stream) {
+            Logger.info("Downloaded transcript ${event.prog} bytes of ${event.total}");
+          }
+        } catch (e) {
+          try {
+            File(path).deleteSync();
+          } catch (_) { }
+          rethrow;
+        }
+
+        var data = await File(path).readAsBytes();
+        File(path).deleteSync();
+        var poster = await api.parseTranscriptPoster(payload: data);
+        
+        var saved = await saveTranscriptPoster(poster);
+
+        if (chat.transcriptPosterPath != null) {
+          await deletePoster(chat.transcriptPosterPath!);
+        }
+
+        chat.transcriptBackgroundVersion = value.bid;
+        chat.transcriptPosterPath = saved;
+        chat.save(updateTranscriptPosterPath: true, updateTranscriptBackgroundVersion: true);
+      } else {
+        if (chat.transcriptPosterPath != null) {
+          await deletePoster(chat.transcriptPosterPath!);
+          chat.transcriptPosterPath = null;
+          chat.transcriptBackgroundVersion = innerMsg.field0.bid;
+          chat.save(updateTranscriptPosterPath: true, updateTranscriptBackgroundVersion: true);
+        }
+      }
+      cvc(chat).chat.transcriptPosterPath = chat.transcriptPosterPath;
+      cvc(chat).updatePoster();
+      markBackgroundChange(myMsg.sender!, myMsg.sentTimestamp, chat);
+      return;
+    }
     if (myMsg.message is api.Message_ShareProfile) {
       // someone shared to us
       var message = myMsg.message as api.Message_ShareProfile;
@@ -3013,6 +3098,106 @@ class RustPushService extends GetxService {
         myTimer = null;
       }
     };
+  }
+
+  Future updateChatPoster(Chat chat) async {    
+    api.SetTranscriptBackgroundMessage Function(String? chat) message;
+    if (chat.transcriptPosterPath != null) {
+      api.SimplifiedTranscriptPoster poster = await api.fromTranscriptPosterSave(poster: await File("${chat.transcriptPosterPath!}.jpg").readAsBytes());
+      await restorePoster(poster.poster, chat.transcriptPosterPath!);
+      var result = await api.packTranscriptPoster(payload: poster);
+
+      var path = "${(await getApplicationCacheDirectory()).path}/${Random().nextInt(9999999)}";
+      await File(path).writeAsBytes(result);
+
+      var mmcsStream = api.uploadMmcs(state: pushService.state, path: path);
+      api.MMCSFile? mmcs;
+      await for (final event in mmcsStream) {
+        if (event.file != null) {
+          Logger.info("upload finish");
+          mmcs = event.file;
+        } else {
+          Logger.info("upload progress ${event.prog} of ${event.total}");
+        }
+      }
+
+      File(path).deleteSync();
+
+      chat.transcriptBackgroundVersion++;
+      chat.save(updateTranscriptBackgroundVersion: true);
+
+      message = (c) => api.SetTranscriptBackgroundMessage.set_(
+        aid: 1, 
+        bid: chat.transcriptBackgroundVersion, 
+        objectId: mmcs!.object, 
+        payloadVersion: 1, 
+        backgroundId: uuid.v4().toUpperCase(), 
+        url: mmcs.url, 
+        signature: base64Encode(mmcs.signature), 
+        key: base64Encode([0, ...mmcs.key]), 
+        fileSize: BigInt.from(mmcs.size),
+        chatId: c,
+      );
+    } else {
+      chat.transcriptBackgroundVersion++;
+      chat.save(updateTranscriptBackgroundVersion: true);
+
+      message = (c) => api.SetTranscriptBackgroundMessage.remove(
+        aid: 1, 
+        bid: chat.transcriptBackgroundVersion, 
+        remove: true,
+        chatId: c,
+      );
+    }
+
+    var myhandle = await chat.ensureHandle();
+    if (chat.participants.length > 1) {
+      var m = message(chat.guid);
+      var msg = await api.newMsg(
+            state: pushService.state,
+            conversation: await chat.getConversationData(),
+            message: api.Message.setTranscriptBackground(m),
+            sender: myhandle);
+      await (backend as RustPushBackend).sendMsg(msg);
+    } else {
+      var cv = await chat.getConversationData();
+      cv.participants.remove(myhandle);
+
+      var msg = await api.newMsg(
+            state: pushService.state,
+            conversation: cv,
+            message: api.Message.setTranscriptBackground(message(null)),
+            sender: myhandle);
+      await (backend as RustPushBackend).sendMsg(msg);
+
+      cv.participants = [myhandle];
+      var msg2 = await api.newMsg(
+            state: pushService.state,
+            conversation: cv,
+            message: api.Message.setTranscriptBackground(message(chat.participants[0].address)),
+            sender: myhandle);
+      await (backend as RustPushBackend).sendMsg(msg2);
+    }
+
+    markBackgroundChange(myhandle, DateTime.now().millisecondsSinceEpoch, chat);
+  }
+
+  void markBackgroundChange(String sender, int ms, Chat chat) async {
+    var myHandles = await api.getHandles(state: pushService.state);
+    var msg = Message(
+      guid: uuid.v4(),
+      isFromMe: myHandles.contains(sender),
+      handleId: RustPushBBUtils.rustHandleToBB(sender).originalROWID!,
+      dateCreated: DateTime.fromMillisecondsSinceEpoch(ms),
+      itemType: 7,
+      groupActionType: chat.transcriptPosterPath != null ? 1 : 2,
+    );
+
+    inq.queue(IncomingItem(
+      chat: chat,
+      message: msg,
+      type: QueueType.newMessage
+    ));
   }
 
   api.TextFormat defaultFormat() {

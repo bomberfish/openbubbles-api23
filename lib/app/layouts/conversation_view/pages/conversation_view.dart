@@ -1,6 +1,7 @@
 import 'package:bluebubbles/app/layouts/conversation_view/widgets/header/cupertino_header.dart';
 import 'package:bluebubbles/app/layouts/conversation_view/widgets/header/material_header.dart';
 import 'package:bluebubbles/app/layouts/conversation_view/widgets/text_field/conversation_text_field.dart';
+import 'package:bluebubbles/app/layouts/settings/pages/profile/posterkit.dart';
 import 'package:bluebubbles/app/wrappers/gradient_background_wrapper.dart';
 import 'package:bluebubbles/app/wrappers/stateful_boilerplate.dart';
 import 'package:bluebubbles/helpers/helpers.dart';
@@ -72,7 +73,7 @@ class ConversationViewState extends OptimizedState<ConversationView> {
         statusBarColor: Colors.transparent,
         statusBarIconBrightness: context.theme.colorScheme.brightness.opposite,
       ),
-      child: Theme(
+      child: Obx(() => Theme(
         data: context.theme.copyWith(
           // in case some components still use legacy theming
           primaryColor: context.theme.colorScheme.bubble(context, chat.isIMessage),
@@ -85,6 +86,7 @@ class ConversationViewState extends OptimizedState<ConversationView> {
             onSurface: ss.settings.monetTheming.value == Monet.full
                 ? null
                 : (context.theme.extensions[BubbleColors] as BubbleColors?)?.onReceivedBubbleColor,
+            outline: controller.backgroundPoster.value != null ? Colors.white : null,
           ),
         ),
         child: PopScope(
@@ -111,7 +113,7 @@ class ConversationViewState extends OptimizedState<ConversationView> {
           child: SafeArea(
             top: false,
             bottom: false,
-            child: Obx(() => Scaffold(
+            child: Scaffold(
               backgroundColor: ss.settings.windowEffect.value != WindowEffect.disabled ? Colors.transparent : context.theme.colorScheme.background,
               extendBodyBehindAppBar: true,
               appBar: PreferredSize(
@@ -144,6 +146,8 @@ class ConversationViewState extends OptimizedState<ConversationView> {
                     child: Stack(
                       clipBehavior: Clip.none,
                       children: [
+                        if (controller.backgroundPoster.value != null)
+                        ImagePoster(poster: controller.backgroundPoster.value!.poster, images: controller.images),
                         const Positioned.fill(child: ScreenEffectsWidget()),
                         Column(
                           mainAxisAlignment: MainAxisAlignment.end,

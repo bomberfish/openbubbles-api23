@@ -1066,6 +1066,12 @@ class Message {
       text = "$name kept an audio message";
     } else if (itemType == 6) {
       text = "$name started a FaceTime call";
+    } else if (itemType == 7) {
+      if (groupActionType == 1) {
+        text = "$name changed the background";
+      } else {
+        text = "$name removed the background";
+      }
     }
 
     return text;

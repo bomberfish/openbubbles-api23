@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:math';
+import 'dart:ui';
 
 import 'package:audio_waveforms/audio_waveforms.dart';
 import 'package:bluebubbles/app/components/custom/custom_bouncing_scroll_physics.dart';
@@ -403,11 +404,12 @@ class ConversationTextFieldState extends CustomState<ConversationTextField, void
       left: false,
       right: false,
       top: false,
-      child: Padding(
-        padding: const EdgeInsets.only(bottom: 10.0, top: 10.0),
-        child: Column(
+      child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
+            Padding(
+            padding: const EdgeInsets.only(bottom: 10.0, top: 10.0),
+            child: 
             Row(crossAxisAlignment: CrossAxisAlignment.end, children: [
               IconButton(
                 icon: Icon(
@@ -622,17 +624,20 @@ class ConversationTextFieldState extends CustomState<ConversationTextField, void
                     sendMessage: sendMessage,
                   ),
                 ),
-            ]),
+            ])),
             AnimatedSize(
               duration: const Duration(milliseconds: 250),
               curve: Curves.easeIn,
               alignment: Alignment.bottomCenter,
               child: !showAttachmentPicker
                   ? SizedBox(width: ns.width(context))
-                  : AttachmentPicker(
+                  : OptionalBackdrop(
+                    child: AttachmentPicker(
                       key: attachmentPicker,
                       controller: controller,
                     ),
+                    controller: controller,
+                  ),
             ),
             AnimatedSize(
               duration: const Duration(milliseconds: 250),
@@ -723,9 +728,54 @@ class ConversationTextFieldState extends CustomState<ConversationTextField, void
               }),
             ),
           ],
-        ),
       ),
     );
+  }
+}
+
+class OptionalBackdrop extends StatelessWidget {
+
+      // simulate apple's saturatioon
+  static const List<double> darkMatrix = <double>[
+    1.385, -0.56, -0.112, 0.0, 0.3, //
+    -0.315, 1.14, -0.112, 0.0, 0.3, //
+    -0.315, -0.56, 1.588, 0.0, 0.3, //
+    0.0, 0.0, 0.0, 1.0, 0.0
+  ];
+
+  static const List<double> lightMatrix = <double>[
+    1.74, -0.4, -0.17, 0.0, 0.0, //
+    -0.26, 1.6, -0.17, 0.0, 0.0, //
+    -0.26, -0.4, 1.83, 0.0, 0.0, //
+    0.0, 0.0, 0.0, 1.0, 0.0
+  ];
+
+  final ConversationViewController? controller;
+  final Widget child;
+  const OptionalBackdrop({ super.key, this.controller, required this.child });
+
+  @override
+  Widget build(BuildContext context) {
+    return Obx(() {
+      var translucentMode = controller?.backgroundPoster.value != null;
+      if (translucentMode) {
+        return ClipRect(
+          child: BackdropFilter(
+            filter: ImageFilter.compose(
+                outer: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
+                inner: ColorFilter.matrix(
+                  CupertinoTheme.maybeBrightnessOf(context) == Brightness.dark ? darkMatrix : lightMatrix,
+                )),
+            child: Container(
+              color: context.theme.colorScheme.properSurface.withOpacity(translucentMode ? 0.7 : 1),
+              child: child,
+            )
+          ),
+        );
+      } else {
+        return child;
+      }
+    });
   }
 }
 
@@ -830,6 +880,8 @@ class TextFieldComponentState extends State<TextFieldComponent> {
             duration: const Duration(milliseconds: 400),
             alignment: Alignment.bottomCenter,
             curve: Curves.easeOutBack,
+            child: OptionalBackdrop(
+              controller: controller,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -899,67 +951,67 @@ class TextFieldComponentState extends State<TextFieldComponent> {
                 CallbackShortcuts(
                   bindings: txtController.getShortcuts(),
                   child: TextField(
-                  textCapitalization: TextCapitalization.sentences,
-                  focusNode: controller?.focusNode ?? focusNode,
-                  autocorrect: true,
-                  controller: txtController,
-                  scrollPhysics: const CustomBouncingScrollPhysics(),
-                  style: context.theme.extension<BubbleText>()!.bubbleText,
-                  keyboardType: TextInputType.multiline,
-                  maxLines: 14,
-                  minLines: 1,
-                  autofocus: (kIsWeb || kIsDesktop) && !isChatCreator,
-                  enableIMEPersonalizedLearning: !ss.settings.incognitoKeyboard.value,
-                  textInputAction: ss.settings.sendWithReturn.value && !kIsWeb && !kIsDesktop ? TextInputAction.send : TextInputAction.newline,
-                  cursorColor: context.theme.colorScheme.primary,
-                  cursorHeight: context.theme.extension<BubbleText>()!.bubbleText.fontSize! * 1.25,
-                  decoration: InputDecoration(
-                    contentPadding: EdgeInsets.all(iOS && !kIsDesktop && !kIsWeb ? 10 : 12.5),
-                    isDense: true,
-                    isCollapsed: true,
-                    hintText: isChatCreator
-                        ? "New Message"
-                        : ss.settings.recipientAsPlaceholder.value == true
-                            ? isRecording ? "" : chat!.getTitle()
-                            : (chat!.isTextForwarding && !isRecording)
-                                ? "Text Message"
-                                : (!isRecording) // Only show iMessage when not recording
-                                  ? "iMessage" : "",
-                    enabledBorder: InputBorder.none,
-                    border: InputBorder.none,
-                    focusedBorder: InputBorder.none,
-                    filled: (isRecording & iOS),
-                    fillColor: (isRecording & iOS) ? context.theme.colorScheme.primary.withOpacity(0.3) : Colors.transparent,
-                    hintStyle: context.theme.extension<BubbleText>()!.bubbleText.copyWith(color: context.theme.colorScheme.outline),
-                    suffixIconConstraints: const BoxConstraints(minHeight: 0),
-                    suffixIcon: samsung && !isChatCreator
-                        ? null
-                        : Padding(
-                            padding: EdgeInsets.only(right: iOS ? 0.0 : 5.0),
-                            child: TextFieldSuffix(
-                              subjectTextController: subjController,
-                              textController: txtController,
-                              controller: controller,
-                              recorderController: recorderController,
-                              sendMessage: sendMessage,
-                              isChatCreator: isChatCreator,
+                    textCapitalization: TextCapitalization.sentences,
+                    focusNode: controller?.focusNode ?? focusNode,
+                    autocorrect: true,
+                    controller: txtController,
+                    scrollPhysics: const CustomBouncingScrollPhysics(),
+                    style: context.theme.extension<BubbleText>()!.bubbleText,
+                    keyboardType: TextInputType.multiline,
+                    maxLines: 14,
+                    minLines: 1,
+                    autofocus: (kIsWeb || kIsDesktop) && !isChatCreator,
+                    enableIMEPersonalizedLearning: !ss.settings.incognitoKeyboard.value,
+                    textInputAction: ss.settings.sendWithReturn.value && !kIsWeb && !kIsDesktop ? TextInputAction.send : TextInputAction.newline,
+                    cursorColor: context.theme.colorScheme.primary,
+                    cursorHeight: context.theme.extension<BubbleText>()!.bubbleText.fontSize! * 1.25,
+                    decoration: InputDecoration(
+                      contentPadding: EdgeInsets.all(iOS && !kIsDesktop && !kIsWeb ? 10 : 12.5),
+                      isDense: true,
+                      isCollapsed: true,
+                      hintText: isChatCreator
+                          ? "New Message"
+                          : ss.settings.recipientAsPlaceholder.value == true
+                              ? isRecording ? "" : chat!.getTitle()
+                              : (chat!.isTextForwarding && !isRecording)
+                                  ? "Text Message"
+                                  : (!isRecording) // Only show iMessage when not recording
+                                    ? "iMessage" : "",
+                      enabledBorder: InputBorder.none,
+                      border: InputBorder.none,
+                      focusedBorder: InputBorder.none,
+                      filled: (isRecording & iOS),
+                      fillColor: (isRecording & iOS) ? context.theme.colorScheme.primary.withOpacity(0.3) : Colors.transparent,
+                      hintStyle: context.theme.extension<BubbleText>()!.bubbleText.copyWith(color: context.theme.colorScheme.outline),
+                      suffixIconConstraints: const BoxConstraints(minHeight: 0),
+                      suffixIcon: samsung && !isChatCreator
+                          ? null
+                          : Padding(
+                              padding: EdgeInsets.only(right: iOS ? 0.0 : 5.0),
+                              child: TextFieldSuffix(
+                                subjectTextController: subjController,
+                                textController: txtController,
+                                controller: controller,
+                                recorderController: recorderController,
+                                sendMessage: sendMessage,
+                                isChatCreator: isChatCreator,
+                              ),
                             ),
-                          ),
+                    ),
+                    contextMenuBuilder: txtController.getContextMenuBuilder(),
+                    onTap: () {
+                      HapticFeedback.selectionClick();
+                    },
+                    onSubmitted: (String value) {
+                      controller?.focusNode.requestFocus();
+                      if (isNullOrEmpty(value) && (controller?.pickedAttachments.isEmpty ?? false)) return;
+                      sendMessage.call();
+                    },
+                    contentInsertionConfiguration: ContentInsertionConfiguration(onContentInserted: onContentCommit),
                   ),
-                  contextMenuBuilder: txtController.getContextMenuBuilder(),
-                  onTap: () {
-                    HapticFeedback.selectionClick();
-                  },
-                  onSubmitted: (String value) {
-                    controller?.focusNode.requestFocus();
-                    if (isNullOrEmpty(value) && (controller?.pickedAttachments.isEmpty ?? false)) return;
-                    sendMessage.call();
-                  },
-                  contentInsertionConfiguration: ContentInsertionConfiguration(onContentInserted: onContentCommit),
-                )
                 ),
               ],
-            ),
+            ),),
           ),
         );
         }

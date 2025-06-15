@@ -89,7 +89,7 @@
     },
     {
       "id": "3:9017250848141753702",
-      "lastPropertyId": "41:7342392293130604386",
+      "lastPropertyId": "43:9027611778744022691",
       "name": "Chat",
       "properties": [
         {
@@ -269,6 +269,16 @@
           "id": "41:7342392293130604386",
           "name": "isRoutingStub",
           "type": 1
+        },
+        {
+          "id": "42:4361624812823479978",
+          "name": "transcriptPosterPath",
+          "type": 9
+        },
+        {
+          "id": "43:9027611778744022691",
+          "name": "transcriptBackgroundVersion",
+          "type": 6
         }
       ],
       "relations": [

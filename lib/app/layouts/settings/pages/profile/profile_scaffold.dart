@@ -256,52 +256,36 @@ class ProfileScaffoldState
                                         isVerticalKey: false, 
                                         typeKey: "com.apple.ContactsUI.MonogramPosterExtension",
                                       ),
-                                      poster: api.SimplifiedPoster(
-                                        role: api.PosterRole.prPosterRoleIncomingCall,
-                                        titleConfiguration: api.PRPosterTitleStyleConfiguration(
-                                          alternateDateEnabled: false, 
-                                          contentsLuminence: 0, 
-                                          groupName: "PREditingLook", 
-                                          preferredTitleAlignment: 0, 
-                                          preferredTitleLayout: 0, 
-                                          timeFontConfiguration: api.PRPosterSystemTimeFontConfiguration(
-                                            isSystemItem: true, 
-                                            timeFontIdentifier: "PRTimeFontIdentifierSFPro", 
-                                            weight: 400,
-                                          ), 
-                                          titleColor: api.PRPosterColor(
-                                            preferredStyle: 2, 
-                                            identifier: "vibrantMaterialColor", 
-                                            suggested: false, 
-                                            color: api.UIColor.grayscaleAlphaColorSpace(colorComponents: 2, white: 1, alpha: 0.5, bin: base64Decode("MSAwLjU="), colorSpace: 4, class_: "PRPosterColor"),
-                                          ), 
-                                          titleContentStyle: Uint8List.fromList([]), 
-                                          userConfigured: false,
-                                          timeNumberingSystem: api.nsNull(),
-                                          titleStyle: api.PRPosterContentMaterialStyle.prPosterContentDiscreteColorsStyle(
-                                            variation: 0, 
-                                            colors: [colorToUIColor(saturateColor(randomColor))], 
-                                            vibrant: true, 
-                                            supportsVariation: true, 
-                                            needsToResolveVariation: false
-                                            )
-                                        ),
-                                        type: api.PosterType.monogram(
-                                          data: api.MonogramData(
-                                            topBackgroundColorDescription: colorToPosterColor(randomColor), 
-                                            backgroundColorDescription: colorToPosterColor(randomColor), 
-                                            initials: initials, 
-                                            monogramSupportedForName: true
-                                          ), 
-                                          background: colorToPosterColor(randomColor),
-                                        )
-                                      ), 
+                                      poster: createNewPoster(api.PosterType.monogram(
+                                        data: api.MonogramData(
+                                          topBackgroundColorDescription: colorToPosterColor(randomColor), 
+                                          backgroundColorDescription: colorToPosterColor(randomColor), 
+                                          initials: initials, 
+                                          monogramSupportedForName: true
+                                        ), 
+                                        background: colorToPosterColor(randomColor),
+                                      ), randomColor, api.PosterRole.prPosterRoleIncomingCall), 
                                       lowRes: Uint8List(0),
                                     );
                                   }
+                                  var activePath = widget.handle != null ? widget.handle!.getPoster() : ss.settings.userPosterPath.value;
                                   Navigator.of(context).push(
                                     ThemeSwitcher.buildPageRoute(
-                                      builder: (context) => PosterEdit(poster: usePoster, handle: widget.handle, posterEdited: () { updatePoster(); (widget.posterEdited ?? () {})(); },),
+                                      builder: (context) => PosterEdit(poster: usePoster, handle: widget.handle, 
+                                        activePath: activePath, 
+                                        posterEdited: (newPath) async {
+                                          if (activePath != newPath && activePath != null) {
+                                            await pushService.deletePoster(activePath);
+                                          }
+
+                                          if (widget.handle != null) {
+                                            widget.handle!.setPoster(newPath);
+                                          } else {
+                                            ss.settings.userPosterPath.value = newPath;
+                                            await ss.saveSettings();
+                                          }
+                                          updatePoster(); (widget.posterEdited ?? () {})();
+                                        },),
                                     ),
                                   );
                                 },

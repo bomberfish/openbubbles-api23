@@ -3047,20 +3047,20 @@ sealed class SetTranscriptBackgroundMessage
   const factory SetTranscriptBackgroundMessage.remove({
     required int aid,
     required int bid,
-    required String chatId,
+    String? chatId,
     required bool remove,
   }) = SetTranscriptBackgroundMessage_Remove;
   const factory SetTranscriptBackgroundMessage.set_({
     required int aid,
     required int bid,
-    required String chatId,
+    String? chatId,
     required String objectId,
     required int payloadVersion,
     required String backgroundId,
     required String url,
     required String signature,
     required String key,
-    required int status,
+    required BigInt fileSize,
   }) = SetTranscriptBackgroundMessage_Set;
 }
 
@@ -3217,10 +3217,10 @@ class SimplifiedPoster {
 }
 
 class SimplifiedTranscriptPoster {
-  final WatchBackground watch;
+  WatchBackground watch;
   final SimplifiedPoster poster;
 
-  const SimplifiedTranscriptPoster({
+  SimplifiedTranscriptPoster({
     required this.watch,
     required this.poster,
   });
