@@ -922,8 +922,9 @@ class ChatCreatorState extends OptimizedState<ChatCreator> {
                                   );
                                 });
                             backend.createChat(participants, textController.getFinalAnnotations(), method).then((newChat) async {
+                              newChat.senderIsKnown = true;
                               // Load the chat data and save it to the DB
-                              newChat = newChat.save();
+                              newChat = newChat.save(updateSenderIsKnown: true);
 
                               // Fetch the newly saved chat data from the DB
                               // Throw an error if it wasn't saved correctly.

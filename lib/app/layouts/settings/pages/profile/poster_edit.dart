@@ -220,6 +220,10 @@ class PosterEditState
       matrix.translate(-layout.visibleFrame.x, -(layout.imageSize.height - layout.visibleFrame.y - layout.visibleFrame.height + getPosterPadding(asset)), 0);
       cropController.value = matrix;
     }
+
+    if (poster.type is! api.PosterType_Monogram && poster.type is! api.PosterType_Photo) {
+      changePhoto();
+    }
   }
 
   Rect getVisibleRect() {
@@ -421,6 +425,208 @@ class PosterEditState
     callPoster?.textMetadata.fontNameKey = availableFonts[poster.titleConfiguration.timeFontConfiguration.timeFontIdentifier]?.name(poster.titleConfiguration.timeFontConfiguration.weight) ?? ".SFUI-Medium";
   }
 
+  void changePhoto() async {
+    final res = await fp.FilePicker.platform.pickFiles(withData: true, type: fp.FileType.custom, allowedExtensions: ['png', 'jpg', 'jpeg']);
+    if (res == null) return;
+
+    showDialog(
+      context: Get.context!,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: context.theme.colorScheme.properSurface,
+          title: Text(
+            "Preparing poster...",
+            style: context.theme.textTheme.titleLarge,
+          ),
+          content: Container(
+            height: 70,
+            child: Center(
+              child: CircularProgressIndicator(
+                backgroundColor: context.theme.colorScheme.properSurface,
+                valueColor: AlwaysStoppedAnimation<Color>(context.theme.colorScheme.primary),
+              ),
+            ),
+          ),
+        );
+      }
+    );
+    try {
+    fp.PlatformFile platformFile = res.files.first;
+
+    var decodedImage = await decodeImageFromBytes(platformFile.bytes!);
+
+    var vibrant = await getVibrantColor(decodedImage);
+
+    var padding = (decodedImage.height.toDouble() * 0.35).ceil();
+
+    var recorder = ui.PictureRecorder();
+    var canvas = Canvas(recorder);
+    canvas.drawImage(decodedImage, Offset(0, padding.toDouble()), Paint());
+
+    var program = await FragmentProgram.fromAsset('shaders/vertical_blur_gradient.frag');
+    var shader = program.fragmentShader();
+
+    print(decodedImage.width.toDouble() / 800);
+    shader.setFloat(0, decodedImage.width.toDouble());
+    shader.setFloat(1, decodedImage.height.toDouble());
+    shader.setFloat(2, padding.toDouble());
+    shader.setFloat(3, decodedImage.height.toDouble() * 0.23);
+
+    shader.setFloat(4, 0);
+    shader.setFloat(5, 0);
+    shader.setFloat(6, 0);
+
+    shader.setImageSampler(0, decodedImage);
+    canvas.drawRect(Rect.fromLTWH(0, 0, decodedImage.width.toDouble(), padding + (decodedImage.height.toDouble() * 0.23)), Paint()..shader = shader);
+
+
+    var picture = recorder.endRecording();
+    
+    var paddedImage = await picture.toImage(decodedImage.width, decodedImage.height + padding);
+    var paddedJpgBytes = await imageToJpeg(paddedImage);
+
+    var assetUuid = uuid.v4().toUpperCase();
+
+    var asset = api.PosterAsset(
+      contents: api.PhotoPosterContents(
+        version: 10, 
+        layers: [
+          api.PhotoPosterLayer(
+            frame: api.PhotoPosterContentsFrame(
+              width: paddedImage.width.toDouble(),
+              height: paddedImage.height.toDouble(),
+              x: 0,
+              y: -padding.toDouble()
+            ), 
+            filename: "portrait-layer_background-backfill.HEIC", 
+            zPosition: 4.5, 
+            identifier: "background-backfill"
+          ),
+          api.PhotoPosterLayer(
+            frame: api.PhotoPosterContentsFrame(
+              width: paddedImage.width.toDouble(),
+              height: paddedImage.height.toDouble(),
+              x: 0,
+              y: -padding.toDouble()
+            ), 
+            filename: "portrait-layer_background.HEIC", 
+            zPosition: 5, 
+            identifier: "background"
+          ),
+        ], 
+        properties: api.PhotoPosterProperties(
+          portraitLayout: api.PhotoPosterLayout(
+            clockIntersection: 2, 
+            deviceResolution: const api.PhotoPosterContentsSize(width: 1170, height: 2532), 
+            visibleFrame: centeredAspectCrop(imageWidth: decodedImage.width.toDouble(), imageHeight: decodedImage.height.toDouble(), targetAspectRatio: MediaQuery.sizeOf(Get.context!).aspectRatio),
+            timeFrame: const api.PhotoPosterContentsFrame(height: 0, width: 0, x: 0, y: 0), 
+            clockLayerOrder: "ClockAboveForeground", 
+            hasTopEdgeContact: false, // TODO
+            inactiveFrame: const api.PhotoPosterContentsFrame(height: 0, width: 0, x: 0, y: 0), 
+            imageSize: api.PhotoPosterContentsSize(width: decodedImage.width.toDouble(), height: decodedImage.height.toDouble()), 
+            parallaxPadding: const api.PhotoPosterContentsSize(width: 0, height: 0), 
+          ), 
+          settlingEffectEnabled: false, 
+          depthEnabled: false, 
+          clockAreaLuminance: 0, 
+          parallaxDisabled: false
+        )
+      ), 
+      files: {
+        "portrait-layer_background-backfill.HEIC": Uint8List(0),
+        "portrait-layer_background.HEIC": Uint8List(0)
+      }, 
+      uuid: assetUuid
+    );
+
+    var newPoster = api.SimplifiedPoster(
+      titleConfiguration: api.PRPosterTitleStyleConfiguration(
+        alternateDateEnabled: false, 
+        contentsLuminence: 0, 
+        groupName: "PREditingLook", 
+        preferredTitleAlignment: 0, 
+        preferredTitleLayout: 0, 
+        timeFontConfiguration: poster.titleConfiguration.timeFontConfiguration, 
+        titleColor: api.PRPosterColor(
+          preferredStyle: 2, 
+          identifier: "vibrantMaterialColor", 
+          suggested: false, 
+          color: api.UIColor.grayscaleAlphaColorSpace(colorComponents: 2, white: 1, alpha: 0.5, bin: base64Decode("MSAwLjU="), colorSpace: 4, class_: "PRPosterColor"),
+        ), 
+        titleContentStyle: Uint8List.fromList([]), 
+        userConfigured: false,
+        timeNumberingSystem: api.nsNull(),
+        titleStyle: api.PRPosterContentMaterialStyle.prPosterContentDiscreteColorsStyle(
+          variation: 0, 
+          colors: [colorToUIColor(vibrant ?? Colors.black)], 
+          vibrant: true, 
+          supportsVariation: true, 
+          needsToResolveVariation: false
+          )
+      ),
+      type: api.PosterType.photo(assets: [
+        asset
+      ]),
+      role: poster.role,
+    );
+
+    var recorder2 = ui.PictureRecorder();
+    var canvas2 = Canvas(recorder2);
+    canvas2.drawImage(decodedImage, Offset(0, padding.toDouble()), Paint());
+
+    canvas2.translate(0, padding.toDouble());
+    canvas2.scale(1, -1); // flip
+    canvas2.drawImage(decodedImage, Offset.zero, Paint());
+
+
+    var picture2 = recorder2.endRecording();
+    
+    var paddedImage2 = await picture2.toImage(decodedImage.width, decodedImage.height + padding);
+    var data = await paddedImage2.toByteData(format: ui.ImageByteFormat.png);
+
+    await makeNewPoster();
+
+    var file = pushService.fileForAsset(posterPath, asset, "portrait-layer_background-backfill.HEIC");
+    await file.writeAsBytes(paddedJpgBytes);
+
+    await mcs.invokeMethod("encode-heif", {
+      "file": file.path,
+      "output": file.path
+    });
+
+    var file2 = pushService.fileForAsset(posterPath, asset, "portrait-layer_background.HEIC");
+    await file2.writeAsBytes(data!.buffer.asUint8List()); // format doesn't matter because we re-crop before upload
+
+    var file3 = pushService.fileForAsset(posterPath, asset, "original-background.jpg");
+    await file3.writeAsBytes(data.buffer.asUint8List());
+
+    stopEditing();
+
+    var layout = asset.contents.properties.portraitLayout;
+    var matrix = Matrix4.identity();
+    matrix.scale(MediaQuery.sizeOf(Get.context!).width / layout.visibleFrame.width);
+    matrix.translate(-layout.visibleFrame.x, -(layout.imageSize.height - layout.visibleFrame.y - layout.visibleFrame.height + getPosterPadding(asset)), 0);
+    cropController.value = matrix;
+
+    setState(() {
+      // we want the mirror to render all over, but we still want it to fade away when we get out of it
+      backgroundFrame = api.PhotoPosterContentsFrame(
+        width: decodedImage.width.toDouble(),
+        height: decodedImage.height.toDouble(),
+        x: 0,
+        y: 0,
+      );
+      updatePoster(newPoster);
+    });
+    } catch(e, s) {
+      Get.back();
+      showSnackbar("Error", "Failed to update profile! $e");
+      rethrow;
+    }
+
+    Get.back();
+  }
+
   void updatePoster(api.SimplifiedPoster newPoster) {
     if (callPoster != null) {
       currentPoster = api.SimplifiedIncomingCallPoster(
@@ -538,7 +744,7 @@ class PosterEditState
                 bottom: 12 + MediaQuery.of(context).padding.bottom,
                 left: 27,
                 child: Column(children: [
-                  if (poster.type is! api.PosterType_Monogram)
+                  if (poster.type is! api.PosterType_Monogram && transcriptPoster == null)
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.transparent,
@@ -639,205 +845,7 @@ class PosterEditState
                       minimumSize: Size.zero,
                     ),
                     onPressed: () async {
-                      final res = await fp.FilePicker.platform.pickFiles(withData: true, type: fp.FileType.custom, allowedExtensions: ['png', 'jpg', 'jpeg']);
-                      if (res == null) return;
-
-                      showDialog(
-                        context: Get.context!,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            backgroundColor: context.theme.colorScheme.properSurface,
-                            title: Text(
-                              "Preparing poster...",
-                              style: context.theme.textTheme.titleLarge,
-                            ),
-                            content: Container(
-                              height: 70,
-                              child: Center(
-                                child: CircularProgressIndicator(
-                                  backgroundColor: context.theme.colorScheme.properSurface,
-                                  valueColor: AlwaysStoppedAnimation<Color>(context.theme.colorScheme.primary),
-                                ),
-                              ),
-                            ),
-                          );
-                        }
-                      );
-                      try {
-                      fp.PlatformFile platformFile = res.files.first;
-
-                      var decodedImage = await decodeImageFromBytes(platformFile.bytes!);
-
-                      var vibrant = await getVibrantColor(decodedImage);
-
-                      var padding = (decodedImage.height.toDouble() * 0.35).ceil();
-
-                      var recorder = ui.PictureRecorder();
-                      var canvas = Canvas(recorder);
-                      canvas.drawImage(decodedImage, Offset(0, padding.toDouble()), Paint());
-
-                      var program = await FragmentProgram.fromAsset('shaders/vertical_blur_gradient.frag');
-                      var shader = program.fragmentShader();
-
-                      print(decodedImage.width.toDouble() / 800);
-                      shader.setFloat(0, decodedImage.width.toDouble());
-                      shader.setFloat(1, decodedImage.height.toDouble());
-                      shader.setFloat(2, padding.toDouble());
-                      shader.setFloat(3, decodedImage.height.toDouble() * 0.23);
-
-                      shader.setFloat(4, 0);
-                      shader.setFloat(5, 0);
-                      shader.setFloat(6, 0);
-
-                      shader.setImageSampler(0, decodedImage);
-                      canvas.drawRect(Rect.fromLTWH(0, 0, decodedImage.width.toDouble(), padding + (decodedImage.height.toDouble() * 0.23)), Paint()..shader = shader);
-
-
-                      var picture = recorder.endRecording();
-                      
-                      var paddedImage = await picture.toImage(decodedImage.width, decodedImage.height + padding);
-                      var paddedJpgBytes = await imageToJpeg(paddedImage);
-
-                      var assetUuid = uuid.v4().toUpperCase();
-
-                      var asset = api.PosterAsset(
-                        contents: api.PhotoPosterContents(
-                          version: 10, 
-                          layers: [
-                            api.PhotoPosterLayer(
-                              frame: api.PhotoPosterContentsFrame(
-                                width: paddedImage.width.toDouble(),
-                                height: paddedImage.height.toDouble(),
-                                x: 0,
-                                y: -padding.toDouble()
-                              ), 
-                              filename: "portrait-layer_background-backfill.HEIC", 
-                              zPosition: 4.5, 
-                              identifier: "background-backfill"
-                            ),
-                            api.PhotoPosterLayer(
-                              frame: api.PhotoPosterContentsFrame(
-                                width: paddedImage.width.toDouble(),
-                                height: paddedImage.height.toDouble(),
-                                x: 0,
-                                y: -padding.toDouble()
-                              ), 
-                              filename: "portrait-layer_background.HEIC", 
-                              zPosition: 5, 
-                              identifier: "background"
-                            ),
-                          ], 
-                          properties: api.PhotoPosterProperties(
-                            portraitLayout: api.PhotoPosterLayout(
-                              clockIntersection: 2, 
-                              deviceResolution: const api.PhotoPosterContentsSize(width: 1170, height: 2532), 
-                              visibleFrame: centeredAspectCrop(imageWidth: decodedImage.width.toDouble(), imageHeight: decodedImage.height.toDouble(), targetAspectRatio: MediaQuery.sizeOf(Get.context!).aspectRatio),
-                              timeFrame: const api.PhotoPosterContentsFrame(height: 0, width: 0, x: 0, y: 0), 
-                              clockLayerOrder: "ClockAboveForeground", 
-                              hasTopEdgeContact: false, // TODO
-                              inactiveFrame: const api.PhotoPosterContentsFrame(height: 0, width: 0, x: 0, y: 0), 
-                              imageSize: api.PhotoPosterContentsSize(width: decodedImage.width.toDouble(), height: decodedImage.height.toDouble()), 
-                              parallaxPadding: const api.PhotoPosterContentsSize(width: 0, height: 0), 
-                            ), 
-                            settlingEffectEnabled: false, 
-                            depthEnabled: false, 
-                            clockAreaLuminance: 0, 
-                            parallaxDisabled: false
-                          )
-                        ), 
-                        files: {
-                          "portrait-layer_background-backfill.HEIC": Uint8List(0),
-                          "portrait-layer_background.HEIC": Uint8List(0)
-                        }, 
-                        uuid: assetUuid
-                      );
-
-                      var newPoster = api.SimplifiedPoster(
-                        titleConfiguration: api.PRPosterTitleStyleConfiguration(
-                          alternateDateEnabled: false, 
-                          contentsLuminence: 0, 
-                          groupName: "PREditingLook", 
-                          preferredTitleAlignment: 0, 
-                          preferredTitleLayout: 0, 
-                          timeFontConfiguration: poster.titleConfiguration.timeFontConfiguration, 
-                          titleColor: api.PRPosterColor(
-                            preferredStyle: 2, 
-                            identifier: "vibrantMaterialColor", 
-                            suggested: false, 
-                            color: api.UIColor.grayscaleAlphaColorSpace(colorComponents: 2, white: 1, alpha: 0.5, bin: base64Decode("MSAwLjU="), colorSpace: 4, class_: "PRPosterColor"),
-                          ), 
-                          titleContentStyle: Uint8List.fromList([]), 
-                          userConfigured: false,
-                          timeNumberingSystem: api.nsNull(),
-                          titleStyle: api.PRPosterContentMaterialStyle.prPosterContentDiscreteColorsStyle(
-                            variation: 0, 
-                            colors: [colorToUIColor(vibrant ?? Colors.black)], 
-                            vibrant: true, 
-                            supportsVariation: true, 
-                            needsToResolveVariation: false
-                            )
-                        ),
-                        type: api.PosterType.photo(assets: [
-                          asset
-                        ]),
-                        role: poster.role,
-                      );
-
-                      var recorder2 = ui.PictureRecorder();
-                      var canvas2 = Canvas(recorder2);
-                      canvas2.drawImage(decodedImage, Offset(0, padding.toDouble()), Paint());
-
-                      canvas2.translate(0, padding.toDouble());
-                      canvas2.scale(1, -1); // flip
-                      canvas2.drawImage(decodedImage, Offset.zero, Paint());
-
-
-                      var picture2 = recorder2.endRecording();
-                      
-                      var paddedImage2 = await picture2.toImage(decodedImage.width, decodedImage.height + padding);
-                      var data = await paddedImage2.toByteData(format: ui.ImageByteFormat.png);
-
-                      await makeNewPoster();
-
-                      var file = pushService.fileForAsset(posterPath, asset, "portrait-layer_background-backfill.HEIC");
-                      await file.writeAsBytes(paddedJpgBytes);
-
-                      await mcs.invokeMethod("encode-heif", {
-                        "file": file.path,
-                        "output": file.path
-                      });
-
-                      var file2 = pushService.fileForAsset(posterPath, asset, "portrait-layer_background.HEIC");
-                      await file2.writeAsBytes(data!.buffer.asUint8List()); // format doesn't matter because we re-crop before upload
-
-                      var file3 = pushService.fileForAsset(posterPath, asset, "original-background.jpg");
-                      await file3.writeAsBytes(data.buffer.asUint8List());
-
-                      stopEditing();
-
-                      var layout = asset.contents.properties.portraitLayout;
-                      var matrix = Matrix4.identity();
-                      matrix.scale(MediaQuery.sizeOf(Get.context!).width / layout.visibleFrame.width);
-                      matrix.translate(-layout.visibleFrame.x, -(layout.imageSize.height - layout.visibleFrame.y - layout.visibleFrame.height + getPosterPadding(asset)), 0);
-                      cropController.value = matrix;
-
-                      setState(() {
-                        // we want the mirror to render all over, but we still want it to fade away when we get out of it
-                        backgroundFrame = api.PhotoPosterContentsFrame(
-                          width: decodedImage.width.toDouble(),
-                          height: decodedImage.height.toDouble(),
-                          x: 0,
-                          y: 0,
-                        );
-                        updatePoster(newPoster);
-                      });
-                      } catch(e, s) {
-                        Get.back();
-                        showSnackbar("Error", "Failed to update profile! $e");
-                        rethrow;
-                      }
-
-                      Get.back();
+                      changePhoto();
                     },
                     child: const Icon(CupertinoIcons.photo_on_rectangle, color: Colors.white, size: 32,),
                   ),
@@ -998,7 +1006,7 @@ class PosterEditState
                       }
 
                       var profile = await drawMonogramProfile(type);
-                      if (widget.handle == null || widget.handle!.contact != null) {
+                      if ((widget.handle == null || widget.handle!.contact != null) && transcriptPoster == null) {
                         await showDialog(
                         context: Get.context!,
                         builder: (BuildContext context) {

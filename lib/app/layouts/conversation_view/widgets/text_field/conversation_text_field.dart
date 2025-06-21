@@ -757,6 +757,7 @@ class OptionalBackdrop extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Obx(() {
+      false.obs.value;
       var translucentMode = controller?.backgroundPoster.value != null;
       if (translucentMode) {
         return ClipRect(

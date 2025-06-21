@@ -2747,16 +2747,27 @@ class RustPushService extends GetxService {
         var data = await File(path).readAsBytes();
         File(path).deleteSync();
         var poster = await api.parseTranscriptPoster(payload: data);
+
+        if (poster.poster.type is api.PosterType_TranscriptDynamic || poster.poster.type is api.PosterType_TranscriptGradient) {
+          // dynamic posters are deleted posters
+          if (chat.transcriptPosterPath != null) {
+            await deletePoster(chat.transcriptPosterPath!);
+            chat.transcriptPosterPath = null;
+            chat.transcriptBackgroundVersion = innerMsg.field0.bid;
+            chat.save(updateTranscriptPosterPath: true, updateTranscriptBackgroundVersion: true);
+          }
+        } else {
         
-        var saved = await saveTranscriptPoster(poster);
+          var saved = await saveTranscriptPoster(poster);
 
-        if (chat.transcriptPosterPath != null) {
-          await deletePoster(chat.transcriptPosterPath!);
+          if (chat.transcriptPosterPath != null) {
+            await deletePoster(chat.transcriptPosterPath!);
+          }
+
+          chat.transcriptBackgroundVersion = value.bid;
+          chat.transcriptPosterPath = saved;
+          chat.save(updateTranscriptPosterPath: true, updateTranscriptBackgroundVersion: true);
         }
-
-        chat.transcriptBackgroundVersion = value.bid;
-        chat.transcriptPosterPath = saved;
-        chat.save(updateTranscriptPosterPath: true, updateTranscriptBackgroundVersion: true);
       } else {
         if (chat.transcriptPosterPath != null) {
           await deletePoster(chat.transcriptPosterPath!);
