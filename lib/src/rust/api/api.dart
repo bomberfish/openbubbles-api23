@@ -1906,7 +1906,9 @@ sealed class Message with _$Message {
   ) = Message_React;
   const factory Message.delivered() = Message_Delivered;
   const factory Message.read() = Message_Read;
-  const factory Message.typing() = Message_Typing;
+  const factory Message.typing(
+    bool field0,
+  ) = Message_Typing;
   const factory Message.unsend(
     UnsendMessage field0,
   ) = Message_Unsend;
@@ -1916,7 +1918,6 @@ sealed class Message with _$Message {
   const factory Message.iconChange(
     IconChangeMessage field0,
   ) = Message_IconChange;
-  const factory Message.stopTyping() = Message_StopTyping;
   const factory Message.enableSmsActivation(
     bool field0,
   ) = Message_EnableSmsActivation;

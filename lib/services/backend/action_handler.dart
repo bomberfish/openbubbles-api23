@@ -673,7 +673,7 @@ class ActionHandler extends GetxService {
         final chat = chats.chats.firstWhereOrNull((element) => element.guid == data["guid"]);
         if (chat != null) {
           final controller = cvc(chat);
-          controller.showTypingIndicator.value = data["display"];
+          // controller.showTypingIndicator.value = data["display"];
         }
         return;
       case "incoming-facetime":

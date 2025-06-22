@@ -16,11 +16,13 @@ import 'package:universal_io/io.dart';
 class ContactAvatarGroupWidget extends StatefulWidget {
   ContactAvatarGroupWidget({
     super.key,
-    required this.chat,
+    this.chat,
     this.size = 40,
     this.editable = true,
+    this.participants,
   });
-  final Chat chat;
+  final Chat? chat;
+  final List<Handle>? participants;
   final double size;
   final bool editable;
 
@@ -29,7 +31,7 @@ class ContactAvatarGroupWidget extends StatefulWidget {
 }
 
 class _ContactAvatarGroupWidgetState extends OptimizedState<ContactAvatarGroupWidget> {
-  late final List<Handle> participants = widget.chat.participants;
+  late final List<Handle> participants = widget.chat?.participants ?? widget.participants ?? [];
   final Map materialGeneration = {
     2: [24.5/40, 10.5/40, [Alignment.topRight, Alignment.bottomLeft]],
     3: [21.5/40, 9/40, [Alignment.bottomRight, Alignment.bottomLeft, Alignment.topCenter]],
@@ -64,10 +66,10 @@ class _ContactAvatarGroupWidgetState extends OptimizedState<ContactAvatarGroupWi
         final avatarSize = widget.size * ss.settings.avatarScale.value;
         final maxAvatars = ss.settings.maxAvatarsInGroupWidget.value;
 
-        if (widget.chat.customAvatarPath != null && !hide) {
-          dynamic file = File(widget.chat.customAvatarPath!);
+        if (widget.chat?.customAvatarPath != null && !hide) {
+          dynamic file = File(widget.chat!.customAvatarPath!);
           return CircleAvatar(
-            key: ValueKey(widget.chat.customAvatarPath!),
+            key: ValueKey(widget.chat!.customAvatarPath!),
             radius: avatarSize / 2,
             backgroundImage: FileImage(file),
             backgroundColor: Colors.transparent,

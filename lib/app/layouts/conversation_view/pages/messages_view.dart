@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:audio_waveforms/audio_waveforms.dart';
+import 'package:bluebubbles/app/components/avatars/contact_avatar_group_widget.dart';
 import 'package:bluebubbles/app/layouts/conversation_view/widgets/message/message_holder.dart';
 import 'package:bluebubbles/app/layouts/conversation_view/widgets/message/typing/typing_indicator.dart';
 import 'package:bluebubbles/database/database.dart';
@@ -680,15 +681,13 @@ class MessagesViewState extends OptimizedState<MessagesView> {
                                       Obx(() => Row(
                                               mainAxisSize: MainAxisSize.min,
                                               children: <Widget>[
-                                                if (controller.showTypingIndicator.value && ss.settings.alwaysShowAvatars.value && iOS)
+                                                if (controller.showTypingIndicatorFor.isNotEmpty && (chat.isGroup || ss.settings.alwaysShowAvatars.value) && iOS)
                                                   Padding(
                                                     padding: const EdgeInsets.only(left: 10.0),
-                                                    child: ContactAvatarWidget(
-                                                      key: Key("${chat.participants.first.address}-typing-indicator"),
-                                                      handle: chat.participants.first,
+                                                    child: ContactAvatarGroupWidget(
+                                                      participants: [...controller.showTypingIndicatorFor],
                                                       size: 30,
-                                                      fontSize: 14,
-                                                      borderThickness: 0.1,
+                                                      editable: false,
                                                     ),
                                                   ),
                                                 Padding(

@@ -30,7 +30,7 @@ class _TypingIndicatorState extends OptimizedState<TypingIndicator> {
   Widget build(BuildContext context) {
     return AnimatedSize(
       duration: const Duration(milliseconds: 200),
-      child: (widget.controller?.showTypingIndicator.value ?? widget.visible)! ? (iOS || cm.activeChat == null ? ClipPath(
+      child: (widget.controller?.showTypingIndicatorFor.isNotEmpty ?? widget.visible)! ? (iOS || cm.activeChat == null ? ClipPath(
         clipper: const TypingClipper(),
         child: Container(
           height: 50,

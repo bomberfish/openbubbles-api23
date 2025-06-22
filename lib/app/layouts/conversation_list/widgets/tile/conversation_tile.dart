@@ -548,7 +548,7 @@ class ChatLeadingState extends OptimizedState<ChatLeading> {
         if (widget.unreadIcon != null && iOS)
           widget.unreadIcon!,
         Obx(() {
-          final showTypingIndicator = cvc(widget.controller.chat).showTypingIndicator.value;
+          final showTypingIndicator = cvc(widget.controller.chat).showTypingIndicatorFor.isNotEmpty;
           double height = Theme.of(context).textTheme.labelLarge!.fontSize! * 1.25;
           return Stack(
             clipBehavior: Clip.none,

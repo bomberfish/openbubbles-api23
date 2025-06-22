@@ -47,7 +47,7 @@ class ConversationViewController extends StatefulController with GetSingleTicker
   final Map<String, List<EntityAnnotation>> mlKitParsedText = {};
 
   // message view items
-  final RxBool showTypingIndicator = false.obs;
+  final RxList<Handle> showTypingIndicatorFor = <Handle>[].obs;
   final RxBool showScrollDown = false.obs;
   final RxDouble timestampOffset = 0.0.obs;
   final RxBool inSelectMode = false.obs;
@@ -57,7 +57,7 @@ class ConversationViewController extends StatefulController with GetSingleTicker
   final RxBool recipientNotifsSilenced = false.obs;
   bool showingOverlays = false;
   bool _subjectWasLastFocused = false; // If this is false, then message field was last focused (default)
-  StreamSubscription<dynamic>? cancelTypingIndicator;
+  final Map<String, StreamSubscription<dynamic>> cancelTypingIndicator = {};
 
   FocusNode get lastFocusedNode => _subjectWasLastFocused ? subjectFocusNode : focusNode;
   SpellCheckTextEditingController get lastFocusedTextController => _subjectWasLastFocused ? subjectTextController : textController;

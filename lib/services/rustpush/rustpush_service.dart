@@ -1200,14 +1200,11 @@ class RustPushBackend implements BackendService {
   @override
   void startedTyping(Chat c) async {
     if (c.isRpSms) return;
-    if (c.participants.length > 1) {
-      return; // no typing indicators for multiple chats
-    }
     var msg = await api.newMsg(
       state: pushService.state,
       conversation: await c.getConversationData(),
       sender: await c.ensureHandle(),
-      message: const api.Message.typing()
+      message: const api.Message.typing(true)
     );
     await sendMsg(msg);
   }
@@ -1215,14 +1212,11 @@ class RustPushBackend implements BackendService {
   @override
   void stoppedTyping(Chat c) async {
     if (c.isRpSms) return;
-    if (c.participants.length > 1) {
-      return; // no typing indicators for multiple chats
-    }
     var msg = await api.newMsg(
       state: pushService.state,
       conversation: await c.getConversationData(),
       sender: await c.ensureHandle(),
-      message: const api.Message.stopTyping()
+      message: const api.Message.typing(false)
     );
     await sendMsg(msg);
   }
@@ -3023,30 +3017,44 @@ class RustPushService extends GetxService {
     if (myMsg.message is api.Message_Typing) {
       if (myMsg.verificationFailed) return; 
       final controller = cvc(chat);
-      controller.showTypingIndicator.value = true;
-      var future = Future.delayed(const Duration(minutes: 1));
-      var subscription = future.asStream().listen((any) {
-        controller.showTypingIndicator.value = false;
-        controller.cancelTypingIndicator = null;
-      });
-      controller.cancelTypingIndicator = subscription;
-      return;
-    }
-    if (myMsg.message is api.Message_StopTyping) {
-      if (myMsg.verificationFailed) return; 
-      final controller = cvc(chat);
-      controller.showTypingIndicator.value = false;
-      if (controller.cancelTypingIndicator != null) {
-        controller.cancelTypingIndicator!.cancel();
-        controller.cancelTypingIndicator = null;
+      var handle = RustPushBBUtils.rustHandleToBB(myMsg.sender!);
+
+      if (controller.cancelTypingIndicator[handle.address] != null) {
+        controller.cancelTypingIndicator[handle.address]?.cancel();
+        controller.cancelTypingIndicator.remove(handle.address);
+      }
+
+      if ((myMsg.message as api.Message_Typing).field0) {
+        if (!controller.showTypingIndicatorFor.any((h) => handle.address == h.address)) {
+          controller.showTypingIndicatorFor.add(handle);
+        }
+        var future = Future.delayed(const Duration(minutes: 1));
+        var subscription = future.asStream().listen((any) {
+          controller.showTypingIndicatorFor.remove(handle);
+          controller.cancelTypingIndicator.remove(handle.address);
+        });
+        controller.cancelTypingIndicator[handle.address] = subscription;
+      } else {
+        var existing = controller.showTypingIndicatorFor.firstWhereOrNull((h) => handle.address == h.address);
+        if (existing != null) {
+          controller.showTypingIndicatorFor.remove(existing);
+        }
       }
       return;
     }
     if (myMsg.message is api.Message_Message) {
       final controller = cvc(chat);
-      controller.showTypingIndicator.value = false;
-      controller.cancelTypingIndicator?.cancel();
-      controller.cancelTypingIndicator = null;
+      
+      var handle = RustPushBBUtils.rustHandleToBB(myMsg.sender!);
+      var existing = controller.showTypingIndicatorFor.firstWhereOrNull((h) => handle.address == h.address);
+      if (existing != null) {
+        controller.showTypingIndicatorFor.remove(existing);
+      }
+      if (controller.cancelTypingIndicator[handle.address] != null) {
+        controller.cancelTypingIndicator[handle.address]?.cancel();
+        controller.cancelTypingIndicator.remove(handle.address);
+      }
+
       if (chat.isRpSms && !myMsg.verificationFailed) {
         var myHandles = await api.getMyPhoneHandles(state: pushService.state);
         var service = (myMsg.message as api.Message_Message).field0.service;

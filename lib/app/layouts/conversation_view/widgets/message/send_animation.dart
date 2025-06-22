@@ -153,7 +153,7 @@ class _SendAnimationState
     final messageBoxSize = ns.width(context) - buttonSize;
     return AnimatedPositioned(
       duration: Duration(milliseconds: message != null ? duration : 0),
-      bottom: message != null ? textFieldSize + focusInfoSize + 17.5 + (controller.showTypingIndicator.value ? 50 : 0) + (!iOS ? 15 : 0) : 0,
+      bottom: message != null ? textFieldSize + focusInfoSize + 17.5 + (controller.showTypingIndicatorFor.isNotEmpty ? 50 : 0) + (!iOS ? 15 : 0) : 0,
       right: samsung ? -37.5 : 5,
       curve: curve,
       onEnd: () async {

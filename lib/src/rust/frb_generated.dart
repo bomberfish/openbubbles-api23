@@ -5300,7 +5300,9 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       case 5:
         return Message_Read();
       case 6:
-        return Message_Typing();
+        return Message_Typing(
+          dco_decode_bool(raw[1]),
+        );
       case 7:
         return Message_Unsend(
           dco_decode_box_autoadd_unsend_message(raw[1]),
@@ -5314,58 +5316,56 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           dco_decode_box_autoadd_icon_change_message(raw[1]),
         );
       case 10:
-        return Message_StopTyping();
-      case 11:
         return Message_EnableSmsActivation(
           dco_decode_bool(raw[1]),
         );
-      case 12:
+      case 11:
         return Message_MessageReadOnDevice();
-      case 13:
+      case 12:
         return Message_SmsConfirmSent(
           dco_decode_bool(raw[1]),
         );
-      case 14:
+      case 13:
         return Message_MarkUnread();
-      case 15:
+      case 14:
         return Message_PeerCacheInvalidate();
-      case 16:
+      case 15:
         return Message_UpdateExtension(
           dco_decode_box_autoadd_update_extension_message(raw[1]),
         );
-      case 17:
+      case 16:
         return Message_Error(
           dco_decode_box_autoadd_error_message(raw[1]),
         );
-      case 18:
+      case 17:
         return Message_MoveToRecycleBin(
           dco_decode_box_autoadd_move_to_recycle_bin_message(raw[1]),
         );
-      case 19:
+      case 18:
         return Message_RecoverChat(
           dco_decode_box_autoadd_operated_chat(raw[1]),
         );
-      case 20:
+      case 19:
         return Message_PermanentDelete(
           dco_decode_box_autoadd_permanent_delete_message(raw[1]),
         );
-      case 21:
+      case 20:
         return Message_Unschedule();
-      case 22:
+      case 21:
         return Message_UpdateProfile(
           dco_decode_box_autoadd_update_profile_message(raw[1]),
         );
-      case 23:
+      case 22:
         return Message_UpdateProfileSharing(
           dco_decode_box_autoadd_update_profile_sharing_message(raw[1]),
         );
-      case 24:
+      case 23:
         return Message_ShareProfile(
           dco_decode_box_autoadd_share_profile_message(raw[1]),
         );
-      case 25:
+      case 24:
         return Message_NotifyAnyways();
-      case 26:
+      case 25:
         return Message_SetTranscriptBackground(
           dco_decode_box_autoadd_set_transcript_background_message(raw[1]),
         );
@@ -8977,7 +8977,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       case 5:
         return Message_Read();
       case 6:
-        return Message_Typing();
+        var var_field0 = sse_decode_bool(deserializer);
+        return Message_Typing(var_field0);
       case 7:
         var var_field0 = sse_decode_box_autoadd_unsend_message(deserializer);
         return Message_Unsend(var_field0);
@@ -8989,54 +8990,52 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             sse_decode_box_autoadd_icon_change_message(deserializer);
         return Message_IconChange(var_field0);
       case 10:
-        return Message_StopTyping();
-      case 11:
         var var_field0 = sse_decode_bool(deserializer);
         return Message_EnableSmsActivation(var_field0);
-      case 12:
+      case 11:
         return Message_MessageReadOnDevice();
-      case 13:
+      case 12:
         var var_field0 = sse_decode_bool(deserializer);
         return Message_SmsConfirmSent(var_field0);
-      case 14:
+      case 13:
         return Message_MarkUnread();
-      case 15:
+      case 14:
         return Message_PeerCacheInvalidate();
-      case 16:
+      case 15:
         var var_field0 =
             sse_decode_box_autoadd_update_extension_message(deserializer);
         return Message_UpdateExtension(var_field0);
-      case 17:
+      case 16:
         var var_field0 = sse_decode_box_autoadd_error_message(deserializer);
         return Message_Error(var_field0);
-      case 18:
+      case 17:
         var var_field0 =
             sse_decode_box_autoadd_move_to_recycle_bin_message(deserializer);
         return Message_MoveToRecycleBin(var_field0);
-      case 19:
+      case 18:
         var var_field0 = sse_decode_box_autoadd_operated_chat(deserializer);
         return Message_RecoverChat(var_field0);
-      case 20:
+      case 19:
         var var_field0 =
             sse_decode_box_autoadd_permanent_delete_message(deserializer);
         return Message_PermanentDelete(var_field0);
-      case 21:
+      case 20:
         return Message_Unschedule();
-      case 22:
+      case 21:
         var var_field0 =
             sse_decode_box_autoadd_update_profile_message(deserializer);
         return Message_UpdateProfile(var_field0);
-      case 23:
+      case 22:
         var var_field0 =
             sse_decode_box_autoadd_update_profile_sharing_message(deserializer);
         return Message_UpdateProfileSharing(var_field0);
-      case 24:
+      case 23:
         var var_field0 =
             sse_decode_box_autoadd_share_profile_message(deserializer);
         return Message_ShareProfile(var_field0);
-      case 25:
+      case 24:
         return Message_NotifyAnyways();
-      case 26:
+      case 25:
         var var_field0 =
             sse_decode_box_autoadd_set_transcript_background_message(
                 deserializer);
@@ -12614,8 +12613,9 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         sse_encode_i_32(4, serializer);
       case Message_Read():
         sse_encode_i_32(5, serializer);
-      case Message_Typing():
+      case Message_Typing(field0: final field0):
         sse_encode_i_32(6, serializer);
+        sse_encode_bool(field0, serializer);
       case Message_Unsend(field0: final field0):
         sse_encode_i_32(7, serializer);
         sse_encode_box_autoadd_unsend_message(field0, serializer);
@@ -12625,51 +12625,49 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       case Message_IconChange(field0: final field0):
         sse_encode_i_32(9, serializer);
         sse_encode_box_autoadd_icon_change_message(field0, serializer);
-      case Message_StopTyping():
-        sse_encode_i_32(10, serializer);
       case Message_EnableSmsActivation(field0: final field0):
-        sse_encode_i_32(11, serializer);
+        sse_encode_i_32(10, serializer);
         sse_encode_bool(field0, serializer);
       case Message_MessageReadOnDevice():
-        sse_encode_i_32(12, serializer);
+        sse_encode_i_32(11, serializer);
       case Message_SmsConfirmSent(field0: final field0):
-        sse_encode_i_32(13, serializer);
+        sse_encode_i_32(12, serializer);
         sse_encode_bool(field0, serializer);
       case Message_MarkUnread():
-        sse_encode_i_32(14, serializer);
+        sse_encode_i_32(13, serializer);
       case Message_PeerCacheInvalidate():
-        sse_encode_i_32(15, serializer);
+        sse_encode_i_32(14, serializer);
       case Message_UpdateExtension(field0: final field0):
-        sse_encode_i_32(16, serializer);
+        sse_encode_i_32(15, serializer);
         sse_encode_box_autoadd_update_extension_message(field0, serializer);
       case Message_Error(field0: final field0):
-        sse_encode_i_32(17, serializer);
+        sse_encode_i_32(16, serializer);
         sse_encode_box_autoadd_error_message(field0, serializer);
       case Message_MoveToRecycleBin(field0: final field0):
-        sse_encode_i_32(18, serializer);
+        sse_encode_i_32(17, serializer);
         sse_encode_box_autoadd_move_to_recycle_bin_message(field0, serializer);
       case Message_RecoverChat(field0: final field0):
-        sse_encode_i_32(19, serializer);
+        sse_encode_i_32(18, serializer);
         sse_encode_box_autoadd_operated_chat(field0, serializer);
       case Message_PermanentDelete(field0: final field0):
-        sse_encode_i_32(20, serializer);
+        sse_encode_i_32(19, serializer);
         sse_encode_box_autoadd_permanent_delete_message(field0, serializer);
       case Message_Unschedule():
-        sse_encode_i_32(21, serializer);
+        sse_encode_i_32(20, serializer);
       case Message_UpdateProfile(field0: final field0):
-        sse_encode_i_32(22, serializer);
+        sse_encode_i_32(21, serializer);
         sse_encode_box_autoadd_update_profile_message(field0, serializer);
       case Message_UpdateProfileSharing(field0: final field0):
-        sse_encode_i_32(23, serializer);
+        sse_encode_i_32(22, serializer);
         sse_encode_box_autoadd_update_profile_sharing_message(
             field0, serializer);
       case Message_ShareProfile(field0: final field0):
-        sse_encode_i_32(24, serializer);
+        sse_encode_i_32(23, serializer);
         sse_encode_box_autoadd_share_profile_message(field0, serializer);
       case Message_NotifyAnyways():
-        sse_encode_i_32(25, serializer);
+        sse_encode_i_32(24, serializer);
       case Message_SetTranscriptBackground(field0: final field0):
-        sse_encode_i_32(26, serializer);
+        sse_encode_i_32(25, serializer);
         sse_encode_box_autoadd_set_transcript_background_message(
             field0, serializer);
       default:

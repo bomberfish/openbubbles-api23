@@ -47,7 +47,7 @@ data class AvailableExtension(
 object ExtensionRegistry {
     val map = hashMapOf<Int, AvailableExtension>(
         1124197642 to AvailableExtension(
-            "https://play.google.com/store/apps/details?id=com.openbubbles.messaging",
+            "https://play.google.com/store/apps/details?id=com.openbubbles.openpigeon",
             "com.openbubbles.openpigeon",
             "GamePigeon",
             "com.apple.messages.MSMessageExtensionBalloonPlugin:EWFNLB79LQ:com.gamerdelights.gamepigeon.ext",

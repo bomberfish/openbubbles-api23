@@ -880,11 +880,10 @@ pub enum DartMessage {
     React(ReactMessage),
     Delivered,
     Read,
-    Typing,
+    Typing(bool), // chat guid
     Unsend(UnsendMessage),
     Edit(EditMessage),
     IconChange(IconChangeMessage),
-    StopTyping,
     EnableSmsActivation(bool),
     MessageReadOnDevice,
     SmsConfirmSent(bool),

@@ -6240,7 +6240,9 @@ const _: fn() = || {
         }
         crate::api::api::Message::Delivered => {}
         crate::api::api::Message::Read => {}
-        crate::api::api::Message::Typing => {}
+        crate::api::api::Message::Typing(field0) => {
+            let _: bool = field0;
+        }
         crate::api::api::Message::Unsend(field0) => {
             let _: crate::api::api::UnsendMessage = field0;
         }
@@ -6250,7 +6252,6 @@ const _: fn() = || {
         crate::api::api::Message::IconChange(field0) => {
             let _: crate::api::api::IconChangeMessage = field0;
         }
-        crate::api::api::Message::StopTyping => {}
         crate::api::api::Message::EnableSmsActivation(field0) => {
             let _: bool = field0;
         }
@@ -8511,7 +8512,8 @@ impl SseDecode for crate::api::api::Message {
                 return crate::api::api::Message::Read;
             }
             6 => {
-                return crate::api::api::Message::Typing;
+                let mut var_field0 = <bool>::sse_decode(deserializer);
+                return crate::api::api::Message::Typing(var_field0);
             }
             7 => {
                 let mut var_field0 = <crate::api::api::UnsendMessage>::sse_decode(deserializer);
@@ -8526,70 +8528,67 @@ impl SseDecode for crate::api::api::Message {
                 return crate::api::api::Message::IconChange(var_field0);
             }
             10 => {
-                return crate::api::api::Message::StopTyping;
-            }
-            11 => {
                 let mut var_field0 = <bool>::sse_decode(deserializer);
                 return crate::api::api::Message::EnableSmsActivation(var_field0);
             }
-            12 => {
+            11 => {
                 return crate::api::api::Message::MessageReadOnDevice;
             }
-            13 => {
+            12 => {
                 let mut var_field0 = <bool>::sse_decode(deserializer);
                 return crate::api::api::Message::SmsConfirmSent(var_field0);
             }
-            14 => {
+            13 => {
                 return crate::api::api::Message::MarkUnread;
             }
-            15 => {
+            14 => {
                 return crate::api::api::Message::PeerCacheInvalidate;
             }
-            16 => {
+            15 => {
                 let mut var_field0 =
                     <crate::api::api::UpdateExtensionMessage>::sse_decode(deserializer);
                 return crate::api::api::Message::UpdateExtension(var_field0);
             }
-            17 => {
+            16 => {
                 let mut var_field0 = <crate::api::api::ErrorMessage>::sse_decode(deserializer);
                 return crate::api::api::Message::Error(var_field0);
             }
-            18 => {
+            17 => {
                 let mut var_field0 =
                     <crate::api::api::MoveToRecycleBinMessage>::sse_decode(deserializer);
                 return crate::api::api::Message::MoveToRecycleBin(var_field0);
             }
-            19 => {
+            18 => {
                 let mut var_field0 = <crate::api::api::OperatedChat>::sse_decode(deserializer);
                 return crate::api::api::Message::RecoverChat(var_field0);
             }
-            20 => {
+            19 => {
                 let mut var_field0 =
                     <crate::api::api::PermanentDeleteMessage>::sse_decode(deserializer);
                 return crate::api::api::Message::PermanentDelete(var_field0);
             }
-            21 => {
+            20 => {
                 return crate::api::api::Message::Unschedule;
             }
-            22 => {
+            21 => {
                 let mut var_field0 =
                     <crate::api::api::UpdateProfileMessage>::sse_decode(deserializer);
                 return crate::api::api::Message::UpdateProfile(var_field0);
             }
-            23 => {
+            22 => {
                 let mut var_field0 =
                     <crate::api::api::UpdateProfileSharingMessage>::sse_decode(deserializer);
                 return crate::api::api::Message::UpdateProfileSharing(var_field0);
             }
-            24 => {
+            23 => {
                 let mut var_field0 =
                     <crate::api::api::ShareProfileMessage>::sse_decode(deserializer);
                 return crate::api::api::Message::ShareProfile(var_field0);
             }
-            25 => {
+            24 => {
                 return crate::api::api::Message::NotifyAnyways;
             }
-            26 => {
+            25 => {
                 let mut var_field0 =
                     <crate::api::api::SetTranscriptBackgroundMessage>::sse_decode(deserializer);
                 return crate::api::api::Message::SetTranscriptBackground(var_field0);
@@ -12045,7 +12044,9 @@ impl flutter_rust_bridge::IntoDart for FrbWrapper<crate::api::api::Message> {
             }
             crate::api::api::Message::Delivered => [4.into_dart()].into_dart(),
             crate::api::api::Message::Read => [5.into_dart()].into_dart(),
-            crate::api::api::Message::Typing => [6.into_dart()].into_dart(),
+            crate::api::api::Message::Typing(field0) => {
+                [6.into_dart(), field0.into_into_dart().into_dart()].into_dart()
+            }
             crate::api::api::Message::Unsend(field0) => {
                 [7.into_dart(), field0.into_into_dart().into_dart()].into_dart()
             }
@@ -12055,44 +12056,43 @@ impl flutter_rust_bridge::IntoDart for FrbWrapper<crate::api::api::Message> {
             crate::api::api::Message::IconChange(field0) => {
                 [9.into_dart(), field0.into_into_dart().into_dart()].into_dart()
             }
-            crate::api::api::Message::StopTyping => [10.into_dart()].into_dart(),
             crate::api::api::Message::EnableSmsActivation(field0) => {
-                [11.into_dart(), field0.into_into_dart().into_dart()].into_dart()
+                [10.into_dart(), field0.into_into_dart().into_dart()].into_dart()
             }
-            crate::api::api::Message::MessageReadOnDevice => [12.into_dart()].into_dart(),
+            crate::api::api::Message::MessageReadOnDevice => [11.into_dart()].into_dart(),
             crate::api::api::Message::SmsConfirmSent(field0) => {
-                [13.into_dart(), field0.into_into_dart().into_dart()].into_dart()
+                [12.into_dart(), field0.into_into_dart().into_dart()].into_dart()
             }
-            crate::api::api::Message::MarkUnread => [14.into_dart()].into_dart(),
-            crate::api::api::Message::PeerCacheInvalidate => [15.into_dart()].into_dart(),
+            crate::api::api::Message::MarkUnread => [13.into_dart()].into_dart(),
+            crate::api::api::Message::PeerCacheInvalidate => [14.into_dart()].into_dart(),
             crate::api::api::Message::UpdateExtension(field0) => {
-                [16.into_dart(), field0.into_into_dart().into_dart()].into_dart()
+                [15.into_dart(), field0.into_into_dart().into_dart()].into_dart()
             }
             crate::api::api::Message::Error(field0) => {
-                [17.into_dart(), field0.into_into_dart().into_dart()].into_dart()
+                [16.into_dart(), field0.into_into_dart().into_dart()].into_dart()
             }
             crate::api::api::Message::MoveToRecycleBin(field0) => {
-                [18.into_dart(), field0.into_into_dart().into_dart()].into_dart()
+                [17.into_dart(), field0.into_into_dart().into_dart()].into_dart()
             }
             crate::api::api::Message::RecoverChat(field0) => {
-                [19.into_dart(), field0.into_into_dart().into_dart()].into_dart()
+                [18.into_dart(), field0.into_into_dart().into_dart()].into_dart()
             }
             crate::api::api::Message::PermanentDelete(field0) => {
-                [20.into_dart(), field0.into_into_dart().into_dart()].into_dart()
+                [19.into_dart(), field0.into_into_dart().into_dart()].into_dart()
             }
-            crate::api::api::Message::Unschedule => [21.into_dart()].into_dart(),
+            crate::api::api::Message::Unschedule => [20.into_dart()].into_dart(),
             crate::api::api::Message::UpdateProfile(field0) => {
-                [22.into_dart(), field0.into_into_dart().into_dart()].into_dart()
+                [21.into_dart(), field0.into_into_dart().into_dart()].into_dart()
             }
             crate::api::api::Message::UpdateProfileSharing(field0) => {
-                [23.into_dart(), field0.into_into_dart().into_dart()].into_dart()
+                [22.into_dart(), field0.into_into_dart().into_dart()].into_dart()
             }
             crate::api::api::Message::ShareProfile(field0) => {
-                [24.into_dart(), field0.into_into_dart().into_dart()].into_dart()
+                [23.into_dart(), field0.into_into_dart().into_dart()].into_dart()
             }
-            crate::api::api::Message::NotifyAnyways => [25.into_dart()].into_dart(),
+            crate::api::api::Message::NotifyAnyways => [24.into_dart()].into_dart(),
             crate::api::api::Message::SetTranscriptBackground(field0) => {
-                [26.into_dart(), field0.into_into_dart().into_dart()].into_dart()
+                [25.into_dart(), field0.into_into_dart().into_dart()].into_dart()
             }
             _ => {
                 unimplemented!("");
@@ -15208,8 +15208,9 @@ impl SseEncode for crate::api::api::Message {
             crate::api::api::Message::Read => {
                 <i32>::sse_encode(5, serializer);
             }
-            crate::api::api::Message::Typing => {
+            crate::api::api::Message::Typing(field0) => {
                 <i32>::sse_encode(6, serializer);
+                <bool>::sse_encode(field0, serializer);
             }
             crate::api::api::Message::Unsend(field0) => {
                 <i32>::sse_encode(7, serializer);
@@ -15223,66 +15224,63 @@ impl SseEncode for crate::api::api::Message {
                 <i32>::sse_encode(9, serializer);
                 <crate::api::api::IconChangeMessage>::sse_encode(field0, serializer);
             }
-            crate::api::api::Message::StopTyping => {
-                <i32>::sse_encode(10, serializer);
-            }
             crate::api::api::Message::EnableSmsActivation(field0) => {
-                <i32>::sse_encode(11, serializer);
+                <i32>::sse_encode(10, serializer);
                 <bool>::sse_encode(field0, serializer);
             }
             crate::api::api::Message::MessageReadOnDevice => {
-                <i32>::sse_encode(12, serializer);
+                <i32>::sse_encode(11, serializer);
             }
             crate::api::api::Message::SmsConfirmSent(field0) => {
-                <i32>::sse_encode(13, serializer);
+                <i32>::sse_encode(12, serializer);
                 <bool>::sse_encode(field0, serializer);
             }
             crate::api::api::Message::MarkUnread => {
-                <i32>::sse_encode(14, serializer);
+                <i32>::sse_encode(13, serializer);
             }
             crate::api::api::Message::PeerCacheInvalidate => {
-                <i32>::sse_encode(15, serializer);
+                <i32>::sse_encode(14, serializer);
             }
             crate::api::api::Message::UpdateExtension(field0) => {
-                <i32>::sse_encode(16, serializer);
+                <i32>::sse_encode(15, serializer);
                 <crate::api::api::UpdateExtensionMessage>::sse_encode(field0, serializer);
             }
             crate::api::api::Message::Error(field0) => {
-                <i32>::sse_encode(17, serializer);
+                <i32>::sse_encode(16, serializer);
                 <crate::api::api::ErrorMessage>::sse_encode(field0, serializer);
             }
             crate::api::api::Message::MoveToRecycleBin(field0) => {
-                <i32>::sse_encode(18, serializer);
+                <i32>::sse_encode(17, serializer);
                 <crate::api::api::MoveToRecycleBinMessage>::sse_encode(field0, serializer);
             }
             crate::api::api::Message::RecoverChat(field0) => {
-                <i32>::sse_encode(19, serializer);
+                <i32>::sse_encode(18, serializer);
                 <crate::api::api::OperatedChat>::sse_encode(field0, serializer);
             }
             crate::api::api::Message::PermanentDelete(field0) => {
-                <i32>::sse_encode(20, serializer);
+                <i32>::sse_encode(19, serializer);
                 <crate::api::api::PermanentDeleteMessage>::sse_encode(field0, serializer);
             }
             crate::api::api::Message::Unschedule => {
-                <i32>::sse_encode(21, serializer);
+                <i32>::sse_encode(20, serializer);
             }
             crate::api::api::Message::UpdateProfile(field0) => {
-                <i32>::sse_encode(22, serializer);
+                <i32>::sse_encode(21, serializer);
                 <crate::api::api::UpdateProfileMessage>::sse_encode(field0, serializer);
             }
             crate::api::api::Message::UpdateProfileSharing(field0) => {
-                <i32>::sse_encode(23, serializer);
+                <i32>::sse_encode(22, serializer);
                 <crate::api::api::UpdateProfileSharingMessage>::sse_encode(field0, serializer);
             }
             crate::api::api::Message::ShareProfile(field0) => {
-                <i32>::sse_encode(24, serializer);
+                <i32>::sse_encode(23, serializer);
                 <crate::api::api::ShareProfileMessage>::sse_encode(field0, serializer);
             }
             crate::api::api::Message::NotifyAnyways => {
-                <i32>::sse_encode(25, serializer);
+                <i32>::sse_encode(24, serializer);
             }
             crate::api::api::Message::SetTranscriptBackground(field0) => {
-                <i32>::sse_encode(26, serializer);
+                <i32>::sse_encode(25, serializer);
                 <crate::api::api::SetTranscriptBackgroundMessage>::sse_encode(field0, serializer);
             }
             _ => {

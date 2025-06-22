@@ -251,8 +251,8 @@ class _ChatOptionsState extends OptimizedState<ChatOptions> {
                       );
                     },
                   ),
-                if (!kIsWeb && !chat.isGroup && ss.settings.enablePrivateAPI.value) const SettingsDivider(),
-                if (!kIsWeb && !chat.isGroup && ss.settings.enablePrivateAPI.value)
+                if (!kIsWeb && ss.settings.enablePrivateAPI.value) const SettingsDivider(),
+                if (!kIsWeb && ss.settings.enablePrivateAPI.value)
                   SettingsSwitch(
                     title: "Send Typing Indicators",
                     initialVal: chat.autoSendTypingIndicators ?? ss.settings.privateSendTypingIndicators.value,
@@ -262,7 +262,7 @@ class _ChatOptionsState extends OptimizedState<ChatOptions> {
                     },
                     backgroundColor: tileColor,
                   ),
-                if (!kIsWeb && !chat.isGroup && ss.settings.enablePrivateAPI.value)
+                if (!kIsWeb && ss.settings.enablePrivateAPI.value)
                   SettingsSwitch(
                       title: "Follow Global Setting",
                       subtitle:

@@ -4893,11 +4893,10 @@ mixin _$Message {
     required TResult Function(ReactMessage field0) react,
     required TResult Function() delivered,
     required TResult Function() read,
-    required TResult Function() typing,
+    required TResult Function(bool field0) typing,
     required TResult Function(UnsendMessage field0) unsend,
     required TResult Function(EditMessage field0) edit,
     required TResult Function(IconChangeMessage field0) iconChange,
-    required TResult Function() stopTyping,
     required TResult Function(bool field0) enableSmsActivation,
     required TResult Function() messageReadOnDevice,
     required TResult Function(bool field0) smsConfirmSent,
@@ -4926,11 +4925,10 @@ mixin _$Message {
     TResult? Function(ReactMessage field0)? react,
     TResult? Function()? delivered,
     TResult? Function()? read,
-    TResult? Function()? typing,
+    TResult? Function(bool field0)? typing,
     TResult? Function(UnsendMessage field0)? unsend,
     TResult? Function(EditMessage field0)? edit,
     TResult? Function(IconChangeMessage field0)? iconChange,
-    TResult? Function()? stopTyping,
     TResult? Function(bool field0)? enableSmsActivation,
     TResult? Function()? messageReadOnDevice,
     TResult? Function(bool field0)? smsConfirmSent,
@@ -4958,11 +4956,10 @@ mixin _$Message {
     TResult Function(ReactMessage field0)? react,
     TResult Function()? delivered,
     TResult Function()? read,
-    TResult Function()? typing,
+    TResult Function(bool field0)? typing,
     TResult Function(UnsendMessage field0)? unsend,
     TResult Function(EditMessage field0)? edit,
     TResult Function(IconChangeMessage field0)? iconChange,
-    TResult Function()? stopTyping,
     TResult Function(bool field0)? enableSmsActivation,
     TResult Function()? messageReadOnDevice,
     TResult Function(bool field0)? smsConfirmSent,
@@ -4996,7 +4993,6 @@ mixin _$Message {
     required TResult Function(Message_Unsend value) unsend,
     required TResult Function(Message_Edit value) edit,
     required TResult Function(Message_IconChange value) iconChange,
-    required TResult Function(Message_StopTyping value) stopTyping,
     required TResult Function(Message_EnableSmsActivation value)
         enableSmsActivation,
     required TResult Function(Message_MessageReadOnDevice value)
@@ -5032,7 +5028,6 @@ mixin _$Message {
     TResult? Function(Message_Unsend value)? unsend,
     TResult? Function(Message_Edit value)? edit,
     TResult? Function(Message_IconChange value)? iconChange,
-    TResult? Function(Message_StopTyping value)? stopTyping,
     TResult? Function(Message_EnableSmsActivation value)? enableSmsActivation,
     TResult? Function(Message_MessageReadOnDevice value)? messageReadOnDevice,
     TResult? Function(Message_SmsConfirmSent value)? smsConfirmSent,
@@ -5064,7 +5059,6 @@ mixin _$Message {
     TResult Function(Message_Unsend value)? unsend,
     TResult Function(Message_Edit value)? edit,
     TResult Function(Message_IconChange value)? iconChange,
-    TResult Function(Message_StopTyping value)? stopTyping,
     TResult Function(Message_EnableSmsActivation value)? enableSmsActivation,
     TResult Function(Message_MessageReadOnDevice value)? messageReadOnDevice,
     TResult Function(Message_SmsConfirmSent value)? smsConfirmSent,
@@ -5183,11 +5177,10 @@ class _$Message_MessageImpl extends Message_Message {
     required TResult Function(ReactMessage field0) react,
     required TResult Function() delivered,
     required TResult Function() read,
-    required TResult Function() typing,
+    required TResult Function(bool field0) typing,
     required TResult Function(UnsendMessage field0) unsend,
     required TResult Function(EditMessage field0) edit,
     required TResult Function(IconChangeMessage field0) iconChange,
-    required TResult Function() stopTyping,
     required TResult Function(bool field0) enableSmsActivation,
     required TResult Function() messageReadOnDevice,
     required TResult Function(bool field0) smsConfirmSent,
@@ -5219,11 +5212,10 @@ class _$Message_MessageImpl extends Message_Message {
     TResult? Function(ReactMessage field0)? react,
     TResult? Function()? delivered,
     TResult? Function()? read,
-    TResult? Function()? typing,
+    TResult? Function(bool field0)? typing,
     TResult? Function(UnsendMessage field0)? unsend,
     TResult? Function(EditMessage field0)? edit,
     TResult? Function(IconChangeMessage field0)? iconChange,
-    TResult? Function()? stopTyping,
     TResult? Function(bool field0)? enableSmsActivation,
     TResult? Function()? messageReadOnDevice,
     TResult? Function(bool field0)? smsConfirmSent,
@@ -5254,11 +5246,10 @@ class _$Message_MessageImpl extends Message_Message {
     TResult Function(ReactMessage field0)? react,
     TResult Function()? delivered,
     TResult Function()? read,
-    TResult Function()? typing,
+    TResult Function(bool field0)? typing,
     TResult Function(UnsendMessage field0)? unsend,
     TResult Function(EditMessage field0)? edit,
     TResult Function(IconChangeMessage field0)? iconChange,
-    TResult Function()? stopTyping,
     TResult Function(bool field0)? enableSmsActivation,
     TResult Function()? messageReadOnDevice,
     TResult Function(bool field0)? smsConfirmSent,
@@ -5298,7 +5289,6 @@ class _$Message_MessageImpl extends Message_Message {
     required TResult Function(Message_Unsend value) unsend,
     required TResult Function(Message_Edit value) edit,
     required TResult Function(Message_IconChange value) iconChange,
-    required TResult Function(Message_StopTyping value) stopTyping,
     required TResult Function(Message_EnableSmsActivation value)
         enableSmsActivation,
     required TResult Function(Message_MessageReadOnDevice value)
@@ -5337,7 +5327,6 @@ class _$Message_MessageImpl extends Message_Message {
     TResult? Function(Message_Unsend value)? unsend,
     TResult? Function(Message_Edit value)? edit,
     TResult? Function(Message_IconChange value)? iconChange,
-    TResult? Function(Message_StopTyping value)? stopTyping,
     TResult? Function(Message_EnableSmsActivation value)? enableSmsActivation,
     TResult? Function(Message_MessageReadOnDevice value)? messageReadOnDevice,
     TResult? Function(Message_SmsConfirmSent value)? smsConfirmSent,
@@ -5372,7 +5361,6 @@ class _$Message_MessageImpl extends Message_Message {
     TResult Function(Message_Unsend value)? unsend,
     TResult Function(Message_Edit value)? edit,
     TResult Function(Message_IconChange value)? iconChange,
-    TResult Function(Message_StopTyping value)? stopTyping,
     TResult Function(Message_EnableSmsActivation value)? enableSmsActivation,
     TResult Function(Message_MessageReadOnDevice value)? messageReadOnDevice,
     TResult Function(Message_SmsConfirmSent value)? smsConfirmSent,
@@ -5490,11 +5478,10 @@ class _$Message_RenameMessageImpl extends Message_RenameMessage {
     required TResult Function(ReactMessage field0) react,
     required TResult Function() delivered,
     required TResult Function() read,
-    required TResult Function() typing,
+    required TResult Function(bool field0) typing,
     required TResult Function(UnsendMessage field0) unsend,
     required TResult Function(EditMessage field0) edit,
     required TResult Function(IconChangeMessage field0) iconChange,
-    required TResult Function() stopTyping,
     required TResult Function(bool field0) enableSmsActivation,
     required TResult Function() messageReadOnDevice,
     required TResult Function(bool field0) smsConfirmSent,
@@ -5526,11 +5513,10 @@ class _$Message_RenameMessageImpl extends Message_RenameMessage {
     TResult? Function(ReactMessage field0)? react,
     TResult? Function()? delivered,
     TResult? Function()? read,
-    TResult? Function()? typing,
+    TResult? Function(bool field0)? typing,
     TResult? Function(UnsendMessage field0)? unsend,
     TResult? Function(EditMessage field0)? edit,
     TResult? Function(IconChangeMessage field0)? iconChange,
-    TResult? Function()? stopTyping,
     TResult? Function(bool field0)? enableSmsActivation,
     TResult? Function()? messageReadOnDevice,
     TResult? Function(bool field0)? smsConfirmSent,
@@ -5561,11 +5547,10 @@ class _$Message_RenameMessageImpl extends Message_RenameMessage {
     TResult Function(ReactMessage field0)? react,
     TResult Function()? delivered,
     TResult Function()? read,
-    TResult Function()? typing,
+    TResult Function(bool field0)? typing,
     TResult Function(UnsendMessage field0)? unsend,
     TResult Function(EditMessage field0)? edit,
     TResult Function(IconChangeMessage field0)? iconChange,
-    TResult Function()? stopTyping,
     TResult Function(bool field0)? enableSmsActivation,
     TResult Function()? messageReadOnDevice,
     TResult Function(bool field0)? smsConfirmSent,
@@ -5605,7 +5590,6 @@ class _$Message_RenameMessageImpl extends Message_RenameMessage {
     required TResult Function(Message_Unsend value) unsend,
     required TResult Function(Message_Edit value) edit,
     required TResult Function(Message_IconChange value) iconChange,
-    required TResult Function(Message_StopTyping value) stopTyping,
     required TResult Function(Message_EnableSmsActivation value)
         enableSmsActivation,
     required TResult Function(Message_MessageReadOnDevice value)
@@ -5644,7 +5628,6 @@ class _$Message_RenameMessageImpl extends Message_RenameMessage {
     TResult? Function(Message_Unsend value)? unsend,
     TResult? Function(Message_Edit value)? edit,
     TResult? Function(Message_IconChange value)? iconChange,
-    TResult? Function(Message_StopTyping value)? stopTyping,
     TResult? Function(Message_EnableSmsActivation value)? enableSmsActivation,
     TResult? Function(Message_MessageReadOnDevice value)? messageReadOnDevice,
     TResult? Function(Message_SmsConfirmSent value)? smsConfirmSent,
@@ -5679,7 +5662,6 @@ class _$Message_RenameMessageImpl extends Message_RenameMessage {
     TResult Function(Message_Unsend value)? unsend,
     TResult Function(Message_Edit value)? edit,
     TResult Function(Message_IconChange value)? iconChange,
-    TResult Function(Message_StopTyping value)? stopTyping,
     TResult Function(Message_EnableSmsActivation value)? enableSmsActivation,
     TResult Function(Message_MessageReadOnDevice value)? messageReadOnDevice,
     TResult Function(Message_SmsConfirmSent value)? smsConfirmSent,
@@ -5798,11 +5780,10 @@ class _$Message_ChangeParticipantsImpl extends Message_ChangeParticipants {
     required TResult Function(ReactMessage field0) react,
     required TResult Function() delivered,
     required TResult Function() read,
-    required TResult Function() typing,
+    required TResult Function(bool field0) typing,
     required TResult Function(UnsendMessage field0) unsend,
     required TResult Function(EditMessage field0) edit,
     required TResult Function(IconChangeMessage field0) iconChange,
-    required TResult Function() stopTyping,
     required TResult Function(bool field0) enableSmsActivation,
     required TResult Function() messageReadOnDevice,
     required TResult Function(bool field0) smsConfirmSent,
@@ -5834,11 +5815,10 @@ class _$Message_ChangeParticipantsImpl extends Message_ChangeParticipants {
     TResult? Function(ReactMessage field0)? react,
     TResult? Function()? delivered,
     TResult? Function()? read,
-    TResult? Function()? typing,
+    TResult? Function(bool field0)? typing,
     TResult? Function(UnsendMessage field0)? unsend,
     TResult? Function(EditMessage field0)? edit,
     TResult? Function(IconChangeMessage field0)? iconChange,
-    TResult? Function()? stopTyping,
     TResult? Function(bool field0)? enableSmsActivation,
     TResult? Function()? messageReadOnDevice,
     TResult? Function(bool field0)? smsConfirmSent,
@@ -5869,11 +5849,10 @@ class _$Message_ChangeParticipantsImpl extends Message_ChangeParticipants {
     TResult Function(ReactMessage field0)? react,
     TResult Function()? delivered,
     TResult Function()? read,
-    TResult Function()? typing,
+    TResult Function(bool field0)? typing,
     TResult Function(UnsendMessage field0)? unsend,
     TResult Function(EditMessage field0)? edit,
     TResult Function(IconChangeMessage field0)? iconChange,
-    TResult Function()? stopTyping,
     TResult Function(bool field0)? enableSmsActivation,
     TResult Function()? messageReadOnDevice,
     TResult Function(bool field0)? smsConfirmSent,
@@ -5913,7 +5892,6 @@ class _$Message_ChangeParticipantsImpl extends Message_ChangeParticipants {
     required TResult Function(Message_Unsend value) unsend,
     required TResult Function(Message_Edit value) edit,
     required TResult Function(Message_IconChange value) iconChange,
-    required TResult Function(Message_StopTyping value) stopTyping,
     required TResult Function(Message_EnableSmsActivation value)
         enableSmsActivation,
     required TResult Function(Message_MessageReadOnDevice value)
@@ -5952,7 +5930,6 @@ class _$Message_ChangeParticipantsImpl extends Message_ChangeParticipants {
     TResult? Function(Message_Unsend value)? unsend,
     TResult? Function(Message_Edit value)? edit,
     TResult? Function(Message_IconChange value)? iconChange,
-    TResult? Function(Message_StopTyping value)? stopTyping,
     TResult? Function(Message_EnableSmsActivation value)? enableSmsActivation,
     TResult? Function(Message_MessageReadOnDevice value)? messageReadOnDevice,
     TResult? Function(Message_SmsConfirmSent value)? smsConfirmSent,
@@ -5987,7 +5964,6 @@ class _$Message_ChangeParticipantsImpl extends Message_ChangeParticipants {
     TResult Function(Message_Unsend value)? unsend,
     TResult Function(Message_Edit value)? edit,
     TResult Function(Message_IconChange value)? iconChange,
-    TResult Function(Message_StopTyping value)? stopTyping,
     TResult Function(Message_EnableSmsActivation value)? enableSmsActivation,
     TResult Function(Message_MessageReadOnDevice value)? messageReadOnDevice,
     TResult Function(Message_SmsConfirmSent value)? smsConfirmSent,
@@ -6103,11 +6079,10 @@ class _$Message_ReactImpl extends Message_React {
     required TResult Function(ReactMessage field0) react,
     required TResult Function() delivered,
     required TResult Function() read,
-    required TResult Function() typing,
+    required TResult Function(bool field0) typing,
     required TResult Function(UnsendMessage field0) unsend,
     required TResult Function(EditMessage field0) edit,
     required TResult Function(IconChangeMessage field0) iconChange,
-    required TResult Function() stopTyping,
     required TResult Function(bool field0) enableSmsActivation,
     required TResult Function() messageReadOnDevice,
     required TResult Function(bool field0) smsConfirmSent,
@@ -6139,11 +6114,10 @@ class _$Message_ReactImpl extends Message_React {
     TResult? Function(ReactMessage field0)? react,
     TResult? Function()? delivered,
     TResult? Function()? read,
-    TResult? Function()? typing,
+    TResult? Function(bool field0)? typing,
     TResult? Function(UnsendMessage field0)? unsend,
     TResult? Function(EditMessage field0)? edit,
     TResult? Function(IconChangeMessage field0)? iconChange,
-    TResult? Function()? stopTyping,
     TResult? Function(bool field0)? enableSmsActivation,
     TResult? Function()? messageReadOnDevice,
     TResult? Function(bool field0)? smsConfirmSent,
@@ -6174,11 +6148,10 @@ class _$Message_ReactImpl extends Message_React {
     TResult Function(ReactMessage field0)? react,
     TResult Function()? delivered,
     TResult Function()? read,
-    TResult Function()? typing,
+    TResult Function(bool field0)? typing,
     TResult Function(UnsendMessage field0)? unsend,
     TResult Function(EditMessage field0)? edit,
     TResult Function(IconChangeMessage field0)? iconChange,
-    TResult Function()? stopTyping,
     TResult Function(bool field0)? enableSmsActivation,
     TResult Function()? messageReadOnDevice,
     TResult Function(bool field0)? smsConfirmSent,
@@ -6218,7 +6191,6 @@ class _$Message_ReactImpl extends Message_React {
     required TResult Function(Message_Unsend value) unsend,
     required TResult Function(Message_Edit value) edit,
     required TResult Function(Message_IconChange value) iconChange,
-    required TResult Function(Message_StopTyping value) stopTyping,
     required TResult Function(Message_EnableSmsActivation value)
         enableSmsActivation,
     required TResult Function(Message_MessageReadOnDevice value)
@@ -6257,7 +6229,6 @@ class _$Message_ReactImpl extends Message_React {
     TResult? Function(Message_Unsend value)? unsend,
     TResult? Function(Message_Edit value)? edit,
     TResult? Function(Message_IconChange value)? iconChange,
-    TResult? Function(Message_StopTyping value)? stopTyping,
     TResult? Function(Message_EnableSmsActivation value)? enableSmsActivation,
     TResult? Function(Message_MessageReadOnDevice value)? messageReadOnDevice,
     TResult? Function(Message_SmsConfirmSent value)? smsConfirmSent,
@@ -6292,7 +6263,6 @@ class _$Message_ReactImpl extends Message_React {
     TResult Function(Message_Unsend value)? unsend,
     TResult Function(Message_Edit value)? edit,
     TResult Function(Message_IconChange value)? iconChange,
-    TResult Function(Message_StopTyping value)? stopTyping,
     TResult Function(Message_EnableSmsActivation value)? enableSmsActivation,
     TResult Function(Message_MessageReadOnDevice value)? messageReadOnDevice,
     TResult Function(Message_SmsConfirmSent value)? smsConfirmSent,
@@ -6380,11 +6350,10 @@ class _$Message_DeliveredImpl extends Message_Delivered {
     required TResult Function(ReactMessage field0) react,
     required TResult Function() delivered,
     required TResult Function() read,
-    required TResult Function() typing,
+    required TResult Function(bool field0) typing,
     required TResult Function(UnsendMessage field0) unsend,
     required TResult Function(EditMessage field0) edit,
     required TResult Function(IconChangeMessage field0) iconChange,
-    required TResult Function() stopTyping,
     required TResult Function(bool field0) enableSmsActivation,
     required TResult Function() messageReadOnDevice,
     required TResult Function(bool field0) smsConfirmSent,
@@ -6416,11 +6385,10 @@ class _$Message_DeliveredImpl extends Message_Delivered {
     TResult? Function(ReactMessage field0)? react,
     TResult? Function()? delivered,
     TResult? Function()? read,
-    TResult? Function()? typing,
+    TResult? Function(bool field0)? typing,
     TResult? Function(UnsendMessage field0)? unsend,
     TResult? Function(EditMessage field0)? edit,
     TResult? Function(IconChangeMessage field0)? iconChange,
-    TResult? Function()? stopTyping,
     TResult? Function(bool field0)? enableSmsActivation,
     TResult? Function()? messageReadOnDevice,
     TResult? Function(bool field0)? smsConfirmSent,
@@ -6451,11 +6419,10 @@ class _$Message_DeliveredImpl extends Message_Delivered {
     TResult Function(ReactMessage field0)? react,
     TResult Function()? delivered,
     TResult Function()? read,
-    TResult Function()? typing,
+    TResult Function(bool field0)? typing,
     TResult Function(UnsendMessage field0)? unsend,
     TResult Function(EditMessage field0)? edit,
     TResult Function(IconChangeMessage field0)? iconChange,
-    TResult Function()? stopTyping,
     TResult Function(bool field0)? enableSmsActivation,
     TResult Function()? messageReadOnDevice,
     TResult Function(bool field0)? smsConfirmSent,
@@ -6495,7 +6462,6 @@ class _$Message_DeliveredImpl extends Message_Delivered {
     required TResult Function(Message_Unsend value) unsend,
     required TResult Function(Message_Edit value) edit,
     required TResult Function(Message_IconChange value) iconChange,
-    required TResult Function(Message_StopTyping value) stopTyping,
     required TResult Function(Message_EnableSmsActivation value)
         enableSmsActivation,
     required TResult Function(Message_MessageReadOnDevice value)
@@ -6534,7 +6500,6 @@ class _$Message_DeliveredImpl extends Message_Delivered {
     TResult? Function(Message_Unsend value)? unsend,
     TResult? Function(Message_Edit value)? edit,
     TResult? Function(Message_IconChange value)? iconChange,
-    TResult? Function(Message_StopTyping value)? stopTyping,
     TResult? Function(Message_EnableSmsActivation value)? enableSmsActivation,
     TResult? Function(Message_MessageReadOnDevice value)? messageReadOnDevice,
     TResult? Function(Message_SmsConfirmSent value)? smsConfirmSent,
@@ -6569,7 +6534,6 @@ class _$Message_DeliveredImpl extends Message_Delivered {
     TResult Function(Message_Unsend value)? unsend,
     TResult Function(Message_Edit value)? edit,
     TResult Function(Message_IconChange value)? iconChange,
-    TResult Function(Message_StopTyping value)? stopTyping,
     TResult Function(Message_EnableSmsActivation value)? enableSmsActivation,
     TResult Function(Message_MessageReadOnDevice value)? messageReadOnDevice,
     TResult Function(Message_SmsConfirmSent value)? smsConfirmSent,
@@ -6649,11 +6613,10 @@ class _$Message_ReadImpl extends Message_Read {
     required TResult Function(ReactMessage field0) react,
     required TResult Function() delivered,
     required TResult Function() read,
-    required TResult Function() typing,
+    required TResult Function(bool field0) typing,
     required TResult Function(UnsendMessage field0) unsend,
     required TResult Function(EditMessage field0) edit,
     required TResult Function(IconChangeMessage field0) iconChange,
-    required TResult Function() stopTyping,
     required TResult Function(bool field0) enableSmsActivation,
     required TResult Function() messageReadOnDevice,
     required TResult Function(bool field0) smsConfirmSent,
@@ -6685,11 +6648,10 @@ class _$Message_ReadImpl extends Message_Read {
     TResult? Function(ReactMessage field0)? react,
     TResult? Function()? delivered,
     TResult? Function()? read,
-    TResult? Function()? typing,
+    TResult? Function(bool field0)? typing,
     TResult? Function(UnsendMessage field0)? unsend,
     TResult? Function(EditMessage field0)? edit,
     TResult? Function(IconChangeMessage field0)? iconChange,
-    TResult? Function()? stopTyping,
     TResult? Function(bool field0)? enableSmsActivation,
     TResult? Function()? messageReadOnDevice,
     TResult? Function(bool field0)? smsConfirmSent,
@@ -6720,11 +6682,10 @@ class _$Message_ReadImpl extends Message_Read {
     TResult Function(ReactMessage field0)? react,
     TResult Function()? delivered,
     TResult Function()? read,
-    TResult Function()? typing,
+    TResult Function(bool field0)? typing,
     TResult Function(UnsendMessage field0)? unsend,
     TResult Function(EditMessage field0)? edit,
     TResult Function(IconChangeMessage field0)? iconChange,
-    TResult Function()? stopTyping,
     TResult Function(bool field0)? enableSmsActivation,
     TResult Function()? messageReadOnDevice,
     TResult Function(bool field0)? smsConfirmSent,
@@ -6764,7 +6725,6 @@ class _$Message_ReadImpl extends Message_Read {
     required TResult Function(Message_Unsend value) unsend,
     required TResult Function(Message_Edit value) edit,
     required TResult Function(Message_IconChange value) iconChange,
-    required TResult Function(Message_StopTyping value) stopTyping,
     required TResult Function(Message_EnableSmsActivation value)
         enableSmsActivation,
     required TResult Function(Message_MessageReadOnDevice value)
@@ -6803,7 +6763,6 @@ class _$Message_ReadImpl extends Message_Read {
     TResult? Function(Message_Unsend value)? unsend,
     TResult? Function(Message_Edit value)? edit,
     TResult? Function(Message_IconChange value)? iconChange,
-    TResult? Function(Message_StopTyping value)? stopTyping,
     TResult? Function(Message_EnableSmsActivation value)? enableSmsActivation,
     TResult? Function(Message_MessageReadOnDevice value)? messageReadOnDevice,
     TResult? Function(Message_SmsConfirmSent value)? smsConfirmSent,
@@ -6838,7 +6797,6 @@ class _$Message_ReadImpl extends Message_Read {
     TResult Function(Message_Unsend value)? unsend,
     TResult Function(Message_Edit value)? edit,
     TResult Function(Message_IconChange value)? iconChange,
-    TResult Function(Message_StopTyping value)? stopTyping,
     TResult Function(Message_EnableSmsActivation value)? enableSmsActivation,
     TResult Function(Message_MessageReadOnDevice value)? messageReadOnDevice,
     TResult Function(Message_SmsConfirmSent value)? smsConfirmSent,
@@ -6875,6 +6833,8 @@ abstract class _$$Message_TypingImplCopyWith<$Res> {
   factory _$$Message_TypingImplCopyWith(_$Message_TypingImpl value,
           $Res Function(_$Message_TypingImpl) then) =
       __$$Message_TypingImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({bool field0});
 }
 
 /// @nodoc
@@ -6887,26 +6847,52 @@ class __$$Message_TypingImplCopyWithImpl<$Res>
 
   /// Create a copy of Message
   /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? field0 = null,
+  }) {
+    return _then(_$Message_TypingImpl(
+      null == field0
+          ? _value.field0
+          : field0 // ignore: cast_nullable_to_non_nullable
+              as bool,
+    ));
+  }
 }
 
 /// @nodoc
 
 class _$Message_TypingImpl extends Message_Typing {
-  const _$Message_TypingImpl() : super._();
+  const _$Message_TypingImpl(this.field0) : super._();
+
+  @override
+  final bool field0;
 
   @override
   String toString() {
-    return 'Message.typing()';
+    return 'Message.typing(field0: $field0)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$Message_TypingImpl);
+        (other.runtimeType == runtimeType &&
+            other is _$Message_TypingImpl &&
+            (identical(other.field0, field0) || other.field0 == field0));
   }
 
   @override
-  int get hashCode => runtimeType.hashCode;
+  int get hashCode => Object.hash(runtimeType, field0);
+
+  /// Create a copy of Message
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$Message_TypingImplCopyWith<_$Message_TypingImpl> get copyWith =>
+      __$$Message_TypingImplCopyWithImpl<_$Message_TypingImpl>(
+          this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -6918,11 +6904,10 @@ class _$Message_TypingImpl extends Message_Typing {
     required TResult Function(ReactMessage field0) react,
     required TResult Function() delivered,
     required TResult Function() read,
-    required TResult Function() typing,
+    required TResult Function(bool field0) typing,
     required TResult Function(UnsendMessage field0) unsend,
     required TResult Function(EditMessage field0) edit,
     required TResult Function(IconChangeMessage field0) iconChange,
-    required TResult Function() stopTyping,
     required TResult Function(bool field0) enableSmsActivation,
     required TResult Function() messageReadOnDevice,
     required TResult Function(bool field0) smsConfirmSent,
@@ -6942,7 +6927,7 @@ class _$Message_TypingImpl extends Message_Typing {
     required TResult Function(SetTranscriptBackgroundMessage field0)
         setTranscriptBackground,
   }) {
-    return typing();
+    return typing(field0);
   }
 
   @override
@@ -6954,11 +6939,10 @@ class _$Message_TypingImpl extends Message_Typing {
     TResult? Function(ReactMessage field0)? react,
     TResult? Function()? delivered,
     TResult? Function()? read,
-    TResult? Function()? typing,
+    TResult? Function(bool field0)? typing,
     TResult? Function(UnsendMessage field0)? unsend,
     TResult? Function(EditMessage field0)? edit,
     TResult? Function(IconChangeMessage field0)? iconChange,
-    TResult? Function()? stopTyping,
     TResult? Function(bool field0)? enableSmsActivation,
     TResult? Function()? messageReadOnDevice,
     TResult? Function(bool field0)? smsConfirmSent,
@@ -6977,7 +6961,7 @@ class _$Message_TypingImpl extends Message_Typing {
     TResult? Function(SetTranscriptBackgroundMessage field0)?
         setTranscriptBackground,
   }) {
-    return typing?.call();
+    return typing?.call(field0);
   }
 
   @override
@@ -6989,11 +6973,10 @@ class _$Message_TypingImpl extends Message_Typing {
     TResult Function(ReactMessage field0)? react,
     TResult Function()? delivered,
     TResult Function()? read,
-    TResult Function()? typing,
+    TResult Function(bool field0)? typing,
     TResult Function(UnsendMessage field0)? unsend,
     TResult Function(EditMessage field0)? edit,
     TResult Function(IconChangeMessage field0)? iconChange,
-    TResult Function()? stopTyping,
     TResult Function(bool field0)? enableSmsActivation,
     TResult Function()? messageReadOnDevice,
     TResult Function(bool field0)? smsConfirmSent,
@@ -7014,7 +6997,7 @@ class _$Message_TypingImpl extends Message_Typing {
     required TResult orElse(),
   }) {
     if (typing != null) {
-      return typing();
+      return typing(field0);
     }
     return orElse();
   }
@@ -7033,7 +7016,6 @@ class _$Message_TypingImpl extends Message_Typing {
     required TResult Function(Message_Unsend value) unsend,
     required TResult Function(Message_Edit value) edit,
     required TResult Function(Message_IconChange value) iconChange,
-    required TResult Function(Message_StopTyping value) stopTyping,
     required TResult Function(Message_EnableSmsActivation value)
         enableSmsActivation,
     required TResult Function(Message_MessageReadOnDevice value)
@@ -7072,7 +7054,6 @@ class _$Message_TypingImpl extends Message_Typing {
     TResult? Function(Message_Unsend value)? unsend,
     TResult? Function(Message_Edit value)? edit,
     TResult? Function(Message_IconChange value)? iconChange,
-    TResult? Function(Message_StopTyping value)? stopTyping,
     TResult? Function(Message_EnableSmsActivation value)? enableSmsActivation,
     TResult? Function(Message_MessageReadOnDevice value)? messageReadOnDevice,
     TResult? Function(Message_SmsConfirmSent value)? smsConfirmSent,
@@ -7107,7 +7088,6 @@ class _$Message_TypingImpl extends Message_Typing {
     TResult Function(Message_Unsend value)? unsend,
     TResult Function(Message_Edit value)? edit,
     TResult Function(Message_IconChange value)? iconChange,
-    TResult Function(Message_StopTyping value)? stopTyping,
     TResult Function(Message_EnableSmsActivation value)? enableSmsActivation,
     TResult Function(Message_MessageReadOnDevice value)? messageReadOnDevice,
     TResult Function(Message_SmsConfirmSent value)? smsConfirmSent,
@@ -7135,8 +7115,16 @@ class _$Message_TypingImpl extends Message_Typing {
 }
 
 abstract class Message_Typing extends Message {
-  const factory Message_Typing() = _$Message_TypingImpl;
+  const factory Message_Typing(final bool field0) = _$Message_TypingImpl;
   const Message_Typing._() : super._();
+
+  bool get field0;
+
+  /// Create a copy of Message
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$Message_TypingImplCopyWith<_$Message_TypingImpl> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
@@ -7215,11 +7203,10 @@ class _$Message_UnsendImpl extends Message_Unsend {
     required TResult Function(ReactMessage field0) react,
     required TResult Function() delivered,
     required TResult Function() read,
-    required TResult Function() typing,
+    required TResult Function(bool field0) typing,
     required TResult Function(UnsendMessage field0) unsend,
     required TResult Function(EditMessage field0) edit,
     required TResult Function(IconChangeMessage field0) iconChange,
-    required TResult Function() stopTyping,
     required TResult Function(bool field0) enableSmsActivation,
     required TResult Function() messageReadOnDevice,
     required TResult Function(bool field0) smsConfirmSent,
@@ -7251,11 +7238,10 @@ class _$Message_UnsendImpl extends Message_Unsend {
     TResult? Function(ReactMessage field0)? react,
     TResult? Function()? delivered,
     TResult? Function()? read,
-    TResult? Function()? typing,
+    TResult? Function(bool field0)? typing,
     TResult? Function(UnsendMessage field0)? unsend,
     TResult? Function(EditMessage field0)? edit,
     TResult? Function(IconChangeMessage field0)? iconChange,
-    TResult? Function()? stopTyping,
     TResult? Function(bool field0)? enableSmsActivation,
     TResult? Function()? messageReadOnDevice,
     TResult? Function(bool field0)? smsConfirmSent,
@@ -7286,11 +7272,10 @@ class _$Message_UnsendImpl extends Message_Unsend {
     TResult Function(ReactMessage field0)? react,
     TResult Function()? delivered,
     TResult Function()? read,
-    TResult Function()? typing,
+    TResult Function(bool field0)? typing,
     TResult Function(UnsendMessage field0)? unsend,
     TResult Function(EditMessage field0)? edit,
     TResult Function(IconChangeMessage field0)? iconChange,
-    TResult Function()? stopTyping,
     TResult Function(bool field0)? enableSmsActivation,
     TResult Function()? messageReadOnDevice,
     TResult Function(bool field0)? smsConfirmSent,
@@ -7330,7 +7315,6 @@ class _$Message_UnsendImpl extends Message_Unsend {
     required TResult Function(Message_Unsend value) unsend,
     required TResult Function(Message_Edit value) edit,
     required TResult Function(Message_IconChange value) iconChange,
-    required TResult Function(Message_StopTyping value) stopTyping,
     required TResult Function(Message_EnableSmsActivation value)
         enableSmsActivation,
     required TResult Function(Message_MessageReadOnDevice value)
@@ -7369,7 +7353,6 @@ class _$Message_UnsendImpl extends Message_Unsend {
     TResult? Function(Message_Unsend value)? unsend,
     TResult? Function(Message_Edit value)? edit,
     TResult? Function(Message_IconChange value)? iconChange,
-    TResult? Function(Message_StopTyping value)? stopTyping,
     TResult? Function(Message_EnableSmsActivation value)? enableSmsActivation,
     TResult? Function(Message_MessageReadOnDevice value)? messageReadOnDevice,
     TResult? Function(Message_SmsConfirmSent value)? smsConfirmSent,
@@ -7404,7 +7387,6 @@ class _$Message_UnsendImpl extends Message_Unsend {
     TResult Function(Message_Unsend value)? unsend,
     TResult Function(Message_Edit value)? edit,
     TResult Function(Message_IconChange value)? iconChange,
-    TResult Function(Message_StopTyping value)? stopTyping,
     TResult Function(Message_EnableSmsActivation value)? enableSmsActivation,
     TResult Function(Message_MessageReadOnDevice value)? messageReadOnDevice,
     TResult Function(Message_SmsConfirmSent value)? smsConfirmSent,
@@ -7520,11 +7502,10 @@ class _$Message_EditImpl extends Message_Edit {
     required TResult Function(ReactMessage field0) react,
     required TResult Function() delivered,
     required TResult Function() read,
-    required TResult Function() typing,
+    required TResult Function(bool field0) typing,
     required TResult Function(UnsendMessage field0) unsend,
     required TResult Function(EditMessage field0) edit,
     required TResult Function(IconChangeMessage field0) iconChange,
-    required TResult Function() stopTyping,
     required TResult Function(bool field0) enableSmsActivation,
     required TResult Function() messageReadOnDevice,
     required TResult Function(bool field0) smsConfirmSent,
@@ -7556,11 +7537,10 @@ class _$Message_EditImpl extends Message_Edit {
     TResult? Function(ReactMessage field0)? react,
     TResult? Function()? delivered,
     TResult? Function()? read,
-    TResult? Function()? typing,
+    TResult? Function(bool field0)? typing,
     TResult? Function(UnsendMessage field0)? unsend,
     TResult? Function(EditMessage field0)? edit,
     TResult? Function(IconChangeMessage field0)? iconChange,
-    TResult? Function()? stopTyping,
     TResult? Function(bool field0)? enableSmsActivation,
     TResult? Function()? messageReadOnDevice,
     TResult? Function(bool field0)? smsConfirmSent,
@@ -7591,11 +7571,10 @@ class _$Message_EditImpl extends Message_Edit {
     TResult Function(ReactMessage field0)? react,
     TResult Function()? delivered,
     TResult Function()? read,
-    TResult Function()? typing,
+    TResult Function(bool field0)? typing,
     TResult Function(UnsendMessage field0)? unsend,
     TResult Function(EditMessage field0)? edit,
     TResult Function(IconChangeMessage field0)? iconChange,
-    TResult Function()? stopTyping,
     TResult Function(bool field0)? enableSmsActivation,
     TResult Function()? messageReadOnDevice,
     TResult Function(bool field0)? smsConfirmSent,
@@ -7635,7 +7614,6 @@ class _$Message_EditImpl extends Message_Edit {
     required TResult Function(Message_Unsend value) unsend,
     required TResult Function(Message_Edit value) edit,
     required TResult Function(Message_IconChange value) iconChange,
-    required TResult Function(Message_StopTyping value) stopTyping,
     required TResult Function(Message_EnableSmsActivation value)
         enableSmsActivation,
     required TResult Function(Message_MessageReadOnDevice value)
@@ -7674,7 +7652,6 @@ class _$Message_EditImpl extends Message_Edit {
     TResult? Function(Message_Unsend value)? unsend,
     TResult? Function(Message_Edit value)? edit,
     TResult? Function(Message_IconChange value)? iconChange,
-    TResult? Function(Message_StopTyping value)? stopTyping,
     TResult? Function(Message_EnableSmsActivation value)? enableSmsActivation,
     TResult? Function(Message_MessageReadOnDevice value)? messageReadOnDevice,
     TResult? Function(Message_SmsConfirmSent value)? smsConfirmSent,
@@ -7709,7 +7686,6 @@ class _$Message_EditImpl extends Message_Edit {
     TResult Function(Message_Unsend value)? unsend,
     TResult Function(Message_Edit value)? edit,
     TResult Function(Message_IconChange value)? iconChange,
-    TResult Function(Message_StopTyping value)? stopTyping,
     TResult Function(Message_EnableSmsActivation value)? enableSmsActivation,
     TResult Function(Message_MessageReadOnDevice value)? messageReadOnDevice,
     TResult Function(Message_SmsConfirmSent value)? smsConfirmSent,
@@ -7825,11 +7801,10 @@ class _$Message_IconChangeImpl extends Message_IconChange {
     required TResult Function(ReactMessage field0) react,
     required TResult Function() delivered,
     required TResult Function() read,
-    required TResult Function() typing,
+    required TResult Function(bool field0) typing,
     required TResult Function(UnsendMessage field0) unsend,
     required TResult Function(EditMessage field0) edit,
     required TResult Function(IconChangeMessage field0) iconChange,
-    required TResult Function() stopTyping,
     required TResult Function(bool field0) enableSmsActivation,
     required TResult Function() messageReadOnDevice,
     required TResult Function(bool field0) smsConfirmSent,
@@ -7861,11 +7836,10 @@ class _$Message_IconChangeImpl extends Message_IconChange {
     TResult? Function(ReactMessage field0)? react,
     TResult? Function()? delivered,
     TResult? Function()? read,
-    TResult? Function()? typing,
+    TResult? Function(bool field0)? typing,
     TResult? Function(UnsendMessage field0)? unsend,
     TResult? Function(EditMessage field0)? edit,
     TResult? Function(IconChangeMessage field0)? iconChange,
-    TResult? Function()? stopTyping,
     TResult? Function(bool field0)? enableSmsActivation,
     TResult? Function()? messageReadOnDevice,
     TResult? Function(bool field0)? smsConfirmSent,
@@ -7896,11 +7870,10 @@ class _$Message_IconChangeImpl extends Message_IconChange {
     TResult Function(ReactMessage field0)? react,
     TResult Function()? delivered,
     TResult Function()? read,
-    TResult Function()? typing,
+    TResult Function(bool field0)? typing,
     TResult Function(UnsendMessage field0)? unsend,
     TResult Function(EditMessage field0)? edit,
     TResult Function(IconChangeMessage field0)? iconChange,
-    TResult Function()? stopTyping,
     TResult Function(bool field0)? enableSmsActivation,
     TResult Function()? messageReadOnDevice,
     TResult Function(bool field0)? smsConfirmSent,
@@ -7940,7 +7913,6 @@ class _$Message_IconChangeImpl extends Message_IconChange {
     required TResult Function(Message_Unsend value) unsend,
     required TResult Function(Message_Edit value) edit,
     required TResult Function(Message_IconChange value) iconChange,
-    required TResult Function(Message_StopTyping value) stopTyping,
     required TResult Function(Message_EnableSmsActivation value)
         enableSmsActivation,
     required TResult Function(Message_MessageReadOnDevice value)
@@ -7979,7 +7951,6 @@ class _$Message_IconChangeImpl extends Message_IconChange {
     TResult? Function(Message_Unsend value)? unsend,
     TResult? Function(Message_Edit value)? edit,
     TResult? Function(Message_IconChange value)? iconChange,
-    TResult? Function(Message_StopTyping value)? stopTyping,
     TResult? Function(Message_EnableSmsActivation value)? enableSmsActivation,
     TResult? Function(Message_MessageReadOnDevice value)? messageReadOnDevice,
     TResult? Function(Message_SmsConfirmSent value)? smsConfirmSent,
@@ -8014,7 +7985,6 @@ class _$Message_IconChangeImpl extends Message_IconChange {
     TResult Function(Message_Unsend value)? unsend,
     TResult Function(Message_Edit value)? edit,
     TResult Function(Message_IconChange value)? iconChange,
-    TResult Function(Message_StopTyping value)? stopTyping,
     TResult Function(Message_EnableSmsActivation value)? enableSmsActivation,
     TResult Function(Message_MessageReadOnDevice value)? messageReadOnDevice,
     TResult Function(Message_SmsConfirmSent value)? smsConfirmSent,
@@ -8053,275 +8023,6 @@ abstract class Message_IconChange extends Message {
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$Message_IconChangeImplCopyWith<_$Message_IconChangeImpl> get copyWith =>
       throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class _$$Message_StopTypingImplCopyWith<$Res> {
-  factory _$$Message_StopTypingImplCopyWith(_$Message_StopTypingImpl value,
-          $Res Function(_$Message_StopTypingImpl) then) =
-      __$$Message_StopTypingImplCopyWithImpl<$Res>;
-}
-
-/// @nodoc
-class __$$Message_StopTypingImplCopyWithImpl<$Res>
-    extends _$MessageCopyWithImpl<$Res, _$Message_StopTypingImpl>
-    implements _$$Message_StopTypingImplCopyWith<$Res> {
-  __$$Message_StopTypingImplCopyWithImpl(_$Message_StopTypingImpl _value,
-      $Res Function(_$Message_StopTypingImpl) _then)
-      : super(_value, _then);
-
-  /// Create a copy of Message
-  /// with the given fields replaced by the non-null parameter values.
-}
-
-/// @nodoc
-
-class _$Message_StopTypingImpl extends Message_StopTyping {
-  const _$Message_StopTypingImpl() : super._();
-
-  @override
-  String toString() {
-    return 'Message.stopTyping()';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$Message_StopTypingImpl);
-  }
-
-  @override
-  int get hashCode => runtimeType.hashCode;
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(NormalMessage field0) message,
-    required TResult Function(RenameMessage field0) renameMessage,
-    required TResult Function(ChangeParticipantMessage field0)
-        changeParticipants,
-    required TResult Function(ReactMessage field0) react,
-    required TResult Function() delivered,
-    required TResult Function() read,
-    required TResult Function() typing,
-    required TResult Function(UnsendMessage field0) unsend,
-    required TResult Function(EditMessage field0) edit,
-    required TResult Function(IconChangeMessage field0) iconChange,
-    required TResult Function() stopTyping,
-    required TResult Function(bool field0) enableSmsActivation,
-    required TResult Function() messageReadOnDevice,
-    required TResult Function(bool field0) smsConfirmSent,
-    required TResult Function() markUnread,
-    required TResult Function() peerCacheInvalidate,
-    required TResult Function(UpdateExtensionMessage field0) updateExtension,
-    required TResult Function(ErrorMessage field0) error,
-    required TResult Function(MoveToRecycleBinMessage field0) moveToRecycleBin,
-    required TResult Function(OperatedChat field0) recoverChat,
-    required TResult Function(PermanentDeleteMessage field0) permanentDelete,
-    required TResult Function() unschedule,
-    required TResult Function(UpdateProfileMessage field0) updateProfile,
-    required TResult Function(UpdateProfileSharingMessage field0)
-        updateProfileSharing,
-    required TResult Function(ShareProfileMessage field0) shareProfile,
-    required TResult Function() notifyAnyways,
-    required TResult Function(SetTranscriptBackgroundMessage field0)
-        setTranscriptBackground,
-  }) {
-    return stopTyping();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(NormalMessage field0)? message,
-    TResult? Function(RenameMessage field0)? renameMessage,
-    TResult? Function(ChangeParticipantMessage field0)? changeParticipants,
-    TResult? Function(ReactMessage field0)? react,
-    TResult? Function()? delivered,
-    TResult? Function()? read,
-    TResult? Function()? typing,
-    TResult? Function(UnsendMessage field0)? unsend,
-    TResult? Function(EditMessage field0)? edit,
-    TResult? Function(IconChangeMessage field0)? iconChange,
-    TResult? Function()? stopTyping,
-    TResult? Function(bool field0)? enableSmsActivation,
-    TResult? Function()? messageReadOnDevice,
-    TResult? Function(bool field0)? smsConfirmSent,
-    TResult? Function()? markUnread,
-    TResult? Function()? peerCacheInvalidate,
-    TResult? Function(UpdateExtensionMessage field0)? updateExtension,
-    TResult? Function(ErrorMessage field0)? error,
-    TResult? Function(MoveToRecycleBinMessage field0)? moveToRecycleBin,
-    TResult? Function(OperatedChat field0)? recoverChat,
-    TResult? Function(PermanentDeleteMessage field0)? permanentDelete,
-    TResult? Function()? unschedule,
-    TResult? Function(UpdateProfileMessage field0)? updateProfile,
-    TResult? Function(UpdateProfileSharingMessage field0)? updateProfileSharing,
-    TResult? Function(ShareProfileMessage field0)? shareProfile,
-    TResult? Function()? notifyAnyways,
-    TResult? Function(SetTranscriptBackgroundMessage field0)?
-        setTranscriptBackground,
-  }) {
-    return stopTyping?.call();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(NormalMessage field0)? message,
-    TResult Function(RenameMessage field0)? renameMessage,
-    TResult Function(ChangeParticipantMessage field0)? changeParticipants,
-    TResult Function(ReactMessage field0)? react,
-    TResult Function()? delivered,
-    TResult Function()? read,
-    TResult Function()? typing,
-    TResult Function(UnsendMessage field0)? unsend,
-    TResult Function(EditMessage field0)? edit,
-    TResult Function(IconChangeMessage field0)? iconChange,
-    TResult Function()? stopTyping,
-    TResult Function(bool field0)? enableSmsActivation,
-    TResult Function()? messageReadOnDevice,
-    TResult Function(bool field0)? smsConfirmSent,
-    TResult Function()? markUnread,
-    TResult Function()? peerCacheInvalidate,
-    TResult Function(UpdateExtensionMessage field0)? updateExtension,
-    TResult Function(ErrorMessage field0)? error,
-    TResult Function(MoveToRecycleBinMessage field0)? moveToRecycleBin,
-    TResult Function(OperatedChat field0)? recoverChat,
-    TResult Function(PermanentDeleteMessage field0)? permanentDelete,
-    TResult Function()? unschedule,
-    TResult Function(UpdateProfileMessage field0)? updateProfile,
-    TResult Function(UpdateProfileSharingMessage field0)? updateProfileSharing,
-    TResult Function(ShareProfileMessage field0)? shareProfile,
-    TResult Function()? notifyAnyways,
-    TResult Function(SetTranscriptBackgroundMessage field0)?
-        setTranscriptBackground,
-    required TResult orElse(),
-  }) {
-    if (stopTyping != null) {
-      return stopTyping();
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(Message_Message value) message,
-    required TResult Function(Message_RenameMessage value) renameMessage,
-    required TResult Function(Message_ChangeParticipants value)
-        changeParticipants,
-    required TResult Function(Message_React value) react,
-    required TResult Function(Message_Delivered value) delivered,
-    required TResult Function(Message_Read value) read,
-    required TResult Function(Message_Typing value) typing,
-    required TResult Function(Message_Unsend value) unsend,
-    required TResult Function(Message_Edit value) edit,
-    required TResult Function(Message_IconChange value) iconChange,
-    required TResult Function(Message_StopTyping value) stopTyping,
-    required TResult Function(Message_EnableSmsActivation value)
-        enableSmsActivation,
-    required TResult Function(Message_MessageReadOnDevice value)
-        messageReadOnDevice,
-    required TResult Function(Message_SmsConfirmSent value) smsConfirmSent,
-    required TResult Function(Message_MarkUnread value) markUnread,
-    required TResult Function(Message_PeerCacheInvalidate value)
-        peerCacheInvalidate,
-    required TResult Function(Message_UpdateExtension value) updateExtension,
-    required TResult Function(Message_Error value) error,
-    required TResult Function(Message_MoveToRecycleBin value) moveToRecycleBin,
-    required TResult Function(Message_RecoverChat value) recoverChat,
-    required TResult Function(Message_PermanentDelete value) permanentDelete,
-    required TResult Function(Message_Unschedule value) unschedule,
-    required TResult Function(Message_UpdateProfile value) updateProfile,
-    required TResult Function(Message_UpdateProfileSharing value)
-        updateProfileSharing,
-    required TResult Function(Message_ShareProfile value) shareProfile,
-    required TResult Function(Message_NotifyAnyways value) notifyAnyways,
-    required TResult Function(Message_SetTranscriptBackground value)
-        setTranscriptBackground,
-  }) {
-    return stopTyping(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(Message_Message value)? message,
-    TResult? Function(Message_RenameMessage value)? renameMessage,
-    TResult? Function(Message_ChangeParticipants value)? changeParticipants,
-    TResult? Function(Message_React value)? react,
-    TResult? Function(Message_Delivered value)? delivered,
-    TResult? Function(Message_Read value)? read,
-    TResult? Function(Message_Typing value)? typing,
-    TResult? Function(Message_Unsend value)? unsend,
-    TResult? Function(Message_Edit value)? edit,
-    TResult? Function(Message_IconChange value)? iconChange,
-    TResult? Function(Message_StopTyping value)? stopTyping,
-    TResult? Function(Message_EnableSmsActivation value)? enableSmsActivation,
-    TResult? Function(Message_MessageReadOnDevice value)? messageReadOnDevice,
-    TResult? Function(Message_SmsConfirmSent value)? smsConfirmSent,
-    TResult? Function(Message_MarkUnread value)? markUnread,
-    TResult? Function(Message_PeerCacheInvalidate value)? peerCacheInvalidate,
-    TResult? Function(Message_UpdateExtension value)? updateExtension,
-    TResult? Function(Message_Error value)? error,
-    TResult? Function(Message_MoveToRecycleBin value)? moveToRecycleBin,
-    TResult? Function(Message_RecoverChat value)? recoverChat,
-    TResult? Function(Message_PermanentDelete value)? permanentDelete,
-    TResult? Function(Message_Unschedule value)? unschedule,
-    TResult? Function(Message_UpdateProfile value)? updateProfile,
-    TResult? Function(Message_UpdateProfileSharing value)? updateProfileSharing,
-    TResult? Function(Message_ShareProfile value)? shareProfile,
-    TResult? Function(Message_NotifyAnyways value)? notifyAnyways,
-    TResult? Function(Message_SetTranscriptBackground value)?
-        setTranscriptBackground,
-  }) {
-    return stopTyping?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(Message_Message value)? message,
-    TResult Function(Message_RenameMessage value)? renameMessage,
-    TResult Function(Message_ChangeParticipants value)? changeParticipants,
-    TResult Function(Message_React value)? react,
-    TResult Function(Message_Delivered value)? delivered,
-    TResult Function(Message_Read value)? read,
-    TResult Function(Message_Typing value)? typing,
-    TResult Function(Message_Unsend value)? unsend,
-    TResult Function(Message_Edit value)? edit,
-    TResult Function(Message_IconChange value)? iconChange,
-    TResult Function(Message_StopTyping value)? stopTyping,
-    TResult Function(Message_EnableSmsActivation value)? enableSmsActivation,
-    TResult Function(Message_MessageReadOnDevice value)? messageReadOnDevice,
-    TResult Function(Message_SmsConfirmSent value)? smsConfirmSent,
-    TResult Function(Message_MarkUnread value)? markUnread,
-    TResult Function(Message_PeerCacheInvalidate value)? peerCacheInvalidate,
-    TResult Function(Message_UpdateExtension value)? updateExtension,
-    TResult Function(Message_Error value)? error,
-    TResult Function(Message_MoveToRecycleBin value)? moveToRecycleBin,
-    TResult Function(Message_RecoverChat value)? recoverChat,
-    TResult Function(Message_PermanentDelete value)? permanentDelete,
-    TResult Function(Message_Unschedule value)? unschedule,
-    TResult Function(Message_UpdateProfile value)? updateProfile,
-    TResult Function(Message_UpdateProfileSharing value)? updateProfileSharing,
-    TResult Function(Message_ShareProfile value)? shareProfile,
-    TResult Function(Message_NotifyAnyways value)? notifyAnyways,
-    TResult Function(Message_SetTranscriptBackground value)?
-        setTranscriptBackground,
-    required TResult orElse(),
-  }) {
-    if (stopTyping != null) {
-      return stopTyping(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class Message_StopTyping extends Message {
-  const factory Message_StopTyping() = _$Message_StopTypingImpl;
-  const Message_StopTyping._() : super._();
 }
 
 /// @nodoc
@@ -8402,11 +8103,10 @@ class _$Message_EnableSmsActivationImpl extends Message_EnableSmsActivation {
     required TResult Function(ReactMessage field0) react,
     required TResult Function() delivered,
     required TResult Function() read,
-    required TResult Function() typing,
+    required TResult Function(bool field0) typing,
     required TResult Function(UnsendMessage field0) unsend,
     required TResult Function(EditMessage field0) edit,
     required TResult Function(IconChangeMessage field0) iconChange,
-    required TResult Function() stopTyping,
     required TResult Function(bool field0) enableSmsActivation,
     required TResult Function() messageReadOnDevice,
     required TResult Function(bool field0) smsConfirmSent,
@@ -8438,11 +8138,10 @@ class _$Message_EnableSmsActivationImpl extends Message_EnableSmsActivation {
     TResult? Function(ReactMessage field0)? react,
     TResult? Function()? delivered,
     TResult? Function()? read,
-    TResult? Function()? typing,
+    TResult? Function(bool field0)? typing,
     TResult? Function(UnsendMessage field0)? unsend,
     TResult? Function(EditMessage field0)? edit,
     TResult? Function(IconChangeMessage field0)? iconChange,
-    TResult? Function()? stopTyping,
     TResult? Function(bool field0)? enableSmsActivation,
     TResult? Function()? messageReadOnDevice,
     TResult? Function(bool field0)? smsConfirmSent,
@@ -8473,11 +8172,10 @@ class _$Message_EnableSmsActivationImpl extends Message_EnableSmsActivation {
     TResult Function(ReactMessage field0)? react,
     TResult Function()? delivered,
     TResult Function()? read,
-    TResult Function()? typing,
+    TResult Function(bool field0)? typing,
     TResult Function(UnsendMessage field0)? unsend,
     TResult Function(EditMessage field0)? edit,
     TResult Function(IconChangeMessage field0)? iconChange,
-    TResult Function()? stopTyping,
     TResult Function(bool field0)? enableSmsActivation,
     TResult Function()? messageReadOnDevice,
     TResult Function(bool field0)? smsConfirmSent,
@@ -8517,7 +8215,6 @@ class _$Message_EnableSmsActivationImpl extends Message_EnableSmsActivation {
     required TResult Function(Message_Unsend value) unsend,
     required TResult Function(Message_Edit value) edit,
     required TResult Function(Message_IconChange value) iconChange,
-    required TResult Function(Message_StopTyping value) stopTyping,
     required TResult Function(Message_EnableSmsActivation value)
         enableSmsActivation,
     required TResult Function(Message_MessageReadOnDevice value)
@@ -8556,7 +8253,6 @@ class _$Message_EnableSmsActivationImpl extends Message_EnableSmsActivation {
     TResult? Function(Message_Unsend value)? unsend,
     TResult? Function(Message_Edit value)? edit,
     TResult? Function(Message_IconChange value)? iconChange,
-    TResult? Function(Message_StopTyping value)? stopTyping,
     TResult? Function(Message_EnableSmsActivation value)? enableSmsActivation,
     TResult? Function(Message_MessageReadOnDevice value)? messageReadOnDevice,
     TResult? Function(Message_SmsConfirmSent value)? smsConfirmSent,
@@ -8591,7 +8287,6 @@ class _$Message_EnableSmsActivationImpl extends Message_EnableSmsActivation {
     TResult Function(Message_Unsend value)? unsend,
     TResult Function(Message_Edit value)? edit,
     TResult Function(Message_IconChange value)? iconChange,
-    TResult Function(Message_StopTyping value)? stopTyping,
     TResult Function(Message_EnableSmsActivation value)? enableSmsActivation,
     TResult Function(Message_MessageReadOnDevice value)? messageReadOnDevice,
     TResult Function(Message_SmsConfirmSent value)? smsConfirmSent,
@@ -8683,11 +8378,10 @@ class _$Message_MessageReadOnDeviceImpl extends Message_MessageReadOnDevice {
     required TResult Function(ReactMessage field0) react,
     required TResult Function() delivered,
     required TResult Function() read,
-    required TResult Function() typing,
+    required TResult Function(bool field0) typing,
     required TResult Function(UnsendMessage field0) unsend,
     required TResult Function(EditMessage field0) edit,
     required TResult Function(IconChangeMessage field0) iconChange,
-    required TResult Function() stopTyping,
     required TResult Function(bool field0) enableSmsActivation,
     required TResult Function() messageReadOnDevice,
     required TResult Function(bool field0) smsConfirmSent,
@@ -8719,11 +8413,10 @@ class _$Message_MessageReadOnDeviceImpl extends Message_MessageReadOnDevice {
     TResult? Function(ReactMessage field0)? react,
     TResult? Function()? delivered,
     TResult? Function()? read,
-    TResult? Function()? typing,
+    TResult? Function(bool field0)? typing,
     TResult? Function(UnsendMessage field0)? unsend,
     TResult? Function(EditMessage field0)? edit,
     TResult? Function(IconChangeMessage field0)? iconChange,
-    TResult? Function()? stopTyping,
     TResult? Function(bool field0)? enableSmsActivation,
     TResult? Function()? messageReadOnDevice,
     TResult? Function(bool field0)? smsConfirmSent,
@@ -8754,11 +8447,10 @@ class _$Message_MessageReadOnDeviceImpl extends Message_MessageReadOnDevice {
     TResult Function(ReactMessage field0)? react,
     TResult Function()? delivered,
     TResult Function()? read,
-    TResult Function()? typing,
+    TResult Function(bool field0)? typing,
     TResult Function(UnsendMessage field0)? unsend,
     TResult Function(EditMessage field0)? edit,
     TResult Function(IconChangeMessage field0)? iconChange,
-    TResult Function()? stopTyping,
     TResult Function(bool field0)? enableSmsActivation,
     TResult Function()? messageReadOnDevice,
     TResult Function(bool field0)? smsConfirmSent,
@@ -8798,7 +8490,6 @@ class _$Message_MessageReadOnDeviceImpl extends Message_MessageReadOnDevice {
     required TResult Function(Message_Unsend value) unsend,
     required TResult Function(Message_Edit value) edit,
     required TResult Function(Message_IconChange value) iconChange,
-    required TResult Function(Message_StopTyping value) stopTyping,
     required TResult Function(Message_EnableSmsActivation value)
         enableSmsActivation,
     required TResult Function(Message_MessageReadOnDevice value)
@@ -8837,7 +8528,6 @@ class _$Message_MessageReadOnDeviceImpl extends Message_MessageReadOnDevice {
     TResult? Function(Message_Unsend value)? unsend,
     TResult? Function(Message_Edit value)? edit,
     TResult? Function(Message_IconChange value)? iconChange,
-    TResult? Function(Message_StopTyping value)? stopTyping,
     TResult? Function(Message_EnableSmsActivation value)? enableSmsActivation,
     TResult? Function(Message_MessageReadOnDevice value)? messageReadOnDevice,
     TResult? Function(Message_SmsConfirmSent value)? smsConfirmSent,
@@ -8872,7 +8562,6 @@ class _$Message_MessageReadOnDeviceImpl extends Message_MessageReadOnDevice {
     TResult Function(Message_Unsend value)? unsend,
     TResult Function(Message_Edit value)? edit,
     TResult Function(Message_IconChange value)? iconChange,
-    TResult Function(Message_StopTyping value)? stopTyping,
     TResult Function(Message_EnableSmsActivation value)? enableSmsActivation,
     TResult Function(Message_MessageReadOnDevice value)? messageReadOnDevice,
     TResult Function(Message_SmsConfirmSent value)? smsConfirmSent,
@@ -8983,11 +8672,10 @@ class _$Message_SmsConfirmSentImpl extends Message_SmsConfirmSent {
     required TResult Function(ReactMessage field0) react,
     required TResult Function() delivered,
     required TResult Function() read,
-    required TResult Function() typing,
+    required TResult Function(bool field0) typing,
     required TResult Function(UnsendMessage field0) unsend,
     required TResult Function(EditMessage field0) edit,
     required TResult Function(IconChangeMessage field0) iconChange,
-    required TResult Function() stopTyping,
     required TResult Function(bool field0) enableSmsActivation,
     required TResult Function() messageReadOnDevice,
     required TResult Function(bool field0) smsConfirmSent,
@@ -9019,11 +8707,10 @@ class _$Message_SmsConfirmSentImpl extends Message_SmsConfirmSent {
     TResult? Function(ReactMessage field0)? react,
     TResult? Function()? delivered,
     TResult? Function()? read,
-    TResult? Function()? typing,
+    TResult? Function(bool field0)? typing,
     TResult? Function(UnsendMessage field0)? unsend,
     TResult? Function(EditMessage field0)? edit,
     TResult? Function(IconChangeMessage field0)? iconChange,
-    TResult? Function()? stopTyping,
     TResult? Function(bool field0)? enableSmsActivation,
     TResult? Function()? messageReadOnDevice,
     TResult? Function(bool field0)? smsConfirmSent,
@@ -9054,11 +8741,10 @@ class _$Message_SmsConfirmSentImpl extends Message_SmsConfirmSent {
     TResult Function(ReactMessage field0)? react,
     TResult Function()? delivered,
     TResult Function()? read,
-    TResult Function()? typing,
+    TResult Function(bool field0)? typing,
     TResult Function(UnsendMessage field0)? unsend,
     TResult Function(EditMessage field0)? edit,
     TResult Function(IconChangeMessage field0)? iconChange,
-    TResult Function()? stopTyping,
     TResult Function(bool field0)? enableSmsActivation,
     TResult Function()? messageReadOnDevice,
     TResult Function(bool field0)? smsConfirmSent,
@@ -9098,7 +8784,6 @@ class _$Message_SmsConfirmSentImpl extends Message_SmsConfirmSent {
     required TResult Function(Message_Unsend value) unsend,
     required TResult Function(Message_Edit value) edit,
     required TResult Function(Message_IconChange value) iconChange,
-    required TResult Function(Message_StopTyping value) stopTyping,
     required TResult Function(Message_EnableSmsActivation value)
         enableSmsActivation,
     required TResult Function(Message_MessageReadOnDevice value)
@@ -9137,7 +8822,6 @@ class _$Message_SmsConfirmSentImpl extends Message_SmsConfirmSent {
     TResult? Function(Message_Unsend value)? unsend,
     TResult? Function(Message_Edit value)? edit,
     TResult? Function(Message_IconChange value)? iconChange,
-    TResult? Function(Message_StopTyping value)? stopTyping,
     TResult? Function(Message_EnableSmsActivation value)? enableSmsActivation,
     TResult? Function(Message_MessageReadOnDevice value)? messageReadOnDevice,
     TResult? Function(Message_SmsConfirmSent value)? smsConfirmSent,
@@ -9172,7 +8856,6 @@ class _$Message_SmsConfirmSentImpl extends Message_SmsConfirmSent {
     TResult Function(Message_Unsend value)? unsend,
     TResult Function(Message_Edit value)? edit,
     TResult Function(Message_IconChange value)? iconChange,
-    TResult Function(Message_StopTyping value)? stopTyping,
     TResult Function(Message_EnableSmsActivation value)? enableSmsActivation,
     TResult Function(Message_MessageReadOnDevice value)? messageReadOnDevice,
     TResult Function(Message_SmsConfirmSent value)? smsConfirmSent,
@@ -9261,11 +8944,10 @@ class _$Message_MarkUnreadImpl extends Message_MarkUnread {
     required TResult Function(ReactMessage field0) react,
     required TResult Function() delivered,
     required TResult Function() read,
-    required TResult Function() typing,
+    required TResult Function(bool field0) typing,
     required TResult Function(UnsendMessage field0) unsend,
     required TResult Function(EditMessage field0) edit,
     required TResult Function(IconChangeMessage field0) iconChange,
-    required TResult Function() stopTyping,
     required TResult Function(bool field0) enableSmsActivation,
     required TResult Function() messageReadOnDevice,
     required TResult Function(bool field0) smsConfirmSent,
@@ -9297,11 +8979,10 @@ class _$Message_MarkUnreadImpl extends Message_MarkUnread {
     TResult? Function(ReactMessage field0)? react,
     TResult? Function()? delivered,
     TResult? Function()? read,
-    TResult? Function()? typing,
+    TResult? Function(bool field0)? typing,
     TResult? Function(UnsendMessage field0)? unsend,
     TResult? Function(EditMessage field0)? edit,
     TResult? Function(IconChangeMessage field0)? iconChange,
-    TResult? Function()? stopTyping,
     TResult? Function(bool field0)? enableSmsActivation,
     TResult? Function()? messageReadOnDevice,
     TResult? Function(bool field0)? smsConfirmSent,
@@ -9332,11 +9013,10 @@ class _$Message_MarkUnreadImpl extends Message_MarkUnread {
     TResult Function(ReactMessage field0)? react,
     TResult Function()? delivered,
     TResult Function()? read,
-    TResult Function()? typing,
+    TResult Function(bool field0)? typing,
     TResult Function(UnsendMessage field0)? unsend,
     TResult Function(EditMessage field0)? edit,
     TResult Function(IconChangeMessage field0)? iconChange,
-    TResult Function()? stopTyping,
     TResult Function(bool field0)? enableSmsActivation,
     TResult Function()? messageReadOnDevice,
     TResult Function(bool field0)? smsConfirmSent,
@@ -9376,7 +9056,6 @@ class _$Message_MarkUnreadImpl extends Message_MarkUnread {
     required TResult Function(Message_Unsend value) unsend,
     required TResult Function(Message_Edit value) edit,
     required TResult Function(Message_IconChange value) iconChange,
-    required TResult Function(Message_StopTyping value) stopTyping,
     required TResult Function(Message_EnableSmsActivation value)
         enableSmsActivation,
     required TResult Function(Message_MessageReadOnDevice value)
@@ -9415,7 +9094,6 @@ class _$Message_MarkUnreadImpl extends Message_MarkUnread {
     TResult? Function(Message_Unsend value)? unsend,
     TResult? Function(Message_Edit value)? edit,
     TResult? Function(Message_IconChange value)? iconChange,
-    TResult? Function(Message_StopTyping value)? stopTyping,
     TResult? Function(Message_EnableSmsActivation value)? enableSmsActivation,
     TResult? Function(Message_MessageReadOnDevice value)? messageReadOnDevice,
     TResult? Function(Message_SmsConfirmSent value)? smsConfirmSent,
@@ -9450,7 +9128,6 @@ class _$Message_MarkUnreadImpl extends Message_MarkUnread {
     TResult Function(Message_Unsend value)? unsend,
     TResult Function(Message_Edit value)? edit,
     TResult Function(Message_IconChange value)? iconChange,
-    TResult Function(Message_StopTyping value)? stopTyping,
     TResult Function(Message_EnableSmsActivation value)? enableSmsActivation,
     TResult Function(Message_MessageReadOnDevice value)? messageReadOnDevice,
     TResult Function(Message_SmsConfirmSent value)? smsConfirmSent,
@@ -9533,11 +9210,10 @@ class _$Message_PeerCacheInvalidateImpl extends Message_PeerCacheInvalidate {
     required TResult Function(ReactMessage field0) react,
     required TResult Function() delivered,
     required TResult Function() read,
-    required TResult Function() typing,
+    required TResult Function(bool field0) typing,
     required TResult Function(UnsendMessage field0) unsend,
     required TResult Function(EditMessage field0) edit,
     required TResult Function(IconChangeMessage field0) iconChange,
-    required TResult Function() stopTyping,
     required TResult Function(bool field0) enableSmsActivation,
     required TResult Function() messageReadOnDevice,
     required TResult Function(bool field0) smsConfirmSent,
@@ -9569,11 +9245,10 @@ class _$Message_PeerCacheInvalidateImpl extends Message_PeerCacheInvalidate {
     TResult? Function(ReactMessage field0)? react,
     TResult? Function()? delivered,
     TResult? Function()? read,
-    TResult? Function()? typing,
+    TResult? Function(bool field0)? typing,
     TResult? Function(UnsendMessage field0)? unsend,
     TResult? Function(EditMessage field0)? edit,
     TResult? Function(IconChangeMessage field0)? iconChange,
-    TResult? Function()? stopTyping,
     TResult? Function(bool field0)? enableSmsActivation,
     TResult? Function()? messageReadOnDevice,
     TResult? Function(bool field0)? smsConfirmSent,
@@ -9604,11 +9279,10 @@ class _$Message_PeerCacheInvalidateImpl extends Message_PeerCacheInvalidate {
     TResult Function(ReactMessage field0)? react,
     TResult Function()? delivered,
     TResult Function()? read,
-    TResult Function()? typing,
+    TResult Function(bool field0)? typing,
     TResult Function(UnsendMessage field0)? unsend,
     TResult Function(EditMessage field0)? edit,
     TResult Function(IconChangeMessage field0)? iconChange,
-    TResult Function()? stopTyping,
     TResult Function(bool field0)? enableSmsActivation,
     TResult Function()? messageReadOnDevice,
     TResult Function(bool field0)? smsConfirmSent,
@@ -9648,7 +9322,6 @@ class _$Message_PeerCacheInvalidateImpl extends Message_PeerCacheInvalidate {
     required TResult Function(Message_Unsend value) unsend,
     required TResult Function(Message_Edit value) edit,
     required TResult Function(Message_IconChange value) iconChange,
-    required TResult Function(Message_StopTyping value) stopTyping,
     required TResult Function(Message_EnableSmsActivation value)
         enableSmsActivation,
     required TResult Function(Message_MessageReadOnDevice value)
@@ -9687,7 +9360,6 @@ class _$Message_PeerCacheInvalidateImpl extends Message_PeerCacheInvalidate {
     TResult? Function(Message_Unsend value)? unsend,
     TResult? Function(Message_Edit value)? edit,
     TResult? Function(Message_IconChange value)? iconChange,
-    TResult? Function(Message_StopTyping value)? stopTyping,
     TResult? Function(Message_EnableSmsActivation value)? enableSmsActivation,
     TResult? Function(Message_MessageReadOnDevice value)? messageReadOnDevice,
     TResult? Function(Message_SmsConfirmSent value)? smsConfirmSent,
@@ -9722,7 +9394,6 @@ class _$Message_PeerCacheInvalidateImpl extends Message_PeerCacheInvalidate {
     TResult Function(Message_Unsend value)? unsend,
     TResult Function(Message_Edit value)? edit,
     TResult Function(Message_IconChange value)? iconChange,
-    TResult Function(Message_StopTyping value)? stopTyping,
     TResult Function(Message_EnableSmsActivation value)? enableSmsActivation,
     TResult Function(Message_MessageReadOnDevice value)? messageReadOnDevice,
     TResult Function(Message_SmsConfirmSent value)? smsConfirmSent,
@@ -9833,11 +9504,10 @@ class _$Message_UpdateExtensionImpl extends Message_UpdateExtension {
     required TResult Function(ReactMessage field0) react,
     required TResult Function() delivered,
     required TResult Function() read,
-    required TResult Function() typing,
+    required TResult Function(bool field0) typing,
     required TResult Function(UnsendMessage field0) unsend,
     required TResult Function(EditMessage field0) edit,
     required TResult Function(IconChangeMessage field0) iconChange,
-    required TResult Function() stopTyping,
     required TResult Function(bool field0) enableSmsActivation,
     required TResult Function() messageReadOnDevice,
     required TResult Function(bool field0) smsConfirmSent,
@@ -9869,11 +9539,10 @@ class _$Message_UpdateExtensionImpl extends Message_UpdateExtension {
     TResult? Function(ReactMessage field0)? react,
     TResult? Function()? delivered,
     TResult? Function()? read,
-    TResult? Function()? typing,
+    TResult? Function(bool field0)? typing,
     TResult? Function(UnsendMessage field0)? unsend,
     TResult? Function(EditMessage field0)? edit,
     TResult? Function(IconChangeMessage field0)? iconChange,
-    TResult? Function()? stopTyping,
     TResult? Function(bool field0)? enableSmsActivation,
     TResult? Function()? messageReadOnDevice,
     TResult? Function(bool field0)? smsConfirmSent,
@@ -9904,11 +9573,10 @@ class _$Message_UpdateExtensionImpl extends Message_UpdateExtension {
     TResult Function(ReactMessage field0)? react,
     TResult Function()? delivered,
     TResult Function()? read,
-    TResult Function()? typing,
+    TResult Function(bool field0)? typing,
     TResult Function(UnsendMessage field0)? unsend,
     TResult Function(EditMessage field0)? edit,
     TResult Function(IconChangeMessage field0)? iconChange,
-    TResult Function()? stopTyping,
     TResult Function(bool field0)? enableSmsActivation,
     TResult Function()? messageReadOnDevice,
     TResult Function(bool field0)? smsConfirmSent,
@@ -9948,7 +9616,6 @@ class _$Message_UpdateExtensionImpl extends Message_UpdateExtension {
     required TResult Function(Message_Unsend value) unsend,
     required TResult Function(Message_Edit value) edit,
     required TResult Function(Message_IconChange value) iconChange,
-    required TResult Function(Message_StopTyping value) stopTyping,
     required TResult Function(Message_EnableSmsActivation value)
         enableSmsActivation,
     required TResult Function(Message_MessageReadOnDevice value)
@@ -9987,7 +9654,6 @@ class _$Message_UpdateExtensionImpl extends Message_UpdateExtension {
     TResult? Function(Message_Unsend value)? unsend,
     TResult? Function(Message_Edit value)? edit,
     TResult? Function(Message_IconChange value)? iconChange,
-    TResult? Function(Message_StopTyping value)? stopTyping,
     TResult? Function(Message_EnableSmsActivation value)? enableSmsActivation,
     TResult? Function(Message_MessageReadOnDevice value)? messageReadOnDevice,
     TResult? Function(Message_SmsConfirmSent value)? smsConfirmSent,
@@ -10022,7 +9688,6 @@ class _$Message_UpdateExtensionImpl extends Message_UpdateExtension {
     TResult Function(Message_Unsend value)? unsend,
     TResult Function(Message_Edit value)? edit,
     TResult Function(Message_IconChange value)? iconChange,
-    TResult Function(Message_StopTyping value)? stopTyping,
     TResult Function(Message_EnableSmsActivation value)? enableSmsActivation,
     TResult Function(Message_MessageReadOnDevice value)? messageReadOnDevice,
     TResult Function(Message_SmsConfirmSent value)? smsConfirmSent,
@@ -10138,11 +9803,10 @@ class _$Message_ErrorImpl extends Message_Error {
     required TResult Function(ReactMessage field0) react,
     required TResult Function() delivered,
     required TResult Function() read,
-    required TResult Function() typing,
+    required TResult Function(bool field0) typing,
     required TResult Function(UnsendMessage field0) unsend,
     required TResult Function(EditMessage field0) edit,
     required TResult Function(IconChangeMessage field0) iconChange,
-    required TResult Function() stopTyping,
     required TResult Function(bool field0) enableSmsActivation,
     required TResult Function() messageReadOnDevice,
     required TResult Function(bool field0) smsConfirmSent,
@@ -10174,11 +9838,10 @@ class _$Message_ErrorImpl extends Message_Error {
     TResult? Function(ReactMessage field0)? react,
     TResult? Function()? delivered,
     TResult? Function()? read,
-    TResult? Function()? typing,
+    TResult? Function(bool field0)? typing,
     TResult? Function(UnsendMessage field0)? unsend,
     TResult? Function(EditMessage field0)? edit,
     TResult? Function(IconChangeMessage field0)? iconChange,
-    TResult? Function()? stopTyping,
     TResult? Function(bool field0)? enableSmsActivation,
     TResult? Function()? messageReadOnDevice,
     TResult? Function(bool field0)? smsConfirmSent,
@@ -10209,11 +9872,10 @@ class _$Message_ErrorImpl extends Message_Error {
     TResult Function(ReactMessage field0)? react,
     TResult Function()? delivered,
     TResult Function()? read,
-    TResult Function()? typing,
+    TResult Function(bool field0)? typing,
     TResult Function(UnsendMessage field0)? unsend,
     TResult Function(EditMessage field0)? edit,
     TResult Function(IconChangeMessage field0)? iconChange,
-    TResult Function()? stopTyping,
     TResult Function(bool field0)? enableSmsActivation,
     TResult Function()? messageReadOnDevice,
     TResult Function(bool field0)? smsConfirmSent,
@@ -10253,7 +9915,6 @@ class _$Message_ErrorImpl extends Message_Error {
     required TResult Function(Message_Unsend value) unsend,
     required TResult Function(Message_Edit value) edit,
     required TResult Function(Message_IconChange value) iconChange,
-    required TResult Function(Message_StopTyping value) stopTyping,
     required TResult Function(Message_EnableSmsActivation value)
         enableSmsActivation,
     required TResult Function(Message_MessageReadOnDevice value)
@@ -10292,7 +9953,6 @@ class _$Message_ErrorImpl extends Message_Error {
     TResult? Function(Message_Unsend value)? unsend,
     TResult? Function(Message_Edit value)? edit,
     TResult? Function(Message_IconChange value)? iconChange,
-    TResult? Function(Message_StopTyping value)? stopTyping,
     TResult? Function(Message_EnableSmsActivation value)? enableSmsActivation,
     TResult? Function(Message_MessageReadOnDevice value)? messageReadOnDevice,
     TResult? Function(Message_SmsConfirmSent value)? smsConfirmSent,
@@ -10327,7 +9987,6 @@ class _$Message_ErrorImpl extends Message_Error {
     TResult Function(Message_Unsend value)? unsend,
     TResult Function(Message_Edit value)? edit,
     TResult Function(Message_IconChange value)? iconChange,
-    TResult Function(Message_StopTyping value)? stopTyping,
     TResult Function(Message_EnableSmsActivation value)? enableSmsActivation,
     TResult Function(Message_MessageReadOnDevice value)? messageReadOnDevice,
     TResult Function(Message_SmsConfirmSent value)? smsConfirmSent,
@@ -10445,11 +10104,10 @@ class _$Message_MoveToRecycleBinImpl extends Message_MoveToRecycleBin {
     required TResult Function(ReactMessage field0) react,
     required TResult Function() delivered,
     required TResult Function() read,
-    required TResult Function() typing,
+    required TResult Function(bool field0) typing,
     required TResult Function(UnsendMessage field0) unsend,
     required TResult Function(EditMessage field0) edit,
     required TResult Function(IconChangeMessage field0) iconChange,
-    required TResult Function() stopTyping,
     required TResult Function(bool field0) enableSmsActivation,
     required TResult Function() messageReadOnDevice,
     required TResult Function(bool field0) smsConfirmSent,
@@ -10481,11 +10139,10 @@ class _$Message_MoveToRecycleBinImpl extends Message_MoveToRecycleBin {
     TResult? Function(ReactMessage field0)? react,
     TResult? Function()? delivered,
     TResult? Function()? read,
-    TResult? Function()? typing,
+    TResult? Function(bool field0)? typing,
     TResult? Function(UnsendMessage field0)? unsend,
     TResult? Function(EditMessage field0)? edit,
     TResult? Function(IconChangeMessage field0)? iconChange,
-    TResult? Function()? stopTyping,
     TResult? Function(bool field0)? enableSmsActivation,
     TResult? Function()? messageReadOnDevice,
     TResult? Function(bool field0)? smsConfirmSent,
@@ -10516,11 +10173,10 @@ class _$Message_MoveToRecycleBinImpl extends Message_MoveToRecycleBin {
     TResult Function(ReactMessage field0)? react,
     TResult Function()? delivered,
     TResult Function()? read,
-    TResult Function()? typing,
+    TResult Function(bool field0)? typing,
     TResult Function(UnsendMessage field0)? unsend,
     TResult Function(EditMessage field0)? edit,
     TResult Function(IconChangeMessage field0)? iconChange,
-    TResult Function()? stopTyping,
     TResult Function(bool field0)? enableSmsActivation,
     TResult Function()? messageReadOnDevice,
     TResult Function(bool field0)? smsConfirmSent,
@@ -10560,7 +10216,6 @@ class _$Message_MoveToRecycleBinImpl extends Message_MoveToRecycleBin {
     required TResult Function(Message_Unsend value) unsend,
     required TResult Function(Message_Edit value) edit,
     required TResult Function(Message_IconChange value) iconChange,
-    required TResult Function(Message_StopTyping value) stopTyping,
     required TResult Function(Message_EnableSmsActivation value)
         enableSmsActivation,
     required TResult Function(Message_MessageReadOnDevice value)
@@ -10599,7 +10254,6 @@ class _$Message_MoveToRecycleBinImpl extends Message_MoveToRecycleBin {
     TResult? Function(Message_Unsend value)? unsend,
     TResult? Function(Message_Edit value)? edit,
     TResult? Function(Message_IconChange value)? iconChange,
-    TResult? Function(Message_StopTyping value)? stopTyping,
     TResult? Function(Message_EnableSmsActivation value)? enableSmsActivation,
     TResult? Function(Message_MessageReadOnDevice value)? messageReadOnDevice,
     TResult? Function(Message_SmsConfirmSent value)? smsConfirmSent,
@@ -10634,7 +10288,6 @@ class _$Message_MoveToRecycleBinImpl extends Message_MoveToRecycleBin {
     TResult Function(Message_Unsend value)? unsend,
     TResult Function(Message_Edit value)? edit,
     TResult Function(Message_IconChange value)? iconChange,
-    TResult Function(Message_StopTyping value)? stopTyping,
     TResult Function(Message_EnableSmsActivation value)? enableSmsActivation,
     TResult Function(Message_MessageReadOnDevice value)? messageReadOnDevice,
     TResult Function(Message_SmsConfirmSent value)? smsConfirmSent,
@@ -10751,11 +10404,10 @@ class _$Message_RecoverChatImpl extends Message_RecoverChat {
     required TResult Function(ReactMessage field0) react,
     required TResult Function() delivered,
     required TResult Function() read,
-    required TResult Function() typing,
+    required TResult Function(bool field0) typing,
     required TResult Function(UnsendMessage field0) unsend,
     required TResult Function(EditMessage field0) edit,
     required TResult Function(IconChangeMessage field0) iconChange,
-    required TResult Function() stopTyping,
     required TResult Function(bool field0) enableSmsActivation,
     required TResult Function() messageReadOnDevice,
     required TResult Function(bool field0) smsConfirmSent,
@@ -10787,11 +10439,10 @@ class _$Message_RecoverChatImpl extends Message_RecoverChat {
     TResult? Function(ReactMessage field0)? react,
     TResult? Function()? delivered,
     TResult? Function()? read,
-    TResult? Function()? typing,
+    TResult? Function(bool field0)? typing,
     TResult? Function(UnsendMessage field0)? unsend,
     TResult? Function(EditMessage field0)? edit,
     TResult? Function(IconChangeMessage field0)? iconChange,
-    TResult? Function()? stopTyping,
     TResult? Function(bool field0)? enableSmsActivation,
     TResult? Function()? messageReadOnDevice,
     TResult? Function(bool field0)? smsConfirmSent,
@@ -10822,11 +10473,10 @@ class _$Message_RecoverChatImpl extends Message_RecoverChat {
     TResult Function(ReactMessage field0)? react,
     TResult Function()? delivered,
     TResult Function()? read,
-    TResult Function()? typing,
+    TResult Function(bool field0)? typing,
     TResult Function(UnsendMessage field0)? unsend,
     TResult Function(EditMessage field0)? edit,
     TResult Function(IconChangeMessage field0)? iconChange,
-    TResult Function()? stopTyping,
     TResult Function(bool field0)? enableSmsActivation,
     TResult Function()? messageReadOnDevice,
     TResult Function(bool field0)? smsConfirmSent,
@@ -10866,7 +10516,6 @@ class _$Message_RecoverChatImpl extends Message_RecoverChat {
     required TResult Function(Message_Unsend value) unsend,
     required TResult Function(Message_Edit value) edit,
     required TResult Function(Message_IconChange value) iconChange,
-    required TResult Function(Message_StopTyping value) stopTyping,
     required TResult Function(Message_EnableSmsActivation value)
         enableSmsActivation,
     required TResult Function(Message_MessageReadOnDevice value)
@@ -10905,7 +10554,6 @@ class _$Message_RecoverChatImpl extends Message_RecoverChat {
     TResult? Function(Message_Unsend value)? unsend,
     TResult? Function(Message_Edit value)? edit,
     TResult? Function(Message_IconChange value)? iconChange,
-    TResult? Function(Message_StopTyping value)? stopTyping,
     TResult? Function(Message_EnableSmsActivation value)? enableSmsActivation,
     TResult? Function(Message_MessageReadOnDevice value)? messageReadOnDevice,
     TResult? Function(Message_SmsConfirmSent value)? smsConfirmSent,
@@ -10940,7 +10588,6 @@ class _$Message_RecoverChatImpl extends Message_RecoverChat {
     TResult Function(Message_Unsend value)? unsend,
     TResult Function(Message_Edit value)? edit,
     TResult Function(Message_IconChange value)? iconChange,
-    TResult Function(Message_StopTyping value)? stopTyping,
     TResult Function(Message_EnableSmsActivation value)? enableSmsActivation,
     TResult Function(Message_MessageReadOnDevice value)? messageReadOnDevice,
     TResult Function(Message_SmsConfirmSent value)? smsConfirmSent,
@@ -11059,11 +10706,10 @@ class _$Message_PermanentDeleteImpl extends Message_PermanentDelete {
     required TResult Function(ReactMessage field0) react,
     required TResult Function() delivered,
     required TResult Function() read,
-    required TResult Function() typing,
+    required TResult Function(bool field0) typing,
     required TResult Function(UnsendMessage field0) unsend,
     required TResult Function(EditMessage field0) edit,
     required TResult Function(IconChangeMessage field0) iconChange,
-    required TResult Function() stopTyping,
     required TResult Function(bool field0) enableSmsActivation,
     required TResult Function() messageReadOnDevice,
     required TResult Function(bool field0) smsConfirmSent,
@@ -11095,11 +10741,10 @@ class _$Message_PermanentDeleteImpl extends Message_PermanentDelete {
     TResult? Function(ReactMessage field0)? react,
     TResult? Function()? delivered,
     TResult? Function()? read,
-    TResult? Function()? typing,
+    TResult? Function(bool field0)? typing,
     TResult? Function(UnsendMessage field0)? unsend,
     TResult? Function(EditMessage field0)? edit,
     TResult? Function(IconChangeMessage field0)? iconChange,
-    TResult? Function()? stopTyping,
     TResult? Function(bool field0)? enableSmsActivation,
     TResult? Function()? messageReadOnDevice,
     TResult? Function(bool field0)? smsConfirmSent,
@@ -11130,11 +10775,10 @@ class _$Message_PermanentDeleteImpl extends Message_PermanentDelete {
     TResult Function(ReactMessage field0)? react,
     TResult Function()? delivered,
     TResult Function()? read,
-    TResult Function()? typing,
+    TResult Function(bool field0)? typing,
     TResult Function(UnsendMessage field0)? unsend,
     TResult Function(EditMessage field0)? edit,
     TResult Function(IconChangeMessage field0)? iconChange,
-    TResult Function()? stopTyping,
     TResult Function(bool field0)? enableSmsActivation,
     TResult Function()? messageReadOnDevice,
     TResult Function(bool field0)? smsConfirmSent,
@@ -11174,7 +10818,6 @@ class _$Message_PermanentDeleteImpl extends Message_PermanentDelete {
     required TResult Function(Message_Unsend value) unsend,
     required TResult Function(Message_Edit value) edit,
     required TResult Function(Message_IconChange value) iconChange,
-    required TResult Function(Message_StopTyping value) stopTyping,
     required TResult Function(Message_EnableSmsActivation value)
         enableSmsActivation,
     required TResult Function(Message_MessageReadOnDevice value)
@@ -11213,7 +10856,6 @@ class _$Message_PermanentDeleteImpl extends Message_PermanentDelete {
     TResult? Function(Message_Unsend value)? unsend,
     TResult? Function(Message_Edit value)? edit,
     TResult? Function(Message_IconChange value)? iconChange,
-    TResult? Function(Message_StopTyping value)? stopTyping,
     TResult? Function(Message_EnableSmsActivation value)? enableSmsActivation,
     TResult? Function(Message_MessageReadOnDevice value)? messageReadOnDevice,
     TResult? Function(Message_SmsConfirmSent value)? smsConfirmSent,
@@ -11248,7 +10890,6 @@ class _$Message_PermanentDeleteImpl extends Message_PermanentDelete {
     TResult Function(Message_Unsend value)? unsend,
     TResult Function(Message_Edit value)? edit,
     TResult Function(Message_IconChange value)? iconChange,
-    TResult Function(Message_StopTyping value)? stopTyping,
     TResult Function(Message_EnableSmsActivation value)? enableSmsActivation,
     TResult Function(Message_MessageReadOnDevice value)? messageReadOnDevice,
     TResult Function(Message_SmsConfirmSent value)? smsConfirmSent,
@@ -11337,11 +10978,10 @@ class _$Message_UnscheduleImpl extends Message_Unschedule {
     required TResult Function(ReactMessage field0) react,
     required TResult Function() delivered,
     required TResult Function() read,
-    required TResult Function() typing,
+    required TResult Function(bool field0) typing,
     required TResult Function(UnsendMessage field0) unsend,
     required TResult Function(EditMessage field0) edit,
     required TResult Function(IconChangeMessage field0) iconChange,
-    required TResult Function() stopTyping,
     required TResult Function(bool field0) enableSmsActivation,
     required TResult Function() messageReadOnDevice,
     required TResult Function(bool field0) smsConfirmSent,
@@ -11373,11 +11013,10 @@ class _$Message_UnscheduleImpl extends Message_Unschedule {
     TResult? Function(ReactMessage field0)? react,
     TResult? Function()? delivered,
     TResult? Function()? read,
-    TResult? Function()? typing,
+    TResult? Function(bool field0)? typing,
     TResult? Function(UnsendMessage field0)? unsend,
     TResult? Function(EditMessage field0)? edit,
     TResult? Function(IconChangeMessage field0)? iconChange,
-    TResult? Function()? stopTyping,
     TResult? Function(bool field0)? enableSmsActivation,
     TResult? Function()? messageReadOnDevice,
     TResult? Function(bool field0)? smsConfirmSent,
@@ -11408,11 +11047,10 @@ class _$Message_UnscheduleImpl extends Message_Unschedule {
     TResult Function(ReactMessage field0)? react,
     TResult Function()? delivered,
     TResult Function()? read,
-    TResult Function()? typing,
+    TResult Function(bool field0)? typing,
     TResult Function(UnsendMessage field0)? unsend,
     TResult Function(EditMessage field0)? edit,
     TResult Function(IconChangeMessage field0)? iconChange,
-    TResult Function()? stopTyping,
     TResult Function(bool field0)? enableSmsActivation,
     TResult Function()? messageReadOnDevice,
     TResult Function(bool field0)? smsConfirmSent,
@@ -11452,7 +11090,6 @@ class _$Message_UnscheduleImpl extends Message_Unschedule {
     required TResult Function(Message_Unsend value) unsend,
     required TResult Function(Message_Edit value) edit,
     required TResult Function(Message_IconChange value) iconChange,
-    required TResult Function(Message_StopTyping value) stopTyping,
     required TResult Function(Message_EnableSmsActivation value)
         enableSmsActivation,
     required TResult Function(Message_MessageReadOnDevice value)
@@ -11491,7 +11128,6 @@ class _$Message_UnscheduleImpl extends Message_Unschedule {
     TResult? Function(Message_Unsend value)? unsend,
     TResult? Function(Message_Edit value)? edit,
     TResult? Function(Message_IconChange value)? iconChange,
-    TResult? Function(Message_StopTyping value)? stopTyping,
     TResult? Function(Message_EnableSmsActivation value)? enableSmsActivation,
     TResult? Function(Message_MessageReadOnDevice value)? messageReadOnDevice,
     TResult? Function(Message_SmsConfirmSent value)? smsConfirmSent,
@@ -11526,7 +11162,6 @@ class _$Message_UnscheduleImpl extends Message_Unschedule {
     TResult Function(Message_Unsend value)? unsend,
     TResult Function(Message_Edit value)? edit,
     TResult Function(Message_IconChange value)? iconChange,
-    TResult Function(Message_StopTyping value)? stopTyping,
     TResult Function(Message_EnableSmsActivation value)? enableSmsActivation,
     TResult Function(Message_MessageReadOnDevice value)? messageReadOnDevice,
     TResult Function(Message_SmsConfirmSent value)? smsConfirmSent,
@@ -11635,11 +11270,10 @@ class _$Message_UpdateProfileImpl extends Message_UpdateProfile {
     required TResult Function(ReactMessage field0) react,
     required TResult Function() delivered,
     required TResult Function() read,
-    required TResult Function() typing,
+    required TResult Function(bool field0) typing,
     required TResult Function(UnsendMessage field0) unsend,
     required TResult Function(EditMessage field0) edit,
     required TResult Function(IconChangeMessage field0) iconChange,
-    required TResult Function() stopTyping,
     required TResult Function(bool field0) enableSmsActivation,
     required TResult Function() messageReadOnDevice,
     required TResult Function(bool field0) smsConfirmSent,
@@ -11671,11 +11305,10 @@ class _$Message_UpdateProfileImpl extends Message_UpdateProfile {
     TResult? Function(ReactMessage field0)? react,
     TResult? Function()? delivered,
     TResult? Function()? read,
-    TResult? Function()? typing,
+    TResult? Function(bool field0)? typing,
     TResult? Function(UnsendMessage field0)? unsend,
     TResult? Function(EditMessage field0)? edit,
     TResult? Function(IconChangeMessage field0)? iconChange,
-    TResult? Function()? stopTyping,
     TResult? Function(bool field0)? enableSmsActivation,
     TResult? Function()? messageReadOnDevice,
     TResult? Function(bool field0)? smsConfirmSent,
@@ -11706,11 +11339,10 @@ class _$Message_UpdateProfileImpl extends Message_UpdateProfile {
     TResult Function(ReactMessage field0)? react,
     TResult Function()? delivered,
     TResult Function()? read,
-    TResult Function()? typing,
+    TResult Function(bool field0)? typing,
     TResult Function(UnsendMessage field0)? unsend,
     TResult Function(EditMessage field0)? edit,
     TResult Function(IconChangeMessage field0)? iconChange,
-    TResult Function()? stopTyping,
     TResult Function(bool field0)? enableSmsActivation,
     TResult Function()? messageReadOnDevice,
     TResult Function(bool field0)? smsConfirmSent,
@@ -11750,7 +11382,6 @@ class _$Message_UpdateProfileImpl extends Message_UpdateProfile {
     required TResult Function(Message_Unsend value) unsend,
     required TResult Function(Message_Edit value) edit,
     required TResult Function(Message_IconChange value) iconChange,
-    required TResult Function(Message_StopTyping value) stopTyping,
     required TResult Function(Message_EnableSmsActivation value)
         enableSmsActivation,
     required TResult Function(Message_MessageReadOnDevice value)
@@ -11789,7 +11420,6 @@ class _$Message_UpdateProfileImpl extends Message_UpdateProfile {
     TResult? Function(Message_Unsend value)? unsend,
     TResult? Function(Message_Edit value)? edit,
     TResult? Function(Message_IconChange value)? iconChange,
-    TResult? Function(Message_StopTyping value)? stopTyping,
     TResult? Function(Message_EnableSmsActivation value)? enableSmsActivation,
     TResult? Function(Message_MessageReadOnDevice value)? messageReadOnDevice,
     TResult? Function(Message_SmsConfirmSent value)? smsConfirmSent,
@@ -11824,7 +11454,6 @@ class _$Message_UpdateProfileImpl extends Message_UpdateProfile {
     TResult Function(Message_Unsend value)? unsend,
     TResult Function(Message_Edit value)? edit,
     TResult Function(Message_IconChange value)? iconChange,
-    TResult Function(Message_StopTyping value)? stopTyping,
     TResult Function(Message_EnableSmsActivation value)? enableSmsActivation,
     TResult Function(Message_MessageReadOnDevice value)? messageReadOnDevice,
     TResult Function(Message_SmsConfirmSent value)? smsConfirmSent,
@@ -11944,11 +11573,10 @@ class _$Message_UpdateProfileSharingImpl extends Message_UpdateProfileSharing {
     required TResult Function(ReactMessage field0) react,
     required TResult Function() delivered,
     required TResult Function() read,
-    required TResult Function() typing,
+    required TResult Function(bool field0) typing,
     required TResult Function(UnsendMessage field0) unsend,
     required TResult Function(EditMessage field0) edit,
     required TResult Function(IconChangeMessage field0) iconChange,
-    required TResult Function() stopTyping,
     required TResult Function(bool field0) enableSmsActivation,
     required TResult Function() messageReadOnDevice,
     required TResult Function(bool field0) smsConfirmSent,
@@ -11980,11 +11608,10 @@ class _$Message_UpdateProfileSharingImpl extends Message_UpdateProfileSharing {
     TResult? Function(ReactMessage field0)? react,
     TResult? Function()? delivered,
     TResult? Function()? read,
-    TResult? Function()? typing,
+    TResult? Function(bool field0)? typing,
     TResult? Function(UnsendMessage field0)? unsend,
     TResult? Function(EditMessage field0)? edit,
     TResult? Function(IconChangeMessage field0)? iconChange,
-    TResult? Function()? stopTyping,
     TResult? Function(bool field0)? enableSmsActivation,
     TResult? Function()? messageReadOnDevice,
     TResult? Function(bool field0)? smsConfirmSent,
@@ -12015,11 +11642,10 @@ class _$Message_UpdateProfileSharingImpl extends Message_UpdateProfileSharing {
     TResult Function(ReactMessage field0)? react,
     TResult Function()? delivered,
     TResult Function()? read,
-    TResult Function()? typing,
+    TResult Function(bool field0)? typing,
     TResult Function(UnsendMessage field0)? unsend,
     TResult Function(EditMessage field0)? edit,
     TResult Function(IconChangeMessage field0)? iconChange,
-    TResult Function()? stopTyping,
     TResult Function(bool field0)? enableSmsActivation,
     TResult Function()? messageReadOnDevice,
     TResult Function(bool field0)? smsConfirmSent,
@@ -12059,7 +11685,6 @@ class _$Message_UpdateProfileSharingImpl extends Message_UpdateProfileSharing {
     required TResult Function(Message_Unsend value) unsend,
     required TResult Function(Message_Edit value) edit,
     required TResult Function(Message_IconChange value) iconChange,
-    required TResult Function(Message_StopTyping value) stopTyping,
     required TResult Function(Message_EnableSmsActivation value)
         enableSmsActivation,
     required TResult Function(Message_MessageReadOnDevice value)
@@ -12098,7 +11723,6 @@ class _$Message_UpdateProfileSharingImpl extends Message_UpdateProfileSharing {
     TResult? Function(Message_Unsend value)? unsend,
     TResult? Function(Message_Edit value)? edit,
     TResult? Function(Message_IconChange value)? iconChange,
-    TResult? Function(Message_StopTyping value)? stopTyping,
     TResult? Function(Message_EnableSmsActivation value)? enableSmsActivation,
     TResult? Function(Message_MessageReadOnDevice value)? messageReadOnDevice,
     TResult? Function(Message_SmsConfirmSent value)? smsConfirmSent,
@@ -12133,7 +11757,6 @@ class _$Message_UpdateProfileSharingImpl extends Message_UpdateProfileSharing {
     TResult Function(Message_Unsend value)? unsend,
     TResult Function(Message_Edit value)? edit,
     TResult Function(Message_IconChange value)? iconChange,
-    TResult Function(Message_StopTyping value)? stopTyping,
     TResult Function(Message_EnableSmsActivation value)? enableSmsActivation,
     TResult Function(Message_MessageReadOnDevice value)? messageReadOnDevice,
     TResult Function(Message_SmsConfirmSent value)? smsConfirmSent,
@@ -12253,11 +11876,10 @@ class _$Message_ShareProfileImpl extends Message_ShareProfile {
     required TResult Function(ReactMessage field0) react,
     required TResult Function() delivered,
     required TResult Function() read,
-    required TResult Function() typing,
+    required TResult Function(bool field0) typing,
     required TResult Function(UnsendMessage field0) unsend,
     required TResult Function(EditMessage field0) edit,
     required TResult Function(IconChangeMessage field0) iconChange,
-    required TResult Function() stopTyping,
     required TResult Function(bool field0) enableSmsActivation,
     required TResult Function() messageReadOnDevice,
     required TResult Function(bool field0) smsConfirmSent,
@@ -12289,11 +11911,10 @@ class _$Message_ShareProfileImpl extends Message_ShareProfile {
     TResult? Function(ReactMessage field0)? react,
     TResult? Function()? delivered,
     TResult? Function()? read,
-    TResult? Function()? typing,
+    TResult? Function(bool field0)? typing,
     TResult? Function(UnsendMessage field0)? unsend,
     TResult? Function(EditMessage field0)? edit,
     TResult? Function(IconChangeMessage field0)? iconChange,
-    TResult? Function()? stopTyping,
     TResult? Function(bool field0)? enableSmsActivation,
     TResult? Function()? messageReadOnDevice,
     TResult? Function(bool field0)? smsConfirmSent,
@@ -12324,11 +11945,10 @@ class _$Message_ShareProfileImpl extends Message_ShareProfile {
     TResult Function(ReactMessage field0)? react,
     TResult Function()? delivered,
     TResult Function()? read,
-    TResult Function()? typing,
+    TResult Function(bool field0)? typing,
     TResult Function(UnsendMessage field0)? unsend,
     TResult Function(EditMessage field0)? edit,
     TResult Function(IconChangeMessage field0)? iconChange,
-    TResult Function()? stopTyping,
     TResult Function(bool field0)? enableSmsActivation,
     TResult Function()? messageReadOnDevice,
     TResult Function(bool field0)? smsConfirmSent,
@@ -12368,7 +11988,6 @@ class _$Message_ShareProfileImpl extends Message_ShareProfile {
     required TResult Function(Message_Unsend value) unsend,
     required TResult Function(Message_Edit value) edit,
     required TResult Function(Message_IconChange value) iconChange,
-    required TResult Function(Message_StopTyping value) stopTyping,
     required TResult Function(Message_EnableSmsActivation value)
         enableSmsActivation,
     required TResult Function(Message_MessageReadOnDevice value)
@@ -12407,7 +12026,6 @@ class _$Message_ShareProfileImpl extends Message_ShareProfile {
     TResult? Function(Message_Unsend value)? unsend,
     TResult? Function(Message_Edit value)? edit,
     TResult? Function(Message_IconChange value)? iconChange,
-    TResult? Function(Message_StopTyping value)? stopTyping,
     TResult? Function(Message_EnableSmsActivation value)? enableSmsActivation,
     TResult? Function(Message_MessageReadOnDevice value)? messageReadOnDevice,
     TResult? Function(Message_SmsConfirmSent value)? smsConfirmSent,
@@ -12442,7 +12060,6 @@ class _$Message_ShareProfileImpl extends Message_ShareProfile {
     TResult Function(Message_Unsend value)? unsend,
     TResult Function(Message_Edit value)? edit,
     TResult Function(Message_IconChange value)? iconChange,
-    TResult Function(Message_StopTyping value)? stopTyping,
     TResult Function(Message_EnableSmsActivation value)? enableSmsActivation,
     TResult Function(Message_MessageReadOnDevice value)? messageReadOnDevice,
     TResult Function(Message_SmsConfirmSent value)? smsConfirmSent,
@@ -12533,11 +12150,10 @@ class _$Message_NotifyAnywaysImpl extends Message_NotifyAnyways {
     required TResult Function(ReactMessage field0) react,
     required TResult Function() delivered,
     required TResult Function() read,
-    required TResult Function() typing,
+    required TResult Function(bool field0) typing,
     required TResult Function(UnsendMessage field0) unsend,
     required TResult Function(EditMessage field0) edit,
     required TResult Function(IconChangeMessage field0) iconChange,
-    required TResult Function() stopTyping,
     required TResult Function(bool field0) enableSmsActivation,
     required TResult Function() messageReadOnDevice,
     required TResult Function(bool field0) smsConfirmSent,
@@ -12569,11 +12185,10 @@ class _$Message_NotifyAnywaysImpl extends Message_NotifyAnyways {
     TResult? Function(ReactMessage field0)? react,
     TResult? Function()? delivered,
     TResult? Function()? read,
-    TResult? Function()? typing,
+    TResult? Function(bool field0)? typing,
     TResult? Function(UnsendMessage field0)? unsend,
     TResult? Function(EditMessage field0)? edit,
     TResult? Function(IconChangeMessage field0)? iconChange,
-    TResult? Function()? stopTyping,
     TResult? Function(bool field0)? enableSmsActivation,
     TResult? Function()? messageReadOnDevice,
     TResult? Function(bool field0)? smsConfirmSent,
@@ -12604,11 +12219,10 @@ class _$Message_NotifyAnywaysImpl extends Message_NotifyAnyways {
     TResult Function(ReactMessage field0)? react,
     TResult Function()? delivered,
     TResult Function()? read,
-    TResult Function()? typing,
+    TResult Function(bool field0)? typing,
     TResult Function(UnsendMessage field0)? unsend,
     TResult Function(EditMessage field0)? edit,
     TResult Function(IconChangeMessage field0)? iconChange,
-    TResult Function()? stopTyping,
     TResult Function(bool field0)? enableSmsActivation,
     TResult Function()? messageReadOnDevice,
     TResult Function(bool field0)? smsConfirmSent,
@@ -12648,7 +12262,6 @@ class _$Message_NotifyAnywaysImpl extends Message_NotifyAnyways {
     required TResult Function(Message_Unsend value) unsend,
     required TResult Function(Message_Edit value) edit,
     required TResult Function(Message_IconChange value) iconChange,
-    required TResult Function(Message_StopTyping value) stopTyping,
     required TResult Function(Message_EnableSmsActivation value)
         enableSmsActivation,
     required TResult Function(Message_MessageReadOnDevice value)
@@ -12687,7 +12300,6 @@ class _$Message_NotifyAnywaysImpl extends Message_NotifyAnyways {
     TResult? Function(Message_Unsend value)? unsend,
     TResult? Function(Message_Edit value)? edit,
     TResult? Function(Message_IconChange value)? iconChange,
-    TResult? Function(Message_StopTyping value)? stopTyping,
     TResult? Function(Message_EnableSmsActivation value)? enableSmsActivation,
     TResult? Function(Message_MessageReadOnDevice value)? messageReadOnDevice,
     TResult? Function(Message_SmsConfirmSent value)? smsConfirmSent,
@@ -12722,7 +12334,6 @@ class _$Message_NotifyAnywaysImpl extends Message_NotifyAnyways {
     TResult Function(Message_Unsend value)? unsend,
     TResult Function(Message_Edit value)? edit,
     TResult Function(Message_IconChange value)? iconChange,
-    TResult Function(Message_StopTyping value)? stopTyping,
     TResult Function(Message_EnableSmsActivation value)? enableSmsActivation,
     TResult Function(Message_MessageReadOnDevice value)? messageReadOnDevice,
     TResult Function(Message_SmsConfirmSent value)? smsConfirmSent,
@@ -12847,11 +12458,10 @@ class _$Message_SetTranscriptBackgroundImpl
     required TResult Function(ReactMessage field0) react,
     required TResult Function() delivered,
     required TResult Function() read,
-    required TResult Function() typing,
+    required TResult Function(bool field0) typing,
     required TResult Function(UnsendMessage field0) unsend,
     required TResult Function(EditMessage field0) edit,
     required TResult Function(IconChangeMessage field0) iconChange,
-    required TResult Function() stopTyping,
     required TResult Function(bool field0) enableSmsActivation,
     required TResult Function() messageReadOnDevice,
     required TResult Function(bool field0) smsConfirmSent,
@@ -12883,11 +12493,10 @@ class _$Message_SetTranscriptBackgroundImpl
     TResult? Function(ReactMessage field0)? react,
     TResult? Function()? delivered,
     TResult? Function()? read,
-    TResult? Function()? typing,
+    TResult? Function(bool field0)? typing,
     TResult? Function(UnsendMessage field0)? unsend,
     TResult? Function(EditMessage field0)? edit,
     TResult? Function(IconChangeMessage field0)? iconChange,
-    TResult? Function()? stopTyping,
     TResult? Function(bool field0)? enableSmsActivation,
     TResult? Function()? messageReadOnDevice,
     TResult? Function(bool field0)? smsConfirmSent,
@@ -12918,11 +12527,10 @@ class _$Message_SetTranscriptBackgroundImpl
     TResult Function(ReactMessage field0)? react,
     TResult Function()? delivered,
     TResult Function()? read,
-    TResult Function()? typing,
+    TResult Function(bool field0)? typing,
     TResult Function(UnsendMessage field0)? unsend,
     TResult Function(EditMessage field0)? edit,
     TResult Function(IconChangeMessage field0)? iconChange,
-    TResult Function()? stopTyping,
     TResult Function(bool field0)? enableSmsActivation,
     TResult Function()? messageReadOnDevice,
     TResult Function(bool field0)? smsConfirmSent,
@@ -12962,7 +12570,6 @@ class _$Message_SetTranscriptBackgroundImpl
     required TResult Function(Message_Unsend value) unsend,
     required TResult Function(Message_Edit value) edit,
     required TResult Function(Message_IconChange value) iconChange,
-    required TResult Function(Message_StopTyping value) stopTyping,
     required TResult Function(Message_EnableSmsActivation value)
         enableSmsActivation,
     required TResult Function(Message_MessageReadOnDevice value)
@@ -13001,7 +12608,6 @@ class _$Message_SetTranscriptBackgroundImpl
     TResult? Function(Message_Unsend value)? unsend,
     TResult? Function(Message_Edit value)? edit,
     TResult? Function(Message_IconChange value)? iconChange,
-    TResult? Function(Message_StopTyping value)? stopTyping,
     TResult? Function(Message_EnableSmsActivation value)? enableSmsActivation,
     TResult? Function(Message_MessageReadOnDevice value)? messageReadOnDevice,
     TResult? Function(Message_SmsConfirmSent value)? smsConfirmSent,
@@ -13036,7 +12642,6 @@ class _$Message_SetTranscriptBackgroundImpl
     TResult Function(Message_Unsend value)? unsend,
     TResult Function(Message_Edit value)? edit,
     TResult Function(Message_IconChange value)? iconChange,
-    TResult Function(Message_StopTyping value)? stopTyping,
     TResult Function(Message_EnableSmsActivation value)? enableSmsActivation,
     TResult Function(Message_MessageReadOnDevice value)? messageReadOnDevice,
     TResult Function(Message_SmsConfirmSent value)? smsConfirmSent,
