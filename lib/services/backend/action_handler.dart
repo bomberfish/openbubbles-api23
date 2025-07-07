@@ -48,7 +48,7 @@ class ActionHandler extends GetxService {
   }
   
   Future<List<Message>> prepMessage(Chat c, Message m, Message? selected, String? r, {bool clearNotificationsIfFromMe = true}) async {
-    if ((m.text?.isEmpty ?? true) && (m.subject?.isEmpty ?? true) && r == null) return [];
+    if ((m.text?.isEmpty ?? true) && (m.subject?.isEmpty ?? true) && r == null && m.payloadData == null) return [];
 
     final List<Message> messages = <Message>[];
 

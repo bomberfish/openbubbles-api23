@@ -2,7 +2,10 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:bluebubbles/app/layouts/conversation_details/dialogs/timeframe_picker.dart';
+import 'package:bluebubbles/app/layouts/conversation_view/widgets/message/interactive/polls.dart';
 import 'package:bluebubbles/app/wrappers/stateful_boilerplate.dart';
+import 'package:bluebubbles/database/global/payload_data.dart';
+import 'package:bluebubbles/services/rustpush/rustpush_service.dart';
 import 'package:bluebubbles/utils/share.dart';
 import 'package:bluebubbles/helpers/helpers.dart';
 import 'package:bluebubbles/app/layouts/conversation_view/widgets/media_picker/attachment_picker_file.dart';
@@ -22,6 +25,8 @@ import 'package:hand_signature/signature.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:photo_manager/photo_manager.dart';
+import 'package:collection/collection.dart';
+import 'package:bluebubbles/helpers/types/constants.dart' as constants;
 
 class AttachmentPicker extends StatefulWidget {
   AttachmentPicker({
@@ -45,6 +50,100 @@ class AttachmentPickerState extends OptimizedState<AttachmentPicker> {
 
   void generateIcons() {
     iconsList = [
+      {
+        "icon": Icons.how_to_vote,
+        "text": "Polls",
+        "handle": () async {
+          List<TextEditingController> participantController = [TextEditingController(), TextEditingController()];
+          showDialog(
+            context: context,
+            builder: (_) {
+              return AlertDialog(
+                actions: [
+                  TextButton(
+                    child: Text("Cancel", style: context.theme.textTheme.bodyLarge!.copyWith(color: context.theme.colorScheme.primary)),
+                    onPressed: () => Get.back(),
+                  ),
+                  TextButton(
+                    child: Text("OK", style: context.theme.textTheme.bodyLarge!.copyWith(color: context.theme.colorScheme.primary)),
+                    onPressed: () async {
+                      var handle = RustPushBBUtils.rustHandleToBB(await controller.chat.ensureHandle());
+                      var items = participantController.map((i) => i.text).toList();
+                      if (items.last == "") {
+                        items.removeLast();
+                      }
+                      if (items.length < 2) return;
+                      controller.pickedApp.value = (null, PayloadData(
+                        type: constants.PayloadType.app,
+                        appData: [
+                          iMessageAppData(
+                            appName: "Polls",
+                            url: "data:,${base64Encode(utf8.encode(pollMessageToJson(PollMessage(
+                              version: 1,
+                              item: Item(
+                                orderedPollOptions: items.map((i) => OrderedPollOption(
+                                  attributedText: i,
+                                  canBeEdited: false,
+                                  creatorHandle: handle.address,
+                                  optionIdentifier: uuid.v4().toUpperCase(),
+                                  text: i,
+                                )).toList(),
+                                creatorHandle: handle.address,
+                                title: "",
+                              ),
+                            ))))}?src=p&c=2",
+                            session: uuid.v4().toUpperCase(),
+                            ldText: items.map((i) => i).join(", "),
+                            userInfo: UserInfo(
+                              imageSubtitle: "",
+                              imageTitle: "",
+                              caption: "ENG: Update your device",
+                              secondarySubcaption: "",
+                              tertiarySubcaption: "",
+                              subcaption: "Learn about how to update your device to see this content.",
+                            ),
+                            isLive: true,
+                            appIcon: base64Encode((await rootBundle.load("assets/images/polls.jpg")).buffer.asUint8List()),
+                          )
+                        ]
+                      ));
+                      Get.back();
+                    },
+                  ),
+                ],
+                content: StatefulBuilder(builder: (context, state) => Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: participantController.mapIndexed((i, c) => [
+                    if (i == 0)
+                    const Text("Requires iOS 26 or above."),
+                    const SizedBox(height: 10),
+                    TextField(
+                      controller: c,
+                      decoration: InputDecoration(
+                        labelText: "Option ${i + 1}",
+                        border: const OutlineInputBorder(),
+                      ),
+                      autofocus: true,
+                      onChanged: (v) {
+                        if (participantController[participantController.length - 1].text != "") {
+                          participantController.add(TextEditingController());
+                          state(() {});
+                        }
+                        if (participantController.length > 2 && participantController[participantController.length - 2].text == "") {
+                          participantController.removeLast();
+                          state(() {});
+                        }
+                      },
+                    )
+                  ]).flattened.toList(),
+                )),
+                title: Text("New Poll", style: context.theme.textTheme.titleLarge),
+                backgroundColor: context.theme.colorScheme.properSurface,
+              );
+            }
+          );
+        }
+      },
       {
         "icon": iOS ? CupertinoIcons.folder_open : Icons.folder_open_outlined,
         "text": "Files",

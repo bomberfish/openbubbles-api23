@@ -71,7 +71,7 @@ class ConversationViewController extends StatefulController with GetSingleTicker
   final subjectFocusNode = FocusNode();
   late final textController = MentionTextEditingController(focusNode: focusNode, supportsFormatting: chat.isIMessage);
   late final subjectTextController = SpellCheckTextEditingController(focusNode: subjectFocusNode);
-  final Rx<(PlatformFile?, PayloadData)?> pickedApp = Rx<(PlatformFile, PayloadData)?>(null);
+  final Rx<(PlatformFile?, PayloadData)?> pickedApp = Rx<(PlatformFile?, PayloadData)?>(null);
   final RxBool showRecording = false.obs;
   final RxList<Emoji> emojiMatches = <Emoji>[].obs;
   final RxInt emojiSelectedIndex = 0.obs;

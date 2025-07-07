@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:bluebubbles/app/layouts/conversation_view/widgets/message/interactive/apple_pay.dart';
 import 'package:bluebubbles/app/layouts/conversation_view/widgets/message/interactive/find_my.dart';
 import 'package:bluebubbles/app/layouts/conversation_view/widgets/message/interactive/embedded_media.dart';
+import 'package:bluebubbles/app/layouts/conversation_view/widgets/message/interactive/polls.dart';
 import 'package:bluebubbles/app/layouts/conversation_view/widgets/message/interactive/supported_interactive.dart';
 import 'package:bluebubbles/app/layouts/conversation_view/widgets/message/interactive/unsupported_interactive.dart';
 import 'package:bluebubbles/app/layouts/conversation_view/widgets/message/interactive/url_preview.dart';
@@ -209,6 +210,11 @@ class _InteractiveHolderState extends CustomState<InteractiveHolder, void, Messa
                               } else {
                                 final data = payloadData!.appData!.first;
                                 switch (message.interactiveText) {
+                                  case "Polls":
+                                    return Polls(
+                                      data: data,
+                                      message: message,
+                                    );
                                   case "Apple Pay":
                                     return ApplePay(
                                       data: data,

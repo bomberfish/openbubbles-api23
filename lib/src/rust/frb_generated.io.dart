@@ -300,6 +300,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   Balloon dco_decode_box_autoadd_balloon(dynamic raw);
 
   @protected
+  BalloonLayout dco_decode_box_autoadd_balloon_layout(dynamic raw);
+
+  @protected
   bool dco_decode_box_autoadd_bool(dynamic raw);
 
   @protected
@@ -800,6 +803,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   Balloon? dco_decode_opt_box_autoadd_balloon(dynamic raw);
+
+  @protected
+  BalloonLayout? dco_decode_opt_box_autoadd_balloon_layout(dynamic raw);
 
   @protected
   bool? dco_decode_opt_box_autoadd_bool(dynamic raw);
@@ -1387,6 +1393,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   Balloon sse_decode_box_autoadd_balloon(SseDeserializer deserializer);
 
   @protected
+  BalloonLayout sse_decode_box_autoadd_balloon_layout(
+      SseDeserializer deserializer);
+
+  @protected
   bool sse_decode_box_autoadd_bool(SseDeserializer deserializer);
 
   @protected
@@ -1941,6 +1951,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   Balloon? sse_decode_opt_box_autoadd_balloon(SseDeserializer deserializer);
+
+  @protected
+  BalloonLayout? sse_decode_opt_box_autoadd_balloon_layout(
+      SseDeserializer deserializer);
 
   @protected
   bool? sse_decode_opt_box_autoadd_bool(SseDeserializer deserializer);
@@ -2573,6 +2587,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   void sse_encode_box_autoadd_balloon(Balloon self, SseSerializer serializer);
 
   @protected
+  void sse_encode_box_autoadd_balloon_layout(
+      BalloonLayout self, SseSerializer serializer);
+
+  @protected
   void sse_encode_box_autoadd_bool(bool self, SseSerializer serializer);
 
   @protected
@@ -3152,6 +3170,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   void sse_encode_opt_box_autoadd_balloon(
       Balloon? self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_opt_box_autoadd_balloon_layout(
+      BalloonLayout? self, SseSerializer serializer);
 
   @protected
   void sse_encode_opt_box_autoadd_bool(bool? self, SseSerializer serializer);

@@ -177,7 +177,7 @@ class ExtensionService extends GetxService {
       );
     }
 
-    var message = await backend.updateMessage(old.chat.target!, old, payload, file);
+    var message = await backend.updateMessage(old.chat.target!, old, payload, file, false, null);
     inq.queue(IncomingItem(
       chat: old.chat.target!,
       message: message,

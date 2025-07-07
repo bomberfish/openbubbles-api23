@@ -909,7 +909,7 @@ class Message {
       if (threadOriginator != null) associatedMessages.add(threadOriginator);
       if (existing == null && threadOriginator != null) service?.struct.addThreadOriginator(threadOriginator);
     }
-    associatedMessages.sort((a, b) => a.originalROWID!.compareTo(b.originalROWID!));
+    associatedMessages.sort((a, b) => a.originalROWID == null || b.originalROWID == null ? 0 : a.originalROWID!.compareTo(b.originalROWID!));
     return this;
   }
 

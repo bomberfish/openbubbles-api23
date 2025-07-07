@@ -202,6 +202,7 @@ class Settings {
   final RxList<String> smsRoutingTargets = <String>[].obs;
   final RxMap<String, String> smsForwardingTargets = <String, String>{}.obs;
   final RxBool warnedTextChats = false.obs;
+  final RxBool isTester = false.obs;
 
   final RxBool enableShareZen = false.obs;
   final RxBool zenModeAware = false.obs;
@@ -418,6 +419,7 @@ class Settings {
       'enableShareZen': enableShareZen.value,
       'warnedTextChats': warnedTextChats.value,
       'zenModeAware': zenModeAware.value,
+      'isTester': isTester.value,
     };
     if (includeAll) {
       map.addAll({
@@ -586,6 +588,7 @@ class Settings {
     ss.settings.smsRoutingTargets.value = (map['smsForwardingTargets']?.runtimeType == String ? jsonDecode(map['smsForwardingTargets']) as List : []).cast<String>();
     ss.settings.developerMode.value = (map['developerMode']?.runtimeType == String ? jsonDecode(map['developerMode']) as List : []).cast<String>();
     ss.settings.lastLocation.value = map['lastLocation'];
+    ss.settings.isTester.value = map['isTester'] ?? false;
     ss.settings.save();
 
     eventDispatcher.emit("theme-update", null);
@@ -750,6 +753,7 @@ class Settings {
     s.smsRoutingTargets.value = (map['smsForwardingTargets']?.runtimeType == String ? jsonDecode(map['smsForwardingTargets']) as List : []).cast<String>();
     s.developerMode.value = (map['developerMode']?.runtimeType == String ? jsonDecode(map['developerMode']) as List : []).cast<String>();
     s.lastLocation.value = map['lastLocation'];
+    s.isTester.value = map['isTester'] ?? false;
     return s;
   }
 

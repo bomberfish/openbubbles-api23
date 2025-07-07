@@ -100,6 +100,8 @@ class MessageWidgetController extends StatefulController with GetSingleTickerPro
       message = Message.merge(newItem, message);
       ms(chat).updateMessage(message, oldGuid: oldGuid);
       updateWidgets<MessageHolder>(null);
+      // mark this for the new guid
+      Get.put(this, tag: newItem.guid);
       if (message.isFromMe! && message.attachments.isNotEmpty) {
         updateWidgets<AttachmentHolder>(null);
       }

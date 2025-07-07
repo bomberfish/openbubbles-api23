@@ -44,7 +44,7 @@ class HttpBackend implements BackendService {
 
   @override
   Future<Message> updateMessage(
-      Chat chat, Message old, PayloadData newData, PlatformFile? newImage) {
+      Chat chat, Message old, PayloadData newData, PlatformFile? newImage, bool isMeta, String? notifText) {
         throw Exception("does not support updating!");
       }
 

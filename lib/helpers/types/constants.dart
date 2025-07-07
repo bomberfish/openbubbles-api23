@@ -51,6 +51,7 @@ const balloonBundleIdMap = {
     'com.apple.Animoji.StickersApp.MessagesExtension': 'Animoji Sticker',
     'com.apple.Stickers.UserGenerated.MessagesExtension': 'Sticker',
     'com.apple.findmy.FindMyMessagesApp': "Live Location",
+    'com.apple.messages.Polls': 'Polls'
   }
 };
 

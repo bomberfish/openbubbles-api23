@@ -5880,10 +5880,10 @@ const _: fn() = || {
         let Balloon = None::<crate::api::api::Balloon>.unwrap();
         let _: String = Balloon.url;
         let _: Option<String> = Balloon.session;
-        let _: crate::api::api::BalloonLayout = Balloon.layout;
+        let _: Option<crate::api::api::BalloonLayout> = Balloon.layout;
         let _: Option<String> = Balloon.ld_text;
         let _: bool = Balloon.is_live;
-        let _: Vec<u8> = Balloon.icon;
+        let _: Option<Vec<u8>> = Balloon.icon;
     }
     match None::<crate::api::api::BalloonLayout>.unwrap() {
         crate::api::api::BalloonLayout::TemplateLayout {
@@ -6585,9 +6585,14 @@ const _: fn() = || {
             let _: crate::api::api::Reaction = reaction;
             let _: bool = enable;
         }
-        crate::api::api::ReactMessageType::Extension { spec, body } => {
+        crate::api::api::ReactMessageType::Extension {
+            spec,
+            body,
+            is_meta,
+        } => {
             let _: crate::api::api::ExtensionApp = spec;
             let _: crate::api::api::MessageParts = body;
+            let _: bool = is_meta;
         }
     }
     match None::<crate::api::api::Reaction>.unwrap() {
@@ -7327,10 +7332,10 @@ impl SseDecode for crate::api::api::Balloon {
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
         let mut var_url = <String>::sse_decode(deserializer);
         let mut var_session = <Option<String>>::sse_decode(deserializer);
-        let mut var_layout = <crate::api::api::BalloonLayout>::sse_decode(deserializer);
+        let mut var_layout = <Option<crate::api::api::BalloonLayout>>::sse_decode(deserializer);
         let mut var_ldText = <Option<String>>::sse_decode(deserializer);
         let mut var_isLive = <bool>::sse_decode(deserializer);
-        let mut var_icon = <Vec<u8>>::sse_decode(deserializer);
+        let mut var_icon = <Option<Vec<u8>>>::sse_decode(deserializer);
         return crate::api::api::Balloon {
             url: var_url,
             session: var_session,
@@ -8986,6 +8991,17 @@ impl SseDecode for Option<crate::api::api::Balloon> {
     }
 }
 
+impl SseDecode for Option<crate::api::api::BalloonLayout> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        if (<bool>::sse_decode(deserializer)) {
+            return Some(<crate::api::api::BalloonLayout>::sse_decode(deserializer));
+        } else {
+            return None;
+        }
+    }
+}
+
 impl SseDecode for Option<bool> {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
@@ -9804,9 +9820,11 @@ impl SseDecode for crate::api::api::ReactMessageType {
             1 => {
                 let mut var_spec = <crate::api::api::ExtensionApp>::sse_decode(deserializer);
                 let mut var_body = <crate::api::api::MessageParts>::sse_decode(deserializer);
+                let mut var_isMeta = <bool>::sse_decode(deserializer);
                 return crate::api::api::ReactMessageType::Extension {
                     spec: var_spec,
                     body: var_body,
+                    is_meta: var_isMeta,
                 };
             }
             _ => {
@@ -13053,10 +13071,15 @@ impl flutter_rust_bridge::IntoDart for FrbWrapper<crate::api::api::ReactMessageT
                 enable.into_into_dart().into_dart(),
             ]
             .into_dart(),
-            crate::api::api::ReactMessageType::Extension { spec, body } => [
+            crate::api::api::ReactMessageType::Extension {
+                spec,
+                body,
+                is_meta,
+            } => [
                 1.into_dart(),
                 spec.into_into_dart().into_dart(),
                 body.into_into_dart().into_dart(),
+                is_meta.into_into_dart().into_dart(),
             ]
             .into_dart(),
             _ => {
@@ -14336,10 +14359,10 @@ impl SseEncode for crate::api::api::Balloon {
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         <String>::sse_encode(self.url, serializer);
         <Option<String>>::sse_encode(self.session, serializer);
-        <crate::api::api::BalloonLayout>::sse_encode(self.layout, serializer);
+        <Option<crate::api::api::BalloonLayout>>::sse_encode(self.layout, serializer);
         <Option<String>>::sse_encode(self.ld_text, serializer);
         <bool>::sse_encode(self.is_live, serializer);
-        <Vec<u8>>::sse_encode(self.icon, serializer);
+        <Option<Vec<u8>>>::sse_encode(self.icon, serializer);
     }
 }
 
@@ -15605,6 +15628,16 @@ impl SseEncode for Option<crate::api::api::Balloon> {
     }
 }
 
+impl SseEncode for Option<crate::api::api::BalloonLayout> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <bool>::sse_encode(self.is_some(), serializer);
+        if let Some(value) = self {
+            <crate::api::api::BalloonLayout>::sse_encode(value, serializer);
+        }
+    }
+}
+
 impl SseEncode for Option<bool> {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
@@ -16276,10 +16309,15 @@ impl SseEncode for crate::api::api::ReactMessageType {
                 <crate::api::api::Reaction>::sse_encode(reaction, serializer);
                 <bool>::sse_encode(enable, serializer);
             }
-            crate::api::api::ReactMessageType::Extension { spec, body } => {
+            crate::api::api::ReactMessageType::Extension {
+                spec,
+                body,
+                is_meta,
+            } => {
                 <i32>::sse_encode(1, serializer);
                 <crate::api::api::ExtensionApp>::sse_encode(spec, serializer);
                 <crate::api::api::MessageParts>::sse_encode(body, serializer);
+                <bool>::sse_encode(is_meta, serializer);
             }
             _ => {
                 unimplemented!("");

@@ -568,11 +568,11 @@ pub enum DartBalloonLayout {
 pub struct DartBalloon {
     pub url: String,
     pub session: Option<String>, // UUID
-    pub layout: BalloonLayout,
+    pub layout: Option<BalloonLayout>,
     pub ld_text: Option<String>,
     pub is_live: bool,
 
-    pub icon: Vec<u8>,
+    pub icon: Option<Vec<u8>>,
 }
 
 #[repr(C)]
@@ -738,7 +738,8 @@ pub enum DartReactMessageType {
     },
     Extension {
         spec: ExtensionApp,
-        body: MessageParts
+        body: MessageParts,
+        is_meta: bool,
     },
 }
 

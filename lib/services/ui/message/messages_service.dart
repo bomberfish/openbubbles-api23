@@ -116,6 +116,10 @@ class MessagesService extends GetxController {
         message.attachments = List<Attachment>.from(message.dbAttachments);
       }
     }
+    // for sessions, we migrate metadata
+    if (message.amkSessionId != null) {
+      message.fetchAssociatedMessages();
+    }
     // add this as a reaction if needed, update thread originators and associated messages
     if (message.associatedMessageGuid != null) {
       struct.getMessage(message.associatedMessageGuid!)?.associatedMessages.add(message);

@@ -21,7 +21,7 @@ abstract class BackendService {
   Future<Message> sendTapback(
       Chat chat, Message selected, String reaction, int? repPart);
   Future<Message> updateMessage(
-      Chat chat, Message old, PayloadData newData, PlatformFile? newImage);
+      Chat chat, Message old, PayloadData newData, PlatformFile? newImage, bool isMeta, String? notifText);
   Future<bool> markRead(Chat chat, bool notifyOthers);
   Future<bool> markUnread(Chat chat);
   HttpService? getRemoteService();

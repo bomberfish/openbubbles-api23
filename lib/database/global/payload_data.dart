@@ -179,6 +179,10 @@ class iMessageAppData {
   bool? isLive;
 
   String get bundleId {
+    // TODO figure out a better way to do this
+    if (appId == null && appName == "Polls") {
+      return "com.apple.messages.MSMessageExtensionBalloonPlugin:0000000000:com.apple.messages.Polls";
+    }
     return es.getExtensionBundle(appId!);
   }
 

@@ -326,9 +326,12 @@ class RustPushBackend implements BackendService {
     return const api.MessageType.iMessage();
   }
   
-
+  bool loggingOut = false;
   void markFailedToLogin({bool hw = false, bool logout = false}) async {
     Logger.error("markingfailed");
+    if (loggingOut) return;
+    try {
+      loggingOut = true;
     if (usingRustPush) {
       await pushService.reset(hw, logout);
     }
@@ -338,6 +341,9 @@ class RustPushBackend implements BackendService {
       canPop: false,
       child: TitleBarWrapper(child: SetupView()),
     ), duration: Duration.zero, transition: Transition.noTransition);
+    } finally {
+      loggingOut = false;
+    }
   }
 
   Future<void> sendMsg(api.MessageInst msg) async {
@@ -660,7 +666,7 @@ class RustPushBackend implements BackendService {
       "sms_forwarding_capable": true,
       "sms_forwarding_enabled": smsForwardingEnabled(),
       "can_pnr": deviceState.name.contains("iPhone") || deviceState.name.contains("iPod") || deviceState.name.contains("iPad"),
-      "can_forward": (await api.getMyPhoneHandles(state: pushService.state)).isNotEmpty,
+      "can_forward": (await api.getMyPhoneHandles(state: pushService.state)).isNotEmpty || ss.settings.isTester.value,
     };
   }
 
@@ -847,6 +853,9 @@ class RustPushBackend implements BackendService {
       parts = await partsFromBody(m.attributedBody.first);
     } else {
       parts = api.MessageParts(field0: [api.IndexedMessagePart(part_: api.MessagePart.text(m.text!, pushService.defaultFormat()))]);
+    }
+    if (m.payloadData?.appData?.first.ldText != null) {
+      parts.field0.add(api.IndexedMessagePart(part_: api.MessagePart.object(m.payloadData!.appData!.first.ldText!)));
     }
     var msg = await api.newMsg(
       state: pushService.state,
@@ -1061,7 +1070,7 @@ class RustPushBackend implements BackendService {
 
   @override
   Future<Message> updateMessage(
-        Chat chat, Message old, PayloadData newData, PlatformFile? newImage) async {
+        Chat chat, Message old, PayloadData newData, PlatformFile? newImage, bool isMeta, String? notifText) async {
     api.Attachment? attachment;
     if (newImage != null) {
       String data = await DefaultAssetBundle.of(Get.context!).loadString("assets/rustpush/uti-map.json");
@@ -1100,8 +1109,8 @@ class RustPushBackend implements BackendService {
         conversation: await chat.getConversationData(),
         sender: await chat.ensureHandle(),
         message: api.Message.react(api.ReactMessage(
-            toUuid: old.amkSessionId!,
-            toText: "",
+            toUuid: isMeta ? old.guid! : old.amkSessionId!,
+            toText: notifText ?? "",
             embeddedProfile: await pushService.getShareProfileMessageFor(chat.participants),
             reaction: api.ReactMessageType.extension_(
               spec: pushService.dataToApp(newData),
@@ -1109,7 +1118,8 @@ class RustPushBackend implements BackendService {
                 api.IndexedMessagePart(part_: api.MessagePart.object(newData.appData![0].ldText ?? "")),
                 if (attachment != null)
                 api.IndexedMessagePart(part_: api.MessagePart.attachment(attachment)),
-              ])
+              ]),
+              isMeta: isMeta,
             ))));
     await sendMsg(msg);
     msg.sentTimestamp = DateTime.now().millisecondsSinceEpoch;
@@ -1440,15 +1450,15 @@ class RustPushService extends GetxService {
     var appData = data.appData!.first;
     return api.ExtensionApp(
       name: appData.appName!,
-      appId: appData.appId!,
+      appId: appData.appId,
       bundleId: appData.bundleId,
       balloon: api.Balloon(
-        icon: base64Decode(appData.appIcon!),
+        icon: appData.appIcon != null ? base64Decode(appData.appIcon!) : null,
         url: appData.url!,
         session: appData.session,
         ldText: appData.ldText,
         isLive: appData.isLive ?? false,
-        layout: api.BalloonLayout.templateLayout(
+        layout: appData.userInfo != null ? api.BalloonLayout.templateLayout(
           imageSubtitle: appData.userInfo!.imageSubtitle ?? "",
           imageTitle: appData.userInfo!.imageTitle ?? "",
           caption: appData.userInfo!.caption ?? "", 
@@ -1456,13 +1466,13 @@ class RustPushService extends GetxService {
           tertiarySubcaption: appData.userInfo!.tertiarySubcaption ?? "", 
           subcaption: appData.userInfo!.subcaption ?? "", 
           class_: api.NSDictionaryClass.nsDictionary,
-        )
+        ) : null,
       )
     );
   }
 
   PayloadData appToData(api.ExtensionApp app) {
-    var layout = app.balloon!.layout as api.BalloonLayout_TemplateLayout;
+    var layout = app.balloon!.layout as api.BalloonLayout_TemplateLayout?;
     return PayloadData(
       type: constants.PayloadType.app,
       urlData: null,
@@ -1472,17 +1482,17 @@ class RustPushService extends GetxService {
           ldText: app.balloon?.ldText,
           url: app.balloon?.url,
           session: app.balloon?.session,
-          appIcon: app.balloon?.icon != null ? base64Encode(app.balloon!.icon) : null,
+          appIcon: app.balloon?.icon != null ? base64Encode(app.balloon!.icon!) : null,
           appId: app.appId,
           isLive: app.balloon?.isLive ?? false,
-          userInfo: UserInfo(
+          userInfo: layout != null ? UserInfo(
             imageSubtitle: layout.imageSubtitle,
             imageTitle: layout.imageTitle,
             caption: layout.caption,
             secondarySubcaption: layout.secondarySubcaption,
             subcaption: layout.subcaption,
             tertiarySubcaption: layout.tertiarySubcaption,
-          )
+          ) : null,
         )
       ]
     );
@@ -1673,7 +1683,10 @@ class RustPushService extends GetxService {
         var msgType = msg.field0.reaction as api.ReactMessageType_Extension;
         app = msgType.spec;
         attributedBodyData = await indexedPartsToAttributedBodyDyn(msgType.body.field0, myMsg.id, null);
-        if (msgType.spec.balloon != null) {
+        if (msgType.isMeta) {
+          reaction = "meta";
+        }
+        if (msgType.spec.balloon != null && !msgType.isMeta) {
           // copy over assets
           reaction = null;
 
@@ -1686,6 +1699,15 @@ class RustPushService extends GetxService {
           query.close();
 
           final original = messages.firstWhere((msg) => (msg.stagingGuid ?? msg.guid) != myMsg.id);
+
+          original.fetchAssociatedMessages();
+
+          // for polls, move associated messages (votes) to latest message when updating
+          for (var associated in original.associatedMessages) {
+            if (associated.associatedMessageType != null) continue;
+            associated.associatedMessageGuid = myMsg.id;
+            associated.save();
+          }
           
           // allow updating image
           attributedBodyData = (attributedBodyData.$3.isEmpty ? original.attributedBody[0] : attributedBodyData.$1, original.text!, attributedBodyData.$3.isEmpty ? original.dbAttachments : attributedBodyData.$3);
@@ -1702,7 +1724,7 @@ class RustPushService extends GetxService {
             ms(original.chat.target!.guid).updateMessage(original);
             mwc(original).updateWidgets<MessageHolder>(null);
           }
-        } else {
+        } else if (!msgType.isMeta) {
           reaction = "sticker";
         }
       } else {
@@ -1715,7 +1737,7 @@ class RustPushService extends GetxService {
         dateCreated: DateTime.fromMillisecondsSinceEpoch(myMsg.sentTimestamp),
         associatedMessagePart: msg.field0.toPart,
         associatedMessageGuid: reaction == null ? null : msg.field0.toUuid,
-        associatedMessageType: reaction,
+        associatedMessageType: reaction == "meta" ? null : reaction,
         associatedMessageEmoji: emoji,
         text: attributedBodyData?.$2,
         attributedBody: attributedBodyData != null ? [attributedBodyData.$1] : [],
@@ -1723,8 +1745,9 @@ class RustPushService extends GetxService {
         hasAttachments: attributedBodyData?.$3.isNotEmpty ?? false,
         balloonBundleId: app?.bundleId,
         payloadData: app?.balloon != null ? appToData(app!) : null,
-        amkSessionId: app?.balloon != null ? msg.field0.toUuid : null,
+        amkSessionId: app?.balloon != null && reaction == null ? msg.field0.toUuid : null,
         verificationFailed: myMsg.verificationFailed,
+        hasApplePayloadData: app?.balloon != null,
       );
 
       if (app?.balloon != null) {
@@ -2344,6 +2367,7 @@ class RustPushService extends GetxService {
   }
 
   void wantAddNumber() {
+    final status = http.dio.get("https://hw.openbubbles.app/status").then((status) => status.data["available"]);
     showDialog(
       context: Get.context!,
       builder: (context) => AlertDialog(
@@ -2352,7 +2376,7 @@ class RustPushService extends GetxService {
           style: context.theme.textTheme.titleLarge,
         ),
         backgroundColor: context.theme.colorScheme.properSurface,
-        content: Text("Join the waitlist for a just-works, paid, hosted solution. Or, jailbreak your own to self-host.", style: context.theme.textTheme.bodyLarge),
+        content: Text("Try hosted for a just-works, paid, hosted solution. Or, jailbreak your own to self-host.", style: context.theme.textTheme.bodyLarge),
         actions: [
           TextButton(
             child: Text(
@@ -2363,20 +2387,26 @@ class RustPushService extends GetxService {
           ),
           TextButton(
             child: Text(
-                "Self-host",
+                "Learn to Self-host",
                 style: context.theme.textTheme.bodyLarge!.copyWith(color: context.theme.colorScheme.primary)
             ),
             onPressed: () {
+              Navigator.of(context).pop();
               launchUrl(Uri.parse("https://openbubbles.app/docs/pnr.html"));
             }
           ),
           TextButton(
             child: Text(
-                "Join the waitlist",
+                "Switch to Hosted",
                 style: context.theme.textTheme.bodyLarge!.copyWith(color: context.theme.colorScheme.primary)
             ),
-            onPressed: () {
-              launchUrl(Uri.parse("https://openbubbles.app/#hosted-waitlist"));
+            onPressed: () async {
+              Navigator.of(context).pop();
+              if (await status) {
+                (backend as RustPushBackend).markFailedToLogin(hw: true, logout: true);
+              } else {
+                launchUrl(Uri.parse("https://openbubbles.app/#hosted"));
+              }
             }
           ),
         ],

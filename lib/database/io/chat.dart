@@ -486,6 +486,17 @@ class Chat {
   }
 
   Future<String> ensureHandle() async {
+    if (usingHandle != null && isRpSms) {
+      var acceptableHandles = [];
+      if (isRoutingStub) {
+        acceptableHandles = await api.getMyPhoneHandles(state: pushService.state);
+      } else {
+        acceptableHandles = ss.settings.smsForwardingTargets.keys.toList();
+      }
+      if (!acceptableHandles.contains(usingHandle)) {
+        usingHandle = null;
+      }
+    }
     if (usingHandle == null) {
       if (isRpSms) {
         if (isRoutingStub) {
@@ -493,6 +504,7 @@ class Chat {
         } else {
           usingHandle = ss.settings.smsForwardingTargets.keys.firstOrNull;
         }
+        save(updateUsingHandle: true);
       } else {
         usingHandle = await (backend as RustPushBackend).getDefaultHandle();
         save(updateUsingHandle: true);

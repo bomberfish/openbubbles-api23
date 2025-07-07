@@ -3972,10 +3972,10 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     return Balloon(
       url: dco_decode_String(arr[0]),
       session: dco_decode_opt_String(arr[1]),
-      layout: dco_decode_balloon_layout(arr[2]),
+      layout: dco_decode_opt_box_autoadd_balloon_layout(arr[2]),
       ldText: dco_decode_opt_String(arr[3]),
       isLive: dco_decode_bool(arr[4]),
-      icon: dco_decode_list_prim_u_8_strict(arr[5]),
+      icon: dco_decode_opt_list_prim_u_8_strict(arr[5]),
     );
   }
 
@@ -4074,6 +4074,12 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   Balloon dco_decode_box_autoadd_balloon(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return dco_decode_balloon(raw);
+  }
+
+  @protected
+  BalloonLayout dco_decode_box_autoadd_balloon_layout(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return dco_decode_balloon_layout(raw);
   }
 
   @protected
@@ -5686,6 +5692,12 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  BalloonLayout? dco_decode_opt_box_autoadd_balloon_layout(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return raw == null ? null : dco_decode_box_autoadd_balloon_layout(raw);
+  }
+
+  @protected
   bool? dco_decode_opt_box_autoadd_bool(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return raw == null ? null : dco_decode_box_autoadd_bool(raw);
@@ -6262,6 +6274,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         return ReactMessageType_Extension(
           spec: dco_decode_box_autoadd_extension_app(raw[1]),
           body: dco_decode_box_autoadd_message_parts(raw[2]),
+          isMeta: dco_decode_bool(raw[3]),
         );
       default:
         throw Exception("unreachable");
@@ -7402,10 +7415,10 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     // Codec=Sse (Serialization based), see doc to use other codecs
     var var_url = sse_decode_String(deserializer);
     var var_session = sse_decode_opt_String(deserializer);
-    var var_layout = sse_decode_balloon_layout(deserializer);
+    var var_layout = sse_decode_opt_box_autoadd_balloon_layout(deserializer);
     var var_ldText = sse_decode_opt_String(deserializer);
     var var_isLive = sse_decode_bool(deserializer);
-    var var_icon = sse_decode_list_prim_u_8_strict(deserializer);
+    var var_icon = sse_decode_opt_list_prim_u_8_strict(deserializer);
     return Balloon(
         url: var_url,
         session: var_session,
@@ -7518,6 +7531,13 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   Balloon sse_decode_box_autoadd_balloon(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return (sse_decode_balloon(deserializer));
+  }
+
+  @protected
+  BalloonLayout sse_decode_box_autoadd_balloon_layout(
+      SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return (sse_decode_balloon_layout(deserializer));
   }
 
   @protected
@@ -9414,6 +9434,18 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  BalloonLayout? sse_decode_opt_box_autoadd_balloon_layout(
+      SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    if (sse_decode_bool(deserializer)) {
+      return (sse_decode_box_autoadd_balloon_layout(deserializer));
+    } else {
+      return null;
+    }
+  }
+
+  @protected
   bool? sse_decode_opt_box_autoadd_bool(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
 
@@ -10189,7 +10221,9 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       case 1:
         var var_spec = sse_decode_box_autoadd_extension_app(deserializer);
         var var_body = sse_decode_box_autoadd_message_parts(deserializer);
-        return ReactMessageType_Extension(spec: var_spec, body: var_body);
+        var var_isMeta = sse_decode_bool(deserializer);
+        return ReactMessageType_Extension(
+            spec: var_spec, body: var_body, isMeta: var_isMeta);
       default:
         throw UnimplementedError('');
     }
@@ -11287,10 +11321,10 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_String(self.url, serializer);
     sse_encode_opt_String(self.session, serializer);
-    sse_encode_balloon_layout(self.layout, serializer);
+    sse_encode_opt_box_autoadd_balloon_layout(self.layout, serializer);
     sse_encode_opt_String(self.ldText, serializer);
     sse_encode_bool(self.isLive, serializer);
-    sse_encode_list_prim_u_8_strict(self.icon, serializer);
+    sse_encode_opt_list_prim_u_8_strict(self.icon, serializer);
   }
 
   @protected
@@ -11396,6 +11430,13 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   void sse_encode_box_autoadd_balloon(Balloon self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_balloon(self, serializer);
+  }
+
+  @protected
+  void sse_encode_box_autoadd_balloon_layout(
+      BalloonLayout self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_balloon_layout(self, serializer);
   }
 
   @protected
@@ -12981,6 +13022,17 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  void sse_encode_opt_box_autoadd_balloon_layout(
+      BalloonLayout? self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    sse_encode_bool(self != null, serializer);
+    if (self != null) {
+      sse_encode_box_autoadd_balloon_layout(self, serializer);
+    }
+  }
+
+  @protected
   void sse_encode_opt_box_autoadd_bool(bool? self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
 
@@ -13645,10 +13697,15 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         sse_encode_i_32(0, serializer);
         sse_encode_box_autoadd_reaction(reaction, serializer);
         sse_encode_bool(enable, serializer);
-      case ReactMessageType_Extension(spec: final spec, body: final body):
+      case ReactMessageType_Extension(
+          spec: final spec,
+          body: final body,
+          isMeta: final isMeta
+        ):
         sse_encode_i_32(1, serializer);
         sse_encode_box_autoadd_extension_app(spec, serializer);
         sse_encode_box_autoadd_message_parts(body, serializer);
+        sse_encode_bool(isMeta, serializer);
       default:
         throw UnimplementedError('');
     }

@@ -107,6 +107,27 @@ class _SendAnimationState
       await outq.queue(OutgoingItem(type: QueueType.sendAttachment, chat: controller.chat, message: message, customArgs: {"audio": isAudioMessage}));
     }
 
+    if (attachments.isEmpty && payload != null) {
+      final message = Message(
+        text: "",
+        dateCreated: DateTime.now(),
+        dateScheduled: schedule,
+        hasAttachments: false,
+        attachments: [],
+        isFromMe: true,
+        handleId: 0,
+        threadOriginatorGuid: replyGuid,
+        threadOriginatorPart: replyRun,
+        expressiveSendStyleId: effectId,
+        payloadData: payload,
+        balloonBundleId: payload.bundleId,
+        stagingGuid: uuid.v4().toUpperCase(),
+        hasApplePayloadData: true,
+      );
+      message.generateTempGuid();
+      await outq.queue(OutgoingItem(type: QueueType.sendMessage, chat: controller.chat, message: message, customArgs: {"audio": isAudioMessage}));
+    }
+
     if (annotations.string.trim().isNotEmpty || subject.isNotEmpty) {
       var text = annotations.string;
       final _message = Message(

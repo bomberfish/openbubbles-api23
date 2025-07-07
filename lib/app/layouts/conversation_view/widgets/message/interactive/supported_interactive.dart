@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:bluebubbles/app/layouts/conversation_view/widgets/message/interactive/polls.dart';
 import 'package:bluebubbles/app/wrappers/stateful_boilerplate.dart';
 import 'package:bluebubbles/helpers/helpers.dart';
 import 'package:bluebubbles/database/models.dart';
@@ -75,6 +76,9 @@ class _SupportedInteractiveState extends OptimizedState<SupportedInteractive> wi
         ),
         )
       );
+    }
+    if (widget.data.appName == "Polls" && widget.data.appId == null) {
+      return Polls(data: widget.data, message: null);
     }
     return Column(
       mainAxisSize: MainAxisSize.min,

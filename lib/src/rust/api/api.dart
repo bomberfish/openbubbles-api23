@@ -674,18 +674,18 @@ sealed class AttachmentType with _$AttachmentType {
 class Balloon {
   final String url;
   final String? session;
-  final BalloonLayout layout;
+  final BalloonLayout? layout;
   final String? ldText;
   final bool isLive;
-  final Uint8List icon;
+  final Uint8List? icon;
 
   const Balloon({
     required this.url,
     this.session,
-    required this.layout,
+    this.layout,
     this.ldText,
     required this.isLive,
-    required this.icon,
+    this.icon,
   });
 
   @override
@@ -2900,6 +2900,7 @@ sealed class ReactMessageType with _$ReactMessageType {
   const factory ReactMessageType.extension_({
     required ExtensionApp spec,
     required MessageParts body,
+    required bool isMeta,
   }) = ReactMessageType_Extension;
 }
 

@@ -247,6 +247,8 @@ class HwInpState extends OptimizedState<HwInp> {
       try {
         await api.configureAppReview(state: pushService.state);
         ss.settings.cachedCodes.clear();
+        ss.settings.isTester.value = true;
+        ss.saveSettings();
         await pushService.configured();
         await setup.finishSetup();
         Get.offAll(() => ConversationList(

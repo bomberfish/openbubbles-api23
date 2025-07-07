@@ -18425,19 +18425,22 @@ mixin _$ReactMessageType {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(Reaction reaction, bool enable) react,
-    required TResult Function(ExtensionApp spec, MessageParts body) extension_,
+    required TResult Function(ExtensionApp spec, MessageParts body, bool isMeta)
+        extension_,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(Reaction reaction, bool enable)? react,
-    TResult? Function(ExtensionApp spec, MessageParts body)? extension_,
+    TResult? Function(ExtensionApp spec, MessageParts body, bool isMeta)?
+        extension_,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(Reaction reaction, bool enable)? react,
-    TResult Function(ExtensionApp spec, MessageParts body)? extension_,
+    TResult Function(ExtensionApp spec, MessageParts body, bool isMeta)?
+        extension_,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -18578,7 +18581,8 @@ class _$ReactMessageType_ReactImpl extends ReactMessageType_React {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(Reaction reaction, bool enable) react,
-    required TResult Function(ExtensionApp spec, MessageParts body) extension_,
+    required TResult Function(ExtensionApp spec, MessageParts body, bool isMeta)
+        extension_,
   }) {
     return react(reaction, enable);
   }
@@ -18587,7 +18591,8 @@ class _$ReactMessageType_ReactImpl extends ReactMessageType_React {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(Reaction reaction, bool enable)? react,
-    TResult? Function(ExtensionApp spec, MessageParts body)? extension_,
+    TResult? Function(ExtensionApp spec, MessageParts body, bool isMeta)?
+        extension_,
   }) {
     return react?.call(reaction, enable);
   }
@@ -18596,7 +18601,8 @@ class _$ReactMessageType_ReactImpl extends ReactMessageType_React {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(Reaction reaction, bool enable)? react,
-    TResult Function(ExtensionApp spec, MessageParts body)? extension_,
+    TResult Function(ExtensionApp spec, MessageParts body, bool isMeta)?
+        extension_,
     required TResult orElse(),
   }) {
     if (react != null) {
@@ -18660,7 +18666,7 @@ abstract class _$$ReactMessageType_ExtensionImplCopyWith<$Res> {
           $Res Function(_$ReactMessageType_ExtensionImpl) then) =
       __$$ReactMessageType_ExtensionImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({ExtensionApp spec, MessageParts body});
+  $Res call({ExtensionApp spec, MessageParts body, bool isMeta});
 }
 
 /// @nodoc
@@ -18680,6 +18686,7 @@ class __$$ReactMessageType_ExtensionImplCopyWithImpl<$Res>
   $Res call({
     Object? spec = null,
     Object? body = null,
+    Object? isMeta = null,
   }) {
     return _then(_$ReactMessageType_ExtensionImpl(
       spec: null == spec
@@ -18690,6 +18697,10 @@ class __$$ReactMessageType_ExtensionImplCopyWithImpl<$Res>
           ? _value.body
           : body // ignore: cast_nullable_to_non_nullable
               as MessageParts,
+      isMeta: null == isMeta
+          ? _value.isMeta
+          : isMeta // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -18698,17 +18709,19 @@ class __$$ReactMessageType_ExtensionImplCopyWithImpl<$Res>
 
 class _$ReactMessageType_ExtensionImpl extends ReactMessageType_Extension {
   const _$ReactMessageType_ExtensionImpl(
-      {required this.spec, required this.body})
+      {required this.spec, required this.body, required this.isMeta})
       : super._();
 
   @override
   final ExtensionApp spec;
   @override
   final MessageParts body;
+  @override
+  final bool isMeta;
 
   @override
   String toString() {
-    return 'ReactMessageType.extension_(spec: $spec, body: $body)';
+    return 'ReactMessageType.extension_(spec: $spec, body: $body, isMeta: $isMeta)';
   }
 
   @override
@@ -18717,11 +18730,12 @@ class _$ReactMessageType_ExtensionImpl extends ReactMessageType_Extension {
         (other.runtimeType == runtimeType &&
             other is _$ReactMessageType_ExtensionImpl &&
             (identical(other.spec, spec) || other.spec == spec) &&
-            (identical(other.body, body) || other.body == body));
+            (identical(other.body, body) || other.body == body) &&
+            (identical(other.isMeta, isMeta) || other.isMeta == isMeta));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, spec, body);
+  int get hashCode => Object.hash(runtimeType, spec, body, isMeta);
 
   /// Create a copy of ReactMessageType
   /// with the given fields replaced by the non-null parameter values.
@@ -18736,29 +18750,32 @@ class _$ReactMessageType_ExtensionImpl extends ReactMessageType_Extension {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(Reaction reaction, bool enable) react,
-    required TResult Function(ExtensionApp spec, MessageParts body) extension_,
+    required TResult Function(ExtensionApp spec, MessageParts body, bool isMeta)
+        extension_,
   }) {
-    return extension_(spec, body);
+    return extension_(spec, body, isMeta);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(Reaction reaction, bool enable)? react,
-    TResult? Function(ExtensionApp spec, MessageParts body)? extension_,
+    TResult? Function(ExtensionApp spec, MessageParts body, bool isMeta)?
+        extension_,
   }) {
-    return extension_?.call(spec, body);
+    return extension_?.call(spec, body, isMeta);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(Reaction reaction, bool enable)? react,
-    TResult Function(ExtensionApp spec, MessageParts body)? extension_,
+    TResult Function(ExtensionApp spec, MessageParts body, bool isMeta)?
+        extension_,
     required TResult orElse(),
   }) {
     if (extension_ != null) {
-      return extension_(spec, body);
+      return extension_(spec, body, isMeta);
     }
     return orElse();
   }
@@ -18798,11 +18815,13 @@ class _$ReactMessageType_ExtensionImpl extends ReactMessageType_Extension {
 abstract class ReactMessageType_Extension extends ReactMessageType {
   const factory ReactMessageType_Extension(
       {required final ExtensionApp spec,
-      required final MessageParts body}) = _$ReactMessageType_ExtensionImpl;
+      required final MessageParts body,
+      required final bool isMeta}) = _$ReactMessageType_ExtensionImpl;
   const ReactMessageType_Extension._() : super._();
 
   ExtensionApp get spec;
   MessageParts get body;
+  bool get isMeta;
 
   /// Create a copy of ReactMessageType
   /// with the given fields replaced by the non-null parameter values.
