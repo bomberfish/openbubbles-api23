@@ -47,7 +47,7 @@ abstract class BackendService {
   bool supportsFindMy();
   bool canCreateGroupChats();
   bool supportsSmsForwarding();
-  void startedTyping(Chat c);
+  void startedTyping(Chat c, [iMessageAppData? appdata]);
   void stoppedTyping(Chat c);
   void updateTypingStatus(Chat c);
   Future<bool> handleiMessageState(String address);

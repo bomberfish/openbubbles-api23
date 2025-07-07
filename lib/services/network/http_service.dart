@@ -49,7 +49,7 @@ class HttpBackend implements BackendService {
       }
 
   @override
-  void startedTyping(Chat c) {
+  void startedTyping(Chat c, [iMessageAppData? appdata]) {
     socket.sendMessage("started-typing", {"chatGuid": c.guid});
   }
 

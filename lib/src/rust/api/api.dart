@@ -1907,8 +1907,9 @@ sealed class Message with _$Message {
   const factory Message.delivered() = Message_Delivered;
   const factory Message.read() = Message_Read;
   const factory Message.typing(
-    bool field0,
-  ) = Message_Typing;
+    bool field0, [
+    TypingApp? field1,
+  ]) = Message_Typing;
   const factory Message.unsend(
     UnsendMessage field0,
   ) = Message_Unsend;
@@ -3473,6 +3474,27 @@ class TrustedPhoneNumber {
           lastTwoDigits == other.lastTwoDigits &&
           pushMode == other.pushMode &&
           id == other.id;
+}
+
+class TypingApp {
+  final String bundleId;
+  final Uint8List icon;
+
+  const TypingApp({
+    required this.bundleId,
+    required this.icon,
+  });
+
+  @override
+  int get hashCode => bundleId.hashCode ^ icon.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is TypingApp &&
+          runtimeType == other.runtimeType &&
+          bundleId == other.bundleId &&
+          icon == other.icon;
 }
 
 @freezed

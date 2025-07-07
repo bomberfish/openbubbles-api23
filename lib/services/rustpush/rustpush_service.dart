@@ -1208,13 +1208,16 @@ class RustPushBackend implements BackendService {
   }
 
   @override
-  void startedTyping(Chat c) async {
+  void startedTyping(Chat c, [iMessageAppData? appdata]) async {
     if (c.isRpSms) return;
     var msg = await api.newMsg(
       state: pushService.state,
       conversation: await c.getConversationData(),
       sender: await c.ensureHandle(),
-      message: const api.Message.typing(true)
+      message: api.Message.typing(true, appdata?.appIcon != null ? api.TypingApp(
+        bundleId: appdata!.bundleId, 
+        icon: base64Decode(appdata.appIcon!),
+      ) : null)
     );
     await sendMsg(msg);
   }
@@ -3049,21 +3052,31 @@ class RustPushService extends GetxService {
       final controller = cvc(chat);
       var handle = RustPushBBUtils.rustHandleToBB(myMsg.sender!);
 
-      if (controller.cancelTypingIndicator[handle.address] != null) {
-        controller.cancelTypingIndicator[handle.address]?.cancel();
-        controller.cancelTypingIndicator.remove(handle.address);
+      if (controller.typingIndicatorData[handle.address] != null) {
+        controller.typingIndicatorData[handle.address]?.$1.cancel();
+        controller.typingIndicatorData.remove(handle.address);
       }
 
-      if ((myMsg.message as api.Message_Typing).field0) {
+      var typing = myMsg.message as api.Message_Typing;
+      if (typing.field0) {
         if (!controller.showTypingIndicatorFor.any((h) => handle.address == h.address)) {
           controller.showTypingIndicatorFor.add(handle);
         }
         var future = Future.delayed(const Duration(minutes: 1));
         var subscription = future.asStream().listen((any) {
           controller.showTypingIndicatorFor.remove(handle);
-          controller.cancelTypingIndicator.remove(handle.address);
+          controller.typingIndicatorData.remove(handle.address);
         });
-        controller.cancelTypingIndicator[handle.address] = subscription;
+        Uint8List? icon;
+        if (typing.field1 != null) {
+          String? i = es.cachedStatus.firstWhereOrNull((i) => i.madridBundleId == typing.field1!.bundleId)?.available?.icon;
+          if (i != null) {
+            icon = base64Decode(i);
+          } else {
+            icon = typing.field1!.icon;
+          }
+        }
+        controller.typingIndicatorData[handle.address] = (subscription, icon);
       } else {
         var existing = controller.showTypingIndicatorFor.firstWhereOrNull((h) => handle.address == h.address);
         if (existing != null) {
@@ -3080,9 +3093,9 @@ class RustPushService extends GetxService {
       if (existing != null) {
         controller.showTypingIndicatorFor.remove(existing);
       }
-      if (controller.cancelTypingIndicator[handle.address] != null) {
-        controller.cancelTypingIndicator[handle.address]?.cancel();
-        controller.cancelTypingIndicator.remove(handle.address);
+      if (controller.typingIndicatorData[handle.address] != null) {
+        controller.typingIndicatorData[handle.address]?.$1.cancel();
+        controller.typingIndicatorData.remove(handle.address);
       }
 
       if (chat.isRpSms && !myMsg.verificationFailed) {

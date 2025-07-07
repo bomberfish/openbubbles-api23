@@ -6,6 +6,7 @@ import 'package:bluebubbles/app/components/custom_text_editing_controllers.dart'
 import 'package:bluebubbles/app/layouts/settings/pages/profile/posterkit.dart';
 import 'package:bluebubbles/app/wrappers/stateful_boilerplate.dart';
 import 'package:bluebubbles/database/models.dart';
+import 'package:bluebubbles/services/network/backend_service.dart';
 import 'package:bluebubbles/services/services.dart';
 import 'package:emojis/emoji.dart';
 import 'package:flutter/foundation.dart';
@@ -57,7 +58,7 @@ class ConversationViewController extends StatefulController with GetSingleTicker
   final RxBool recipientNotifsSilenced = false.obs;
   bool showingOverlays = false;
   bool _subjectWasLastFocused = false; // If this is false, then message field was last focused (default)
-  final Map<String, StreamSubscription<dynamic>> cancelTypingIndicator = {};
+  final Map<String, (StreamSubscription<dynamic>, Uint8List?)> typingIndicatorData = {};
 
   FocusNode get lastFocusedNode => _subjectWasLastFocused ? subjectFocusNode : focusNode;
   SpellCheckTextEditingController get lastFocusedTextController => _subjectWasLastFocused ? subjectTextController : textController;
@@ -103,6 +104,26 @@ class ConversationViewController extends StatefulController with GetSingleTicker
   Map<String, ui.Image> images = {};
 
   final RxBool reportJunkAvailable = false.obs;
+  Timer? _debounceTyping;
+
+  void clearTypingState() {
+    _debounceTyping = null;
+  }
+
+  void triggerTypingIndicator() {
+    // don't send a bunch of duplicate events for every typing change
+    if (!ss.settings.enablePrivateAPI.value || !(chat.autoSendTypingIndicators ?? ss.settings.privateSendTypingIndicators.value)) return;
+    _debounceTyping?.cancel();
+    if (_debounceTyping == null) {
+      var a = pickedApp.value?.$2.appData?.firstOrNull;
+      // only other app is Polls atm. Built-in apps have a circle icon which does not work with typing indicators.
+      backend.startedTyping(chat, a?.appId != null ? a : null);
+    }
+    _debounceTyping = Timer(const Duration(seconds: 5), () {
+      backend.stoppedTyping(chat);
+      _debounceTyping = null;
+    });
+  }
 
   void updateContactInfo() {
     if (chat.participants.length == 1) {

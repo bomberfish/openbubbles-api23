@@ -62,7 +62,6 @@ class ConversationTextFieldState extends CustomState<ConversationTextField, void
 
   // typing indicators
   String oldText = "\n";
-  Timer? _debounceTyping;
 
   // previous text state
   TextSelection oldTextFieldSelection = const TextSelection.collapsed(offset: 0);
@@ -185,18 +184,8 @@ class ConversationTextFieldState extends CustomState<ConversationTextField, void
     // typing indicators
     final newText = "${controller.subjectTextController.text}\n${controller.textController.text}";
     if (newText != oldText) {
-      _debounceTyping?.cancel();
       oldText = newText;
-      // don't send a bunch of duplicate events for every typing change
-      if (ss.settings.enablePrivateAPI.value && (chat.autoSendTypingIndicators ?? ss.settings.privateSendTypingIndicators.value) && newText.trim() != "") {
-        if (_debounceTyping == null) {
-          backend.startedTyping(chat);
-        }
-        _debounceTyping = Timer(const Duration(seconds: 3), () {
-          backend.stoppedTyping(chat);
-          _debounceTyping = null;
-        });
-      }
+      if (newText.trim() != "") controller.triggerTypingIndicator();
     }
     // emoji picker
     final _controller = subject ? controller.subjectTextController : controller.textController;
@@ -366,7 +355,7 @@ class ConversationTextFieldState extends CustomState<ConversationTextField, void
     controller.subjectTextController.clear();
     controller.replyToMessage = null;
     controller.scheduledDate.value = null;
-    _debounceTyping = null;
+    controller.clearTypingState();
     // Remove the saved text field draft
     if ((chat.textFieldText ?? "").isNotEmpty) {
       chat.textFieldText = "";

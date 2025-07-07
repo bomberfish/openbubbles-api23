@@ -213,6 +213,7 @@ class ExtensionService extends GetxService {
     }
 
     cm.activeChat!.controller!.pickedApp.value = (file, payload);
+    cm.activeChat!.controller!.triggerTypingIndicator();
     Logger.debug("set");
   }
 }

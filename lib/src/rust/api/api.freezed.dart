@@ -4893,7 +4893,7 @@ mixin _$Message {
     required TResult Function(ReactMessage field0) react,
     required TResult Function() delivered,
     required TResult Function() read,
-    required TResult Function(bool field0) typing,
+    required TResult Function(bool field0, TypingApp? field1) typing,
     required TResult Function(UnsendMessage field0) unsend,
     required TResult Function(EditMessage field0) edit,
     required TResult Function(IconChangeMessage field0) iconChange,
@@ -4925,7 +4925,7 @@ mixin _$Message {
     TResult? Function(ReactMessage field0)? react,
     TResult? Function()? delivered,
     TResult? Function()? read,
-    TResult? Function(bool field0)? typing,
+    TResult? Function(bool field0, TypingApp? field1)? typing,
     TResult? Function(UnsendMessage field0)? unsend,
     TResult? Function(EditMessage field0)? edit,
     TResult? Function(IconChangeMessage field0)? iconChange,
@@ -4956,7 +4956,7 @@ mixin _$Message {
     TResult Function(ReactMessage field0)? react,
     TResult Function()? delivered,
     TResult Function()? read,
-    TResult Function(bool field0)? typing,
+    TResult Function(bool field0, TypingApp? field1)? typing,
     TResult Function(UnsendMessage field0)? unsend,
     TResult Function(EditMessage field0)? edit,
     TResult Function(IconChangeMessage field0)? iconChange,
@@ -5177,7 +5177,7 @@ class _$Message_MessageImpl extends Message_Message {
     required TResult Function(ReactMessage field0) react,
     required TResult Function() delivered,
     required TResult Function() read,
-    required TResult Function(bool field0) typing,
+    required TResult Function(bool field0, TypingApp? field1) typing,
     required TResult Function(UnsendMessage field0) unsend,
     required TResult Function(EditMessage field0) edit,
     required TResult Function(IconChangeMessage field0) iconChange,
@@ -5212,7 +5212,7 @@ class _$Message_MessageImpl extends Message_Message {
     TResult? Function(ReactMessage field0)? react,
     TResult? Function()? delivered,
     TResult? Function()? read,
-    TResult? Function(bool field0)? typing,
+    TResult? Function(bool field0, TypingApp? field1)? typing,
     TResult? Function(UnsendMessage field0)? unsend,
     TResult? Function(EditMessage field0)? edit,
     TResult? Function(IconChangeMessage field0)? iconChange,
@@ -5246,7 +5246,7 @@ class _$Message_MessageImpl extends Message_Message {
     TResult Function(ReactMessage field0)? react,
     TResult Function()? delivered,
     TResult Function()? read,
-    TResult Function(bool field0)? typing,
+    TResult Function(bool field0, TypingApp? field1)? typing,
     TResult Function(UnsendMessage field0)? unsend,
     TResult Function(EditMessage field0)? edit,
     TResult Function(IconChangeMessage field0)? iconChange,
@@ -5478,7 +5478,7 @@ class _$Message_RenameMessageImpl extends Message_RenameMessage {
     required TResult Function(ReactMessage field0) react,
     required TResult Function() delivered,
     required TResult Function() read,
-    required TResult Function(bool field0) typing,
+    required TResult Function(bool field0, TypingApp? field1) typing,
     required TResult Function(UnsendMessage field0) unsend,
     required TResult Function(EditMessage field0) edit,
     required TResult Function(IconChangeMessage field0) iconChange,
@@ -5513,7 +5513,7 @@ class _$Message_RenameMessageImpl extends Message_RenameMessage {
     TResult? Function(ReactMessage field0)? react,
     TResult? Function()? delivered,
     TResult? Function()? read,
-    TResult? Function(bool field0)? typing,
+    TResult? Function(bool field0, TypingApp? field1)? typing,
     TResult? Function(UnsendMessage field0)? unsend,
     TResult? Function(EditMessage field0)? edit,
     TResult? Function(IconChangeMessage field0)? iconChange,
@@ -5547,7 +5547,7 @@ class _$Message_RenameMessageImpl extends Message_RenameMessage {
     TResult Function(ReactMessage field0)? react,
     TResult Function()? delivered,
     TResult Function()? read,
-    TResult Function(bool field0)? typing,
+    TResult Function(bool field0, TypingApp? field1)? typing,
     TResult Function(UnsendMessage field0)? unsend,
     TResult Function(EditMessage field0)? edit,
     TResult Function(IconChangeMessage field0)? iconChange,
@@ -5780,7 +5780,7 @@ class _$Message_ChangeParticipantsImpl extends Message_ChangeParticipants {
     required TResult Function(ReactMessage field0) react,
     required TResult Function() delivered,
     required TResult Function() read,
-    required TResult Function(bool field0) typing,
+    required TResult Function(bool field0, TypingApp? field1) typing,
     required TResult Function(UnsendMessage field0) unsend,
     required TResult Function(EditMessage field0) edit,
     required TResult Function(IconChangeMessage field0) iconChange,
@@ -5815,7 +5815,7 @@ class _$Message_ChangeParticipantsImpl extends Message_ChangeParticipants {
     TResult? Function(ReactMessage field0)? react,
     TResult? Function()? delivered,
     TResult? Function()? read,
-    TResult? Function(bool field0)? typing,
+    TResult? Function(bool field0, TypingApp? field1)? typing,
     TResult? Function(UnsendMessage field0)? unsend,
     TResult? Function(EditMessage field0)? edit,
     TResult? Function(IconChangeMessage field0)? iconChange,
@@ -5849,7 +5849,7 @@ class _$Message_ChangeParticipantsImpl extends Message_ChangeParticipants {
     TResult Function(ReactMessage field0)? react,
     TResult Function()? delivered,
     TResult Function()? read,
-    TResult Function(bool field0)? typing,
+    TResult Function(bool field0, TypingApp? field1)? typing,
     TResult Function(UnsendMessage field0)? unsend,
     TResult Function(EditMessage field0)? edit,
     TResult Function(IconChangeMessage field0)? iconChange,
@@ -6079,7 +6079,7 @@ class _$Message_ReactImpl extends Message_React {
     required TResult Function(ReactMessage field0) react,
     required TResult Function() delivered,
     required TResult Function() read,
-    required TResult Function(bool field0) typing,
+    required TResult Function(bool field0, TypingApp? field1) typing,
     required TResult Function(UnsendMessage field0) unsend,
     required TResult Function(EditMessage field0) edit,
     required TResult Function(IconChangeMessage field0) iconChange,
@@ -6114,7 +6114,7 @@ class _$Message_ReactImpl extends Message_React {
     TResult? Function(ReactMessage field0)? react,
     TResult? Function()? delivered,
     TResult? Function()? read,
-    TResult? Function(bool field0)? typing,
+    TResult? Function(bool field0, TypingApp? field1)? typing,
     TResult? Function(UnsendMessage field0)? unsend,
     TResult? Function(EditMessage field0)? edit,
     TResult? Function(IconChangeMessage field0)? iconChange,
@@ -6148,7 +6148,7 @@ class _$Message_ReactImpl extends Message_React {
     TResult Function(ReactMessage field0)? react,
     TResult Function()? delivered,
     TResult Function()? read,
-    TResult Function(bool field0)? typing,
+    TResult Function(bool field0, TypingApp? field1)? typing,
     TResult Function(UnsendMessage field0)? unsend,
     TResult Function(EditMessage field0)? edit,
     TResult Function(IconChangeMessage field0)? iconChange,
@@ -6350,7 +6350,7 @@ class _$Message_DeliveredImpl extends Message_Delivered {
     required TResult Function(ReactMessage field0) react,
     required TResult Function() delivered,
     required TResult Function() read,
-    required TResult Function(bool field0) typing,
+    required TResult Function(bool field0, TypingApp? field1) typing,
     required TResult Function(UnsendMessage field0) unsend,
     required TResult Function(EditMessage field0) edit,
     required TResult Function(IconChangeMessage field0) iconChange,
@@ -6385,7 +6385,7 @@ class _$Message_DeliveredImpl extends Message_Delivered {
     TResult? Function(ReactMessage field0)? react,
     TResult? Function()? delivered,
     TResult? Function()? read,
-    TResult? Function(bool field0)? typing,
+    TResult? Function(bool field0, TypingApp? field1)? typing,
     TResult? Function(UnsendMessage field0)? unsend,
     TResult? Function(EditMessage field0)? edit,
     TResult? Function(IconChangeMessage field0)? iconChange,
@@ -6419,7 +6419,7 @@ class _$Message_DeliveredImpl extends Message_Delivered {
     TResult Function(ReactMessage field0)? react,
     TResult Function()? delivered,
     TResult Function()? read,
-    TResult Function(bool field0)? typing,
+    TResult Function(bool field0, TypingApp? field1)? typing,
     TResult Function(UnsendMessage field0)? unsend,
     TResult Function(EditMessage field0)? edit,
     TResult Function(IconChangeMessage field0)? iconChange,
@@ -6613,7 +6613,7 @@ class _$Message_ReadImpl extends Message_Read {
     required TResult Function(ReactMessage field0) react,
     required TResult Function() delivered,
     required TResult Function() read,
-    required TResult Function(bool field0) typing,
+    required TResult Function(bool field0, TypingApp? field1) typing,
     required TResult Function(UnsendMessage field0) unsend,
     required TResult Function(EditMessage field0) edit,
     required TResult Function(IconChangeMessage field0) iconChange,
@@ -6648,7 +6648,7 @@ class _$Message_ReadImpl extends Message_Read {
     TResult? Function(ReactMessage field0)? react,
     TResult? Function()? delivered,
     TResult? Function()? read,
-    TResult? Function(bool field0)? typing,
+    TResult? Function(bool field0, TypingApp? field1)? typing,
     TResult? Function(UnsendMessage field0)? unsend,
     TResult? Function(EditMessage field0)? edit,
     TResult? Function(IconChangeMessage field0)? iconChange,
@@ -6682,7 +6682,7 @@ class _$Message_ReadImpl extends Message_Read {
     TResult Function(ReactMessage field0)? react,
     TResult Function()? delivered,
     TResult Function()? read,
-    TResult Function(bool field0)? typing,
+    TResult Function(bool field0, TypingApp? field1)? typing,
     TResult Function(UnsendMessage field0)? unsend,
     TResult Function(EditMessage field0)? edit,
     TResult Function(IconChangeMessage field0)? iconChange,
@@ -6834,7 +6834,7 @@ abstract class _$$Message_TypingImplCopyWith<$Res> {
           $Res Function(_$Message_TypingImpl) then) =
       __$$Message_TypingImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({bool field0});
+  $Res call({bool field0, TypingApp? field1});
 }
 
 /// @nodoc
@@ -6851,12 +6851,17 @@ class __$$Message_TypingImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? field0 = null,
+    Object? field1 = freezed,
   }) {
     return _then(_$Message_TypingImpl(
       null == field0
           ? _value.field0
           : field0 // ignore: cast_nullable_to_non_nullable
               as bool,
+      freezed == field1
+          ? _value.field1
+          : field1 // ignore: cast_nullable_to_non_nullable
+              as TypingApp?,
     ));
   }
 }
@@ -6864,14 +6869,16 @@ class __$$Message_TypingImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$Message_TypingImpl extends Message_Typing {
-  const _$Message_TypingImpl(this.field0) : super._();
+  const _$Message_TypingImpl(this.field0, [this.field1]) : super._();
 
   @override
   final bool field0;
+  @override
+  final TypingApp? field1;
 
   @override
   String toString() {
-    return 'Message.typing(field0: $field0)';
+    return 'Message.typing(field0: $field0, field1: $field1)';
   }
 
   @override
@@ -6879,11 +6886,12 @@ class _$Message_TypingImpl extends Message_Typing {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$Message_TypingImpl &&
-            (identical(other.field0, field0) || other.field0 == field0));
+            (identical(other.field0, field0) || other.field0 == field0) &&
+            (identical(other.field1, field1) || other.field1 == field1));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, field0);
+  int get hashCode => Object.hash(runtimeType, field0, field1);
 
   /// Create a copy of Message
   /// with the given fields replaced by the non-null parameter values.
@@ -6904,7 +6912,7 @@ class _$Message_TypingImpl extends Message_Typing {
     required TResult Function(ReactMessage field0) react,
     required TResult Function() delivered,
     required TResult Function() read,
-    required TResult Function(bool field0) typing,
+    required TResult Function(bool field0, TypingApp? field1) typing,
     required TResult Function(UnsendMessage field0) unsend,
     required TResult Function(EditMessage field0) edit,
     required TResult Function(IconChangeMessage field0) iconChange,
@@ -6927,7 +6935,7 @@ class _$Message_TypingImpl extends Message_Typing {
     required TResult Function(SetTranscriptBackgroundMessage field0)
         setTranscriptBackground,
   }) {
-    return typing(field0);
+    return typing(field0, field1);
   }
 
   @override
@@ -6939,7 +6947,7 @@ class _$Message_TypingImpl extends Message_Typing {
     TResult? Function(ReactMessage field0)? react,
     TResult? Function()? delivered,
     TResult? Function()? read,
-    TResult? Function(bool field0)? typing,
+    TResult? Function(bool field0, TypingApp? field1)? typing,
     TResult? Function(UnsendMessage field0)? unsend,
     TResult? Function(EditMessage field0)? edit,
     TResult? Function(IconChangeMessage field0)? iconChange,
@@ -6961,7 +6969,7 @@ class _$Message_TypingImpl extends Message_Typing {
     TResult? Function(SetTranscriptBackgroundMessage field0)?
         setTranscriptBackground,
   }) {
-    return typing?.call(field0);
+    return typing?.call(field0, field1);
   }
 
   @override
@@ -6973,7 +6981,7 @@ class _$Message_TypingImpl extends Message_Typing {
     TResult Function(ReactMessage field0)? react,
     TResult Function()? delivered,
     TResult Function()? read,
-    TResult Function(bool field0)? typing,
+    TResult Function(bool field0, TypingApp? field1)? typing,
     TResult Function(UnsendMessage field0)? unsend,
     TResult Function(EditMessage field0)? edit,
     TResult Function(IconChangeMessage field0)? iconChange,
@@ -6997,7 +7005,7 @@ class _$Message_TypingImpl extends Message_Typing {
     required TResult orElse(),
   }) {
     if (typing != null) {
-      return typing(field0);
+      return typing(field0, field1);
     }
     return orElse();
   }
@@ -7115,10 +7123,12 @@ class _$Message_TypingImpl extends Message_Typing {
 }
 
 abstract class Message_Typing extends Message {
-  const factory Message_Typing(final bool field0) = _$Message_TypingImpl;
+  const factory Message_Typing(final bool field0, [final TypingApp? field1]) =
+      _$Message_TypingImpl;
   const Message_Typing._() : super._();
 
   bool get field0;
+  TypingApp? get field1;
 
   /// Create a copy of Message
   /// with the given fields replaced by the non-null parameter values.
@@ -7203,7 +7213,7 @@ class _$Message_UnsendImpl extends Message_Unsend {
     required TResult Function(ReactMessage field0) react,
     required TResult Function() delivered,
     required TResult Function() read,
-    required TResult Function(bool field0) typing,
+    required TResult Function(bool field0, TypingApp? field1) typing,
     required TResult Function(UnsendMessage field0) unsend,
     required TResult Function(EditMessage field0) edit,
     required TResult Function(IconChangeMessage field0) iconChange,
@@ -7238,7 +7248,7 @@ class _$Message_UnsendImpl extends Message_Unsend {
     TResult? Function(ReactMessage field0)? react,
     TResult? Function()? delivered,
     TResult? Function()? read,
-    TResult? Function(bool field0)? typing,
+    TResult? Function(bool field0, TypingApp? field1)? typing,
     TResult? Function(UnsendMessage field0)? unsend,
     TResult? Function(EditMessage field0)? edit,
     TResult? Function(IconChangeMessage field0)? iconChange,
@@ -7272,7 +7282,7 @@ class _$Message_UnsendImpl extends Message_Unsend {
     TResult Function(ReactMessage field0)? react,
     TResult Function()? delivered,
     TResult Function()? read,
-    TResult Function(bool field0)? typing,
+    TResult Function(bool field0, TypingApp? field1)? typing,
     TResult Function(UnsendMessage field0)? unsend,
     TResult Function(EditMessage field0)? edit,
     TResult Function(IconChangeMessage field0)? iconChange,
@@ -7502,7 +7512,7 @@ class _$Message_EditImpl extends Message_Edit {
     required TResult Function(ReactMessage field0) react,
     required TResult Function() delivered,
     required TResult Function() read,
-    required TResult Function(bool field0) typing,
+    required TResult Function(bool field0, TypingApp? field1) typing,
     required TResult Function(UnsendMessage field0) unsend,
     required TResult Function(EditMessage field0) edit,
     required TResult Function(IconChangeMessage field0) iconChange,
@@ -7537,7 +7547,7 @@ class _$Message_EditImpl extends Message_Edit {
     TResult? Function(ReactMessage field0)? react,
     TResult? Function()? delivered,
     TResult? Function()? read,
-    TResult? Function(bool field0)? typing,
+    TResult? Function(bool field0, TypingApp? field1)? typing,
     TResult? Function(UnsendMessage field0)? unsend,
     TResult? Function(EditMessage field0)? edit,
     TResult? Function(IconChangeMessage field0)? iconChange,
@@ -7571,7 +7581,7 @@ class _$Message_EditImpl extends Message_Edit {
     TResult Function(ReactMessage field0)? react,
     TResult Function()? delivered,
     TResult Function()? read,
-    TResult Function(bool field0)? typing,
+    TResult Function(bool field0, TypingApp? field1)? typing,
     TResult Function(UnsendMessage field0)? unsend,
     TResult Function(EditMessage field0)? edit,
     TResult Function(IconChangeMessage field0)? iconChange,
@@ -7801,7 +7811,7 @@ class _$Message_IconChangeImpl extends Message_IconChange {
     required TResult Function(ReactMessage field0) react,
     required TResult Function() delivered,
     required TResult Function() read,
-    required TResult Function(bool field0) typing,
+    required TResult Function(bool field0, TypingApp? field1) typing,
     required TResult Function(UnsendMessage field0) unsend,
     required TResult Function(EditMessage field0) edit,
     required TResult Function(IconChangeMessage field0) iconChange,
@@ -7836,7 +7846,7 @@ class _$Message_IconChangeImpl extends Message_IconChange {
     TResult? Function(ReactMessage field0)? react,
     TResult? Function()? delivered,
     TResult? Function()? read,
-    TResult? Function(bool field0)? typing,
+    TResult? Function(bool field0, TypingApp? field1)? typing,
     TResult? Function(UnsendMessage field0)? unsend,
     TResult? Function(EditMessage field0)? edit,
     TResult? Function(IconChangeMessage field0)? iconChange,
@@ -7870,7 +7880,7 @@ class _$Message_IconChangeImpl extends Message_IconChange {
     TResult Function(ReactMessage field0)? react,
     TResult Function()? delivered,
     TResult Function()? read,
-    TResult Function(bool field0)? typing,
+    TResult Function(bool field0, TypingApp? field1)? typing,
     TResult Function(UnsendMessage field0)? unsend,
     TResult Function(EditMessage field0)? edit,
     TResult Function(IconChangeMessage field0)? iconChange,
@@ -8103,7 +8113,7 @@ class _$Message_EnableSmsActivationImpl extends Message_EnableSmsActivation {
     required TResult Function(ReactMessage field0) react,
     required TResult Function() delivered,
     required TResult Function() read,
-    required TResult Function(bool field0) typing,
+    required TResult Function(bool field0, TypingApp? field1) typing,
     required TResult Function(UnsendMessage field0) unsend,
     required TResult Function(EditMessage field0) edit,
     required TResult Function(IconChangeMessage field0) iconChange,
@@ -8138,7 +8148,7 @@ class _$Message_EnableSmsActivationImpl extends Message_EnableSmsActivation {
     TResult? Function(ReactMessage field0)? react,
     TResult? Function()? delivered,
     TResult? Function()? read,
-    TResult? Function(bool field0)? typing,
+    TResult? Function(bool field0, TypingApp? field1)? typing,
     TResult? Function(UnsendMessage field0)? unsend,
     TResult? Function(EditMessage field0)? edit,
     TResult? Function(IconChangeMessage field0)? iconChange,
@@ -8172,7 +8182,7 @@ class _$Message_EnableSmsActivationImpl extends Message_EnableSmsActivation {
     TResult Function(ReactMessage field0)? react,
     TResult Function()? delivered,
     TResult Function()? read,
-    TResult Function(bool field0)? typing,
+    TResult Function(bool field0, TypingApp? field1)? typing,
     TResult Function(UnsendMessage field0)? unsend,
     TResult Function(EditMessage field0)? edit,
     TResult Function(IconChangeMessage field0)? iconChange,
@@ -8378,7 +8388,7 @@ class _$Message_MessageReadOnDeviceImpl extends Message_MessageReadOnDevice {
     required TResult Function(ReactMessage field0) react,
     required TResult Function() delivered,
     required TResult Function() read,
-    required TResult Function(bool field0) typing,
+    required TResult Function(bool field0, TypingApp? field1) typing,
     required TResult Function(UnsendMessage field0) unsend,
     required TResult Function(EditMessage field0) edit,
     required TResult Function(IconChangeMessage field0) iconChange,
@@ -8413,7 +8423,7 @@ class _$Message_MessageReadOnDeviceImpl extends Message_MessageReadOnDevice {
     TResult? Function(ReactMessage field0)? react,
     TResult? Function()? delivered,
     TResult? Function()? read,
-    TResult? Function(bool field0)? typing,
+    TResult? Function(bool field0, TypingApp? field1)? typing,
     TResult? Function(UnsendMessage field0)? unsend,
     TResult? Function(EditMessage field0)? edit,
     TResult? Function(IconChangeMessage field0)? iconChange,
@@ -8447,7 +8457,7 @@ class _$Message_MessageReadOnDeviceImpl extends Message_MessageReadOnDevice {
     TResult Function(ReactMessage field0)? react,
     TResult Function()? delivered,
     TResult Function()? read,
-    TResult Function(bool field0)? typing,
+    TResult Function(bool field0, TypingApp? field1)? typing,
     TResult Function(UnsendMessage field0)? unsend,
     TResult Function(EditMessage field0)? edit,
     TResult Function(IconChangeMessage field0)? iconChange,
@@ -8672,7 +8682,7 @@ class _$Message_SmsConfirmSentImpl extends Message_SmsConfirmSent {
     required TResult Function(ReactMessage field0) react,
     required TResult Function() delivered,
     required TResult Function() read,
-    required TResult Function(bool field0) typing,
+    required TResult Function(bool field0, TypingApp? field1) typing,
     required TResult Function(UnsendMessage field0) unsend,
     required TResult Function(EditMessage field0) edit,
     required TResult Function(IconChangeMessage field0) iconChange,
@@ -8707,7 +8717,7 @@ class _$Message_SmsConfirmSentImpl extends Message_SmsConfirmSent {
     TResult? Function(ReactMessage field0)? react,
     TResult? Function()? delivered,
     TResult? Function()? read,
-    TResult? Function(bool field0)? typing,
+    TResult? Function(bool field0, TypingApp? field1)? typing,
     TResult? Function(UnsendMessage field0)? unsend,
     TResult? Function(EditMessage field0)? edit,
     TResult? Function(IconChangeMessage field0)? iconChange,
@@ -8741,7 +8751,7 @@ class _$Message_SmsConfirmSentImpl extends Message_SmsConfirmSent {
     TResult Function(ReactMessage field0)? react,
     TResult Function()? delivered,
     TResult Function()? read,
-    TResult Function(bool field0)? typing,
+    TResult Function(bool field0, TypingApp? field1)? typing,
     TResult Function(UnsendMessage field0)? unsend,
     TResult Function(EditMessage field0)? edit,
     TResult Function(IconChangeMessage field0)? iconChange,
@@ -8944,7 +8954,7 @@ class _$Message_MarkUnreadImpl extends Message_MarkUnread {
     required TResult Function(ReactMessage field0) react,
     required TResult Function() delivered,
     required TResult Function() read,
-    required TResult Function(bool field0) typing,
+    required TResult Function(bool field0, TypingApp? field1) typing,
     required TResult Function(UnsendMessage field0) unsend,
     required TResult Function(EditMessage field0) edit,
     required TResult Function(IconChangeMessage field0) iconChange,
@@ -8979,7 +8989,7 @@ class _$Message_MarkUnreadImpl extends Message_MarkUnread {
     TResult? Function(ReactMessage field0)? react,
     TResult? Function()? delivered,
     TResult? Function()? read,
-    TResult? Function(bool field0)? typing,
+    TResult? Function(bool field0, TypingApp? field1)? typing,
     TResult? Function(UnsendMessage field0)? unsend,
     TResult? Function(EditMessage field0)? edit,
     TResult? Function(IconChangeMessage field0)? iconChange,
@@ -9013,7 +9023,7 @@ class _$Message_MarkUnreadImpl extends Message_MarkUnread {
     TResult Function(ReactMessage field0)? react,
     TResult Function()? delivered,
     TResult Function()? read,
-    TResult Function(bool field0)? typing,
+    TResult Function(bool field0, TypingApp? field1)? typing,
     TResult Function(UnsendMessage field0)? unsend,
     TResult Function(EditMessage field0)? edit,
     TResult Function(IconChangeMessage field0)? iconChange,
@@ -9210,7 +9220,7 @@ class _$Message_PeerCacheInvalidateImpl extends Message_PeerCacheInvalidate {
     required TResult Function(ReactMessage field0) react,
     required TResult Function() delivered,
     required TResult Function() read,
-    required TResult Function(bool field0) typing,
+    required TResult Function(bool field0, TypingApp? field1) typing,
     required TResult Function(UnsendMessage field0) unsend,
     required TResult Function(EditMessage field0) edit,
     required TResult Function(IconChangeMessage field0) iconChange,
@@ -9245,7 +9255,7 @@ class _$Message_PeerCacheInvalidateImpl extends Message_PeerCacheInvalidate {
     TResult? Function(ReactMessage field0)? react,
     TResult? Function()? delivered,
     TResult? Function()? read,
-    TResult? Function(bool field0)? typing,
+    TResult? Function(bool field0, TypingApp? field1)? typing,
     TResult? Function(UnsendMessage field0)? unsend,
     TResult? Function(EditMessage field0)? edit,
     TResult? Function(IconChangeMessage field0)? iconChange,
@@ -9279,7 +9289,7 @@ class _$Message_PeerCacheInvalidateImpl extends Message_PeerCacheInvalidate {
     TResult Function(ReactMessage field0)? react,
     TResult Function()? delivered,
     TResult Function()? read,
-    TResult Function(bool field0)? typing,
+    TResult Function(bool field0, TypingApp? field1)? typing,
     TResult Function(UnsendMessage field0)? unsend,
     TResult Function(EditMessage field0)? edit,
     TResult Function(IconChangeMessage field0)? iconChange,
@@ -9504,7 +9514,7 @@ class _$Message_UpdateExtensionImpl extends Message_UpdateExtension {
     required TResult Function(ReactMessage field0) react,
     required TResult Function() delivered,
     required TResult Function() read,
-    required TResult Function(bool field0) typing,
+    required TResult Function(bool field0, TypingApp? field1) typing,
     required TResult Function(UnsendMessage field0) unsend,
     required TResult Function(EditMessage field0) edit,
     required TResult Function(IconChangeMessage field0) iconChange,
@@ -9539,7 +9549,7 @@ class _$Message_UpdateExtensionImpl extends Message_UpdateExtension {
     TResult? Function(ReactMessage field0)? react,
     TResult? Function()? delivered,
     TResult? Function()? read,
-    TResult? Function(bool field0)? typing,
+    TResult? Function(bool field0, TypingApp? field1)? typing,
     TResult? Function(UnsendMessage field0)? unsend,
     TResult? Function(EditMessage field0)? edit,
     TResult? Function(IconChangeMessage field0)? iconChange,
@@ -9573,7 +9583,7 @@ class _$Message_UpdateExtensionImpl extends Message_UpdateExtension {
     TResult Function(ReactMessage field0)? react,
     TResult Function()? delivered,
     TResult Function()? read,
-    TResult Function(bool field0)? typing,
+    TResult Function(bool field0, TypingApp? field1)? typing,
     TResult Function(UnsendMessage field0)? unsend,
     TResult Function(EditMessage field0)? edit,
     TResult Function(IconChangeMessage field0)? iconChange,
@@ -9803,7 +9813,7 @@ class _$Message_ErrorImpl extends Message_Error {
     required TResult Function(ReactMessage field0) react,
     required TResult Function() delivered,
     required TResult Function() read,
-    required TResult Function(bool field0) typing,
+    required TResult Function(bool field0, TypingApp? field1) typing,
     required TResult Function(UnsendMessage field0) unsend,
     required TResult Function(EditMessage field0) edit,
     required TResult Function(IconChangeMessage field0) iconChange,
@@ -9838,7 +9848,7 @@ class _$Message_ErrorImpl extends Message_Error {
     TResult? Function(ReactMessage field0)? react,
     TResult? Function()? delivered,
     TResult? Function()? read,
-    TResult? Function(bool field0)? typing,
+    TResult? Function(bool field0, TypingApp? field1)? typing,
     TResult? Function(UnsendMessage field0)? unsend,
     TResult? Function(EditMessage field0)? edit,
     TResult? Function(IconChangeMessage field0)? iconChange,
@@ -9872,7 +9882,7 @@ class _$Message_ErrorImpl extends Message_Error {
     TResult Function(ReactMessage field0)? react,
     TResult Function()? delivered,
     TResult Function()? read,
-    TResult Function(bool field0)? typing,
+    TResult Function(bool field0, TypingApp? field1)? typing,
     TResult Function(UnsendMessage field0)? unsend,
     TResult Function(EditMessage field0)? edit,
     TResult Function(IconChangeMessage field0)? iconChange,
@@ -10104,7 +10114,7 @@ class _$Message_MoveToRecycleBinImpl extends Message_MoveToRecycleBin {
     required TResult Function(ReactMessage field0) react,
     required TResult Function() delivered,
     required TResult Function() read,
-    required TResult Function(bool field0) typing,
+    required TResult Function(bool field0, TypingApp? field1) typing,
     required TResult Function(UnsendMessage field0) unsend,
     required TResult Function(EditMessage field0) edit,
     required TResult Function(IconChangeMessage field0) iconChange,
@@ -10139,7 +10149,7 @@ class _$Message_MoveToRecycleBinImpl extends Message_MoveToRecycleBin {
     TResult? Function(ReactMessage field0)? react,
     TResult? Function()? delivered,
     TResult? Function()? read,
-    TResult? Function(bool field0)? typing,
+    TResult? Function(bool field0, TypingApp? field1)? typing,
     TResult? Function(UnsendMessage field0)? unsend,
     TResult? Function(EditMessage field0)? edit,
     TResult? Function(IconChangeMessage field0)? iconChange,
@@ -10173,7 +10183,7 @@ class _$Message_MoveToRecycleBinImpl extends Message_MoveToRecycleBin {
     TResult Function(ReactMessage field0)? react,
     TResult Function()? delivered,
     TResult Function()? read,
-    TResult Function(bool field0)? typing,
+    TResult Function(bool field0, TypingApp? field1)? typing,
     TResult Function(UnsendMessage field0)? unsend,
     TResult Function(EditMessage field0)? edit,
     TResult Function(IconChangeMessage field0)? iconChange,
@@ -10404,7 +10414,7 @@ class _$Message_RecoverChatImpl extends Message_RecoverChat {
     required TResult Function(ReactMessage field0) react,
     required TResult Function() delivered,
     required TResult Function() read,
-    required TResult Function(bool field0) typing,
+    required TResult Function(bool field0, TypingApp? field1) typing,
     required TResult Function(UnsendMessage field0) unsend,
     required TResult Function(EditMessage field0) edit,
     required TResult Function(IconChangeMessage field0) iconChange,
@@ -10439,7 +10449,7 @@ class _$Message_RecoverChatImpl extends Message_RecoverChat {
     TResult? Function(ReactMessage field0)? react,
     TResult? Function()? delivered,
     TResult? Function()? read,
-    TResult? Function(bool field0)? typing,
+    TResult? Function(bool field0, TypingApp? field1)? typing,
     TResult? Function(UnsendMessage field0)? unsend,
     TResult? Function(EditMessage field0)? edit,
     TResult? Function(IconChangeMessage field0)? iconChange,
@@ -10473,7 +10483,7 @@ class _$Message_RecoverChatImpl extends Message_RecoverChat {
     TResult Function(ReactMessage field0)? react,
     TResult Function()? delivered,
     TResult Function()? read,
-    TResult Function(bool field0)? typing,
+    TResult Function(bool field0, TypingApp? field1)? typing,
     TResult Function(UnsendMessage field0)? unsend,
     TResult Function(EditMessage field0)? edit,
     TResult Function(IconChangeMessage field0)? iconChange,
@@ -10706,7 +10716,7 @@ class _$Message_PermanentDeleteImpl extends Message_PermanentDelete {
     required TResult Function(ReactMessage field0) react,
     required TResult Function() delivered,
     required TResult Function() read,
-    required TResult Function(bool field0) typing,
+    required TResult Function(bool field0, TypingApp? field1) typing,
     required TResult Function(UnsendMessage field0) unsend,
     required TResult Function(EditMessage field0) edit,
     required TResult Function(IconChangeMessage field0) iconChange,
@@ -10741,7 +10751,7 @@ class _$Message_PermanentDeleteImpl extends Message_PermanentDelete {
     TResult? Function(ReactMessage field0)? react,
     TResult? Function()? delivered,
     TResult? Function()? read,
-    TResult? Function(bool field0)? typing,
+    TResult? Function(bool field0, TypingApp? field1)? typing,
     TResult? Function(UnsendMessage field0)? unsend,
     TResult? Function(EditMessage field0)? edit,
     TResult? Function(IconChangeMessage field0)? iconChange,
@@ -10775,7 +10785,7 @@ class _$Message_PermanentDeleteImpl extends Message_PermanentDelete {
     TResult Function(ReactMessage field0)? react,
     TResult Function()? delivered,
     TResult Function()? read,
-    TResult Function(bool field0)? typing,
+    TResult Function(bool field0, TypingApp? field1)? typing,
     TResult Function(UnsendMessage field0)? unsend,
     TResult Function(EditMessage field0)? edit,
     TResult Function(IconChangeMessage field0)? iconChange,
@@ -10978,7 +10988,7 @@ class _$Message_UnscheduleImpl extends Message_Unschedule {
     required TResult Function(ReactMessage field0) react,
     required TResult Function() delivered,
     required TResult Function() read,
-    required TResult Function(bool field0) typing,
+    required TResult Function(bool field0, TypingApp? field1) typing,
     required TResult Function(UnsendMessage field0) unsend,
     required TResult Function(EditMessage field0) edit,
     required TResult Function(IconChangeMessage field0) iconChange,
@@ -11013,7 +11023,7 @@ class _$Message_UnscheduleImpl extends Message_Unschedule {
     TResult? Function(ReactMessage field0)? react,
     TResult? Function()? delivered,
     TResult? Function()? read,
-    TResult? Function(bool field0)? typing,
+    TResult? Function(bool field0, TypingApp? field1)? typing,
     TResult? Function(UnsendMessage field0)? unsend,
     TResult? Function(EditMessage field0)? edit,
     TResult? Function(IconChangeMessage field0)? iconChange,
@@ -11047,7 +11057,7 @@ class _$Message_UnscheduleImpl extends Message_Unschedule {
     TResult Function(ReactMessage field0)? react,
     TResult Function()? delivered,
     TResult Function()? read,
-    TResult Function(bool field0)? typing,
+    TResult Function(bool field0, TypingApp? field1)? typing,
     TResult Function(UnsendMessage field0)? unsend,
     TResult Function(EditMessage field0)? edit,
     TResult Function(IconChangeMessage field0)? iconChange,
@@ -11270,7 +11280,7 @@ class _$Message_UpdateProfileImpl extends Message_UpdateProfile {
     required TResult Function(ReactMessage field0) react,
     required TResult Function() delivered,
     required TResult Function() read,
-    required TResult Function(bool field0) typing,
+    required TResult Function(bool field0, TypingApp? field1) typing,
     required TResult Function(UnsendMessage field0) unsend,
     required TResult Function(EditMessage field0) edit,
     required TResult Function(IconChangeMessage field0) iconChange,
@@ -11305,7 +11315,7 @@ class _$Message_UpdateProfileImpl extends Message_UpdateProfile {
     TResult? Function(ReactMessage field0)? react,
     TResult? Function()? delivered,
     TResult? Function()? read,
-    TResult? Function(bool field0)? typing,
+    TResult? Function(bool field0, TypingApp? field1)? typing,
     TResult? Function(UnsendMessage field0)? unsend,
     TResult? Function(EditMessage field0)? edit,
     TResult? Function(IconChangeMessage field0)? iconChange,
@@ -11339,7 +11349,7 @@ class _$Message_UpdateProfileImpl extends Message_UpdateProfile {
     TResult Function(ReactMessage field0)? react,
     TResult Function()? delivered,
     TResult Function()? read,
-    TResult Function(bool field0)? typing,
+    TResult Function(bool field0, TypingApp? field1)? typing,
     TResult Function(UnsendMessage field0)? unsend,
     TResult Function(EditMessage field0)? edit,
     TResult Function(IconChangeMessage field0)? iconChange,
@@ -11573,7 +11583,7 @@ class _$Message_UpdateProfileSharingImpl extends Message_UpdateProfileSharing {
     required TResult Function(ReactMessage field0) react,
     required TResult Function() delivered,
     required TResult Function() read,
-    required TResult Function(bool field0) typing,
+    required TResult Function(bool field0, TypingApp? field1) typing,
     required TResult Function(UnsendMessage field0) unsend,
     required TResult Function(EditMessage field0) edit,
     required TResult Function(IconChangeMessage field0) iconChange,
@@ -11608,7 +11618,7 @@ class _$Message_UpdateProfileSharingImpl extends Message_UpdateProfileSharing {
     TResult? Function(ReactMessage field0)? react,
     TResult? Function()? delivered,
     TResult? Function()? read,
-    TResult? Function(bool field0)? typing,
+    TResult? Function(bool field0, TypingApp? field1)? typing,
     TResult? Function(UnsendMessage field0)? unsend,
     TResult? Function(EditMessage field0)? edit,
     TResult? Function(IconChangeMessage field0)? iconChange,
@@ -11642,7 +11652,7 @@ class _$Message_UpdateProfileSharingImpl extends Message_UpdateProfileSharing {
     TResult Function(ReactMessage field0)? react,
     TResult Function()? delivered,
     TResult Function()? read,
-    TResult Function(bool field0)? typing,
+    TResult Function(bool field0, TypingApp? field1)? typing,
     TResult Function(UnsendMessage field0)? unsend,
     TResult Function(EditMessage field0)? edit,
     TResult Function(IconChangeMessage field0)? iconChange,
@@ -11876,7 +11886,7 @@ class _$Message_ShareProfileImpl extends Message_ShareProfile {
     required TResult Function(ReactMessage field0) react,
     required TResult Function() delivered,
     required TResult Function() read,
-    required TResult Function(bool field0) typing,
+    required TResult Function(bool field0, TypingApp? field1) typing,
     required TResult Function(UnsendMessage field0) unsend,
     required TResult Function(EditMessage field0) edit,
     required TResult Function(IconChangeMessage field0) iconChange,
@@ -11911,7 +11921,7 @@ class _$Message_ShareProfileImpl extends Message_ShareProfile {
     TResult? Function(ReactMessage field0)? react,
     TResult? Function()? delivered,
     TResult? Function()? read,
-    TResult? Function(bool field0)? typing,
+    TResult? Function(bool field0, TypingApp? field1)? typing,
     TResult? Function(UnsendMessage field0)? unsend,
     TResult? Function(EditMessage field0)? edit,
     TResult? Function(IconChangeMessage field0)? iconChange,
@@ -11945,7 +11955,7 @@ class _$Message_ShareProfileImpl extends Message_ShareProfile {
     TResult Function(ReactMessage field0)? react,
     TResult Function()? delivered,
     TResult Function()? read,
-    TResult Function(bool field0)? typing,
+    TResult Function(bool field0, TypingApp? field1)? typing,
     TResult Function(UnsendMessage field0)? unsend,
     TResult Function(EditMessage field0)? edit,
     TResult Function(IconChangeMessage field0)? iconChange,
@@ -12150,7 +12160,7 @@ class _$Message_NotifyAnywaysImpl extends Message_NotifyAnyways {
     required TResult Function(ReactMessage field0) react,
     required TResult Function() delivered,
     required TResult Function() read,
-    required TResult Function(bool field0) typing,
+    required TResult Function(bool field0, TypingApp? field1) typing,
     required TResult Function(UnsendMessage field0) unsend,
     required TResult Function(EditMessage field0) edit,
     required TResult Function(IconChangeMessage field0) iconChange,
@@ -12185,7 +12195,7 @@ class _$Message_NotifyAnywaysImpl extends Message_NotifyAnyways {
     TResult? Function(ReactMessage field0)? react,
     TResult? Function()? delivered,
     TResult? Function()? read,
-    TResult? Function(bool field0)? typing,
+    TResult? Function(bool field0, TypingApp? field1)? typing,
     TResult? Function(UnsendMessage field0)? unsend,
     TResult? Function(EditMessage field0)? edit,
     TResult? Function(IconChangeMessage field0)? iconChange,
@@ -12219,7 +12229,7 @@ class _$Message_NotifyAnywaysImpl extends Message_NotifyAnyways {
     TResult Function(ReactMessage field0)? react,
     TResult Function()? delivered,
     TResult Function()? read,
-    TResult Function(bool field0)? typing,
+    TResult Function(bool field0, TypingApp? field1)? typing,
     TResult Function(UnsendMessage field0)? unsend,
     TResult Function(EditMessage field0)? edit,
     TResult Function(IconChangeMessage field0)? iconChange,
@@ -12458,7 +12468,7 @@ class _$Message_SetTranscriptBackgroundImpl
     required TResult Function(ReactMessage field0) react,
     required TResult Function() delivered,
     required TResult Function() read,
-    required TResult Function(bool field0) typing,
+    required TResult Function(bool field0, TypingApp? field1) typing,
     required TResult Function(UnsendMessage field0) unsend,
     required TResult Function(EditMessage field0) edit,
     required TResult Function(IconChangeMessage field0) iconChange,
@@ -12493,7 +12503,7 @@ class _$Message_SetTranscriptBackgroundImpl
     TResult? Function(ReactMessage field0)? react,
     TResult? Function()? delivered,
     TResult? Function()? read,
-    TResult? Function(bool field0)? typing,
+    TResult? Function(bool field0, TypingApp? field1)? typing,
     TResult? Function(UnsendMessage field0)? unsend,
     TResult? Function(EditMessage field0)? edit,
     TResult? Function(IconChangeMessage field0)? iconChange,
@@ -12527,7 +12537,7 @@ class _$Message_SetTranscriptBackgroundImpl
     TResult Function(ReactMessage field0)? react,
     TResult Function()? delivered,
     TResult Function()? read,
-    TResult Function(bool field0)? typing,
+    TResult Function(bool field0, TypingApp? field1)? typing,
     TResult Function(UnsendMessage field0)? unsend,
     TResult Function(EditMessage field0)? edit,
     TResult Function(IconChangeMessage field0)? iconChange,

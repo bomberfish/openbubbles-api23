@@ -6240,8 +6240,9 @@ const _: fn() = || {
         }
         crate::api::api::Message::Delivered => {}
         crate::api::api::Message::Read => {}
-        crate::api::api::Message::Typing(field0) => {
+        crate::api::api::Message::Typing(field0, field1) => {
             let _: bool = field0;
+            let _: Option<crate::api::api::TypingApp> = field1;
         }
         crate::api::api::Message::Unsend(field0) => {
             let _: crate::api::api::UnsendMessage = field0;
@@ -6780,6 +6781,11 @@ const _: fn() = || {
         let _: String = TrustedPhoneNumber.last_two_digits;
         let _: String = TrustedPhoneNumber.push_mode;
         let _: u32 = TrustedPhoneNumber.id;
+    }
+    {
+        let TypingApp = None::<crate::api::api::TypingApp>.unwrap();
+        let _: String = TypingApp.bundle_id;
+        let _: Vec<u8> = TypingApp.icon;
     }
     match None::<crate::api::api::UIColor>.unwrap() {
         crate::api::api::UIColor::RGBAColorSpace {
@@ -8518,7 +8524,8 @@ impl SseDecode for crate::api::api::Message {
             }
             6 => {
                 let mut var_field0 = <bool>::sse_decode(deserializer);
-                return crate::api::api::Message::Typing(var_field0);
+                let mut var_field1 = <Option<crate::api::api::TypingApp>>::sse_decode(deserializer);
+                return crate::api::api::Message::Typing(var_field0, var_field1);
             }
             7 => {
                 let mut var_field0 = <crate::api::api::UnsendMessage>::sse_decode(deserializer);
@@ -9318,6 +9325,17 @@ impl SseDecode for Option<crate::api::api::SupportAlert> {
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
         if (<bool>::sse_decode(deserializer)) {
             return Some(<crate::api::api::SupportAlert>::sse_decode(deserializer));
+        } else {
+            return None;
+        }
+    }
+}
+
+impl SseDecode for Option<crate::api::api::TypingApp> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        if (<bool>::sse_decode(deserializer)) {
+            return Some(<crate::api::api::TypingApp>::sse_decode(deserializer));
         } else {
             return None;
         }
@@ -10416,6 +10434,18 @@ impl SseDecode for crate::api::api::TrustedPhoneNumber {
             last_two_digits: var_lastTwoDigits,
             push_mode: var_pushMode,
             id: var_id,
+        };
+    }
+}
+
+impl SseDecode for crate::api::api::TypingApp {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut var_bundleId = <String>::sse_decode(deserializer);
+        let mut var_icon = <Vec<u8>>::sse_decode(deserializer);
+        return crate::api::api::TypingApp {
+            bundle_id: var_bundleId,
+            icon: var_icon,
         };
     }
 }
@@ -12062,9 +12092,12 @@ impl flutter_rust_bridge::IntoDart for FrbWrapper<crate::api::api::Message> {
             }
             crate::api::api::Message::Delivered => [4.into_dart()].into_dart(),
             crate::api::api::Message::Read => [5.into_dart()].into_dart(),
-            crate::api::api::Message::Typing(field0) => {
-                [6.into_dart(), field0.into_into_dart().into_dart()].into_dart()
-            }
+            crate::api::api::Message::Typing(field0, field1) => [
+                6.into_dart(),
+                field0.into_into_dart().into_dart(),
+                field1.into_into_dart().into_dart(),
+            ]
+            .into_dart(),
             crate::api::api::Message::Unsend(field0) => {
                 [7.into_dart(), field0.into_into_dart().into_dart()].into_dart()
             }
@@ -13761,6 +13794,27 @@ impl flutter_rust_bridge::IntoIntoDart<FrbWrapper<crate::api::api::TrustedPhoneN
     }
 }
 // Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart for FrbWrapper<crate::api::api::TypingApp> {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        [
+            self.0.bundle_id.into_into_dart().into_dart(),
+            self.0.icon.into_into_dart().into_dart(),
+        ]
+        .into_dart()
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
+    for FrbWrapper<crate::api::api::TypingApp>
+{
+}
+impl flutter_rust_bridge::IntoIntoDart<FrbWrapper<crate::api::api::TypingApp>>
+    for crate::api::api::TypingApp
+{
+    fn into_into_dart(self) -> FrbWrapper<crate::api::api::TypingApp> {
+        self.into()
+    }
+}
+// Codec=Dco (DartCObject based), see doc to use other codecs
 impl flutter_rust_bridge::IntoDart for FrbWrapper<crate::api::api::UIColor> {
     fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
         match self.0 {
@@ -15231,9 +15285,10 @@ impl SseEncode for crate::api::api::Message {
             crate::api::api::Message::Read => {
                 <i32>::sse_encode(5, serializer);
             }
-            crate::api::api::Message::Typing(field0) => {
+            crate::api::api::Message::Typing(field0, field1) => {
                 <i32>::sse_encode(6, serializer);
                 <bool>::sse_encode(field0, serializer);
+                <Option<crate::api::api::TypingApp>>::sse_encode(field1, serializer);
             }
             crate::api::api::Message::Unsend(field0) => {
                 <i32>::sse_encode(7, serializer);
@@ -15914,6 +15969,16 @@ impl SseEncode for Option<crate::api::api::SupportAlert> {
         <bool>::sse_encode(self.is_some(), serializer);
         if let Some(value) = self {
             <crate::api::api::SupportAlert>::sse_encode(value, serializer);
+        }
+    }
+}
+
+impl SseEncode for Option<crate::api::api::TypingApp> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <bool>::sse_encode(self.is_some(), serializer);
+        if let Some(value) = self {
+            <crate::api::api::TypingApp>::sse_encode(value, serializer);
         }
     }
 }
@@ -16800,6 +16865,14 @@ impl SseEncode for crate::api::api::TrustedPhoneNumber {
         <String>::sse_encode(self.last_two_digits, serializer);
         <String>::sse_encode(self.push_mode, serializer);
         <u32>::sse_encode(self.id, serializer);
+    }
+}
+
+impl SseEncode for crate::api::api::TypingApp {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <String>::sse_encode(self.bundle_id, serializer);
+        <Vec<u8>>::sse_encode(self.icon, serializer);
     }
 }
 

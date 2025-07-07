@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 
+import 'package:bluebubbles/app/components/avatars/contact_avatar_group_widget.dart';
 import 'package:bluebubbles/app/layouts/conversation_view/widgets/message/typing/typing_clipper.dart';
 import 'package:bluebubbles/app/components/avatars/contact_avatar_widget.dart';
 import 'package:bluebubbles/app/wrappers/stateful_boilerplate.dart';
@@ -34,36 +35,37 @@ class _TypingIndicatorState extends OptimizedState<TypingIndicator> {
         clipper: const TypingClipper(),
         child: Container(
           height: 50,
-          width: 80,
           color: context.theme.colorScheme.properSurface,
-          child: Stack(
-            alignment: Alignment.center,
+          padding: const EdgeInsets.fromLTRB(30, 10, 14, 20),
+          child: Row(
             children: [
-              Positioned(
-                top: 15,
-                right: 12,
-                child: Row(
-                  children: [
-                    AnimatedDot(index: 2),
-                    AnimatedDot(index: 1),
-                    AnimatedDot(index: 0),
-                  ],
-                  mainAxisSize: MainAxisSize.min,
-                ),
-              )
+              if (widget.controller != null && widget.controller!.showTypingIndicatorFor.length == 1 && widget.controller!.typingIndicatorData[widget.controller!.showTypingIndicatorFor.first.address]?.$2 != null)
+              Container(
+                child: ClipRRect(child: Image.memory(widget.controller!.typingIndicatorData[widget.controller!.showTypingIndicatorFor.first.address]!.$2!), borderRadius: BorderRadius.circular(99),),
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+              ),
+              AnimatedDot(index: 2),
+              AnimatedDot(index: 1),
+              AnimatedDot(index: 0),
             ],
+            mainAxisSize: MainAxisSize.min,
           ),
         ),
       ) : Row(
         children: [
           Padding(
             padding: const EdgeInsets.only(left: 10, right: 10),
-            child: ContactAvatarWidget(
-              handle: cm.activeChat!.chat.participants.first,
+            child: ContactAvatarGroupWidget(
+              participants: [...(widget.controller?.showTypingIndicatorFor ?? [])],
               size: 25,
-              fontSize: context.theme.textTheme.bodyMedium!.fontSize!,
-              borderThickness: 0.1,
+              editable: false,
             ),
+          ),
+          if (widget.controller != null && widget.controller!.showTypingIndicatorFor.length == 1 && widget.controller!.typingIndicatorData[widget.controller!.showTypingIndicatorFor.first.address]?.$2 != null)
+          Container(
+            child: ClipRRect(child: Image.memory(widget.controller!.typingIndicatorData[widget.controller!.showTypingIndicatorFor.first.address]!.$2!), borderRadius: BorderRadius.circular(99),),
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            height: 25,
           ),
           AnimatedDot(index: 2),
           AnimatedDot(index: 1),

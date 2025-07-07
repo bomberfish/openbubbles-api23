@@ -4457,6 +4457,12 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  TypingApp dco_decode_box_autoadd_typing_app(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return dco_decode_typing_app(raw);
+  }
+
+  @protected
   BigInt dco_decode_box_autoadd_u_64(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return dco_decode_u_64(raw);
@@ -5308,6 +5314,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       case 6:
         return Message_Typing(
           dco_decode_bool(raw[1]),
+          dco_decode_opt_box_autoadd_typing_app(raw[2]),
         );
       case 7:
         return Message_Unsend(
@@ -5879,6 +5886,12 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   SupportAlert? dco_decode_opt_box_autoadd_support_alert(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return raw == null ? null : dco_decode_box_autoadd_support_alert(raw);
+  }
+
+  @protected
+  TypingApp? dco_decode_opt_box_autoadd_typing_app(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return raw == null ? null : dco_decode_box_autoadd_typing_app(raw);
   }
 
   @protected
@@ -6832,6 +6845,18 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       lastTwoDigits: dco_decode_String(arr[1]),
       pushMode: dco_decode_String(arr[2]),
       id: dco_decode_u_32(arr[3]),
+    );
+  }
+
+  @protected
+  TypingApp dco_decode_typing_app(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    final arr = raw as List<dynamic>;
+    if (arr.length != 2)
+      throw Exception('unexpected arr length: expect 2 but see ${arr.length}');
+    return TypingApp(
+      bundleId: dco_decode_String(arr[0]),
+      icon: dco_decode_list_prim_u_8_strict(arr[1]),
     );
   }
 
@@ -7949,6 +7974,12 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  TypingApp sse_decode_box_autoadd_typing_app(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return (sse_decode_typing_app(deserializer));
+  }
+
+  @protected
   BigInt sse_decode_box_autoadd_u_64(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return (sse_decode_u_64(deserializer));
@@ -8998,7 +9029,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         return Message_Read();
       case 6:
         var var_field0 = sse_decode_bool(deserializer);
-        return Message_Typing(var_field0);
+        var var_field1 = sse_decode_opt_box_autoadd_typing_app(deserializer);
+        return Message_Typing(var_field0, var_field1);
       case 7:
         var var_field0 = sse_decode_box_autoadd_unsend_message(deserializer);
         return Message_Unsend(var_field0);
@@ -9771,6 +9803,18 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
     if (sse_decode_bool(deserializer)) {
       return (sse_decode_box_autoadd_support_alert(deserializer));
+    } else {
+      return null;
+    }
+  }
+
+  @protected
+  TypingApp? sse_decode_opt_box_autoadd_typing_app(
+      SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    if (sse_decode_bool(deserializer)) {
+      return (sse_decode_box_autoadd_typing_app(deserializer));
     } else {
       return null;
     }
@@ -10715,6 +10759,14 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         lastTwoDigits: var_lastTwoDigits,
         pushMode: var_pushMode,
         id: var_id);
+  }
+
+  @protected
+  TypingApp sse_decode_typing_app(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    var var_bundleId = sse_decode_String(deserializer);
+    var var_icon = sse_decode_list_prim_u_8_strict(deserializer);
+    return TypingApp(bundleId: var_bundleId, icon: var_icon);
   }
 
   @protected
@@ -11853,6 +11905,13 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  void sse_encode_box_autoadd_typing_app(
+      TypingApp self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_typing_app(self, serializer);
+  }
+
+  @protected
   void sse_encode_box_autoadd_u_64(BigInt self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_u_64(self, serializer);
@@ -12654,9 +12713,10 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         sse_encode_i_32(4, serializer);
       case Message_Read():
         sse_encode_i_32(5, serializer);
-      case Message_Typing(field0: final field0):
+      case Message_Typing(field0: final field0, field1: final field1):
         sse_encode_i_32(6, serializer);
         sse_encode_bool(field0, serializer);
+        sse_encode_opt_box_autoadd_typing_app(field1, serializer);
       case Message_Unsend(field0: final field0):
         sse_encode_i_32(7, serializer);
         sse_encode_box_autoadd_unsend_message(field0, serializer);
@@ -13334,6 +13394,17 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     sse_encode_bool(self != null, serializer);
     if (self != null) {
       sse_encode_box_autoadd_support_alert(self, serializer);
+    }
+  }
+
+  @protected
+  void sse_encode_opt_box_autoadd_typing_app(
+      TypingApp? self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    sse_encode_bool(self != null, serializer);
+    if (self != null) {
+      sse_encode_box_autoadd_typing_app(self, serializer);
     }
   }
 
@@ -14121,6 +14192,13 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     sse_encode_String(self.lastTwoDigits, serializer);
     sse_encode_String(self.pushMode, serializer);
     sse_encode_u_32(self.id, serializer);
+  }
+
+  @protected
+  void sse_encode_typing_app(TypingApp self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_String(self.bundleId, serializer);
+    sse_encode_list_prim_u_8_strict(self.icon, serializer);
   }
 
   @protected
