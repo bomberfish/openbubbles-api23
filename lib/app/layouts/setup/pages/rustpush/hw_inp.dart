@@ -582,7 +582,7 @@ class HwInpState extends OptimizedState<HwInp> {
                                             style: context.theme.textTheme.titleMedium!.copyWith(color: !hosted ? null : context.theme.colorScheme.onPrimary)),
                                         Text("We'll take care of everything for you. \nYour phone number will become a blue bubble!",
                                             style: context.theme.textTheme.bodySmall!.copyWith(color: !hosted ? null : context.theme.colorScheme.onPrimary)),
-                                        Text("\n${controller.availableIAP.value!.pricingPhases.last.formattedPrice}/mo${controller.availableIAP.value!.pricingPhases.length > 1 ? '. 7-day free trial.' : ''}",
+                                        Text("\n${controller.availableIAP.value!.pricingPhases.last.formattedPrice}/mo${controller.availableIAP.value!.pricingPhases.length > 1 ? '. ${controller.availableIAP.value!.pricingPhases.first.formattedPrice} 7-day trial.' : ''}",
                                             style: context.theme.textTheme.bodySmall!.copyWith(color: !hosted ? null : context.theme.colorScheme.onPrimary)),
                                       ],
                                     ),),
