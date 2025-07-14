@@ -921,7 +921,7 @@ class ChatCreatorState extends OptimizedState<ChatCreator> {
                                     ),
                                   );
                                 });
-                            backend.createChat(participants, textController.getFinalAnnotations(), method).then((newChat) async {
+                            backend.createChat(participants.map((i) => RustPushBBUtils.formatAddress(i)).toList(), textController.getFinalAnnotations(), method).then((newChat) async {
                               newChat.senderIsKnown = true;
                               // Load the chat data and save it to the DB
                               newChat = newChat.save(updateSenderIsKnown: true);

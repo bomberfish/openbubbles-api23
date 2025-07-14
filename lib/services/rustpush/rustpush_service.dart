@@ -45,6 +45,7 @@ import 'package:vpn_connection_detector/vpn_connection_detector.dart';
 import 'package:convert/convert.dart';
 import 'package:bluebubbles/helpers/types/constants.dart' as constants;
 import 'dart:ui' as ui;
+import 'package:mixpanel_flutter/mixpanel_flutter.dart';
 
 var uuid = const Uuid();
 RustPushService pushService =
@@ -72,7 +73,7 @@ class RustPushBBUtils {
     return mHandle;
   }
 
-  static Future<String> formatAddress(String e) async {
+  static String formatAddress(String e) {
     if (e.isEmail) {
       return e;
     }
@@ -81,7 +82,7 @@ class RustPushBBUtils {
   }
 
   static Future<String> formatAndAddPrefix(String e) async {
-    var address = await formatAddress(e);
+    var address = formatAddress(e);
     if (address.isEmail) {
       return "mailto:$address";
     } else {
@@ -377,9 +378,7 @@ class RustPushBackend implements BackendService {
   Future<Chat> createChat(List<String> addresses, AttributedBody? message, String service,
       {CancelToken? cancelToken, String? existingGuid}) async {
     var handle = service == "SMS" ? await getDefaultSMSHandle() : await getDefaultHandle();
-    var formattedHandles = (await Future.wait(
-              addresses.map((e) async => RustPushBBUtils.rustHandleToBB(await RustPushBBUtils.formatAddress(e)))))
-          .toList();
+    var formattedHandles = addresses.map((e) => RustPushBBUtils.rustHandleToBB(e)).toList();
     var chat = Chat(
       guid: existingGuid ?? uuid.v4(),
       participants: formattedHandles,
