@@ -1252,6 +1252,7 @@ class RustPushService extends GetxService {
   var findMy = false;
   var sharedStreams = false;
 
+  late Mixpanel mixpanel;
 
   var disableOutgoingSms = false;
 
@@ -2683,9 +2684,15 @@ class RustPushService extends GetxService {
       var state = push.field0;
       if (state is api.RegisterState_Registered) {
         notifiedFailed = false;
+        if (ss.settings.deviceIsHosted.value) {
+          mixpanel.track("hosted-register-success");
+        }
         handleRegistered();
       }
       if (state is api.RegisterState_Failed && !notifiedFailed) {
+        if (ss.settings.deviceIsHosted.value) {
+          mixpanel.track("hosted-register-failure");
+        }
         notif.createRegisterFailed(state.retryWait == null);
         if (state.retryWait == null) {
           (backend as RustPushBackend).markFailedToLogin(hw: false);
@@ -3688,6 +3695,7 @@ class RustPushService extends GetxService {
       validateSubState();
     })();
     initAppLinks();
+    initMixPanel();
     await initFuture;
     // pre-cache next FT link
     api.getFtLink(state: pushService.state, usage: "next");
@@ -3703,6 +3711,10 @@ class RustPushService extends GetxService {
     }
     if (ls.isUiThread) await cs.refreshContacts();
     Logger.info("finishInit");
+  }
+
+  void initMixPanel() async {
+    mixpanel = await Mixpanel.init("d66dc2d8f2ad649fac2640ff059dc9f4", trackAutomaticEvents: false);
   }
 
   Future reset(bool hw, bool logout) async {

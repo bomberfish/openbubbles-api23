@@ -365,6 +365,7 @@ class HwInpState extends OptimizedState<HwInp> {
     } catch (e, s) {
       Get.back();
       showSnackbar("Failure handling subscription! Please try again", e.toString());
+      pushService.mixpanel.track("hosted-device-failure");
       rethrow;
     }
     Get.back();
@@ -596,6 +597,7 @@ class HwInpState extends OptimizedState<HwInp> {
                                 hosted,
                                 () async {
                                   if (hosted) {
+                                    pushService.mixpanel.track("choose-hosted");
                                     wrapSubscriptionPromise<void>((() async {
                                       await controller.ensureToken();
                                       pushService.client.runWithClientNonRetryable<void>((client) async {
@@ -952,42 +954,47 @@ class HwInpState extends OptimizedState<HwInp> {
           ss.settings.cachedCodes.remove(items.key);
         }
         ss.saveSettings();
+        if (isHosted) {
+          pushService.mixpanel.track("hosted-device-configured");
+        }
       }
 
       var state = await api.getDeviceInfoState(state: pushService.state);
       controller.supportsPhoneReg.value = state.name.contains("iPhone") || state.name.contains("iPod") || state.name.contains("iPad");
       // controller.updatePhoneReg();
-      showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (context) => AlertDialog(
-          title: const Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Icon(
-                Icons.security,
-                size: 40,
-                color: Colors.blue,
+      Future.delayed(const Duration(milliseconds: 200), () {
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (context) => AlertDialog(
+            title: const Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.security,
+                  size: 40,
+                  color: Colors.blue,
+                ),
+                SizedBox(height: 12),
+                Text("You're in control"),
+              ],
+            ),
+            content: const Text('A new Apple device will appear on your Apple Account.\n\nAll keys and account credentials are generated and stored locally on this device. The new device does not have any access to your Apple Account or Messages.'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  controller.pageController.nextPage(
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.easeInOut,
+                  );
+                },
+                child: const Text('Next'),
               ),
-              SizedBox(height: 12),
-              Text("You're in control"),
             ],
           ),
-          content: const Text('A new Apple device will appear on your Apple Account.\n\nAll keys and account credentials are generated and stored locally on this device. The new device does not have any access to your Apple Account or Messages.'),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-                controller.pageController.nextPage(
-                  duration: const Duration(milliseconds: 300),
-                  curve: Curves.easeInOut,
-                );
-              },
-              child: const Text('Next'),
-            ),
-          ],
-        ),
-      );
+        );
+      });
     } catch (e) {
       if (e is AnyhowException) {
         controller.updateConnectError(e.message);

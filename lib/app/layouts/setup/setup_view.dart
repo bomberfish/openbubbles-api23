@@ -73,6 +73,10 @@ class SetupViewController extends StatefulController {
   String? currentWaitlist;
   RxString noCapErrorMsg = "Currently full. If you got an invite, enter your code from your email. Otherwise, sign up to get notified!".obs;
 
+  bool errorIsProblem() {
+    return error.isNotEmpty && !error.contains("Enter the correct password") && !error.contains("Your account information was entered incorrectly") && (!error.contains("Relay device offline") || !ss.settings.deviceIsHosted.value);
+  }
+
   bool hasValidToken() {
     return !tokenExpiry.isBefore(DateTime.now());
   }
@@ -359,6 +363,9 @@ class SetupViewController extends StatefulController {
       // persisting SMS auth certs is actually really useful
       // ss.settings.cachedCodes.clear();
       Logger.debug("Success registered!");
+      if (ss.settings.deviceIsHosted.value) {
+        pushService.mixpanel.track("hosted-setup-success");
+      }
       await pushService.configured();
 
       var handles = await api.getHandles(state: pushService.state);
@@ -450,6 +457,9 @@ class SetupViewController extends StatefulController {
       newError += " Make sure Contact Key Verification and Advanced Data Protection are off.";
     }
     error = newError;
+    if (ss.settings.deviceIsHosted.value && errorIsProblem()) {
+      pushService.mixpanel.track("hosted-setup-error");
+    }
     updateWidgets<ErrorText>(newError);
   }
 }
@@ -768,7 +778,7 @@ class _ErrorTextState extends CustomState<ErrorText, String, SetupViewController
                       .copyWith(height: 2)),
             ),
           ),
-        if (controller.error.isNotEmpty && !controller.error.contains("Enter the correct password") && !controller.error.contains("Your account information was entered incorrectly") && (!controller.error.contains("Relay device offline") || !ss.settings.deviceIsHosted.value))
+        if (controller.errorIsProblem())
         TextButton(
           onPressed: () async {
             final TextEditingController participantController = TextEditingController();
