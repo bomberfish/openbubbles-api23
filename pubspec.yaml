@@ -212,6 +212,7 @@ dependencies:
   in_app_purchase_android: ^0.4.0
   android_play_install_referrer: ^0.4.0
   palette_generator: ^0.3.3+6
+  mixpanel_flutter: ^2.4.4
 
 
 dependency_overrides:
