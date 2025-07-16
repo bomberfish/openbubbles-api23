@@ -111,32 +111,34 @@ class AttachmentPickerState extends OptimizedState<AttachmentPicker> {
                     },
                   ),
                 ],
-                content: StatefulBuilder(builder: (context, state) => Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: participantController.mapIndexed((i, c) => [
-                    if (i == 0)
-                    const Text("Requires iOS 26 or above."),
-                    const SizedBox(height: 10),
-                    TextField(
-                      controller: c,
-                      decoration: InputDecoration(
-                        labelText: "Option ${i + 1}",
-                        border: const OutlineInputBorder(),
-                      ),
-                      autofocus: true,
-                      onChanged: (v) {
-                        if (participantController[participantController.length - 1].text != "") {
-                          participantController.add(TextEditingController());
-                          state(() {});
-                        }
-                        if (participantController.length > 2 && participantController[participantController.length - 2].text == "") {
-                          participantController.removeLast();
-                          state(() {});
-                        }
-                      },
-                    )
-                  ]).flattened.toList(),
-                )),
+                content: SingleChildScrollView(
+                  child: StatefulBuilder(builder: (context, state) => Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: participantController.mapIndexed((i, c) => [
+                      if (i == 0)
+                      const Text("Requires iOS 26 or above."),
+                      const SizedBox(height: 10),
+                      TextField(
+                        controller: c,
+                        decoration: InputDecoration(
+                          labelText: "Option ${i + 1}",
+                          border: const OutlineInputBorder(),
+                        ),
+                        autofocus: true,
+                        onChanged: (v) {
+                          if (participantController[participantController.length - 1].text != "") {
+                            participantController.add(TextEditingController());
+                            state(() {});
+                          }
+                          if (participantController.length > 2 && participantController[participantController.length - 2].text == "") {
+                            participantController.removeLast();
+                            state(() {});
+                          }
+                        },
+                      )
+                    ]).flattened.toList(),
+                  )),
+                ),
                 title: Text("New Poll", style: context.theme.textTheme.titleLarge),
                 backgroundColor: context.theme.colorScheme.properSurface,
               );
