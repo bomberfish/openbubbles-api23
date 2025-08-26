@@ -14,7 +14,7 @@ use sha2::Digest;
 use prost::Message as prostMessage;
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use tokio::{runtime::Runtime, select, sync::{broadcast, mpsc, oneshot::{self, Sender}, watch, Mutex, RwLock}};
-use rustpush::{authenticate_apple, authenticate_phone, cloud_messages::CloudMessagesClient, cloudkit::{CloudKitClient, CloudKitState}, facetime::{FTClient, FTState, FACETIME_SERVICE, VIDEO_SERVICE}, findmy::{FindMyClient, FindMyState, FindMyStateManager, MULTIPLEX_SERVICE}, keychain::{KeychainClient, KeychainClientState}, login_apple_delegates, name_photo_sharing::ProfilesClient, sharedstreams::{AssetMetadata, FFMpegFilePackager, FileMetadata, FilePackager, PreparedAsset, PreparedFile, SharedStreamClient, SharedStreamsState, SyncController, SyncManager, SyncState}, statuskit::{ChannelInterestToken, StatusKitClient, StatusKitState, StatusKitStatus}, APSMessage, CircleClientSession, CircleServerSession, IDSNGMIdentity, LoginDelegate, MADRID_SERVICE};
+use rustpush::{authenticate_apple, authenticate_phone, TokenProvider, cloud_messages::CloudMessagesClient, cloudkit::{CloudKitClient, CloudKitState}, facetime::{FTClient, FTState, FACETIME_SERVICE, VIDEO_SERVICE}, findmy::{FindMyClient, FindMyState, FindMyStateManager, MULTIPLEX_SERVICE}, keychain::{KeychainClient, KeychainClientState}, login_apple_delegates, name_photo_sharing::ProfilesClient, sharedstreams::{AssetMetadata, FFMpegFilePackager, FileMetadata, FilePackager, PreparedAsset, PreparedFile, SharedStreamClient, SharedStreamsState, SyncController, SyncManager, SyncState}, statuskit::{ChannelInterestToken, StatusKitClient, StatusKitState, StatusKitStatus}, APSMessage, CircleClientSession, CircleServerSession, IDSNGMIdentity, LoginDelegate, MADRID_SERVICE};
 use rustpush::AnisetteProvider;
 pub use rustpush::findmy::{FindMyFriendsClient, FindMyPhoneClient};
 pub use rustpush::sharedstreams::{SharedAlbum, SyncStatus};
@@ -190,6 +190,7 @@ pub struct InnerPushState {
     pub cloudkit_client: Option<Arc<CloudKitClient<DefaultAnisetteProvider>>>,
     pub idms_circle_client: Mutex<Option<CircleClientSession<DefaultAnisetteProvider>>>,
     pub cloud_messages_client: Option<CloudMessagesClient<DefaultAnisetteProvider>>,
+    pub token_provider: Option<Arc<TokenProvider<DefaultAnisetteProvider>>>,
 }
 
 pub struct ActiveCircleSession {
@@ -235,6 +236,7 @@ pub async fn new_push_state(dir: String) -> Arc<PushState> {
         cloudkit_client: None,
         idms_circle_client: Mutex::new(None),
         cloud_messages_client: None,
+        token_provider: None,
     }));
     restore(&state).await;
     Arc::new(state)
@@ -415,7 +417,10 @@ async fn restore(curr_state: &PushState) {
         inner.account = Some(Arc::new(Mutex::new(apple_account)));
     }
 
-    if inner.account.is_some() {
+    if let Some(account) = &inner.account {
+        let token_provider = TokenProvider::new(account.clone(), inner.os_config.as_ref().unwrap().config());
+        inner.token_provider = Some(token_provider.clone());
+
         let id_path = inner.conf_dir.join("findmy.plist");
         if let Ok(state) = plist::from_file(&id_path) {
             inner.fmfd = Some(FindMyClient::new(inner.conn.as_ref().unwrap().clone(), inner.os_config.as_ref().unwrap().config(), Arc::new(FindMyStateManager {
@@ -423,16 +428,29 @@ async fn restore(curr_state: &PushState) {
                 update: Box::new(move |state| {
                     plist::to_file_xml(&id_path, state).expect("Failed to serialize plist!");
                 }),
-            }), inner.account.clone().unwrap(), inner.anisette.clone().unwrap(), inner.client.as_ref().unwrap().identity.clone()).await.unwrap());
+            }), token_provider.clone(), inner.anisette.clone().unwrap(), inner.client.as_ref().unwrap().identity.clone()).await.unwrap());
         }
 
         let stream_path = inner.conf_dir.join("sharedstreams.plist");
         if let Ok(state) = plist::from_file(&stream_path) {
             let client = SharedStreamClient::new(state, Box::new(move |update| {
                 plist::to_file_xml(&stream_path, update).unwrap();
-            }), inner.account.clone().expect("no account?"), inner.conn.as_ref().unwrap().clone(), inner.anisette.clone().unwrap(), inner.os_config.as_ref().unwrap().config()).await;
+            }), token_provider.clone(), inner.conn.as_ref().unwrap().clone(), inner.anisette.clone().unwrap(), inner.os_config.as_ref().unwrap().config()).await;
             inner.sharedstreams = Some(SyncController::new(client, inner.conf_dir.join("sync.plist"), MyFilePackager::default(), Duration::from_secs(60 * 30)).await);
             subscribe_streams(inner.sharedstreams.clone().unwrap());
+        }
+
+        let cloudkit_path = inner.conf_dir.join("cloudkit.plist");
+        if let Ok(state) = plist::from_file(&cloudkit_path) {
+            let cloudkit = Arc::new(CloudKitClient {
+                state: RwLock::new(state),
+                anisette: inner.anisette.clone().unwrap(),
+                config: inner.os_config.as_ref().unwrap().config(),
+                token_provider: token_provider.clone()
+            });
+
+            inner.cloudkit_client = Some(cloudkit.clone());
+            inner.profiles_client = Some(ProfilesClient::new(cloudkit));
         }
     }
 
@@ -444,17 +462,6 @@ async fn restore(curr_state: &PushState) {
         plist::to_file_xml(&facetime_path, state).expect("Failed to serialize plist!");
     }), inner.conn.as_ref().unwrap().clone(), inner.client.as_ref().unwrap().identity.clone(), inner.os_config.as_ref().unwrap().config()).await);
 
-    let cloudkit_path = inner.conf_dir.join("cloudkit.plist");
-    if let Ok(state) = plist::from_file(&cloudkit_path) {
-        let cloudkit = Arc::new(CloudKitClient {
-            state: RwLock::new(state),
-            anisette: inner.anisette.clone().unwrap(),
-            config: inner.os_config.as_ref().unwrap().config(),
-        });
-
-        inner.cloudkit_client = Some(cloudkit.clone());
-        inner.profiles_client = Some(ProfilesClient::new(cloudkit));
-    }
 
     let inner = &mut *inner;
     if let Some(account) = &inner.account {
@@ -559,6 +566,9 @@ pub async fn register_ids(state: &Arc<PushState>, users: &Vec<IDSUser>) -> anyho
 
     inner.reg_state = Some(Mutex::new(inner.client.as_ref().unwrap().identity.resource_state.subscribe()));
 
+    let token_provider = TokenProvider::new(inner.account.clone().unwrap(), inner.os_config.as_ref().unwrap().config());
+    inner.token_provider = Some(token_provider.clone());
+
     let id_path = inner.conf_dir.join("findmy.plist");
     if let Ok(state) = plist::from_file(&id_path) {
         inner.fmfd = Some(FindMyClient::new(inner.conn.as_ref().unwrap().clone(), inner.os_config.as_ref().unwrap().config(), Arc::new(FindMyStateManager {
@@ -566,13 +576,13 @@ pub async fn register_ids(state: &Arc<PushState>, users: &Vec<IDSUser>) -> anyho
             update: Box::new(move |state| {
                 plist::to_file_xml(&id_path, state).expect("Failed to serialize plist!");
             }),
-        }), inner.account.clone().unwrap(), inner.anisette.clone().unwrap(), inner.client.as_ref().unwrap().identity.clone()).await.unwrap());
+        }), token_provider.clone(), inner.anisette.clone().unwrap(), inner.client.as_ref().unwrap().identity.clone()).await.unwrap());
     }
     let stream_path = inner.conf_dir.join("sharedstreams.plist");
     if let Ok(state) = plist::from_file(&stream_path) {
         let client = SharedStreamClient::new(state, Box::new(move |update| {
             plist::to_file_xml(&stream_path, update).unwrap();
-        }), inner.account.clone().expect("no account?"), inner.conn.as_ref().unwrap().clone(), inner.anisette.clone().unwrap(), inner.os_config.as_ref().unwrap().config()).await;
+        }), token_provider.clone(), inner.conn.as_ref().unwrap().clone(), inner.anisette.clone().unwrap(), inner.os_config.as_ref().unwrap().config()).await;
         inner.sharedstreams = Some(SyncController::new(client, inner.conf_dir.join("sync.plist"), MyFilePackager::default(), Duration::from_secs(60 * 30)).await);
         subscribe_streams(inner.sharedstreams.clone().unwrap());
     }
@@ -589,6 +599,7 @@ pub async fn register_ids(state: &Arc<PushState>, users: &Vec<IDSUser>) -> anyho
             state: RwLock::new(state),
             anisette: inner.anisette.clone().unwrap(),
             config: inner.os_config.as_ref().unwrap().config(),
+            token_provider: token_provider.clone(),
         });
 
         inner.cloudkit_client = Some(cloudkit.clone());
@@ -1688,7 +1699,7 @@ pub async fn make_find_my_phone(state: &Arc<PushState>) -> anyhow::Result<FindMy
     let id_path = inner.conf_dir.join("findmy.plist");
     let state: FindMyState = plist::from_file(id_path)?;
 
-    Ok(FindMyPhoneClient::new(inner.os_config.as_deref().unwrap(), state, inner.conn.clone().unwrap(), inner.anisette.clone().unwrap()).await?)
+    Ok(FindMyPhoneClient::new(inner.os_config.as_deref().unwrap(), state, inner.conn.clone().unwrap(), inner.anisette.clone().unwrap(), inner.token_provider.clone().unwrap()).await?)
 }
 
 pub async fn get_devices(client: &mut FindMyPhoneClient<DefaultAnisetteProvider>) -> Vec<FoundDevice> {
@@ -1706,7 +1717,7 @@ pub async fn make_find_my_friends(state: &Arc<PushState>) -> anyhow::Result<Find
 
     let fmfd = inner.fmfd.as_ref().ok_or(anyhow!("Fmfd!"))?;
 
-    Ok(FindMyFriendsClient::new(inner.os_config.as_deref().unwrap(), fmfd.state.clone(), inner.account.clone().ok_or(anyhow!("No account?"))?, inner.conn.clone().unwrap(), inner.anisette.clone().unwrap(), false).await?)
+    Ok(FindMyFriendsClient::new(inner.os_config.as_deref().unwrap(), fmfd.state.clone(), inner.token_provider.clone().unwrap(), inner.conn.clone().unwrap(), inner.anisette.clone().unwrap(), false).await?)
 }
 
 pub async fn get_following(client: &mut FindMyFriendsClient<DefaultAnisetteProvider>) -> Vec<Follow> {
@@ -1779,7 +1790,7 @@ async fn do_login(conf_dir: &Path, account: &mut AppleAccount<DefaultAnisettePro
     }).unwrap()).unwrap();
     
     let mobileme = delegates.mobileme.unwrap();
-    let findmy = FindMyState::new(dsid.clone(), acname, &mobileme);
+    let findmy = FindMyState::new(dsid.clone(), acname);
 
     if let Some(findmy) = findmy {
         let id_path = conf_dir.join("findmy.plist");
@@ -1796,7 +1807,7 @@ async fn do_login(conf_dir: &Path, account: &mut AppleAccount<DefaultAnisettePro
         warn!("missing shared streams tokens!");
     }
 
-    let cloudkitstate = CloudKitState::new(dsid.clone(), &mobileme);
+    let cloudkitstate = CloudKitState::new(dsid.clone());
     if let Some(cloudkitstate) = cloudkitstate {
         let id_path = conf_dir.join("cloudkit.plist");
         std::fs::write(id_path, plist_to_string(&cloudkitstate).unwrap()).unwrap();
@@ -2267,6 +2278,7 @@ pub async fn reset_state(state: &Arc<PushState>, reset_hw: bool, logout: bool) -
     inner.keychain = None;
     inner.cloud_messages_client = None;
     inner.cloudkit_client = None;
+    inner.token_provider = None;
     *inner.statuskit_interest_token.lock().await = None;
     // try deregistering from iMessage, but if it fails we don't really care
     let _ = register(inner.os_config.as_deref().unwrap(), &*conn_state.state.read().await, &[], &mut [], inner.identity.as_ref().unwrap()).await;
