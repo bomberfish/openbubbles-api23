@@ -14127,6 +14127,357 @@ abstract class MessageType_SMS extends MessageType {
 }
 
 /// @nodoc
+mixin _$NumOrString {
+  Object get field0 => throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(int field0) num,
+    required TResult Function(String field0) string,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(int field0)? num,
+    TResult? Function(String field0)? string,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(int field0)? num,
+    TResult Function(String field0)? string,
+    required TResult orElse(),
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(NumOrString_Num value) num,
+    required TResult Function(NumOrString_String value) string,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(NumOrString_Num value)? num,
+    TResult? Function(NumOrString_String value)? string,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(NumOrString_Num value)? num,
+    TResult Function(NumOrString_String value)? string,
+    required TResult orElse(),
+  }) =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $NumOrStringCopyWith<$Res> {
+  factory $NumOrStringCopyWith(
+          NumOrString value, $Res Function(NumOrString) then) =
+      _$NumOrStringCopyWithImpl<$Res, NumOrString>;
+}
+
+/// @nodoc
+class _$NumOrStringCopyWithImpl<$Res, $Val extends NumOrString>
+    implements $NumOrStringCopyWith<$Res> {
+  _$NumOrStringCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of NumOrString
+  /// with the given fields replaced by the non-null parameter values.
+}
+
+/// @nodoc
+abstract class _$$NumOrString_NumImplCopyWith<$Res> {
+  factory _$$NumOrString_NumImplCopyWith(_$NumOrString_NumImpl value,
+          $Res Function(_$NumOrString_NumImpl) then) =
+      __$$NumOrString_NumImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({int field0});
+}
+
+/// @nodoc
+class __$$NumOrString_NumImplCopyWithImpl<$Res>
+    extends _$NumOrStringCopyWithImpl<$Res, _$NumOrString_NumImpl>
+    implements _$$NumOrString_NumImplCopyWith<$Res> {
+  __$$NumOrString_NumImplCopyWithImpl(
+      _$NumOrString_NumImpl _value, $Res Function(_$NumOrString_NumImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of NumOrString
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? field0 = null,
+  }) {
+    return _then(_$NumOrString_NumImpl(
+      null == field0
+          ? _value.field0
+          : field0 // ignore: cast_nullable_to_non_nullable
+              as int,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$NumOrString_NumImpl extends NumOrString_Num {
+  const _$NumOrString_NumImpl(this.field0) : super._();
+
+  @override
+  final int field0;
+
+  @override
+  String toString() {
+    return 'NumOrString.num(field0: $field0)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$NumOrString_NumImpl &&
+            (identical(other.field0, field0) || other.field0 == field0));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, field0);
+
+  /// Create a copy of NumOrString
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$NumOrString_NumImplCopyWith<_$NumOrString_NumImpl> get copyWith =>
+      __$$NumOrString_NumImplCopyWithImpl<_$NumOrString_NumImpl>(
+          this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(int field0) num,
+    required TResult Function(String field0) string,
+  }) {
+    return num(field0);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(int field0)? num,
+    TResult? Function(String field0)? string,
+  }) {
+    return num?.call(field0);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(int field0)? num,
+    TResult Function(String field0)? string,
+    required TResult orElse(),
+  }) {
+    if (num != null) {
+      return num(field0);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(NumOrString_Num value) num,
+    required TResult Function(NumOrString_String value) string,
+  }) {
+    return num(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(NumOrString_Num value)? num,
+    TResult? Function(NumOrString_String value)? string,
+  }) {
+    return num?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(NumOrString_Num value)? num,
+    TResult Function(NumOrString_String value)? string,
+    required TResult orElse(),
+  }) {
+    if (num != null) {
+      return num(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class NumOrString_Num extends NumOrString {
+  const factory NumOrString_Num(final int field0) = _$NumOrString_NumImpl;
+  const NumOrString_Num._() : super._();
+
+  @override
+  int get field0;
+
+  /// Create a copy of NumOrString
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$NumOrString_NumImplCopyWith<_$NumOrString_NumImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$NumOrString_StringImplCopyWith<$Res> {
+  factory _$$NumOrString_StringImplCopyWith(_$NumOrString_StringImpl value,
+          $Res Function(_$NumOrString_StringImpl) then) =
+      __$$NumOrString_StringImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({String field0});
+}
+
+/// @nodoc
+class __$$NumOrString_StringImplCopyWithImpl<$Res>
+    extends _$NumOrStringCopyWithImpl<$Res, _$NumOrString_StringImpl>
+    implements _$$NumOrString_StringImplCopyWith<$Res> {
+  __$$NumOrString_StringImplCopyWithImpl(_$NumOrString_StringImpl _value,
+      $Res Function(_$NumOrString_StringImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of NumOrString
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? field0 = null,
+  }) {
+    return _then(_$NumOrString_StringImpl(
+      null == field0
+          ? _value.field0
+          : field0 // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$NumOrString_StringImpl extends NumOrString_String {
+  const _$NumOrString_StringImpl(this.field0) : super._();
+
+  @override
+  final String field0;
+
+  @override
+  String toString() {
+    return 'NumOrString.string(field0: $field0)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$NumOrString_StringImpl &&
+            (identical(other.field0, field0) || other.field0 == field0));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, field0);
+
+  /// Create a copy of NumOrString
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$NumOrString_StringImplCopyWith<_$NumOrString_StringImpl> get copyWith =>
+      __$$NumOrString_StringImplCopyWithImpl<_$NumOrString_StringImpl>(
+          this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(int field0) num,
+    required TResult Function(String field0) string,
+  }) {
+    return string(field0);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(int field0)? num,
+    TResult? Function(String field0)? string,
+  }) {
+    return string?.call(field0);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(int field0)? num,
+    TResult Function(String field0)? string,
+    required TResult orElse(),
+  }) {
+    if (string != null) {
+      return string(field0);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(NumOrString_Num value) num,
+    required TResult Function(NumOrString_String value) string,
+  }) {
+    return string(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(NumOrString_Num value)? num,
+    TResult? Function(NumOrString_String value)? string,
+  }) {
+    return string?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(NumOrString_Num value)? num,
+    TResult Function(NumOrString_String value)? string,
+    required TResult orElse(),
+  }) {
+    if (string != null) {
+      return string(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class NumOrString_String extends NumOrString {
+  const factory NumOrString_String(final String field0) =
+      _$NumOrString_StringImpl;
+  const NumOrString_String._() : super._();
+
+  @override
+  String get field0;
+
+  /// Create a copy of NumOrString
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$NumOrString_StringImplCopyWith<_$NumOrString_StringImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
 mixin _$PartExtension {
   double get msgWidth => throw _privateConstructorUsedError;
   double get rotation => throw _privateConstructorUsedError;

@@ -13,6 +13,56 @@ part 'api.freezed.dart';
 // These types are ignored because they are not used by any `pub` functions: `ActiveCircleSession`, `FLUTTER_RUST_BRIDGE_HANDLER`, `GSAConfig`, `InnerPushState`, `NSArrayClass`, `NSArrayIconArray`, `NSArrayImageArray`, `SavedHardwareState`
 // These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `deref`, `deref`, `eq`, `fmt`, `get_files`, `initialize`, `spawn`
 
+ChatProto decodeChatproto({required GZipWrapperChatProto wrapped}) =>
+    RustLib.instance.api.crateApiApiDecodeChatproto(wrapped: wrapped);
+
+GZipWrapperChatProto encodeChatproto({required ChatProto chat}) =>
+    RustLib.instance.api.crateApiApiEncodeChatproto(chat: chat);
+
+MessageProto decodeMessageproto({required GZipWrapperMessageProto wrapped}) =>
+    RustLib.instance.api.crateApiApiDecodeMessageproto(wrapped: wrapped);
+
+GZipWrapperMessageProto encodeMessageproto(
+        {required MessageProto messageproto}) =>
+    RustLib.instance.api
+        .crateApiApiEncodeMessageproto(messageproto: messageproto);
+
+MessageProto2 decodeMessageproto2(
+        {required GZipWrapperMessageProto2 wrapped}) =>
+    RustLib.instance.api.crateApiApiDecodeMessageproto2(wrapped: wrapped);
+
+GZipWrapperMessageProto2 encodeMessageproto2(
+        {required MessageProto2 messageproto2}) =>
+    RustLib.instance.api
+        .crateApiApiEncodeMessageproto2(messageproto2: messageproto2);
+
+MessageProto3 decodeMessageproto3(
+        {required GZipWrapperMessageProto3 wrapped}) =>
+    RustLib.instance.api.crateApiApiDecodeMessageproto3(wrapped: wrapped);
+
+GZipWrapperMessageProto3 encodeMessageproto3(
+        {required MessageProto3 messageproto3}) =>
+    RustLib.instance.api
+        .crateApiApiEncodeMessageproto3(messageproto3: messageproto3);
+
+MessageProto4 decodeMessageproto4(
+        {required GZipWrapperMessageProto4 wrapped}) =>
+    RustLib.instance.api.crateApiApiDecodeMessageproto4(wrapped: wrapped);
+
+GZipWrapperMessageProto4 encodeMessageproto4(
+        {required MessageProto4 messageproto4}) =>
+    RustLib.instance.api
+        .crateApiApiEncodeMessageproto4(messageproto4: messageproto4);
+
+AttachmentMeta decodeAttachmentmeta(
+        {required GZipWrapperAttachmentMeta wrapped}) =>
+    RustLib.instance.api.crateApiApiDecodeAttachmentmeta(wrapped: wrapped);
+
+GZipWrapperAttachmentMeta encodeAttachmentmeta(
+        {required AttachmentMeta attachmentmeta}) =>
+    RustLib.instance.api
+        .crateApiApiEncodeAttachmentmeta(attachmentmeta: attachmentmeta);
+
 Future<ArcPushState> newPushState({required String dir}) =>
     RustLib.instance.api.crateApiApiNewPushState(dir: dir);
 
@@ -108,7 +158,7 @@ Future<PushMessage?> ptrToDart({required String ptr}) =>
 Future<void> completeMsg({required String ptr}) =>
     RustLib.instance.api.crateApiApiCompleteMsg(ptr: ptr);
 
-Future<Attachment> restoreAttachment({required String data}) =>
+Attachment restoreAttachment({required String data}) =>
     RustLib.instance.api.crateApiApiRestoreAttachment(data: data);
 
 Future<String> saveAttachment({required Attachment att}) =>
@@ -419,6 +469,132 @@ Future<IdsUser> authPhone(
 Future<LoginState> send2FaToDevices({required ArcPushState state}) =>
     RustLib.instance.api.crateApiApiSend2FaToDevices(state: state);
 
+Future<bool> supportsKeychain({required ArcPushState state}) =>
+    RustLib.instance.api.crateApiApiSupportsKeychain(state: state);
+
+Future<bool> isInClique({required ArcPushState state}) =>
+    RustLib.instance.api.crateApiApiIsInClique(state: state);
+
+Future<void> joinCliqueWithBottle(
+        {required ArcPushState state,
+        required EscrowData bottle,
+        required String password,
+        required String devicePassword}) =>
+    RustLib.instance.api.crateApiApiJoinCliqueWithBottle(
+        state: state,
+        bottle: bottle,
+        password: password,
+        devicePassword: devicePassword);
+
+Future<void> resetClique(
+        {required ArcPushState state, required String devicePassword}) =>
+    RustLib.instance.api
+        .crateApiApiResetClique(state: state, devicePassword: devicePassword);
+
+Future<List<ViableBottle>> getBottles({required ArcPushState state}) =>
+    RustLib.instance.api.crateApiApiGetBottles(state: state);
+
+Future<Uint8List> encodeSummaryInfo({required MessageSummaryInfo info}) =>
+    RustLib.instance.api.crateApiApiEncodeSummaryInfo(info: info);
+
+Future<MessageSummaryInfo> decodeSummaryInfo({required List<int> info}) =>
+    RustLib.instance.api.crateApiApiDecodeSummaryInfo(info: info);
+
+MMCSAttachmentMeta? attachmentToCloud({required Attachment att}) =>
+    RustLib.instance.api.crateApiApiAttachmentToCloud(att: att);
+
+Uint8List nscoderEncode({required List<StCollapsedValue> value}) =>
+    RustLib.instance.api.crateApiApiNscoderEncode(value: value);
+
+List<StCollapsedValue> nscoderDecode({required List<int> data}) =>
+    RustLib.instance.api.crateApiApiNscoderDecode(data: data);
+
+Uint8List saveCloudChat({required CloudChat value}) =>
+    RustLib.instance.api.crateApiApiSaveCloudChat(value: value);
+
+CloudChat restoreCloudChat({required List<int> data}) =>
+    RustLib.instance.api.crateApiApiRestoreCloudChat(data: data);
+
+Future<(Uint8List, Map<String, CloudChat?>)> syncChats(
+        {required ArcPushState state, Uint8List? continuationToken}) =>
+    RustLib.instance.api.crateApiApiSyncChats(
+        state: state, continuationToken: continuationToken);
+
+Future<void> saveChats(
+        {required ArcPushState state, required Map<String, CloudChat> chats}) =>
+    RustLib.instance.api.crateApiApiSaveChats(state: state, chats: chats);
+
+Future<void> deleteChats(
+        {required ArcPushState state, required List<String> chats}) =>
+    RustLib.instance.api.crateApiApiDeleteChats(state: state, chats: chats);
+
+Future<(Uint8List, Map<String, CloudMessage?>)> syncMessages(
+        {required ArcPushState state, Uint8List? continuationToken}) =>
+    RustLib.instance.api.crateApiApiSyncMessages(
+        state: state, continuationToken: continuationToken);
+
+Future<void> saveMessages(
+        {required ArcPushState state,
+        required Map<String, CloudMessage> messages}) =>
+    RustLib.instance.api
+        .crateApiApiSaveMessages(state: state, messages: messages);
+
+Future<void> deleteMessages(
+        {required ArcPushState state, required List<String> messages}) =>
+    RustLib.instance.api
+        .crateApiApiDeleteMessages(state: state, messages: messages);
+
+MessageSummaryInfo decodeMessageInfo({required List<int> data}) =>
+    RustLib.instance.api.crateApiApiDecodeMessageInfo(data: data);
+
+Uint8List encodeMessageInfo({required MessageSummaryInfo info}) =>
+    RustLib.instance.api.crateApiApiEncodeMessageInfo(info: info);
+
+Future<(Uint8List, Map<String, CloudAttachment?>)> syncAttachments(
+        {required ArcPushState state, Uint8List? continuationToken}) =>
+    RustLib.instance.api.crateApiApiSyncAttachments(
+        state: state, continuationToken: continuationToken);
+
+Future<void> saveAttachments(
+        {required ArcPushState state,
+        required Map<String, CloudAttachment> attachments}) =>
+    RustLib.instance.api
+        .crateApiApiSaveAttachments(state: state, attachments: attachments);
+
+Future<void> deleteAttachments(
+        {required ArcPushState state, required List<String> attachments}) =>
+    RustLib.instance.api
+        .crateApiApiDeleteAttachments(state: state, attachments: attachments);
+
+Future<void> downloadCloudAttachments(
+        {required ArcPushState state, required List<(String, String)> files}) =>
+    RustLib.instance.api
+        .crateApiApiDownloadCloudAttachments(state: state, files: files);
+
+SystemTime utmNow() => RustLib.instance.api.crateApiApiUtmNow();
+
+Date dateNow() => RustLib.instance.api.crateApiApiDateNow();
+
+Future<void> downloadCloudGroupPhotos(
+        {required ArcPushState state, required List<(String, String)> files}) =>
+    RustLib.instance.api
+        .crateApiApiDownloadCloudGroupPhotos(state: state, files: files);
+
+Future<Map<String, Asset>> uploadCloudAttachments(
+        {required ArcPushState state, required List<(String, String)> files}) =>
+    RustLib.instance.api
+        .crateApiApiUploadCloudAttachments(state: state, files: files);
+
+Future<Map<String, Asset>> uploadGroupPhoto(
+        {required ArcPushState state, required List<(String, String)> files}) =>
+    RustLib.instance.api
+        .crateApiApiUploadGroupPhoto(state: state, files: files);
+
+Future<void> circleSetupClique(
+        {required ArcPushState state, required String devicePassword}) =>
+    RustLib.instance.api.crateApiApiCircleSetupClique(
+        state: state, devicePassword: devicePassword);
+
 Future<(LoginState, IdsUser?)> verify2Fa(
         {required ArcPushState state, required String code}) =>
     RustLib.instance.api.crateApiApiVerify2Fa(state: state, code: code);
@@ -472,11 +648,20 @@ Future<List<PrivateDeviceInfo>> getSmsTargets(
     RustLib.instance.api.crateApiApiGetSmsTargets(
         state: state, handle: handle, refresh: refresh);
 
+// Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<Asset>>
+abstract class Asset implements RustOpaqueInterface {}
+
 // Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<ConversationLink>>
 abstract class ConversationLink implements RustOpaqueInterface {}
 
 // Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<ConversationParticipant>>
 abstract class ConversationParticipant implements RustOpaqueInterface {}
+
+// Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner< Date>>
+abstract class Date implements RustOpaqueInterface {}
+
+// Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<EscrowData>>
+abstract class EscrowData implements RustOpaqueInterface {}
 
 // Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<FindMyFriendsClient < DefaultAnisetteProvider >>>
 abstract class FindMyFriendsClientDefaultAnisetteProvider
@@ -486,14 +671,68 @@ abstract class FindMyFriendsClientDefaultAnisetteProvider
 abstract class FindMyPhoneClientDefaultAnisetteProvider
     implements RustOpaqueInterface {}
 
+// Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<GZipWrapper < AttachmentMeta >>>
+abstract class GZipWrapperAttachmentMeta implements RustOpaqueInterface {}
+
+// Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<GZipWrapper < ChatProto >>>
+abstract class GZipWrapperChatProto implements RustOpaqueInterface {}
+
+// Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<GZipWrapper < MessageProto >>>
+abstract class GZipWrapperMessageProto implements RustOpaqueInterface {}
+
+// Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<GZipWrapper < MessageProto2 >>>
+abstract class GZipWrapperMessageProto2 implements RustOpaqueInterface {}
+
+// Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<GZipWrapper < MessageProto3 >>>
+abstract class GZipWrapperMessageProto3 implements RustOpaqueInterface {}
+
+// Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<GZipWrapper < MessageProto4 >>>
+abstract class GZipWrapperMessageProto4 implements RustOpaqueInterface {}
+
 // Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<IDSUser>>
 abstract class IdsUser implements RustOpaqueInterface {}
 
 // Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<JoinedOSConfig>>
 abstract class JoinedOsConfig implements RustOpaqueInterface {}
 
+// Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<MessageFlags>>
+abstract class MessageFlags implements RustOpaqueInterface {
+  PlatformInt64 bits();
+
+  static MessageFlags fromBitsTruncate({required PlatformInt64 val}) =>
+      RustLib.instance.api.crateApiApiMessageFlagsFromBitsTruncate(val: val);
+}
+
+// Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<PushError>>
+abstract class PushError implements RustOpaqueInterface {}
+
+// Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<StCollapsedValue>>
+abstract class StCollapsedValue implements RustOpaqueInterface {}
+
+// Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<SystemTime>>
+abstract class SystemTime implements RustOpaqueInterface {}
+
 // Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<VerifyBody>>
 abstract class VerifyBody implements RustOpaqueInterface {}
+
+// Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<ViableBottle>>
+abstract class ViableBottle implements RustOpaqueInterface {
+  String get deviceName;
+
+  EscrowData get escrow;
+
+  String get modelClass;
+
+  int get numericLength;
+
+  set deviceName(String deviceName);
+
+  set escrow(EscrowData escrow);
+
+  set modelClass(String modelClass);
+
+  set numericLength(int numericLength);
+}
 
 class Address {
   final String? administrativeArea;
@@ -659,6 +898,107 @@ class Attachment {
           iris == other.iris;
 }
 
+class AttachmentMeta {
+  final String? mimeType;
+  final int startDate;
+  final int totalBytes;
+  final int transferState;
+  final bool isSticker;
+  final String guid;
+  final bool hideAttachment;
+  final MMCSAttachmentMeta? userInfo;
+  final String filename;
+  final AttachmentMetaExtra? extras;
+  final bool isOutgoing;
+  final String transferName;
+  final int version;
+  final String? uti;
+  final int createdDate;
+  final String? pathc;
+  final String? md5;
+
+  const AttachmentMeta({
+    this.mimeType,
+    required this.startDate,
+    required this.totalBytes,
+    required this.transferState,
+    required this.isSticker,
+    required this.guid,
+    required this.hideAttachment,
+    this.userInfo,
+    required this.filename,
+    this.extras,
+    required this.isOutgoing,
+    required this.transferName,
+    required this.version,
+    this.uti,
+    required this.createdDate,
+    this.pathc,
+    this.md5,
+  });
+
+  @override
+  int get hashCode =>
+      mimeType.hashCode ^
+      startDate.hashCode ^
+      totalBytes.hashCode ^
+      transferState.hashCode ^
+      isSticker.hashCode ^
+      guid.hashCode ^
+      hideAttachment.hashCode ^
+      userInfo.hashCode ^
+      filename.hashCode ^
+      extras.hashCode ^
+      isOutgoing.hashCode ^
+      transferName.hashCode ^
+      version.hashCode ^
+      uti.hashCode ^
+      createdDate.hashCode ^
+      pathc.hashCode ^
+      md5.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is AttachmentMeta &&
+          runtimeType == other.runtimeType &&
+          mimeType == other.mimeType &&
+          startDate == other.startDate &&
+          totalBytes == other.totalBytes &&
+          transferState == other.transferState &&
+          isSticker == other.isSticker &&
+          guid == other.guid &&
+          hideAttachment == other.hideAttachment &&
+          userInfo == other.userInfo &&
+          filename == other.filename &&
+          extras == other.extras &&
+          isOutgoing == other.isOutgoing &&
+          transferName == other.transferName &&
+          version == other.version &&
+          uti == other.uti &&
+          createdDate == other.createdDate &&
+          pathc == other.pathc &&
+          md5 == other.md5;
+}
+
+class AttachmentMetaExtra {
+  final int? previewGenerationState;
+
+  const AttachmentMetaExtra({
+    this.previewGenerationState,
+  });
+
+  @override
+  int get hashCode => previewGenerationState.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is AttachmentMetaExtra &&
+          runtimeType == other.runtimeType &&
+          previewGenerationState == other.previewGenerationState;
+}
+
 @freezed
 sealed class AttachmentType with _$AttachmentType {
   const AttachmentType._();
@@ -783,6 +1123,291 @@ class ChangeParticipantMessage {
           runtimeType == other.runtimeType &&
           newParticipants == other.newParticipants &&
           groupVersion == other.groupVersion;
+}
+
+class ChatProto {
+  final int? unk1;
+
+  const ChatProto({
+    this.unk1,
+  });
+
+  @override
+  int get hashCode => unk1.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is ChatProto &&
+          runtimeType == other.runtimeType &&
+          unk1 == other.unk1;
+}
+
+class CloudAttachment {
+  final GZipWrapperAttachmentMeta cm;
+  final Asset lqa;
+
+  const CloudAttachment({
+    required this.cm,
+    required this.lqa,
+  });
+
+  @override
+  int get hashCode => cm.hashCode ^ lqa.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is CloudAttachment &&
+          runtimeType == other.runtimeType &&
+          cm == other.cm &&
+          lqa == other.lqa;
+}
+
+class CloudChat {
+  PlatformInt64 style;
+  PlatformInt64 isFiltered;
+  PlatformInt64 successfulQuery;
+  PlatformInt64 state;
+  String chatIdentifier;
+  String groupId;
+  String serviceName;
+  String originalGroupId;
+  CloudProp? properties;
+  List<CloudParticipant> participants;
+  CloudProp001 prop001;
+  PlatformInt64 lastReadMessageTimestamp;
+  String lastAddressedHandle;
+  String guid;
+  String? displayName;
+  GZipWrapperChatProto? proto001;
+  String? groupPhotoGuid;
+  Asset? groupPhoto;
+
+  CloudChat({
+    required this.style,
+    required this.isFiltered,
+    required this.successfulQuery,
+    required this.state,
+    required this.chatIdentifier,
+    required this.groupId,
+    required this.serviceName,
+    required this.originalGroupId,
+    this.properties,
+    required this.participants,
+    required this.prop001,
+    required this.lastReadMessageTimestamp,
+    required this.lastAddressedHandle,
+    required this.guid,
+    this.displayName,
+    this.proto001,
+    this.groupPhotoGuid,
+    this.groupPhoto,
+  });
+
+  @override
+  int get hashCode =>
+      style.hashCode ^
+      isFiltered.hashCode ^
+      successfulQuery.hashCode ^
+      state.hashCode ^
+      chatIdentifier.hashCode ^
+      groupId.hashCode ^
+      serviceName.hashCode ^
+      originalGroupId.hashCode ^
+      properties.hashCode ^
+      participants.hashCode ^
+      prop001.hashCode ^
+      lastReadMessageTimestamp.hashCode ^
+      lastAddressedHandle.hashCode ^
+      guid.hashCode ^
+      displayName.hashCode ^
+      proto001.hashCode ^
+      groupPhotoGuid.hashCode ^
+      groupPhoto.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is CloudChat &&
+          runtimeType == other.runtimeType &&
+          style == other.style &&
+          isFiltered == other.isFiltered &&
+          successfulQuery == other.successfulQuery &&
+          state == other.state &&
+          chatIdentifier == other.chatIdentifier &&
+          groupId == other.groupId &&
+          serviceName == other.serviceName &&
+          originalGroupId == other.originalGroupId &&
+          properties == other.properties &&
+          participants == other.participants &&
+          prop001 == other.prop001 &&
+          lastReadMessageTimestamp == other.lastReadMessageTimestamp &&
+          lastAddressedHandle == other.lastAddressedHandle &&
+          guid == other.guid &&
+          displayName == other.displayName &&
+          proto001 == other.proto001 &&
+          groupPhotoGuid == other.groupPhotoGuid &&
+          groupPhoto == other.groupPhoto;
+}
+
+class CloudMessage {
+  final SystemTime? utm;
+  final PlatformInt64 type;
+  final PlatformInt64 error;
+  final String chatId;
+  final String sender;
+  final PlatformInt64 time;
+  final GZipWrapperMessageProto2? msgProto2;
+  final String destinationCallerId;
+  final GZipWrapperMessageProto msgProto;
+  final MessageFlags flags;
+  final String guid;
+  final GZipWrapperMessageProto3? msgProto3;
+  final String service;
+  final GZipWrapperMessageProto4? msgProto4;
+
+  const CloudMessage({
+    this.utm,
+    required this.type,
+    required this.error,
+    required this.chatId,
+    required this.sender,
+    required this.time,
+    this.msgProto2,
+    required this.destinationCallerId,
+    required this.msgProto,
+    required this.flags,
+    required this.guid,
+    this.msgProto3,
+    required this.service,
+    this.msgProto4,
+  });
+
+  @override
+  int get hashCode =>
+      utm.hashCode ^
+      type.hashCode ^
+      error.hashCode ^
+      chatId.hashCode ^
+      sender.hashCode ^
+      time.hashCode ^
+      msgProto2.hashCode ^
+      destinationCallerId.hashCode ^
+      msgProto.hashCode ^
+      flags.hashCode ^
+      guid.hashCode ^
+      msgProto3.hashCode ^
+      service.hashCode ^
+      msgProto4.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is CloudMessage &&
+          runtimeType == other.runtimeType &&
+          utm == other.utm &&
+          type == other.type &&
+          error == other.error &&
+          chatId == other.chatId &&
+          sender == other.sender &&
+          time == other.time &&
+          msgProto2 == other.msgProto2 &&
+          destinationCallerId == other.destinationCallerId &&
+          msgProto == other.msgProto &&
+          flags == other.flags &&
+          guid == other.guid &&
+          msgProto3 == other.msgProto3 &&
+          service == other.service &&
+          msgProto4 == other.msgProto4;
+}
+
+class CloudParticipant {
+  final String uri;
+
+  const CloudParticipant({
+    required this.uri,
+  });
+
+  @override
+  int get hashCode => uri.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is CloudParticipant &&
+          runtimeType == other.runtimeType &&
+          uri == other.uri;
+}
+
+class CloudProp {
+  int? gpufc;
+  int? pv;
+  int? numberOfTimesRespondedtoThread;
+  bool? shouldForceToSms;
+  String? lastSeenMessageGuid;
+  int? messageHandshakeState;
+  List<String> legacyGroupIdentifiers;
+  String? groupPhotoGuid;
+  Date? lastModificationDate;
+
+  CloudProp({
+    this.gpufc,
+    this.pv,
+    this.numberOfTimesRespondedtoThread,
+    this.shouldForceToSms,
+    this.lastSeenMessageGuid,
+    this.messageHandshakeState,
+    required this.legacyGroupIdentifiers,
+    this.groupPhotoGuid,
+    this.lastModificationDate,
+  });
+
+  @override
+  int get hashCode =>
+      gpufc.hashCode ^
+      pv.hashCode ^
+      numberOfTimesRespondedtoThread.hashCode ^
+      shouldForceToSms.hashCode ^
+      lastSeenMessageGuid.hashCode ^
+      messageHandshakeState.hashCode ^
+      legacyGroupIdentifiers.hashCode ^
+      groupPhotoGuid.hashCode ^
+      lastModificationDate.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is CloudProp &&
+          runtimeType == other.runtimeType &&
+          gpufc == other.gpufc &&
+          pv == other.pv &&
+          numberOfTimesRespondedtoThread ==
+              other.numberOfTimesRespondedtoThread &&
+          shouldForceToSms == other.shouldForceToSms &&
+          lastSeenMessageGuid == other.lastSeenMessageGuid &&
+          messageHandshakeState == other.messageHandshakeState &&
+          legacyGroupIdentifiers == other.legacyGroupIdentifiers &&
+          groupPhotoGuid == other.groupPhotoGuid &&
+          lastModificationDate == other.lastModificationDate;
+}
+
+class CloudProp001 {
+  final int syndicationType;
+
+  const CloudProp001({
+    required this.syndicationType,
+  });
+
+  @override
+  int get hashCode => syndicationType.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is CloudProp001 &&
+          runtimeType == other.runtimeType &&
+          syndicationType == other.syndicationType;
 }
 
 class ConversationData {
@@ -919,6 +1544,14 @@ class ExtensionApp {
     required this.bundleId,
     this.balloon,
   });
+
+  static ExtensionApp fromBp({required List<int> bp, required String bid}) =>
+      RustLib.instance.api.crateApiApiExtensionAppFromBp(bp: bp, bid: bid);
+
+  (Uint8List, Uint8List?) toRaw() =>
+      RustLib.instance.api.crateApiApiExtensionAppToRaw(
+        that: this,
+      );
 
   @override
   int get hashCode =>
@@ -1959,6 +2592,51 @@ sealed class Message with _$Message {
   ) = Message_SetTranscriptBackground;
 }
 
+class MessageEdit {
+  final Uint8List t;
+  final double d;
+  final String? bcg;
+
+  const MessageEdit({
+    required this.t,
+    required this.d,
+    this.bcg,
+  });
+
+  @override
+  int get hashCode => t.hashCode ^ d.hashCode ^ bcg.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is MessageEdit &&
+          runtimeType == other.runtimeType &&
+          t == other.t &&
+          d == other.d &&
+          bcg == other.bcg;
+}
+
+class MessageEditRange {
+  final int lo;
+  final int le;
+
+  const MessageEditRange({
+    required this.lo,
+    required this.le,
+  });
+
+  @override
+  int get hashCode => lo.hashCode ^ le.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is MessageEditRange &&
+          runtimeType == other.runtimeType &&
+          lo == other.lo &&
+          le == other.le;
+}
+
 class MessageInst {
   String id;
   String? sender;
@@ -2053,6 +2731,247 @@ class MessageParts {
           field0 == other.field0;
 }
 
+class MessageProto {
+  /// always 1, is finished or ck sync state
+  final int unk1;
+  final String? groupTitle;
+  final String text;
+  final Uint8List attributedBody;
+  final String? balloonBundleId;
+  final Uint8List? payloadData;
+  final Uint8List? messageSummaryInfo;
+  final String? effect;
+  final int? dateRead;
+  final int? unk10;
+  final int? unk11;
+  final int? dateDelivered;
+  final int? unk14;
+  final int? associatedMessageType;
+  final String? associatedMessageGuid;
+  final int? associatedMessageRangeLocation;
+  final int? associatedMessageRangeLength;
+
+  const MessageProto({
+    required this.unk1,
+    this.groupTitle,
+    required this.text,
+    required this.attributedBody,
+    this.balloonBundleId,
+    this.payloadData,
+    this.messageSummaryInfo,
+    this.effect,
+    this.dateRead,
+    this.unk10,
+    this.unk11,
+    this.dateDelivered,
+    this.unk14,
+    this.associatedMessageType,
+    this.associatedMessageGuid,
+    this.associatedMessageRangeLocation,
+    this.associatedMessageRangeLength,
+  });
+
+  @override
+  int get hashCode =>
+      unk1.hashCode ^
+      groupTitle.hashCode ^
+      text.hashCode ^
+      attributedBody.hashCode ^
+      balloonBundleId.hashCode ^
+      payloadData.hashCode ^
+      messageSummaryInfo.hashCode ^
+      effect.hashCode ^
+      dateRead.hashCode ^
+      unk10.hashCode ^
+      unk11.hashCode ^
+      dateDelivered.hashCode ^
+      unk14.hashCode ^
+      associatedMessageType.hashCode ^
+      associatedMessageGuid.hashCode ^
+      associatedMessageRangeLocation.hashCode ^
+      associatedMessageRangeLength.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is MessageProto &&
+          runtimeType == other.runtimeType &&
+          unk1 == other.unk1 &&
+          groupTitle == other.groupTitle &&
+          text == other.text &&
+          attributedBody == other.attributedBody &&
+          balloonBundleId == other.balloonBundleId &&
+          payloadData == other.payloadData &&
+          messageSummaryInfo == other.messageSummaryInfo &&
+          effect == other.effect &&
+          dateRead == other.dateRead &&
+          unk10 == other.unk10 &&
+          unk11 == other.unk11 &&
+          dateDelivered == other.dateDelivered &&
+          unk14 == other.unk14 &&
+          associatedMessageType == other.associatedMessageType &&
+          associatedMessageGuid == other.associatedMessageGuid &&
+          associatedMessageRangeLocation ==
+              other.associatedMessageRangeLocation &&
+          associatedMessageRangeLength == other.associatedMessageRangeLength;
+}
+
+class MessageProto2 {
+  final String? reply;
+
+  const MessageProto2({
+    this.reply,
+  });
+
+  @override
+  int get hashCode => reply.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is MessageProto2 &&
+          runtimeType == other.runtimeType &&
+          reply == other.reply;
+}
+
+class MessageProto3 {
+  /// always 0
+  final int? unk2;
+
+  /// always 0
+  final int? unk3;
+
+  const MessageProto3({
+    this.unk2,
+    this.unk3,
+  });
+
+  @override
+  int get hashCode => unk2.hashCode ^ unk3.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is MessageProto3 &&
+          runtimeType == other.runtimeType &&
+          unk2 == other.unk2 &&
+          unk3 == other.unk3;
+}
+
+class MessageProto4 {
+  final String? associatedMessageEmoji;
+  final String? service;
+
+  /// test is 0, unconfirmed
+  final int? scheduleType;
+  final int? scheduleState;
+  final String? groupId;
+
+  /// test is 0, uncomfirmed
+  final int? sentOrReceivedOffGrid;
+
+  const MessageProto4({
+    this.associatedMessageEmoji,
+    this.service,
+    this.scheduleType,
+    this.scheduleState,
+    this.groupId,
+    this.sentOrReceivedOffGrid,
+  });
+
+  @override
+  int get hashCode =>
+      associatedMessageEmoji.hashCode ^
+      service.hashCode ^
+      scheduleType.hashCode ^
+      scheduleState.hashCode ^
+      groupId.hashCode ^
+      sentOrReceivedOffGrid.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is MessageProto4 &&
+          runtimeType == other.runtimeType &&
+          associatedMessageEmoji == other.associatedMessageEmoji &&
+          service == other.service &&
+          scheduleType == other.scheduleType &&
+          scheduleState == other.scheduleState &&
+          groupId == other.groupId &&
+          sentOrReceivedOffGrid == other.sentOrReceivedOffGrid;
+}
+
+class MessageSummaryInfo {
+  final String? ams;
+  final Uint8List? ampt;
+  final int? amc;
+  final String? amb;
+  final String? amd;
+  final Map<String, List<MessageEdit>> ec;
+  final Uint32List ep;
+  final Map<String, MessageEditRange> otr;
+  final bool? ust;
+  final Uint32List rp;
+  final bool? hbr;
+  final String? oui;
+  final String? osn;
+  final List<String> euh;
+
+  const MessageSummaryInfo({
+    this.ams,
+    this.ampt,
+    this.amc,
+    this.amb,
+    this.amd,
+    required this.ec,
+    required this.ep,
+    required this.otr,
+    this.ust,
+    required this.rp,
+    this.hbr,
+    this.oui,
+    this.osn,
+    required this.euh,
+  });
+
+  @override
+  int get hashCode =>
+      ams.hashCode ^
+      ampt.hashCode ^
+      amc.hashCode ^
+      amb.hashCode ^
+      amd.hashCode ^
+      ec.hashCode ^
+      ep.hashCode ^
+      otr.hashCode ^
+      ust.hashCode ^
+      rp.hashCode ^
+      hbr.hashCode ^
+      oui.hashCode ^
+      osn.hashCode ^
+      euh.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is MessageSummaryInfo &&
+          runtimeType == other.runtimeType &&
+          ams == other.ams &&
+          ampt == other.ampt &&
+          amc == other.amc &&
+          amb == other.amb &&
+          amd == other.amd &&
+          ec == other.ec &&
+          ep == other.ep &&
+          otr == other.otr &&
+          ust == other.ust &&
+          rp == other.rp &&
+          hbr == other.hbr &&
+          oui == other.oui &&
+          osn == other.osn &&
+          euh == other.euh;
+}
+
 @freezed
 sealed class MessageTarget with _$MessageTarget {
   const MessageTarget._();
@@ -2075,6 +2994,53 @@ sealed class MessageType with _$MessageType {
     required String usingNumber,
     String? fromHandle,
   }) = MessageType_SMS;
+}
+
+class MMCSAttachmentMeta {
+  final String mmcsSignatureHex;
+  final NumOrString fileSize;
+  final String decryptionKey;
+  final String? utiType;
+  final String mmcsOwner;
+  final String? mimeType;
+  final String mmcsUrl;
+  final String? name;
+
+  const MMCSAttachmentMeta({
+    required this.mmcsSignatureHex,
+    required this.fileSize,
+    required this.decryptionKey,
+    this.utiType,
+    required this.mmcsOwner,
+    this.mimeType,
+    required this.mmcsUrl,
+    this.name,
+  });
+
+  @override
+  int get hashCode =>
+      mmcsSignatureHex.hashCode ^
+      fileSize.hashCode ^
+      decryptionKey.hashCode ^
+      utiType.hashCode ^
+      mmcsOwner.hashCode ^
+      mimeType.hashCode ^
+      mmcsUrl.hashCode ^
+      name.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is MMCSAttachmentMeta &&
+          runtimeType == other.runtimeType &&
+          mmcsSignatureHex == other.mmcsSignatureHex &&
+          fileSize == other.fileSize &&
+          decryptionKey == other.decryptionKey &&
+          utiType == other.utiType &&
+          mmcsOwner == other.mmcsOwner &&
+          mimeType == other.mimeType &&
+          mmcsUrl == other.mmcsUrl &&
+          name == other.name;
 }
 
 class MMCSFile {
@@ -2263,10 +3229,107 @@ class NormalMessage {
           embeddedProfile == other.embeddedProfile;
 }
 
+class NSAttributedString {
+  final String text;
+  final List<(int, NSDictionaryTypedCoder)> ranges;
+
+  const NSAttributedString({
+    required this.text,
+    required this.ranges,
+  });
+
+  static NSAttributedString decode({required StCollapsedValue val}) =>
+      RustLib.instance.api.crateApiApiNsAttributedStringDecode(val: val);
+
+  StCollapsedValue encode() =>
+      RustLib.instance.api.crateApiApiNsAttributedStringEncode(
+        that: this,
+      );
+
+  @override
+  int get hashCode => text.hashCode ^ ranges.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is NSAttributedString &&
+          runtimeType == other.runtimeType &&
+          text == other.text &&
+          ranges == other.ranges;
+}
+
 enum NSDictionaryClass {
   nsDictionary,
   nsMutableDictionary,
   ;
+}
+
+class NSDictionaryTypedCoder {
+  final Map<String, StCollapsedValue> field0;
+
+  const NSDictionaryTypedCoder({
+    required this.field0,
+  });
+
+  @override
+  int get hashCode => field0.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is NSDictionaryTypedCoder &&
+          runtimeType == other.runtimeType &&
+          field0 == other.field0;
+}
+
+class NSNumber {
+  final int field0;
+
+  const NSNumber({
+    required this.field0,
+  });
+
+  static NSNumber decode({required StCollapsedValue val}) =>
+      RustLib.instance.api.crateApiApiNsNumberDecode(val: val);
+
+  StCollapsedValue encode() => RustLib.instance.api.crateApiApiNsNumberEncode(
+        that: this,
+      );
+
+  @override
+  int get hashCode => field0.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is NSNumber &&
+          runtimeType == other.runtimeType &&
+          field0 == other.field0;
+}
+
+class NSString {
+  final String field0;
+
+  const NSString({
+    required this.field0,
+  });
+
+  static NSString decode({required StCollapsedValue val}) =>
+      RustLib.instance.api.crateApiApiNsStringDecode(val: val);
+
+  StCollapsedValue encode() => RustLib.instance.api.crateApiApiNsStringEncode(
+        that: this,
+      );
+
+  @override
+  int get hashCode => field0.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is NSString &&
+          runtimeType == other.runtimeType &&
+          field0 == other.field0;
 }
 
 class NSURL {
@@ -2288,6 +3351,18 @@ class NSURL {
           runtimeType == other.runtimeType &&
           base == other.base &&
           relative == other.relative;
+}
+
+@freezed
+sealed class NumOrString with _$NumOrString {
+  const NumOrString._();
+
+  const factory NumOrString.num(
+    int field0,
+  ) = NumOrString_Num;
+  const factory NumOrString.string(
+    String field0,
+  ) = NumOrString_String;
 }
 
 class OperatedChat {

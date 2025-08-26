@@ -433,6 +433,333 @@ pub enum DartSyncStatus {
     Syncing, // deleting remote/local
 }
 
+pub use rustpush::cloud_messages::{CloudChat, CloudProp, CloudParticipant, GZipWrapper, MMCSAttachmentMeta, AttachmentMeta, NumOrString, AttachmentMetaExtra, CloudProp001, CloudMessage, CloudAttachment, MessageFlags, cloudmessagesp::{ChatProto, MessageProto, MessageProto2, MessageProto3, MessageProto4}};
+pub use rustpush::cloudkit_proto::Asset;
+pub use plist::Date;
+#[frb(mirror(CloudProp))]
+pub struct DartCloudProp {
+    #[frb(non_final)]
+    pub gpufc: Option<u32>, // 2
+    #[frb(non_final)]
+    pub pv: Option<u32>,
+    #[frb(non_final)]
+    pub number_of_times_respondedto_thread: Option<u32>,
+    #[frb(non_final)]
+    pub should_force_to_sms: Option<bool>,
+    #[frb(non_final)]
+    pub last_seen_message_guid: Option<String>,
+    #[frb(non_final)]
+    pub message_handshake_state: Option<u32>,
+    #[frb(non_final)]
+    pub legacy_group_identifiers: Vec<String>,
+    #[frb(non_final)]
+    pub group_photo_guid: Option<String>,
+    #[frb(non_final)]
+    pub last_modification_date: Option<plist::Date>, // not actually optional, just to get around default trait
+}
+
+#[frb(mirror(CloudParticipant))]
+pub struct DartCloudParticipant {
+    pub uri: String,
+}
+
+#[frb(mirror(CloudProp001))]
+pub struct DartCloudProp001 {
+    pub syndication_type: u32, // guess
+}
+
+#[frb(mirror(ChatProto))]
+pub struct DartChatProto {
+    pub unk1: Option<u32>,
+}
+
+pub use rustpush::{NSAttributedString, NSDictionaryTypedCoder, StCollapsedValue, NSNumber, NSString};
+#[frb(mirror(NSDictionaryTypedCoder))]
+pub struct DartNSDictionaryTypedCoder(pub HashMap<String, StCollapsedValue>);
+
+#[frb(mirror(NSAttributedString))]
+pub struct DartNSAttributedString {
+    pub text: String,
+    pub ranges: Vec<(u32, NSDictionaryTypedCoder)>,
+}
+
+#[frb(external)]
+impl NSAttributedString {
+    #[frb(sync)]
+    pub fn decode(val: &StCollapsedValue) -> Self {}
+    #[frb(sync)]
+    pub fn encode(&self) -> StCollapsedValue {}
+}
+
+#[frb(mirror(NSNumber))]
+pub struct DartNSNumber(pub u32);
+
+#[frb(external)]
+impl NSNumber {
+    #[frb(sync)]
+    pub fn decode(val: &StCollapsedValue) -> Self {}
+    #[frb(sync)]
+    pub fn encode(&self) -> StCollapsedValue {}
+}
+
+#[frb(mirror(NSString))]
+pub struct DartNSString(pub String);
+
+#[frb(external)]
+impl NSString {
+    #[frb(sync)]
+    pub fn decode(val: &StCollapsedValue) -> Self {}
+    #[frb(sync)]
+    pub fn encode(&self) -> StCollapsedValue {}
+}
+
+#[frb(mirror(CloudChat))]
+pub struct DartCloudChat {
+    #[frb(non_final)]
+    pub style: i64,
+    #[frb(non_final)]
+    pub is_filtered: i64,
+    #[frb(non_final)]
+    pub successful_query: i64,
+    #[frb(non_final)]
+    pub state: i64,
+    #[frb(non_final)]
+    pub chat_identifier: String,
+    #[frb(non_final)]
+    pub group_id: String,
+    #[frb(non_final)]
+    pub service_name: String,
+    #[frb(non_final)]
+    pub original_group_id: String,
+    #[frb(non_final)]
+    pub properties: Option<CloudProp>,
+    #[frb(non_final)]
+    pub participants: Vec<CloudParticipant>,
+    #[frb(non_final)]
+    pub prop001: CloudProp001,
+    #[frb(non_final)]
+    pub last_read_message_timestamp: i64,
+    #[frb(non_final)]
+    pub last_addressed_handle: String,
+    #[frb(non_final)]
+    pub guid: String,
+    #[frb(non_final)]
+    pub display_name: Option<String>,
+    #[frb(non_final)]
+    pub proto001: Option<GZipWrapper<ChatProto>>,
+    #[frb(non_final)]
+    pub group_photo_guid: Option<String>,
+    #[frb(non_final)]
+    pub group_photo: Option<Asset>,
+}
+
+#[frb(sync)]
+pub fn decode_chatproto(wrapped: &GZipWrapper<ChatProto>) -> ChatProto {
+    (**wrapped).clone()
+}
+
+#[frb(sync)]
+pub fn encode_chatproto(chat: &ChatProto) -> GZipWrapper<ChatProto> {
+    GZipWrapper(chat.clone())
+}
+
+pub use rustpush::cloud_messages::{MessageEdit, MessageEditRange, MessageSummaryInfo};
+#[frb(non_opaque, mirror(MessageEdit))]
+pub struct DartMessageEdit {
+    pub t: Vec<u8>, // this is a streamtyped
+    pub d: f64,
+    pub bcg: Option<String>, // uuid, refers to something
+}
+
+#[frb(non_opaque, mirror(MessageEditRange))]
+pub struct DartMessageEditRange {
+    pub lo: u32,
+    pub le: u32,
+}
+
+#[frb(non_opaque, mirror(MessageSummaryInfo))]
+pub struct DartMessageSummaryInfo {
+    pub ams: Option<String>,
+    pub ampt: Option<Vec<u8>>, // am part (full text part of ams)
+    pub amc: Option<u32>,
+    pub amb: Option<String>, // balloon id
+    pub amd: Option<String>, // GamePigeon
+    pub ec: HashMap<String, Vec<MessageEdit>>, // edit text
+    pub ep: Vec<u32>, // edit part
+    pub otr: HashMap<String, MessageEditRange>, // edit range maybe?
+    pub ust: Option<bool>,
+    pub rp: Vec<u32>,
+    pub hbr: Option<bool>,
+    pub oui: Option<String>,
+    pub osn: Option<String>, // service (SMS)
+    pub euh: Vec<String>, // list of handles
+}
+
+#[frb(non_opaque, mirror(CloudMessage))]
+pub struct DartCloudMessage {
+    pub utm: Option<SystemTime>, // option for default
+    pub r#type: i64,
+    pub error: i64,
+    pub chat_id: String,
+    pub sender: String,
+    pub time: i64, // ns since apple epoch
+    pub msg_proto_2: Option<GZipWrapper<MessageProto2>>, // always empty afaict??
+    pub destination_caller_id: String,
+    pub msg_proto: GZipWrapper<MessageProto>,
+    pub flags: MessageFlags, // unk
+    pub guid: String,
+    pub msg_proto_3: Option<GZipWrapper<MessageProto3>>,
+    pub service: String,
+    pub msg_proto_4: Option<GZipWrapper<MessageProto4>>,
+}
+
+#[frb(sync)]
+pub fn decode_messageproto(wrapped: &GZipWrapper<MessageProto>) -> MessageProto {
+    (**wrapped).clone()
+}
+
+#[frb(sync)]
+pub fn encode_messageproto(messageproto: &MessageProto) -> GZipWrapper<MessageProto> {
+    GZipWrapper(messageproto.clone())
+}
+
+#[frb(sync)]
+pub fn decode_messageproto2(wrapped: &GZipWrapper<MessageProto2>) -> MessageProto2 {
+    (**wrapped).clone()
+}
+
+#[frb(sync)]
+pub fn encode_messageproto2(messageproto2: &MessageProto2) -> GZipWrapper<MessageProto2> {
+    GZipWrapper(messageproto2.clone())
+}
+
+#[frb(sync)]
+pub fn decode_messageproto3(wrapped: &GZipWrapper<MessageProto3>) -> MessageProto3 {
+    (**wrapped).clone()
+}
+
+#[frb(sync)]
+pub fn encode_messageproto3(messageproto3: &MessageProto3) -> GZipWrapper<MessageProto3> {
+    GZipWrapper(messageproto3.clone())
+}
+
+#[frb(sync)]
+pub fn decode_messageproto4(wrapped: &GZipWrapper<MessageProto4>) -> MessageProto4 {
+    (**wrapped).clone()
+}
+
+#[frb(sync)]
+pub fn encode_messageproto4(messageproto4: &MessageProto4) -> GZipWrapper<MessageProto4> {
+    GZipWrapper(messageproto4.clone())
+}
+
+#[frb(non_opaque, mirror(MessageProto), type_64bit_int)]
+pub struct DartMessageProto {
+    /// always 1, is finished or ck sync state
+    pub unk1: u32,
+    pub group_title: Option<String>,
+    pub text: String,
+    pub attributed_body: Vec<u8>,
+    pub balloon_bundle_id: Option<String>,
+    pub payload_data: Option<Vec<u8>>,
+    pub message_summary_info: Option<Vec<u8>>,
+    pub effect: Option<String>,
+    pub date_read: Option<u64>,
+    pub unk10: Option<u32>,
+    pub unk11: Option<u32>,
+    pub date_delivered: Option<u64>,
+    pub unk14: Option<u32>,
+    pub associated_message_type: Option<u32>,
+    pub associated_message_guid: Option<String>,
+    pub associated_message_range_location: Option<u32>,
+    pub associated_message_range_length: Option<u32>,
+}
+
+#[frb(non_opaque, mirror(AttachmentMetaExtra))]
+pub struct DartAttachmentMetaExtra {
+    pub preview_generation_state: Option<u32>, // set to 1
+}
+
+#[frb(non_opaque, mirror(NumOrString))]
+pub enum DartNumOrString {
+    Num(u32),
+    String(String),
+}
+
+#[frb(non_opaque, mirror(MMCSAttachmentMeta))]
+pub struct DartMMCSAttachmentMeta {
+    pub mmcs_signature_hex: String,
+    pub file_size: NumOrString,
+    pub decryption_key: String,
+    pub uti_type: Option<String>,
+    pub mmcs_owner: String,
+    pub mime_type: Option<String>,
+    pub mmcs_url: String,
+    pub name: Option<String>,
+}
+
+#[frb(non_opaque, mirror(AttachmentMeta), type_64bit_int)]
+pub struct DartAttachmentMeta {
+    pub mime_type: Option<String>,
+    pub start_date: u64,
+    pub total_bytes: u64,
+    pub transfer_state: u32,
+    pub is_sticker: bool,
+    pub guid: String,
+    pub hide_attachment: bool,
+    pub user_info: Option<MMCSAttachmentMeta>,
+    pub filename: String, //path
+    pub extras: Option<AttachmentMetaExtra>,
+    pub is_outgoing: bool,
+    pub transfer_name: String,
+    pub version: u32, // set to 1
+    pub uti: Option<String>, // uti type
+    pub created_date: u64,
+    pub pathc: Option<String>, // also transfer name
+    pub md5: Option<String>, // first 8 bytes of md5 hash of file
+}
+
+#[frb(mirror(CloudAttachment), non_opaque)]
+pub struct DartCloudAttachment {
+    pub cm: GZipWrapper<AttachmentMeta>,
+    pub lqa: Asset,
+}
+
+#[frb(sync)]
+pub fn decode_attachmentmeta(wrapped: &GZipWrapper<AttachmentMeta>) -> AttachmentMeta {
+    (**wrapped).clone()
+}
+
+#[frb(sync)]
+pub fn encode_attachmentmeta(attachmentmeta: &AttachmentMeta) -> GZipWrapper<AttachmentMeta> {
+    GZipWrapper(attachmentmeta.clone())
+}
+
+#[frb(non_opaque, mirror(MessageProto2))]
+pub struct DartMessageProto2 {
+    pub reply: Option<String>,
+}
+
+#[frb(non_opaque, mirror(MessageProto3))]
+pub struct DartMessageProto3 {
+    /// always 0
+    pub unk2: Option<u32>,
+    /// always 0
+    pub unk3: Option<u32>,
+}
+
+#[frb(non_opaque, mirror(MessageProto4))]
+pub struct DartMessageProto4 {
+    pub associated_message_emoji: Option<String>,
+    pub service: Option<String>,
+    /// test is 0, unconfirmed
+    pub schedule_type: Option<u32>,
+    pub schedule_state: Option<u32>,
+    pub group_id: Option<String>,
+    /// test is 0, uncomfirmed
+    pub sent_or_received_off_grid: Option<u32>,
+}
+
 #[repr(C)]
 #[frb(mirror(AttachmentType))]
 pub enum DartAttachmentType {
@@ -583,6 +910,14 @@ pub struct DartExtensionApp {
     pub bundle_id: String,
 
     pub balloon: Option<Balloon>,
+}
+
+#[frb(external)]
+impl ExtensionApp {
+    #[frb(sync)]
+    pub fn from_bp(bp: &[u8], bid: &str) -> Result<ExtensionApp, PushError> { }
+    #[frb(sync)]
+    pub fn to_raw(&self) -> Result<(Vec<u8>, Option<Vec<u8>>), PushError> { }
 }
 
 #[frb(mirror(PermanentDeleteMessage))]

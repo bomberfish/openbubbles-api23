@@ -15,6 +15,7 @@ import 'package:bluebubbles/database/database.dart';
 import 'package:bluebubbles/services/network/backend_service.dart';
 import 'package:bluebubbles/services/rustpush/rustpush_service.dart';
 import 'package:bluebubbles/services/services.dart';
+import 'package:bluebubbles/utils/logger/logger.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' hide Notification;
@@ -686,28 +687,32 @@ class NotificationsService extends GetxService {
   Future<void> notifySignInRequest(api.IdmsRequestedSignIn message) async {
     var title = message.aps.alert.title.replaceAll("Apple ID", "Apple Account");
     var subtitle = message.aps.alert.body.replaceAll("Apple ID", "Apple Account");
-    var request = await http.dio.get("https://nominatim.openstreetmap.org/reverse?lat=${message.akdata.lat}&lon=${message.akdata.lng}&format=jsonv2&zoom=10");
+    try {
+      var request = await http.dio.get("https://nominatim.openstreetmap.org/reverse?lat=${message.akdata.lat}&lon=${message.akdata.lng}&format=jsonv2&zoom=10");
 
-    String text;
-    var address = request.data["address"];
-    if (address != null) {
-      String? city = address["city"];
-      if (city != null) {
-        String? state = address["state"]?.substring(0, 2).toUpperCase();
-        String? country = address["country_code"];
-        if (state != null) {
-          text = "$city, $state";
+      String text;
+      var address = request.data["address"];
+      if (address != null) {
+        String? city = address["city"];
+        if (city != null) {
+          String? state = address["state"]?.substring(0, 2).toUpperCase();
+          String? country = address["country_code"];
+          if (state != null) {
+            text = "$city, $state";
+          } else {
+            text = "$city, $country";
+          }
         } else {
-          text = "$city, $country";
+          text = address["state"] ?? address["country"];
         }
       } else {
-        text = address["state"] ?? address["country"];
+        text = request.data["name"];
       }
-    } else {
-      text = request.data["name"];
+      
+      subtitle = subtitle.replaceAll("%loc%", text);
+    } catch (e, s) {
+      Logger.error("Failed to geocode!", error: e, trace: s);
     }
-    
-    subtitle = subtitle.replaceAll("%loc%", text);
 
     if (kIsDesktop) {
       await showDialog(

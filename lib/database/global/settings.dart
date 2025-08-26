@@ -210,6 +210,17 @@ class Settings {
   final RxBool developerEnabled = false.obs;
   final RxList<String> developerMode = <String>[].obs;
 
+  final RxnString keychainDefaultPassword = RxnString();
+  final RxnString chatSyncToken = RxnString();
+  final RxnString messageSyncToken = RxnString();
+  final RxnString attachmentSyncToken = RxnString();
+
+  // CloudKit IDs to delete at next sync
+  final RxList<String> chatDeletionIds = <String>[].obs;
+  final RxList<String> messageDeletionIds = <String>[].obs;
+  final RxList<String> attachmentDeletionIds = <String>[].obs;
+
+
   Future<DisplayMode> getDisplayMode() async {
     List<DisplayMode> modes = await FlutterDisplayMode.supported;
     return modes.firstWhereOrNull((element) => element.refreshRate.round() == refreshRate.value) ?? DisplayMode.auto;
@@ -410,11 +421,18 @@ class Settings {
       'macIsMine': macIsMine.value,
       'deviceIsHosted': deviceIsHosted.value,
       'hostedPendingTransaction': hostedPendingTransaction.value,
+      'keychainDefaultPassword': keychainDefaultPassword.value,
+      'chatSyncToken': chatSyncToken.value,
+      'messageSyncToken': messageSyncToken.value,
+      'attachmentSyncToken': attachmentSyncToken.value,
       'isSmsRouter': isSmsRouter.value,
       'developerEnabled': developerEnabled.value,
       'vpnWarned': vpnWarned.value,
       'smsForwardingTargets': smsRoutingTargets,
       'developerMode': developerMode,
+      'chatDeletionIds': chatDeletionIds,
+      'messageDeletionIds': messageDeletionIds,
+      'attachmentDeletionIds': attachmentDeletionIds,
       'lastLocation': lastLocation,
       'enableShareZen': enableShareZen.value,
       'warnedTextChats': warnedTextChats.value,
@@ -577,6 +595,10 @@ class Settings {
     // ss.settings.macIsMine.value = map['macIsMine'] ?? true;
     // ss.settings.deviceIsHosted.value = map['deviceIsHosted'] ?? false;
     ss.settings.hostedPendingTransaction.value = map['hostedPendingTransaction'];
+    ss.settings.keychainDefaultPassword.value = map['keychainDefaultPassword'];
+    ss.settings.chatSyncToken.value = map['chatSyncToken'];
+    ss.settings.messageSyncToken.value = map['messageSyncToken'];
+    ss.settings.attachmentSyncToken.value = map['attachmentSyncToken'];
     ss.settings.isSmsRouter.value = map['isSmsRouter'] ?? false;
     ss.settings.developerEnabled.value = map['developerEnabled'] ?? false;
     ss.settings.vpnWarned.value = map['vpnWarned'] ?? false;
@@ -587,6 +609,9 @@ class Settings {
     ss.settings.zenModeAware.value = map['zenModeAware'] ?? false;
     ss.settings.smsRoutingTargets.value = (map['smsForwardingTargets']?.runtimeType == String ? jsonDecode(map['smsForwardingTargets']) as List : []).cast<String>();
     ss.settings.developerMode.value = (map['developerMode']?.runtimeType == String ? jsonDecode(map['developerMode']) as List : []).cast<String>();
+    ss.settings.chatDeletionIds.value = (map['chatDeletionIds']?.runtimeType == String ? jsonDecode(map['chatDeletionIds']) as List : []).cast<String>();
+    ss.settings.messageDeletionIds.value = (map['messageDeletionIds']?.runtimeType == String ? jsonDecode(map['messageDeletionIds']) as List : []).cast<String>();
+    ss.settings.attachmentDeletionIds.value = (map['attachmentDeletionIds']?.runtimeType == String ? jsonDecode(map['attachmentDeletionIds']) as List : []).cast<String>();
     ss.settings.lastLocation.value = map['lastLocation'];
     ss.settings.isTester.value = map['isTester'] ?? false;
     ss.settings.save();
@@ -742,6 +767,10 @@ class Settings {
     s.macIsMine.value = map['macIsMine'] ?? true;
     s.deviceIsHosted.value = map['deviceIsHosted'] ?? false;
     s.hostedPendingTransaction.value = map['hostedPendingTransaction'];
+    s.keychainDefaultPassword.value = map['keychainDefaultPassword'];
+    s.chatSyncToken.value = map['chatSyncToken'];
+    s.messageSyncToken.value = map['messageSyncToken'];
+    s.attachmentSyncToken.value = map['attachmentSyncToken'];
     s.isSmsRouter.value = map['isSmsRouter'] ?? false;
     s.developerEnabled.value = map['developerEnabled'] ?? false;
     s.vpnWarned.value = map['vpnWarned'] ?? false;
@@ -752,6 +781,9 @@ class Settings {
     s.zenModeAware.value = map['zenModeAware'] ?? false;
     s.smsRoutingTargets.value = (map['smsForwardingTargets']?.runtimeType == String ? jsonDecode(map['smsForwardingTargets']) as List : []).cast<String>();
     s.developerMode.value = (map['developerMode']?.runtimeType == String ? jsonDecode(map['developerMode']) as List : []).cast<String>();
+    s.chatDeletionIds.value = (map['chatDeletionIds']?.runtimeType == String ? jsonDecode(map['chatDeletionIds']) as List : []).cast<String>();
+    s.messageDeletionIds.value = (map['messageDeletionIds']?.runtimeType == String ? jsonDecode(map['messageDeletionIds']) as List : []).cast<String>();
+    s.attachmentDeletionIds.value = (map['attachmentDeletionIds']?.runtimeType == String ? jsonDecode(map['attachmentDeletionIds']) as List : []).cast<String>();
     s.lastLocation.value = map['lastLocation'];
     s.isTester.value = map['isTester'] ?? false;
     return s;

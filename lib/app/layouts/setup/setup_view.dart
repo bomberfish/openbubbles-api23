@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:android_play_install_referrer/android_play_install_referrer.dart';
 import 'package:bluebubbles/app/layouts/conversation_list/pages/conversation_list.dart';
@@ -374,6 +375,12 @@ class SetupViewController extends StatefulController {
         ss.settings.defaultHandle.value = phone;
         ss.saveSettings();
       }
+
+      var defaultPassword = Random.secure().nextInt(1000000).toString().padLeft(6, '0');
+      ss.settings.keychainDefaultPassword.value = defaultPassword;
+      ss.saveSettings();
+
+      await api.circleSetupClique(state: pushService.state, devicePassword: defaultPassword);
 
       Logger.debug("Finishing!");
       setup.finishSetup();

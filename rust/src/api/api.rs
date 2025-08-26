@@ -1,7 +1,7 @@
 
 
-use std::{borrow::{Borrow, BorrowMut}, collections::HashSet, fs::{self, File}, future::Future, io::{Cursor, Read, Write}, ops::Deref, path::{Path, PathBuf}, str::FromStr, sync::{Arc, OnceLock}, time::{Duration, SystemTime}, u64};
-
+use std::{borrow::{Borrow, BorrowMut}, collections::HashSet, fs::{self, File}, future::Future, io::{Cursor, Read, Write}, ops::Deref, path::{Path, PathBuf}, str::FromStr, sync::{Arc, OnceLock}, time::Duration, u64};
+pub use std::time::SystemTime;
 use anyhow::anyhow;
 use flutter_rust_bridge::{frb, IntoDart, JoinHandle};
 use icloud_auth::{default_provider, ArcAnisetteClient, LoginClientInfo};
@@ -14,10 +14,11 @@ use sha2::Digest;
 use prost::Message as prostMessage;
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use tokio::{runtime::Runtime, select, sync::{broadcast, mpsc, oneshot::{self, Sender}, watch, Mutex, RwLock}};
-use rustpush::{authenticate_apple, authenticate_phone, cloudkit::{CloudKitClient, CloudKitState}, facetime::{FTClient, FTState, FACETIME_SERVICE, VIDEO_SERVICE}, findmy::{FindMyClient, FindMyState, FindMyStateManager, MULTIPLEX_SERVICE}, login_apple_delegates, name_photo_sharing::ProfilesClient, sharedstreams::{AssetMetadata, FFMpegFilePackager, FileMetadata, FilePackager, PreparedAsset, PreparedFile, SharedStreamClient, SharedStreamsState, SyncController, SyncManager, SyncState}, statuskit::{ChannelInterestToken, StatusKitClient, StatusKitState, StatusKitStatus}, APSMessage, CircleServerSession, IDSNGMIdentity, LoginDelegate, MADRID_SERVICE};
+use rustpush::{authenticate_apple, authenticate_phone, cloud_messages::CloudMessagesClient, cloudkit::{CloudKitClient, CloudKitState}, facetime::{FTClient, FTState, FACETIME_SERVICE, VIDEO_SERVICE}, findmy::{FindMyClient, FindMyState, FindMyStateManager, MULTIPLEX_SERVICE}, keychain::{KeychainClient, KeychainClientState}, login_apple_delegates, name_photo_sharing::ProfilesClient, sharedstreams::{AssetMetadata, FFMpegFilePackager, FileMetadata, FilePackager, PreparedAsset, PreparedFile, SharedStreamClient, SharedStreamsState, SyncController, SyncManager, SyncState}, statuskit::{ChannelInterestToken, StatusKitClient, StatusKitState, StatusKitStatus}, APSMessage, CircleClientSession, CircleServerSession, IDSNGMIdentity, LoginDelegate, MADRID_SERVICE};
 use rustpush::AnisetteProvider;
 pub use rustpush::findmy::{FindMyFriendsClient, FindMyPhoneClient};
 pub use rustpush::sharedstreams::{SharedAlbum, SyncStatus};
+pub use rustpush::cloudkit_proto::EscrowData;
 pub use icloud_auth::DefaultAnisetteProvider;
 use uniffi::HandleAlloc;
 use rand::Rng;
@@ -185,6 +186,10 @@ pub struct InnerPushState {
     pub local_broadcast: mpsc::Sender<PushMessage>,
     pub reg_state: Option<Mutex<watch::Receiver<ResourceState>>>,
     pub cancel_poll_recv: Mutex<mpsc::Receiver<()>>,
+    pub keychain: Option<Arc<KeychainClient<DefaultAnisetteProvider>>>,
+    pub cloudkit_client: Option<Arc<CloudKitClient<DefaultAnisetteProvider>>>,
+    pub idms_circle_client: Mutex<Option<CircleClientSession<DefaultAnisetteProvider>>>,
+    pub cloud_messages_client: Option<CloudMessagesClient<DefaultAnisetteProvider>>,
 }
 
 pub struct ActiveCircleSession {
@@ -226,6 +231,10 @@ pub async fn new_push_state(dir: String) -> Arc<PushState> {
         idms_client: None,
         idms_circle_sessions: Mutex::new(vec![]),
         cancel_poll_recv: Mutex::new(cancel_recv),
+        keychain: None,
+        cloudkit_client: None,
+        idms_circle_client: Mutex::new(None),
+        cloud_messages_client: None,
     }));
     restore(&state).await;
     Arc::new(state)
@@ -443,15 +452,36 @@ async fn restore(curr_state: &PushState) {
             config: inner.os_config.as_ref().unwrap().config(),
         });
 
+        inner.cloudkit_client = Some(cloudkit.clone());
         inner.profiles_client = Some(ProfilesClient::new(cloudkit));
     }
 
+    let inner = &mut *inner;
     if let Some(account) = &inner.account {
         let path = inner.conf_dir.join("statuskit.plist");
         let state: StatusKitState = plist::from_file(&path).unwrap_or_default();
         inner.statuskit_client = Some(StatusKitClient::new(state, Box::new(move |state| {
             plist::to_file_xml(&path, state).unwrap();
         }), account.clone(), inner.conn.as_ref().unwrap().clone(), inner.os_config.as_ref().unwrap().config(), inner.client.as_ref().unwrap().identity.clone()).await);
+
+        let cloudkit_path = inner.conf_dir.join("keychain.plist");
+        if let (Ok(state), Some(cloudkit)) = (plist::from_file(&cloudkit_path), &inner.cloudkit_client) {
+            let keychain = Arc::new(KeychainClient {
+                anisette: inner.anisette.clone().unwrap(),
+                account: account.clone(),
+                state: RwLock::new(state),
+                config: inner.os_config.as_ref().unwrap().config(),
+                update_state: Box::new(move |update| {
+                    plist::to_file_xml(&cloudkit_path, update).unwrap();
+                }),
+                container: tokio::sync::Mutex::new(None),
+                security_container: tokio::sync::Mutex::new(None),
+                client: cloudkit.clone(),
+            });
+
+            inner.keychain = Some(keychain.clone());
+            inner.cloud_messages_client = Some(CloudMessagesClient::new(cloudkit.clone(), keychain.clone()));
+        }
     }
     inner.idms_client = Some(IdmsAuthListener::new(inner.conn.as_ref().unwrap().clone()).await);
 }
@@ -561,15 +591,36 @@ pub async fn register_ids(state: &Arc<PushState>, users: &Vec<IDSUser>) -> anyho
             config: inner.os_config.as_ref().unwrap().config(),
         });
 
+        inner.cloudkit_client = Some(cloudkit.clone());
         inner.profiles_client = Some(ProfilesClient::new(cloudkit));
     }
 
+    let inner = &mut *inner;
     if let Some(account) = &inner.account {
         let path = inner.conf_dir.join("statuskit.plist");
         let state: StatusKitState = plist::from_file(&path).unwrap_or_default();
         inner.statuskit_client = Some(StatusKitClient::new(state, Box::new(move |state| {
             plist::to_file_xml(&path, state).unwrap();
         }), account.clone(), inner.conn.as_ref().unwrap().clone(), inner.os_config.as_ref().unwrap().config(), inner.client.as_ref().unwrap().identity.clone()).await);
+
+        let cloudkit_path = inner.conf_dir.join("keychain.plist");
+        if let (Ok(state), Some(cloudkit)) = (plist::from_file(&cloudkit_path), &inner.cloudkit_client) {
+            let keychain = Arc::new(KeychainClient {
+                anisette: inner.anisette.clone().unwrap(),
+                account: account.clone(),
+                state: RwLock::new(state),
+                config: inner.os_config.as_ref().unwrap().config(),
+                update_state: Box::new(move |update| {
+                    plist::to_file_xml(&cloudkit_path, update).unwrap();
+                }),
+                container: tokio::sync::Mutex::new(None),
+                security_container: tokio::sync::Mutex::new(None),
+                client: cloudkit.clone(),
+            });
+
+            inner.keychain = Some(keychain.clone());
+            inner.cloud_messages_client = Some(CloudMessagesClient::new(cloudkit.clone(), keychain.clone()));
+        }
     }
     inner.idms_client = Some(IdmsAuthListener::new(inner.conn.as_ref().unwrap().clone()).await);
     Ok(None)
@@ -646,6 +697,7 @@ pub async fn configure_macos(state: &Arc<PushState>, config: &JoinedOSConfig) ->
     inner.conn = Some(connection);
     let provider = Some(default_provider(get_login_config(&*inner).await, inner.conf_dir.join("anisette_test")));
     inner.anisette = provider;
+    inner.idms_client = Some(IdmsAuthListener::new(inner.conn.as_ref().unwrap().clone()).await);
     Ok(())
 }
 
@@ -880,7 +932,7 @@ pub async fn complete_msg(ptr: String) {
 
 
 
-
+#[frb(sync)]
 pub fn restore_attachment(data: String) -> Attachment {
     plist::from_reader_xml(Cursor::new(data)).unwrap()
 }
@@ -1237,6 +1289,27 @@ async fn handle_2fa(state: &InnerPushState, signin: &IdmsRequestedSignIn) -> boo
 }
 
 async fn handle_circle(state: &InnerPushState, signin: &Option<IdmsRequestedSignIn>, msg: &IdmsCircleMessage) {
+    if msg.step % 2 == 0 {
+        // this is a client step (we are the client)
+        let mut locked = state.idms_circle_client.lock().await;
+        let Some(client) = &mut *locked else {
+            warn!("Ignoring unknown circle client session");
+            return
+        };
+        match client.handle_circle_request(msg).await {
+            Err(e) => {
+                warn!("error {e}");
+            },
+            Ok(Some(LoginState::LoggedIn)) => {
+                // we are done
+                *locked = None;
+                info!("Finished client circle!");
+            },
+            _ => info!("Did circle step {}", msg.step),
+        }
+        return
+    }
+
     let mut circle_lock = state.idms_circle_sessions.lock().await;
     if !circle_lock.iter().any(|a| a.atxnid == msg.atxnid) {
         if msg.step != 1 {
@@ -1264,7 +1337,7 @@ async fn handle_circle(state: &InnerPushState, signin: &Option<IdmsRequestedSign
 
         let mut rng = rand::thread_rng();
         let otp: u32 = rng.gen_range(0..1_000_000);
-        let session = CircleServerSession::new(dsid, otp, account, push_token);
+        let session = CircleServerSession::new(dsid, otp, account, push_token, state.keychain.clone());
         circle_lock.push(ActiveCircleSession {
             session,
             atxnid: msg.atxnid.clone(),
@@ -1731,6 +1804,14 @@ async fn do_login(conf_dir: &Path, account: &mut AppleAccount<DefaultAnisettePro
         warn!("missing cloudkit tokens!");
     }
 
+    let keychain = KeychainClientState::new(dsid.clone(), adsid.to_string(), &mobileme);
+    if let Some(keychain) = keychain {
+        let id_path = conf_dir.join("keychain.plist");
+        std::fs::write(id_path, plist_to_string(&keychain).unwrap()).unwrap();
+    } else {
+        warn!("missing keychain tokens!");
+    }
+
     debug!("Spd finish parse");
 
     let user = authenticate_apple(delegates.ids.unwrap(), os_config).await?;
@@ -1779,16 +1860,332 @@ pub async fn auth_phone(state: &Arc<PushState>, number: String, sig: Vec<u8>) ->
 }
 
 pub async fn send_2fa_to_devices(state: &Arc<PushState>) -> anyhow::Result<LoginState> {
-    let inner = state.0.read().await;
+    let mut inner = state.0.write().await;
     let account = inner.account.as_ref().unwrap().lock().await;
-    Ok(account.send_2fa_to_devices().await?)
 
+    let spd = account.spd.as_ref().unwrap();
+    let dsid = spd["DsPrsId"].as_unsigned_integer().unwrap();
+
+    drop(account);
+
+    let conn = inner.conn.as_ref().unwrap();
+
+    *inner.idms_circle_client.lock().await = Some(CircleClientSession::new(dsid, inner.account.clone().unwrap(), conn.get_token().await).await?);
+
+    Ok(LoginState::Needs2FAVerification)
+}
+
+#[frb(type_64bit_int)]
+pub struct ViableBottle {
+    pub escrow: EscrowData,
+    pub numeric_length: u64,
+    pub device_name: String,
+    pub model_class: String,
+}
+
+pub async fn supports_keychain(state: &Arc<PushState>) -> bool {
+    let inner = state.0.read().await;
+    inner.keychain.is_some()
+}
+
+pub async fn is_in_clique(state: &Arc<PushState>) -> bool {
+    let inner = state.0.read().await;
+    let Some(keychain) = inner.keychain.clone() else { return false };
+    
+    keychain.is_in_clique().await
+}
+
+pub async fn join_clique_with_bottle(state: &Arc<PushState>, bottle: &EscrowData, password: String, device_password: String) -> anyhow::Result<()> {
+    let inner = state.0.read().await;
+    let keychain = inner.keychain.clone().unwrap();
+
+    keychain.join_clique_from_escrow(bottle, password.as_bytes(), device_password.as_bytes()).await?;
+    Ok(())
+}
+
+pub async fn reset_clique(state: &Arc<PushState>, device_password: String) -> anyhow::Result<()> {
+    let inner = state.0.read().await;
+    let keychain = inner.keychain.clone().unwrap();
+
+    keychain.reset_clique(device_password.as_bytes()).await?;
+    Ok(())
+}
+
+pub async fn get_bottles(state: &Arc<PushState>) -> anyhow::Result<Vec<ViableBottle>> {
+    let inner = state.0.read().await;
+    let keychain = inner.keychain.clone().unwrap();
+    let bottles = keychain.get_viable_bottles().await?;
+    Ok(bottles.into_iter().filter_map(|b| {
+        let client_metadata = b.1.client_metadata.as_dictionary()?;
+        Some(ViableBottle {
+            escrow: b.0,
+            numeric_length: client_metadata.get("SecureBackupNumericPassphraseLength").and_then(|i| i.as_unsigned_integer()).unwrap_or(0),
+            device_name: client_metadata.get("device_name").and_then(|i| i.as_string()).unwrap_or("No Name").to_string(),
+            model_class: client_metadata.get("device_model_class").and_then(|i| i.as_string()).unwrap_or("iMac").to_string(),
+        })
+    }).collect())
+}
+
+pub fn encode_summary_info(info: &MessageSummaryInfo) -> Vec<u8> {
+    plist_to_bin(info).unwrap()
+}
+
+pub fn decode_summary_info(info: &[u8]) -> MessageSummaryInfo {
+    plist::from_bytes(info).unwrap()
+}
+
+use rustpush::{coder_encode_flattened, coder_decode_flattened};
+
+#[frb(sync)]
+pub fn attachment_to_cloud(att: &Attachment) -> Option<MMCSAttachmentMeta> {
+    att.into()
+}
+
+#[frb(sync)]
+pub fn nscoder_encode(value: &[StCollapsedValue]) -> Vec<u8> {
+    coder_encode_flattened(value)
+}
+
+#[frb(sync)]
+pub fn nscoder_decode(data: &[u8]) -> Vec<StCollapsedValue> {
+    coder_decode_flattened(data)
+}
+
+#[frb(sync)]
+pub fn save_cloud_chat(value: &CloudChat) -> Vec<u8> {
+    plist_to_bin(&value).unwrap()
+}
+
+#[frb(sync)]
+pub fn restore_cloud_chat(data: &[u8]) -> CloudChat {
+    plist::from_bytes(data).unwrap()
+}
+
+pub async fn sync_chats(
+    state: &Arc<PushState>,
+    continuation_token: Option<Vec<u8>>,
+) -> anyhow::Result<(Vec<u8>, HashMap<String, Option<CloudChat>>)> {
+    let inner = state.0.read().await;
+    let cloud_messages_client = inner.cloud_messages_client.as_ref().unwrap();
+    Ok(cloud_messages_client.sync_chats(continuation_token).await?)
+}
+
+pub async fn save_chats(
+    state: &Arc<PushState>,
+    chats: HashMap<String, CloudChat>,
+) -> anyhow::Result<()> {
+    let inner = state.0.read().await;
+    let cloud_messages_client = inner.cloud_messages_client.as_ref().unwrap();
+    Ok(cloud_messages_client.save_chats(chats).await?)
+}
+
+pub async fn delete_chats(
+    state: &Arc<PushState>,
+    chats: &[String],
+) -> anyhow::Result<()> {
+    let inner = state.0.read().await;
+    let cloud_messages_client = inner.cloud_messages_client.as_ref().unwrap();
+    Ok(cloud_messages_client.delete_chats(chats).await?)
+}
+
+pub async fn sync_messages(
+    state: &Arc<PushState>,
+    continuation_token: Option<Vec<u8>>,
+) -> anyhow::Result<(Vec<u8>, HashMap<String, Option<CloudMessage>>)> {
+    let inner = state.0.read().await;
+    let cloud_messages_client = inner.cloud_messages_client.as_ref().unwrap();
+    Ok(cloud_messages_client.sync_messages(continuation_token).await?)
+}
+
+pub async fn save_messages(
+    state: &Arc<PushState>,
+    messages: HashMap<String, CloudMessage>,
+) -> anyhow::Result<()> {
+    let inner = state.0.read().await;
+    let cloud_messages_client = inner.cloud_messages_client.as_ref().unwrap();
+    Ok(cloud_messages_client.save_messages(messages).await?)
+}
+
+pub async fn delete_messages(
+    state: &Arc<PushState>,
+    messages: &[String],
+) -> anyhow::Result<()> {
+    let inner = state.0.read().await;
+    let cloud_messages_client = inner.cloud_messages_client.as_ref().unwrap();
+    Ok(cloud_messages_client.delete_messages(messages).await?)
+}
+
+#[frb(sync)]
+pub fn decode_message_info(data: &[u8]) -> anyhow::Result<MessageSummaryInfo> {
+    Ok(plist::from_bytes(data)?)
+}
+
+#[frb(sync)]
+pub fn encode_message_info(info: &MessageSummaryInfo) -> Vec<u8> {
+    plist_to_bin(info).unwrap()
+}
+
+#[frb(external)]
+impl MessageFlags {
+    #[frb(sync)]
+    pub fn bits(&self) -> i64 { }
+    #[frb(sync)]
+    pub fn from_bits_truncate(val: i64) -> Self { }
+}
+
+pub async fn sync_attachments(
+    state: &Arc<PushState>,
+    continuation_token: Option<Vec<u8>>,
+) -> anyhow::Result<(Vec<u8>, HashMap<String, Option<CloudAttachment>>)> {
+    let inner = state.0.read().await;
+    let cloud_messages_client = inner.cloud_messages_client.as_ref().unwrap();
+    Ok(cloud_messages_client.sync_attachments(continuation_token).await?)
+}
+
+pub async fn save_attachments(
+    state: &Arc<PushState>,
+    attachments: HashMap<String, CloudAttachment>,
+) -> anyhow::Result<()> {
+    let inner = state.0.read().await;
+    let cloud_messages_client = inner.cloud_messages_client.as_ref().unwrap();
+    Ok(cloud_messages_client.save_attachments(attachments).await?)
+}
+
+pub async fn delete_attachments(
+    state: &Arc<PushState>,
+    attachments: &[String],
+) -> anyhow::Result<()> {
+    let inner = state.0.read().await;
+    let cloud_messages_client = inner.cloud_messages_client.as_ref().unwrap();
+    Ok(cloud_messages_client.delete_attachments(attachments).await?)
+}
+
+pub async fn download_cloud_attachments(state: &Arc<PushState>, files: Vec<(String, String)>) -> anyhow::Result<()> {
+    let inner = state.0.read().await;
+    let cloud_messages_client = inner.cloud_messages_client.as_ref().unwrap();
+
+    let mut map = HashMap::new();
+    for (file, record) in files {
+        info!("here {}", file);
+        let path = std::path::Path::new(&file);
+        let prefix = path.parent().unwrap();
+        std::fs::create_dir_all(prefix)?;
+
+        info!("created {}", file);
+
+        map.insert(record, std::fs::File::create(file)?);
+    }
+
+    cloud_messages_client.download_attachment(map).await?;
+    Ok(())
+}
+
+#[frb(sync)]
+pub fn utm_now() -> SystemTime {
+    SystemTime::now()
+}
+
+#[frb(sync)]
+pub fn date_now() -> plist::Date {
+    SystemTime::now().into()
+}
+
+pub async fn download_cloud_group_photos(state: &Arc<PushState>, files: Vec<(String, String)>) -> anyhow::Result<()> {
+    let inner = state.0.read().await;
+    let cloud_messages_client = inner.cloud_messages_client.as_ref().unwrap();
+
+    let mut map = HashMap::new();
+    for (file, record) in files {
+        let path = std::path::Path::new(&file);
+        let prefix = path.parent().unwrap();
+        std::fs::create_dir_all(prefix)?;
+
+        map.insert(record, std::fs::File::create(file)?);
+    }
+
+    cloud_messages_client.download_group_photo(map).await?;
+    Ok(())
+}
+
+pub async fn upload_cloud_attachments(state: &Arc<PushState>, files: Vec<(String, String)>) -> anyhow::Result<HashMap<String, Asset>> {
+    let inner = state.0.read().await;
+    let cloud_messages_client = inner.cloud_messages_client.as_ref().unwrap();
+
+    let mut to_upload = vec![];
+    let mut hashes = vec![];
+    for (file, record) in &files {
+        let prepared = cloud_messages_client.prepare_file(std::fs::File::open(file)?).await?;
+        hashes.push(prepared.total_sig.clone());
+        to_upload.push((prepared, std::fs::File::open(file)?, record.clone()));
+    }
+    
+    let results = cloud_messages_client.upload_attachments(to_upload).await?;
+
+    let mut finish = HashMap::new();
+    for result in results {
+        let idx = hashes.iter().position(|h| h == result.signature.as_ref().unwrap()).unwrap();
+        finish.insert(files[idx].1.clone(), result);
+    }
+
+    Ok(finish)
+}
+
+pub async fn upload_group_photo(state: &Arc<PushState>, files: Vec<(String, String)>) -> anyhow::Result<HashMap<String, Asset>> {
+    let inner = state.0.read().await;
+    let cloud_messages_client = inner.cloud_messages_client.as_ref().unwrap();
+
+    let mut to_upload = vec![];
+    let mut hashes = vec![];
+    for (file, record) in &files {
+        let prepared = cloud_messages_client.prepare_file(std::fs::File::open(file)?).await?;
+        hashes.push(prepared.total_sig.clone());
+        to_upload.push((prepared, std::fs::File::open(file)?, record.clone()));
+    }
+    
+    let results = cloud_messages_client.upload_group_photo(to_upload).await?;
+
+    let mut finish = HashMap::new();
+    for result in results {
+        let idx = hashes.iter().position(|h| h == result.signature.as_ref().unwrap()).unwrap();
+        finish.insert(files[idx].1.clone(), result);
+    }
+
+    Ok(finish)
+}
+
+pub async fn circle_setup_clique(state: &Arc<PushState>, device_password: String) -> anyhow::Result<()> {
+    let inner = state.0.read().await;
+
+    let mut locked = inner.idms_circle_client.lock().await;
+    let Some(client) = &mut *locked else { return Err(anyhow!("Missing client circle session!")) };
+
+    client.setup_trusted_peers(inner.keychain.clone().unwrap(), device_password.as_bytes()).await?;
+    Ok(())
 }
 
 pub async fn verify_2fa(state: &Arc<PushState>, code: String) -> anyhow::Result<(LoginState, Option<IDSUser>)> {
-    let mut inner = state.0.write().await;
+    let inner = state.0.read().await;
+
+    let mut locked = inner.idms_circle_client.lock().await;
+    let Some(client) = &mut *locked else { return Err(anyhow!("Missing client circle session!")) };
+
+    client.send_code(&code).await?;
+
+    let mut login_state = loop {
+        let msg = inner.inq_queue.as_ref().expect("No inq que 2fa?").lock().await.recv().await.unwrap();
+        if let Some(test) = inner.idms_client.as_ref().unwrap().handle(msg)? {
+            match test {
+                IdmsMessage::CircleRequest(c, _) => {
+                    if let Some(state) = client.handle_circle_request(&c).await? {
+                        break state;
+                    }
+                },
+                _ => { }
+            }
+        }
+    };
+
     let mut account = inner.account.as_ref().unwrap().lock().await;
-    let mut login_state = account.verify_2fa(code).await?;
 
     let mut user = None;
     if let Some(pet) = account.get_pet() {
@@ -1867,6 +2264,9 @@ pub async fn reset_state(state: &Arc<PushState>, reset_hw: bool, logout: bool) -
     inner.ft_client = None;
     inner.idms_client = None;
     inner.idms_circle_sessions.lock().await.clear();
+    inner.keychain = None;
+    inner.cloud_messages_client = None;
+    inner.cloudkit_client = None;
     *inner.statuskit_interest_token.lock().await = None;
     // try deregistering from iMessage, but if it fails we don't really care
     let _ = register(inner.os_config.as_deref().unwrap(), &*conn_state.state.read().await, &[], &mut [], inner.identity.as_ref().unwrap()).await;
@@ -1881,6 +2281,7 @@ pub async fn reset_state(state: &Arc<PushState>, reset_hw: bool, logout: bool) -
     let _ = std::fs::remove_file(inner.conf_dir.join("findmy.plist"));
     let _ = std::fs::remove_file(inner.conf_dir.join("facetime.plist"));
     let _ = std::fs::remove_dir(inner.conf_dir.join("cloudkit.plist"));
+    let _ = std::fs::remove_dir(inner.conf_dir.join("keychain.plist"));
     let _ = std::fs::remove_file(inner.conf_dir.join("sharedstreams.plist"));
     let _ = std::fs::remove_file(inner.conf_dir.join("gsa.plist"));
     if let Ok(mut cache) = plist::from_file::<_, Dictionary>(inner.conf_dir.join("id_cache.plist")) {

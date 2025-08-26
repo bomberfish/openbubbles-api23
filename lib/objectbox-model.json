@@ -5,7 +5,7 @@
   "entities": [
     {
       "id": "1:2065429213543838585",
-      "lastPropertyId": "19:2980761301143366690",
+      "lastPropertyId": "20:4318192841720051066",
       "name": "Attachment",
       "properties": [
         {
@@ -83,13 +83,18 @@
           "id": "19:2980761301143366690",
           "name": "hasLivePhoto",
           "type": 1
+        },
+        {
+          "id": "20:4318192841720051066",
+          "name": "ckRecordId",
+          "type": 9
         }
       ],
       "relations": []
     },
     {
       "id": "3:9017250848141753702",
-      "lastPropertyId": "43:9027611778744022691",
+      "lastPropertyId": "47:3819874096338136746",
       "name": "Chat",
       "properties": [
         {
@@ -279,6 +284,26 @@
           "id": "43:9027611778744022691",
           "name": "transcriptBackgroundVersion",
           "type": 6
+        },
+        {
+          "id": "44:6303048169382671264",
+          "name": "cloudData",
+          "type": 23
+        },
+        {
+          "id": "45:3549423414997445177",
+          "name": "ckRecordId",
+          "type": 9
+        },
+        {
+          "id": "46:2938538298825979541",
+          "name": "ckSyncState",
+          "type": 1
+        },
+        {
+          "id": "47:3819874096338136746",
+          "name": "photoAttachmentGuid",
+          "type": 9
         }
       ],
       "relations": [
@@ -466,7 +491,7 @@
     },
     {
       "id": "13:4148278195232901830",
-      "lastPropertyId": "57:5276795239995260938",
+      "lastPropertyId": "58:5464844875358527751",
       "name": "Message",
       "properties": [
         {
@@ -711,6 +736,11 @@
           "id": "57:5276795239995260938",
           "name": "dateScheduled",
           "type": 10
+        },
+        {
+          "id": "58:5464844875358527751",
+          "name": "ckRecordId",
+          "type": 9
         }
       ],
       "relations": []

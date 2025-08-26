@@ -24,6 +24,41 @@ import 'package:telephony_plus/telephony_plus.dart';
 import 'package:telephony_plus/src/models/attachment.dart' as TelephonyAttachment;
 import 'package:bluebubbles/src/rust/api/api.dart' as api;
 import 'package:tuple/tuple.dart';
+import 'dart:typed_data';
+
+const IS_FINISHED               = 1 << 0; // this one probably, although there are some unset in db, all are set on local db
+const IS_EMOTE                  = 1 << 1;
+const IS_FROM_ME                = 1 << 2;
+const IS_EMPTY                  = 1 << 3;
+const IS_DELAYED                = 1 << 5;
+const IS_AUTO_REPLY             = 1 << 6;
+const IS_PREPARED               = 1 << 11;
+const IS_DELIVERED              = 1 << 12;
+const IS_READ                   = 1 << 13;
+const IS_SYSTEM_MESSAGE         = 1 << 14;
+const IS_SENT                   = 1 << 15;
+const HAS_DD_RESULTS            = 1 << 16;
+const IS_SERVICE_MESSAGE        = 1 << 17;
+const IS_FORWARD                = 1 << 18;
+const WAS_DOWNGRADED            = 1 << 19;
+const WAS_DATA_DETECTED         = 1 << 20;
+const IS_AUDIO_MESSAGE          = 1 << 21;
+const IS_PLAYED                 = 1 << 22;
+const IS_EXPIRABLE              = 1 << 24;
+const MESSAGE_SOURCE            = 1 << 25;
+const IS_CORRUPT                = 1 << 26;
+const IS_SPAM                   = 1 << 27;
+const HAS_UNKNOWN_MENTION       = 1 << 28;
+const IS_STEWIE                 = 1 << 33;
+const WAS_DELIVERED_QUIETLY     = 1 << 34;
+const DID_NOTIFY_RECIPIENT      = 1 << 35;
+const WAS_DETONATED             = 1 << 36;
+const IS_KT_VERIFIED            = 1 << 37;
+const IS_CRITICAL               = 1 << 38;
+const IS_SOS                    = 1 << 39;
+const IS_PENDING_SATELLITE_SEND = 1 << 41;
+const NEEDS_RELAY               = 1 << 42;
+const SENT_OR_RECEIVED_OFF_GRID = 1 << 43;
 
 /// Async method to fetch attachments
 class GetMessageAttachments extends AsyncTask<List<dynamic>, Map<String, List<Attachment?>>> {
@@ -293,6 +328,8 @@ class Message {
   String? amkSessionId; // for sessioned messages
   bool hasBeenForwarded; // local SMS forwarding, used to keep track of this message needs to be sent locally via SMS
   String? stagingGuid;
+
+  String? ckRecordId;
 
   final RxInt _error = RxInt(0);
   int get error => _error.value;
@@ -898,6 +935,219 @@ class Message {
     });
   }
 
+  String convertAttachmentGuid(String guid) {
+    if (guid.startsWith("at")) {
+      var items = guid.split("_");
+      guid = "${items[2]}_${items[1]}";
+    }
+    return guid;
+  }
+
+  String unconvertAttachmentGuid(String guid) {
+    var items = guid.split("_");
+    if (items.length == 1) return guid;
+    return "at_${items[1]}_${items[0]}";
+  }
+
+  Uint8List encodeAttributedBody(List<AttributedBody> body) {
+    return api.nscoderEncode(value: body.map((b) => api.NSAttributedString(
+      text: b.string,
+      ranges: b.runs.map((run) => (run.range[1], api.NSDictionaryTypedCoder(field0: {
+        if (run.attributes?.messagePart != null)
+        "__kIMMessagePartAttributeName": api.NSNumber(field0: run.attributes!.messagePart!).encode(),
+        if (run.attributes?.attachmentGuid != null)
+        "__kIMFileTransferGUIDAttributeName": api.NSString(field0: unconvertAttachmentGuid(run.attributes!.attachmentGuid!)).encode(),
+        if (run.attributes?.mention != null)
+        "__kIMMentionConfirmedMention": api.NSString(field0: run.attributes!.mention!).encode(),
+        if (run.attributes?.audioTranscript != null)
+        "IMAudioTranscription": api.NSString(field0: run.attributes!.audioTranscript!).encode(),
+        if (run.attributes?.textEffect != null)
+        "__kIMTextEffectAttributeName": api.NSNumber(field0: run.attributes!.textEffect!).encode(),
+        if (run.attributes?.bold != null)
+        "__kIMTextBoldAttributeName": api.NSNumber(field0: run.attributes!.bold! ? 1 : 0).encode(),
+        if (run.attributes?.italic != null)
+        "__kIMTextItalicAttributeName": api.NSNumber(field0: run.attributes!.italic! ? 1 : 0).encode(),
+        if (run.attributes?.italic != null)
+        "__kIMTextStrikethroughAttributeName": api.NSNumber(field0: run.attributes!.italic! ? 1 : 0).encode(),
+        if (run.attributes?.underline != null)
+        "__kIMTextUnderlineAttributeName": api.NSNumber(field0: run.attributes!.underline! ? 1 : 0).encode(),
+      }))).toList()
+    ).encode()).toList());
+  }
+
+  List<AttributedBody> decodeAttributedBody(Uint8List data) {
+    return api.nscoderDecode(data: data).map((val) {
+      var decoded = api.NSAttributedString.decode(val: val);
+      int length = 0;
+      return AttributedBody(
+        string: decoded.text,
+        runs: decoded.ranges.map((r) {
+          var start = length;
+          length += r.$1;
+          return Run(
+            range: [start, r.$1],
+            attributes: Attributes(
+              messagePart: r.$2.field0["__kIMMessagePartAttributeName"] == null ? null : api.NSNumber.decode(val: r.$2.field0["__kIMMessagePartAttributeName"]!).field0,
+              attachmentGuid: r.$2.field0["__kIMFileTransferGUIDAttributeName"] == null ? null : convertAttachmentGuid(api.NSString.decode(val: r.$2.field0["__kIMFileTransferGUIDAttributeName"]!).field0),
+              mention: r.$2.field0["__kIMMentionConfirmedMention"] == null ? null : api.NSString.decode(val: r.$2.field0["__kIMMentionConfirmedMention"]!).field0,
+              audioTranscript: r.$2.field0["IMAudioTranscription"] == null ? null : api.NSString.decode(val: r.$2.field0["IMAudioTranscription"]!).field0,
+              textEffect: r.$2.field0["__kIMTextEffectAttributeName"] == null ? null : api.NSNumber.decode(val: r.$2.field0["__kIMTextEffectAttributeName"]!).field0,
+              bold: r.$2.field0["__kIMTextBoldAttributeName"] == null ? null : api.NSNumber.decode(val: r.$2.field0["__kIMTextBoldAttributeName"]!).field0 == 1,
+              italic: r.$2.field0["__kIMTextItalicAttributeName"] == null ? null : api.NSNumber.decode(val: r.$2.field0["__kIMTextItalicAttributeName"]!).field0 == 1,
+              strikethrough: r.$2.field0["__kIMTextStrikethroughAttributeName"] == null ? null : api.NSNumber.decode(val: r.$2.field0["__kIMTextStrikethroughAttributeName"]!).field0 == 1,
+              underline: r.$2.field0["__kIMTextUnderlineAttributeName"] == null ? null : api.NSNumber.decode(val: r.$2.field0["__kIMTextUnderlineAttributeName"]!).field0 == 1,
+            )
+          );
+        }).toList()
+      );
+    }).toList();
+  }
+
+  api.CloudMessage toCloud() {
+    int? amt;
+    if (associatedMessageType == "sticker") {
+      amt = 2;
+    } else if (associatedMessageType != null) {
+      var itemRaw = associatedMessageType!.replaceFirst("-", "");
+      var idx = ReactionTypes.toList().indexOf(itemRaw);
+      amt = idx + (associatedMessageType!.startsWith("-") ? 3000 : 2000);
+    }
+
+    return api.CloudMessage(
+      utm: api.utmNow(),
+      type: 1,
+      error: error, 
+      chatId: chat.target!.chatIdentifier!, 
+      sender: isFromMe == true ? "" : handle?.address ?? "", 
+      time: RustPushBBUtils.nsSinceAppleEpoch(dateCreated!), 
+      msgProto2: threadOriginatorGuid != null ? api.encodeMessageproto2(messageproto2: api.MessageProto2(
+        reply: "r:$threadOriginatorPart:$threadOriginatorGuid"
+      )) : null,
+      // this assumes it was sent with this handle, but, cmon, just go along with me...
+      destinationCallerId: chat.target!.usingHandle!.replaceFirst("mailto:", "").replaceFirst("tel:", ""), 
+      msgProto: api.encodeMessageproto(messageproto: api.MessageProto(
+        unk1: 1,
+        groupTitle: groupTitle, 
+        text: attributedBody[0].string, 
+        attributedBody: encodeAttributedBody(attributedBody),
+        balloonBundleId: balloonBundleId,
+        payloadData: payloadData != null ? pushService.dataToApp(payloadData!).toRaw().$2 : null,
+        messageSummaryInfo: messageSummaryInfo.isEmpty ? null : api.encodeMessageInfo(info: api.MessageSummaryInfo(
+          ec: messageSummaryInfo.first.editedContent.map((key, value) => 
+            MapEntry(key, value.map((i) => api.MessageEdit(
+              t: encodeAttributedBody(i.text!.values), 
+              d: i.date!,
+            )).toList())), 
+          ep: Uint32List.fromList(messageSummaryInfo.first.editedParts), 
+          otr: messageSummaryInfo.first.originalTextRange.map((key, value) => MapEntry(key, api.MessageEditRange(lo: value[0], le: value[1]))), 
+          rp: Uint32List.fromList(messageSummaryInfo.first.retractedParts), 
+          euh: [],
+          amc: 0,
+          ust: true,
+        )),
+        effect: expressiveSendStyleId,
+        dateRead: dateRead != null ? RustPushBBUtils.nsSinceAppleEpoch(dateRead!) : 0,
+        unk10: 0,
+        unk11: 0,
+        dateDelivered: dateDelivered != null ? RustPushBBUtils.nsSinceAppleEpoch(dateDelivered!) : 0,
+        unk14: 0,
+        associatedMessageType: amt,
+        associatedMessageGuid: associatedMessageGuid,
+        associatedMessageRangeLength: associatedMessagePart != null ? attributedBody[0].runs.firstWhere((r) => r.attributes!.messagePart == associatedMessagePart).range[1] : null,
+        associatedMessageRangeLocation: associatedMessagePart != null ? attributedBody[0].runs.firstWhere((r) => r.attributes!.messagePart == associatedMessagePart).range[0] : null
+      )),
+      flags: api.MessageFlags.fromBitsTruncate(val: 
+        IS_FINISHED |
+        ((isFromMe ?? false) ? IS_FROM_ME : 0) |
+        (isDelivered ? IS_DELIVERED : 0) |
+        (dateRead != null ? IS_READ : 0) |
+        IS_SENT | 
+        (hasBeenForwarded ? IS_FORWARD : 0) |
+        WAS_DATA_DETECTED
+      ), 
+      guid: guid!, 
+      msgProto3: api.encodeMessageproto3(messageproto3: const api.MessageProto3(unk2: 0, unk3: 0)),
+      service: chat.target!.isRpSms ? "SMS" : "iMessage",
+      msgProto4: api.encodeMessageproto4(messageproto4: api.MessageProto4(
+        associatedMessageEmoji: associatedMessageEmoji,
+        service: chat.target!.isRpSms ? "SMS" : "iMessage", 
+        scheduleType: 0, 
+        scheduleState: 0, 
+        groupId: chat.target!.guid, 
+        sentOrReceivedOffGrid: 0
+      ))
+    );
+  }
+
+  void applyFromCloud(api.CloudMessage c, String cloudkitId) {
+    Logger.info("item ${c.chatId}");
+    final query = Database.chats.query(Chat_.chatIdentifier.equals(c.chatId.split(";")[2])).build();
+    final chat = query.findFirst();
+    query.close();
+
+    if (chat?.isRpSms ?? true) return;
+
+    Logger.info("Syncing new message");
+
+    ckRecordId = cloudkitId;
+
+    error = c.error;
+    handle = RustPushBBUtils.rustHandleToBB(c.sender);
+    dateCreated = RustPushBBUtils.fromNsSinceAppleEpoch(c.time);
+    var proto1 = api.decodeMessageproto(wrapped: c.msgProto);
+    groupTitle = proto1.groupTitle;
+    text = proto1.text;
+    attributedBody = decodeAttributedBody(proto1.attributedBody);
+    hasAttachments = attributedBody[0].runs.any((run) => run.attributes?.attachmentGuid != null);
+    balloonBundleId = proto1.balloonBundleId;
+    payloadData = proto1.payloadData != null ? pushService.appToData(api.ExtensionApp.fromBp(bp: proto1.payloadData!, bid: proto1.balloonBundleId!)) : null;
+    if (proto1.messageSummaryInfo != null) {
+      var summary = api.decodeMessageInfo(data: proto1.messageSummaryInfo!);
+      messageSummaryInfo = [MessageSummaryInfo(
+        retractedParts: summary.rp.toList(), 
+        editedContent: summary.ec.map((key, value) => MapEntry(key, value.map((i) => EditedContent(text: Content(values: decodeAttributedBody(i.t)), date: i.d)).toList())), 
+        originalTextRange: summary.otr.map((key, value) => MapEntry(key, [value.lo, value.le])), 
+        editedParts: summary.ep.toList(),
+      )];
+    } else {
+      messageSummaryInfo = [];
+    }
+    expressiveSendStyleId = proto1.effect;
+    dateRead = proto1.dateRead == null || proto1.dateRead == 0 ? null : RustPushBBUtils.fromNsSinceAppleEpoch(proto1.dateRead!);
+    dateDelivered = proto1.dateDelivered == null || proto1.dateDelivered == 0 ? null : RustPushBBUtils.fromNsSinceAppleEpoch(proto1.dateDelivered!);
+    if (proto1.associatedMessageType != null) {
+      if (proto1.associatedMessageType == 2) {
+        associatedMessageType = "sticker";
+      } else if (proto1.associatedMessageType! >= 2000 && proto1.associatedMessageType! < 3000) {
+        associatedMessageType = ReactionTypes.toList()[proto1.associatedMessageType! - 2000];
+      } else if (proto1.associatedMessageType! >= 3000 && proto1.associatedMessageType! < 4000) {
+        associatedMessageType = "-${ReactionTypes.toList()[proto1.associatedMessageType! - 3000]}";
+      }
+    }
+    associatedMessageGuid = proto1.associatedMessageGuid;
+    associatedMessagePart = attributedBody[0].runs.firstWhereOrNull((b) => b.range[0] == proto1.associatedMessageRangeLocation && b.range[1] == proto1.associatedMessageRangeLength)?.attributes?.messagePart;
+    hasApplePayloadData = proto1.payloadData != null;
+    guid = c.guid;
+    var bits = c.flags.bits();
+    isFromMe = (bits & IS_FROM_ME) != 0;
+
+    if (c.msgProto2 != null) {
+      var proto2 = api.decodeMessageproto2(wrapped: c.msgProto2!);
+      if (proto2.reply != null && proto2.reply!.startsWith("r:")) {
+        var parts = proto2.reply!.split(":");
+        threadOriginatorGuid = parts.last;
+        threadOriginatorPart = parts.slice(1, parts.length - 1).join(":");
+      }
+    }
+    
+    if (c.msgProto4 != null) {
+      var proto4 = api.decodeMessageproto4(wrapped: c.msgProto4!);
+      associatedMessageEmoji = proto4.associatedMessageEmoji;
+    }
+    
+    save(chat: chat);
+  }
+
   /// Fetch reactions
   Message fetchAssociatedMessages({MessagesService? service, bool shouldRefresh = false}) {
     associatedMessages = Message.find(cond: Message_.associatedMessageGuid.equals(guid ?? ""));
@@ -961,6 +1211,10 @@ class Message {
       final result = query.findFirst();
       query.close();
       if (result?.id != null) {
+        if (result?.ckRecordId != null && !pushService.syncStopDelete) {
+          ss.settings.messageDeletionIds.add(result!.ckRecordId!);
+          ss.saveSettings();
+        }
         Database.messages.remove(result!.id!);
       }
     });

@@ -90,6 +90,16 @@ class RustPushBBUtils {
     }
   }
 
+  static DateTime fromNsSinceAppleEpoch(int ns) {
+    const coreDataEpochOffsetSeconds = 978307200;
+    return DateTime.fromMicrosecondsSinceEpoch((ns ~/ 1000) + coreDataEpochOffsetSeconds * 1000000, isUtc: true);
+  }
+
+  static int nsSinceAppleEpoch(DateTime time) {
+    const coreDataEpochOffsetSeconds = 978307200;
+    return (time.microsecondsSinceEpoch - coreDataEpochOffsetSeconds * 1000000) * 1000;
+  }
+
   static String bbHandleToRust(Handle handle) {
     var address = handle.address;
     if (address.isEmail) {
@@ -416,7 +426,11 @@ class RustPushBackend implements BackendService {
   @override
   Future<PlatformFile> downloadAttachment(Attachment attachment,
       {void Function(int p1, int p2)? onReceiveProgress, bool original = false, CancelToken? cancelToken}) async {
-    var rustAttachment = await api.restoreAttachment(data: attachment.metadata!["rustpush"]);
+    if (attachment.metadata!.containsKey("cloud")) {
+      await api.downloadCloudAttachments(state: pushService.state, files: [(attachment.path, attachment.metadata!["cloud"])]);
+      return attachment.getFile();
+    }
+    var rustAttachment = api.restoreAttachment(data: attachment.metadata!["rustpush"]);
     var stream = api.downloadAttachment(state: pushService.state, attachment: rustAttachment, path: attachment.path);
     await for (final event in stream) {
       if (onReceiveProgress != null) {
@@ -613,6 +627,8 @@ class RustPushBackend implements BackendService {
       message: api.Message.iconChange(api.IconChangeMessage(groupVersion: chat.groupVersion!)),
     );
     await sendMsg(msg);
+    Attachment.delete(chat.photoAttachmentGuid!);
+    chat.photoAttachmentGuid = null;
     return true;
   }
 
@@ -695,13 +711,25 @@ class RustPushBackend implements BackendService {
         onSendProgress(event.prog, event.total);
       }
     }
+    chat.customAvatarPath = path;
     var msg = await api.newMsg(
       state: pushService.state,
       conversation: await chat.getConversationData(),
       sender: await chat.ensureHandle(),
       message: api.Message.iconChange(api.IconChangeMessage(groupVersion: chat.groupVersion!, file: mmcs!)),
     );
+
     await sendMsg(msg);
+
+    chat.updateAttachmentGuid(msg.id);
+    chat.save(updateAttachmentGuid: true, updateCustomAvatarPath: true, updateGroupVersion: true);
+
+    msg.sentTimestamp = DateTime.now().millisecondsSinceEpoch;
+    inq.queue(IncomingItem(
+      chat: chat,
+      message: (await pushService.reflectMessageDyn(msg))!,
+      type: QueueType.newMessage
+    ));
     return true;
   }
 
@@ -768,7 +796,7 @@ class RustPushBackend implements BackendService {
       if (e.isAttachment) {
         var attachment = Attachment.findOne(e.attributes!.attachmentGuid!);
         if (attachment == null) continue;
-        var rustAttachment = await api.restoreAttachment(data: attachment.metadata!["rustpush"]);
+        var rustAttachment = api.restoreAttachment(data: attachment.metadata!["rustpush"]);
         parts.add(api.IndexedMessagePart(part_: api.MessagePart.attachment(rustAttachment)));
         continue;
       }
@@ -1133,6 +1161,11 @@ class RustPushBackend implements BackendService {
         conversation: await msgObj.chat.target!.getConversationData(),
         message: api.Message.unsend(api.UnsendMessage(tuuid: msgObj.guid!, editPart: part.part)));
     await sendMsg(msg);
+
+    if (msgObj.ckRecordId != null) {
+      await api.saveMessages(state: pushService.state, messages: {msgObj.ckRecordId!: msgObj.toCloud()});
+    }
+
     return await pushService.reflectMessageDyn(msg);
   }
 
@@ -1153,6 +1186,11 @@ class RustPushBackend implements BackendService {
             editPart: part,
             newParts: await partsFromBody(text))));
     await sendMsg(msg);
+
+    if (msgObj.ckRecordId != null) {
+      await api.saveMessages(state: pushService.state, messages: {msgObj.ckRecordId!: msgObj.toCloud()});
+    }
+
     msg.sentTimestamp = DateTime.now().millisecondsSinceEpoch;
     return await pushService.reflectMessageDyn(msg);
   }
@@ -1175,7 +1213,7 @@ class RustPushBackend implements BackendService {
   @override
   Future<bool> downloadLivePhoto(Attachment attachment, String target,
       {void Function(int p1, int p2)? onReceiveProgress, CancelToken? cancelToken}) async {
-    var rustAttachment = await api.restoreAttachment(data: attachment.metadata!["myIris"]);
+    var rustAttachment = api.restoreAttachment(data: attachment.metadata!["myIris"]);
     var filePath = "${attachment.directory}/$target";
     if (!canonicalize(filePath).startsWith(canonicalize(attachment.directory))) {
       throw Exception("Path traversal detected, are we under attack??");
@@ -1619,13 +1657,15 @@ class RustPushService extends GetxService {
       if (myMsg.verificationFailed) return null;
       await updateChatParticipants(chat!, myMsg, myMsg.conversation!.participants, msg.field0.newParticipants);
       chat.groupVersion = msg.field0.groupVersion;
-      chat.save(updateGroupVersion: true);
+      chat.ckSyncState = false;
+      chat.save(updateGroupVersion: true, updateCkSyncState: true);
       return null;
     } else if (myMsg.message is api.Message_IconChange) {
-      if (!chat!.lockChatIcon) {
-        var innerMsg = myMsg.message as api.Message_IconChange;
+      var innerMsg = myMsg.message as api.Message_IconChange;
+      if (!chat!.lockChatIcon && (chat.groupVersion ?? 0) < innerMsg.field0.groupVersion) {
         var file = innerMsg.field0.file;
         chat.groupVersion = innerMsg.field0.groupVersion;
+        chat.ckSyncState = false;
         if (file != null) {
           var path = chat.getIconPath(file.size);
           var stream = api.downloadMmcs(state: pushService.state, attachment: file, path: path);
@@ -1636,7 +1676,8 @@ class RustPushService extends GetxService {
         } else {
           chat.removeProfilePhoto();
         }
-        chat.save(updateCustomAvatarPath: true, updateGroupVersion: true);
+        chat.updateAttachmentGuid(myMsg.id);
+        chat.save(updateCustomAvatarPath: true, updateGroupVersion: true, updateCkSyncState: true, updateAttachmentGuid: true);
       }
       return Message(
         guid: myMsg.id,
@@ -2012,6 +2053,217 @@ class RustPushService extends GetxService {
     
     sessions.value = othersessions;
     activeSessions.value = activesessions;
+  }
+
+  String convertAttachmentGuid(String guid) {
+    if (guid.startsWith("at")) {
+      var items = guid.split("_");
+      guid = "${items[2]}_${items[1]}";
+    }
+    return guid;
+  }
+
+  String generateCloudKitId() {
+    final random = Random.secure(); // cryptographically secure RNG
+    final bytes = Uint8List(32);    // 32 bytes
+    for (int i = 0; i < bytes.length; i++) {
+      bytes[i] = random.nextInt(256); // fill with random byte
+    }
+    return hex.encode(bytes);
+  }
+
+  bool syncStopDelete = false;
+
+  Future<void> doCloudKitSync() async {
+    var isInClique = await api.isInClique(state: pushService.state);
+    if (!isInClique) {
+      Logger.warn("Skipping sync because we are no longer in the clique!");
+      return;
+    }
+
+    if (ss.settings.messageDeletionIds.isNotEmpty) {
+      await api.deleteMessages(state: pushService.state, messages: ss.settings.messageDeletionIds);
+      ss.settings.messageDeletionIds.clear();
+    }
+
+    if (ss.settings.attachmentDeletionIds.isNotEmpty) {
+      await api.deleteAttachments(state: pushService.state, attachments: ss.settings.attachmentDeletionIds);
+      ss.settings.attachmentDeletionIds.clear();
+    }
+
+    if (ss.settings.chatDeletionIds.isNotEmpty) {
+      await api.deleteChats(state: pushService.state, chats: ss.settings.chatDeletionIds);
+      ss.settings.chatDeletionIds.clear();
+    }
+
+    ss.saveSettings();
+
+    List<(String, String)> downloadPfPics = [];
+    var (token, items) = await api.syncChats(state: pushService.state, 
+      continuationToken: ss.settings.chatSyncToken.value != null ? base64Decode(ss.settings.chatSyncToken.value!) : null);
+    ss.settings.chatSyncToken.value = base64Encode(token);
+    for (var item in items.entries) {
+      if (item.value == null) {
+        final query = Database.chats.query(Chat_.ckRecordId.equals(item.key)).build();
+        final result = query.findFirst();
+        if (result != null) {
+          syncStopDelete = true;
+          chats.removeChat(result);
+          Chat.deleteChat(result);
+          syncStopDelete = false;
+        }
+        continue;
+      }
+      var chat = await Chat.findFromCloud(item.value!);
+      if (item.value!.serviceName != "iMessage") continue; // skip SMS chats for now
+      var didSync = chat.applyFromCloud(item.value!, item.key);
+      if (didSync) {
+        downloadPfPics.add((chat.customAvatarPath!, item.key));
+      }
+    }
+
+    if (downloadPfPics.isNotEmpty) {
+      await api.downloadCloudGroupPhotos(state: pushService.state, files: downloadPfPics);
+    }
+
+    var (token3, items3) = await api.syncAttachments(state: pushService.state, 
+      continuationToken: ss.settings.attachmentSyncToken.value != null ? base64Decode(ss.settings.attachmentSyncToken.value!) : null);
+    ss.settings.attachmentSyncToken.value = base64Encode(token3);
+    for (var item in items3.entries) {
+      if (item.value == null) {
+        final query = Database.attachments.query(Attachment_.ckRecordId.equals(item.key)).build();
+        final result = query.findFirst();
+        syncStopDelete = true;
+        if (result != null) Attachment.delete(result.guid!);
+        syncStopDelete = false;
+        continue;
+      }
+      var decoded = api.decodeAttachmentmeta(wrapped: item.value!.cm);
+      var existing = Attachment.findOne(convertAttachmentGuid(decoded.guid));
+      if (existing != null) {
+        existing.ckRecordId = item.key;
+        existing.save(null);
+        continue;
+      } // don't overwrite existing
+      Logger.info("Syncing new attachment");
+      var message = Attachment();
+      message.applyFromCloud(item.value!, item.key);
+    }
+
+    var (token2, items2) = await api.syncMessages(state: pushService.state, 
+      continuationToken: ss.settings.messageSyncToken.value != null ? base64Decode(ss.settings.messageSyncToken.value!) : null);
+    ss.settings.messageSyncToken.value = base64Encode(token2);
+    for (var item in items2.entries) {
+      if (item.value == null) {
+        final query = Database.messages.query(Message_.ckRecordId.equals(item.key)).build();
+        final result = query.findFirst();
+        syncStopDelete = true;
+        if (result != null) Message.delete(result.guid!);
+        syncStopDelete = false;
+        continue;
+      }
+      var existing = Message.findOne(guid: item.value!.guid);
+      if (existing != null) {
+        existing.ckRecordId = item.key;
+        existing.save();
+        continue;
+      } // don't overwrite existing
+      var message = Message();
+      message.applyFromCloud(item.value!, item.key);
+    }
+    ss.saveSettings();
+
+    List<(String, String)> uploadAttachments = [];
+    Map<String, Attachment> idToAttachment = {};
+
+    var unsyncedChats = Database.chats.query(Chat_.ckSyncState.equals(false).and(Chat_.dateDeleted.isNull())).build();
+    var useChats = unsyncedChats.find();
+    Map<String, api.CloudChat> saveChats = {};
+    List<(String, String)> uploadPhotos = [];
+    for (var chat in useChats) {
+      var item = await chat.toCloud();
+
+      if (chat.photoAttachmentGuid != null) {
+        var attachment = Attachment.findOne(chat.photoAttachmentGuid!);
+        if (attachment != null && attachment.getFile().exists() && attachment.ckRecordId == null) {
+          attachment.ckRecordId = generateCloudKitId();
+          uploadAttachments.add((attachment.path, attachment.ckRecordId!));
+          idToAttachment[attachment.ckRecordId!] = attachment;
+        }
+      }
+
+      chat.ckRecordId ??= generateCloudKitId();
+
+      if (chat.customAvatarPath != null) {
+        uploadPhotos.add((chat.customAvatarPath!, chat.ckRecordId!));
+      }
+
+      saveChats[chat.ckRecordId!] = item;
+    }
+
+    if (saveChats.isNotEmpty) {
+      if (uploadPhotos.isNotEmpty) {
+        var results = await api.uploadGroupPhoto(state: pushService.state, files: uploadPhotos);
+        for (var result in results.entries) {
+          saveChats[result.key]!.groupPhoto = result.value;
+        }
+      }
+
+      await api.saveChats(state: pushService.state, chats: saveChats);
+
+      for (var result in useChats) {
+        result.save(updateCkRecordId: true); // save ckRecordId
+      }
+    }
+
+    var unsyncedMessages = Database.messages.query(Message_.ckRecordId.isNull().and(Message_.itemType.equals(0))).build();
+    var messages = unsyncedMessages.find();
+
+    Map<String, api.CloudMessage> saveMessages = {};
+    for (var message in messages) {
+      message.fetchAttachments();
+
+      message.ckRecordId = generateCloudKitId();
+      try {
+        saveMessages[message.ckRecordId!] = message.toCloud();
+      } catch (e, s) {
+        Logger.warn("Failure to convert to cloud", error: e, trace: s);
+        continue;
+      }
+
+      for (var attachment in message.attachments) {
+        if (!attachment!.getFile().exists() || attachment.ckRecordId != null) continue;
+        attachment.ckRecordId = generateCloudKitId();
+        uploadAttachments.add((attachment.path, attachment.ckRecordId!));
+        idToAttachment[attachment.ckRecordId!] = attachment;
+      }
+    }
+
+    if (uploadAttachments.isNotEmpty) {
+      Map<String, api.CloudAttachment> saveAttachments = {};
+      var results = await api.uploadCloudAttachments(state: pushService.state, files: uploadAttachments);
+      for (var result in results.entries) {
+        var attachment = idToAttachment[result.key]!;
+        saveAttachments[attachment.ckRecordId!] = api.CloudAttachment(
+          cm: api.encodeAttachmentmeta(attachmentmeta: await attachment.getAttachmentMeta()),
+          lqa: result.value,
+        );
+      }
+      await api.saveAttachments(state: pushService.state, attachments: saveAttachments);
+
+      for (var result in idToAttachment.values) {
+        result.save(null); // save ckRecordId
+      }
+    }
+
+    if (saveMessages.isNotEmpty) {
+      await api.saveMessages(state: pushService.state, messages: saveMessages);
+
+      for (var result in messages) {
+        result.save(); // save ckRecordId
+        getActiveMwc(result.guid!)?.message.ckRecordId = result.ckRecordId;
+      }
+    }
   }
 
   Future<PurchaseWrapper?> getPurchaseDetails() async {

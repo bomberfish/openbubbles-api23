@@ -4,6 +4,7 @@ import 'package:bluebubbles/helpers/helpers.dart';
 import 'package:bluebubbles/database/database.dart';
 import 'package:bluebubbles/database/models.dart';
 import 'package:bluebubbles/services/network/backend_service.dart';
+import 'package:bluebubbles/services/rustpush/rustpush_service.dart';
 import 'package:bluebubbles/services/services.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
@@ -14,6 +15,9 @@ import 'package:objectbox/objectbox.dart';
 import 'package:path/path.dart';
 import 'package:universal_io/io.dart';
 import 'package:telephony_plus/src/models/attachment.dart' as TelephonyAttachment;
+import 'package:bluebubbles/src/rust/api/api.dart' as api;
+import 'package:crypto/crypto.dart';
+import 'package:convert/convert.dart';
 
 @Entity()
 class Attachment {
@@ -39,6 +43,8 @@ class Attachment {
   @Transient()
   String? sourcePath;
 
+  String? ckRecordId;
+
   final message = ToOne<Message>();
 
   Map<String, dynamic>? metadata;
@@ -47,6 +53,57 @@ class Attachment {
       ? null : jsonEncode(metadata);
   set dbMetadata(String? json) => metadata = json == null
       ? null : jsonDecode(json) as Map<String, dynamic>;
+  
+  void applyFromCloud(api.CloudAttachment c, String ckRecordId) {
+    this.ckRecordId = ckRecordId;
+    var decoded = api.decodeAttachmentmeta(wrapped: c.cm);
+    uti = decoded.uti;
+    mimeType = decoded.mimeType;
+    isOutgoing = decoded.isOutgoing;
+    transferName = decoded.transferName;
+    totalBytes = decoded.totalBytes;
+    metadata ??= {};
+    metadata!["cloud"] = ckRecordId;
+    if (decoded.guid.startsWith("at")) {
+      var items = decoded.guid.split("_");
+      // format defined in indexedPartsToAttributedBodyDyn
+      var message = Message.findOne(guid: items[2]);
+      guid = "${items[2]}_${items[1]}";
+      save(message);
+    } else {
+      guid = decoded.guid;
+      save(null);
+    }
+  }
+
+  String unconvertAttachmentGuid(String guid) {
+    var items = guid.split("_");
+    if (items.length == 1) return guid;
+    return "at_${items[1]}_${items[0]}";
+  }
+
+  Future<api.AttachmentMeta> getAttachmentMeta() async {
+    var sum = md5.convert(File(path).readAsBytesSync());
+    return api.AttachmentMeta(
+      mimeType: mimeType,
+      startDate: RustPushBBUtils.nsSinceAppleEpoch(DateTime.now()), 
+      totalBytes: totalBytes ?? File(path).lengthSync(), 
+      transferState: 5, 
+      isSticker: false, 
+      guid: unconvertAttachmentGuid(guid!), 
+      hideAttachment: false, 
+      userInfo: metadata!["rustpush"] != null ? api.attachmentToCloud(att: api.restoreAttachment(data: metadata!["rustpush"])) : null,
+      filename: "~/Library/Messages/Attachments/24/04/${unconvertAttachmentGuid(guid!)}/test.png", 
+      extras: const api.AttachmentMetaExtra(previewGenerationState: 1),
+      isOutgoing: message.target?.isFromMe ?? true, 
+      transferName: transferName ?? "unknown", 
+      version: 1, 
+      uti: uti,
+      pathc: transferName ?? "unknown",
+      createdDate: RustPushBBUtils.nsSinceAppleEpoch(DateTime.now()),
+      md5: hex.encode(sum.bytes.slice(0, 8)),
+    );
+  }
 
   Attachment({
     this.id,
@@ -240,6 +297,10 @@ class Attachment {
       final result = query.findFirst();
       query.close();
       if (result?.id != null) {
+        if (result?.ckRecordId != null && !pushService.syncStopDelete) {
+          ss.settings.attachmentDeletionIds.add(result!.ckRecordId!);
+          ss.saveSettings();
+        }
         Database.attachments.remove(result!.id!);
       }
     });

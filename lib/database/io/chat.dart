@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:async_task/async_task.dart';
 import 'package:bluebubbles/utils/logger/logger.dart';
@@ -363,6 +364,11 @@ class Chat {
   String? lastReadMessageGuid;
   int? groupVersion;
 
+  Uint8List? cloudData;
+  String? ckRecordId;
+  bool ckSyncState = false;
+  String? photoAttachmentGuid;
+
   Message get sendLastMessage {
     var messages = Chat.getMessages(this, limit: 10, getDetails: true);
     return messages.firstWhereOrNull((msg) => msg.stagingGuid != null || (msg.guid != null && !msg.guid!.contains("temp") && !msg.guid!.contains("error"))) ?? Message(
@@ -559,6 +565,9 @@ class Chat {
     bool updateSenderIsKnown = false,
     bool updateTranscriptPosterPath = false,
     bool updateTranscriptBackgroundVersion = false,
+    bool updateCkRecordId = false,
+    bool updateCkSyncState = false,
+    bool updateAttachmentGuid = false,
   }) {
     if (kIsWeb) return this;
     Database.runInTransaction(TxMode.write, () {
@@ -579,6 +588,16 @@ class Chat {
       }
       if (!updateIsArchived) {
         isArchived = existing?.isArchived ?? isArchived;
+      }
+      cloudData = existing?.cloudData ?? cloudData;
+      if (!updateCkRecordId) {
+        ckRecordId = existing?.ckRecordId ?? ckRecordId;
+      }
+      if (!updateCkSyncState) {
+        ckSyncState = existing?.ckSyncState ?? ckSyncState;
+      }
+      if (!updateAttachmentGuid) {
+        photoAttachmentGuid = existing?.photoAttachmentGuid ?? photoAttachmentGuid;
       }
       if (!updateHasUnreadMessage) {
         hasUnreadMessage = existing?.hasUnreadMessage ?? hasUnreadMessage;
@@ -741,6 +760,138 @@ class Chat {
       }
       Database.chats.putMany(older);
     }
+  }
+
+  void updateAttachmentGuid(String guid) {
+    if (customAvatarPath == null) {
+      if (photoAttachmentGuid != null) {
+        Attachment.delete(photoAttachmentGuid!);
+      }
+      photoAttachmentGuid = null;
+    } else {
+      if (photoAttachmentGuid != null) {
+        Attachment.delete(photoAttachmentGuid!);
+      }
+      photoAttachmentGuid = "${guid}_0";
+      var data = Attachment(
+        guid: photoAttachmentGuid,
+        isOutgoing: true,
+        transferName: "GroupPhotoImage",
+        totalBytes: File(customAvatarPath!).lengthSync(),
+        metadata: {},
+      );
+      final directory = Directory(data.directory);
+      if (!directory.existsSync()) {
+        directory.createSync(recursive: true);
+      }
+      File(customAvatarPath!).copySync(data.path);
+      data.save(null);
+    }
+  }
+
+  static Future<Chat> findFromCloud(api.CloudChat c) async {
+    var chat = Chat.findByRustGuid(c.groupId);
+    if (chat != null) return chat;
+
+    final query = Database.chats.query(Chat_.chatIdentifier.equals(c.chatIdentifier)).build();
+    final result = query.findFirst();
+    query.close();
+    if (result != null) return result;
+
+    return await backend.createChat(c.participants.map((p) => p.uri).toList(), null, c.serviceName, existingGuid: c.groupId);
+  }
+
+  Future<api.CloudChat> toCloud() async {
+    api.CloudChat existing;
+    if (cloudData != null) {
+      existing = api.restoreCloudChat(data: cloudData!);
+    } else {
+      chatIdentifier = participants.length == 1 ? participants[0].address : "chat${(Random().nextInt(pow(2, 32).toInt()) << 32) | Random().nextInt(pow(2, 32).toInt())}";
+      existing = api.CloudChat(
+        style: isGroup ? 45 : 43, 
+        isFiltered: 0, 
+        successfulQuery: 1, 
+        state: 3, // seems to be a constant 
+        chatIdentifier: chatIdentifier!, 
+        groupId: guid, 
+        serviceName: "iMessage", 
+        originalGroupId: guid, 
+        properties: api.CloudProp(
+          numberOfTimesRespondedtoThread: 3, // always 3?
+          shouldForceToSms: false,
+          legacyGroupIdentifiers: [],
+        ),
+        participants: participants.map((p) => api.CloudParticipant(uri: p.address)).toList(), 
+        prop001: const api.CloudProp001(syndicationType: 0), 
+        lastReadMessageTimestamp: dbOnlyLatestMessageDate == null ? 0 : RustPushBBUtils.nsSinceAppleEpoch(dbOnlyLatestMessageDate!), 
+        lastAddressedHandle: (await ensureHandle()).replaceFirst("mailto:", "").replaceFirst("tel:", ""), 
+        guid: "iMessage;-;$chatIdentifier",
+        displayName: displayName,
+        proto001: api.encodeChatproto(chat: const api.ChatProto(unk1: 0)),
+      );
+    }
+    existing.style = isGroup ? 45 : 43;
+    existing.chatIdentifier = chatIdentifier!;
+    existing.participants = participants.map((p) => api.CloudParticipant(uri: p.address)).toList();
+    existing.lastReadMessageTimestamp = dbOnlyLatestMessageDate == null ? 0 : RustPushBBUtils.nsSinceAppleEpoch(dbOnlyLatestMessageDate!);
+    existing.lastAddressedHandle = (await ensureHandle()).replaceFirst("mailto:", "").replaceFirst("tel:", "");
+    existing.displayName = displayName;
+    if (existing.properties != null) {
+      existing.properties!.pv = groupVersion ?? 1;
+      existing.properties!.gpufc = groupVersion ?? 1;
+      existing.properties!.lastSeenMessageGuid = lastReadMessageGuid;
+      existing.properties!.lastModificationDate = api.dateNow();
+      existing.properties!.groupPhotoGuid = photoAttachmentGuid != null ? unconvertAttachmentGuid(photoAttachmentGuid!) : null;
+    }
+    if (customAvatarPath == null) {
+      existing.groupPhoto = null;
+      existing.groupPhotoGuid = null;
+    } else {
+      existing.groupPhotoGuid = photoAttachmentGuid != null ? unconvertAttachmentGuid(photoAttachmentGuid!) : null;
+    }
+    return existing;
+  }
+
+  String unconvertAttachmentGuid(String guid) {
+    var items = guid.split("_");
+    if (items.length == 1) return guid;
+    return "at_${items[1]}_${items[0]}";
+  }
+
+  bool applyFromCloud(api.CloudChat c, String record) {
+    chatIdentifier = c.chatIdentifier;
+    ckRecordId = record;
+    ckSyncState = c.properties?.pv == (groupVersion ?? 1);
+    if (c.properties?.pv == null || c.properties!.pv! <= (groupVersion ?? 1)) {
+      Database.chats.put(this);
+      return false;
+    }
+    Logger.info("Syncing new chat");
+    style = c.style;
+    // don't copy groupid
+    lastReadMessageGuid = c.properties?.lastSeenMessageGuid;
+    groupVersion = c.properties?.pv;
+    // techincally uri doesn't have mailto: or tel: prefix, but that's fine
+    handles.clear();
+    handles.addAll(c.participants.map((i) => RustPushBBUtils.rustHandleToBB(i.uri)));
+    handles.applyToDb();
+    
+    usingHandle = c.lastAddressedHandle.isEmail ? "mailto:${c.lastAddressedHandle}" : "tel:${c.lastAddressedHandle}";
+    displayName = c.displayName;
+    dbOnlyLatestMessageDate = RustPushBBUtils.fromNsSinceAppleEpoch(c.lastReadMessageTimestamp);
+    cloudData = api.saveCloudChat(value: c);
+    ckSyncState = true;
+
+    if (c.groupPhoto != null) {
+      var path = getIconPath(0);
+      customAvatarPath = path;
+    } else if (customAvatarPath != null) {
+      File(customAvatarPath!).deleteSync();
+      customAvatarPath = null;
+    }
+
+    Database.chats.put(this);
+    return true;
   }
 
   static Future<Chat> getChatForTel(int tid, List<String> participants) async {
@@ -1018,6 +1169,10 @@ class Chat {
       Database.messages.removeMany(messages.map((e) => e.id!).toList());
       Database.attachments.removeMany(attachments.map((e) => e.id!).toList());
     });
+    if (chat.ckRecordId != null && !pushService.syncStopDelete) {
+      ss.settings.chatDeletionIds.add(chat.ckRecordId!);
+      ss.saveSettings();
+    }
   }
 
   static void softDelete(Chat chat, {bool markDeleted = true}) async {

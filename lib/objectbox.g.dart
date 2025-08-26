@@ -30,7 +30,7 @@ final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
       id: const obx_int.IdUid(1, 2065429213543838585),
       name: 'Attachment',
-      lastPropertyId: const obx_int.IdUid(19, 2980761301143366690),
+      lastPropertyId: const obx_int.IdUid(20, 4318192841720051066),
       flags: 0,
       properties: <obx_int.ModelProperty>[
         obx_int.ModelProperty(
@@ -105,6 +105,11 @@ final _entities = <obx_int.ModelEntity>[
             id: const obx_int.IdUid(19, 2980761301143366690),
             name: 'hasLivePhoto',
             type: 1,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(20, 4318192841720051066),
+            name: 'ckRecordId',
+            type: 9,
             flags: 0)
       ],
       relations: <obx_int.ModelRelation>[],
@@ -112,7 +117,7 @@ final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
       id: const obx_int.IdUid(3, 9017250848141753702),
       name: 'Chat',
-      lastPropertyId: const obx_int.IdUid(43, 9027611778744022691),
+      lastPropertyId: const obx_int.IdUid(47, 3819874096338136746),
       flags: 0,
       properties: <obx_int.ModelProperty>[
         obx_int.ModelProperty(
@@ -300,6 +305,26 @@ final _entities = <obx_int.ModelEntity>[
             id: const obx_int.IdUid(43, 9027611778744022691),
             name: 'transcriptBackgroundVersion',
             type: 6,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(44, 6303048169382671264),
+            name: 'cloudData',
+            type: 23,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(45, 3549423414997445177),
+            name: 'ckRecordId',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(46, 2938538298825979541),
+            name: 'ckSyncState',
+            type: 1,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(47, 3819874096338136746),
+            name: 'photoAttachmentGuid',
+            type: 9,
             flags: 0)
       ],
       relations: <obx_int.ModelRelation>[
@@ -487,7 +512,7 @@ final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
       id: const obx_int.IdUid(13, 4148278195232901830),
       name: 'Message',
-      lastPropertyId: const obx_int.IdUid(57, 5276795239995260938),
+      lastPropertyId: const obx_int.IdUid(58, 5464844875358527751),
       flags: 0,
       properties: <obx_int.ModelProperty>[
         obx_int.ModelProperty(
@@ -728,6 +753,11 @@ final _entities = <obx_int.ModelEntity>[
             id: const obx_int.IdUid(57, 5276795239995260938),
             name: 'dateScheduled',
             type: 10,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(58, 5464844875358527751),
+            name: 'ckRecordId',
+            type: 9,
             flags: 0)
       ],
       relations: <obx_int.ModelRelation>[],
@@ -1055,7 +1085,10 @@ obx_int.ModelDefinition getObjectBoxModel() {
           final dbMetadataOffset = object.dbMetadata == null
               ? null
               : fbb.writeString(object.dbMetadata!);
-          fbb.startTable(20);
+          final ckRecordIdOffset = object.ckRecordId == null
+              ? null
+              : fbb.writeString(object.ckRecordId!);
+          fbb.startTable(21);
           fbb.addInt64(0, object.id ?? 0);
           fbb.addInt64(1, object.originalROWID);
           fbb.addOffset(2, guidOffset);
@@ -1070,6 +1103,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
           fbb.addInt64(16, object.message.targetId);
           fbb.addOffset(17, dbMetadataOffset);
           fbb.addBool(18, object.hasLivePhoto);
+          fbb.addOffset(19, ckRecordIdOffset);
           fbb.finish(fbb.endTable());
           return object.id ?? 0;
         },
@@ -1115,7 +1149,9 @@ obx_int.ModelDefinition getObjectBoxModel() {
               webUrl: webUrlParam,
               hasLivePhoto: hasLivePhotoParam)
             ..dbMetadata = const fb.StringReader(asciiOptimization: true)
-                .vTableGetNullable(buffer, rootOffset, 38);
+                .vTableGetNullable(buffer, rootOffset, 38)
+            ..ckRecordId = const fb.StringReader(asciiOptimization: true)
+                .vTableGetNullable(buffer, rootOffset, 42);
           object.message.targetId =
               const fb.Int64Reader().vTableGet(buffer, rootOffset, 36, 0);
           object.message.attach(store);
@@ -1177,7 +1213,16 @@ obx_int.ModelDefinition getObjectBoxModel() {
           final transcriptPosterPathOffset = object.transcriptPosterPath == null
               ? null
               : fbb.writeString(object.transcriptPosterPath!);
-          fbb.startTable(44);
+          final cloudDataOffset = object.cloudData == null
+              ? null
+              : fbb.writeListInt8(object.cloudData!);
+          final ckRecordIdOffset = object.ckRecordId == null
+              ? null
+              : fbb.writeString(object.ckRecordId!);
+          final photoAttachmentGuidOffset = object.photoAttachmentGuid == null
+              ? null
+              : fbb.writeString(object.photoAttachmentGuid!);
+          fbb.startTable(48);
           fbb.addInt64(0, object.id ?? 0);
           fbb.addOffset(2, guidOffset);
           fbb.addOffset(4, chatIdentifierOffset);
@@ -1216,6 +1261,10 @@ obx_int.ModelDefinition getObjectBoxModel() {
           fbb.addBool(40, object.isRoutingStub);
           fbb.addOffset(41, transcriptPosterPathOffset);
           fbb.addInt64(42, object.transcriptBackgroundVersion);
+          fbb.addOffset(43, cloudDataOffset);
+          fbb.addOffset(44, ckRecordIdOffset);
+          fbb.addBool(45, object.ckSyncState);
+          fbb.addOffset(46, photoAttachmentGuidOffset);
           fbb.finish(fbb.endTable());
           return object.id ?? 0;
         },
@@ -1346,7 +1395,16 @@ obx_int.ModelDefinition getObjectBoxModel() {
                 const fb.StringReader(asciiOptimization: true)
                     .vTableGetNullable(buffer, rootOffset, 86)
             ..transcriptBackgroundVersion =
-                const fb.Int64Reader().vTableGet(buffer, rootOffset, 88, 0);
+                const fb.Int64Reader().vTableGet(buffer, rootOffset, 88, 0)
+            ..cloudData = const fb.Uint8ListReader(lazy: false)
+                .vTableGetNullable(buffer, rootOffset, 90) as Uint8List?
+            ..ckRecordId = const fb.StringReader(asciiOptimization: true)
+                .vTableGetNullable(buffer, rootOffset, 92)
+            ..ckSyncState =
+                const fb.BoolReader().vTableGet(buffer, rootOffset, 94, false)
+            ..photoAttachmentGuid =
+                const fb.StringReader(asciiOptimization: true)
+                    .vTableGetNullable(buffer, rootOffset, 96);
           obx_int.InternalToManyAccess.setRelInfo<Chat>(object.handles, store,
               obx_int.RelInfo<Chat>.toMany(1, object.id!));
           obx_int.InternalToManyAccess.setRelInfo<Chat>(
@@ -1641,7 +1699,10 @@ obx_int.ModelDefinition getObjectBoxModel() {
               object.associatedMessageEmoji == null
                   ? null
                   : fbb.writeString(object.associatedMessageEmoji!);
-          fbb.startTable(58);
+          final ckRecordIdOffset = object.ckRecordId == null
+              ? null
+              : fbb.writeString(object.ckRecordId!);
+          fbb.startTable(59);
           fbb.addInt64(0, object.id ?? 0);
           fbb.addInt64(1, object.originalROWID);
           fbb.addOffset(2, guidOffset);
@@ -1689,6 +1750,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
           fbb.addOffset(54, sendingServiceIdOffset);
           fbb.addOffset(55, associatedMessageEmojiOffset);
           fbb.addInt64(56, object.dateScheduled?.millisecondsSinceEpoch);
+          fbb.addOffset(57, ckRecordIdOffset);
           fbb.finish(fbb.endTable());
           return object.id ?? 0;
         },
@@ -1859,7 +1921,9 @@ obx_int.ModelDefinition getObjectBoxModel() {
             ..dbMetadata = const fb.StringReader(asciiOptimization: true)
                 .vTableGetNullable(buffer, rootOffset, 94)
             ..isDelivered =
-                const fb.BoolReader().vTableGet(buffer, rootOffset, 108, false);
+                const fb.BoolReader().vTableGet(buffer, rootOffset, 108, false)
+            ..ckRecordId = const fb.StringReader(asciiOptimization: true)
+                .vTableGetNullable(buffer, rootOffset, 118);
           object.chat.targetId =
               const fb.Int64Reader().vTableGet(buffer, rootOffset, 80, 0);
           object.chat.attach(store);
@@ -2110,6 +2174,10 @@ class Attachment_ {
   /// See [Attachment.hasLivePhoto].
   static final hasLivePhoto =
       obx.QueryBooleanProperty<Attachment>(_entities[0].properties[13]);
+
+  /// See [Attachment.ckRecordId].
+  static final ckRecordId =
+      obx.QueryStringProperty<Attachment>(_entities[0].properties[14]);
 }
 
 /// [Chat] entity fields to define ObjectBox queries.
@@ -2259,6 +2327,22 @@ class Chat_ {
   /// See [Chat.transcriptBackgroundVersion].
   static final transcriptBackgroundVersion =
       obx.QueryIntegerProperty<Chat>(_entities[1].properties[36]);
+
+  /// See [Chat.cloudData].
+  static final cloudData =
+      obx.QueryByteVectorProperty<Chat>(_entities[1].properties[37]);
+
+  /// See [Chat.ckRecordId].
+  static final ckRecordId =
+      obx.QueryStringProperty<Chat>(_entities[1].properties[38]);
+
+  /// See [Chat.ckSyncState].
+  static final ckSyncState =
+      obx.QueryBooleanProperty<Chat>(_entities[1].properties[39]);
+
+  /// See [Chat.photoAttachmentGuid].
+  static final photoAttachmentGuid =
+      obx.QueryStringProperty<Chat>(_entities[1].properties[40]);
 
   /// see [Chat.handles]
   static final handles =
@@ -2578,6 +2662,10 @@ class Message_ {
   /// See [Message.dateScheduled].
   static final dateScheduled =
       obx.QueryDateProperty<Message>(_entities[5].properties[46]);
+
+  /// See [Message.ckRecordId].
+  static final ckRecordId =
+      obx.QueryStringProperty<Message>(_entities[5].properties[47]);
 
   /// see [Message.dbAttachments]
   static final dbAttachments =
