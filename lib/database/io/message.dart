@@ -1030,7 +1030,7 @@ class Message {
       utm: api.utmNow(),
       type: associatedMessageGuid != null ? 2 : 1,
       error: error, 
-      chatId: chat.target!.chatIdentifier!, 
+      chatId: "iMessage;${chat.target!.isGroup ? '+' : '-'};${chat.target!.chatIdentifier}", 
       sender: isFromMe == true ? "" : getHandle()?.address ?? "", 
       time: RustPushBBUtils.nsSinceAppleEpoch(dateCreated!), 
       msgProto2: threadOriginatorGuid != null ? api.encodeMessageproto2(messageproto2: api.MessageProto2(

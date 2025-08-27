@@ -87,6 +87,11 @@ Future<void> configureMacos(
 Future<void> refreshToken({required ArcPushState state}) =>
     RustLib.instance.api.crateApiApiRefreshToken(state: state);
 
+Future<String> encodeHex({required List<int> bytes}) =>
+    RustLib.instance.api.crateApiApiEncodeHex(bytes: bytes);
+
+Future<String> generateUdid() => RustLib.instance.api.crateApiApiGenerateUdid();
+
 Future<JoinedOsConfig> configFromValidationData(
         {required List<int> data, required HwExtra extra}) =>
     RustLib.instance.api
@@ -3931,6 +3936,7 @@ sealed class PushMessage with _$PushMessage {
   const factory PushMessage.twoFaAuthEvent(
     bool field0,
   ) = PushMessage_TwoFaAuthEvent;
+  const factory PushMessage.circleFinishEvent() = PushMessage_CircleFinishEvent;
 }
 
 class QuotaInfo {

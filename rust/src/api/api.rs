@@ -1023,6 +1023,7 @@ pub enum PushMessage {
     StatusUpdate(StatusKitMessage),
     Idms(IdmsMessage),
     TwoFaAuthEvent(bool),
+    CircleFinishEvent,
 }
 
 async fn handle_photostream(client: &SharedStreamClient<DefaultAnisetteProvider>, changes: Vec<String>, local: &mpsc::Sender<PushMessage>) {
@@ -1350,6 +1351,7 @@ async fn handle_circle(state: &InnerPushState, signin: &Option<IdmsRequestedSign
             Ok(Some(LoginState::LoggedIn)) => {
                 // we are done
                 *locked = None;
+                let _ = state.local_broadcast.send(PushMessage::CircleFinishEvent).await;
                 info!("Finished client circle!");
             },
             _ => info!("Did circle step {}", msg.step),

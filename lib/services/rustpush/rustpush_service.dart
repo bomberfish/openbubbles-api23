@@ -722,7 +722,8 @@ class RustPushBackend implements BackendService {
     await sendMsg(msg);
 
     chat.updateAttachmentGuid(msg.id);
-    chat.save(updateAttachmentGuid: true, updateCustomAvatarPath: true, updateGroupVersion: true);
+    chat.ckSyncState = false;
+    chat.save(updateAttachmentGuid: true, updateCustomAvatarPath: true, updateGroupVersion: true, updateCkSyncState: true);
 
     msg.sentTimestamp = DateTime.now().millisecondsSinceEpoch;
     inq.queue(IncomingItem(
@@ -993,7 +994,8 @@ class RustPushBackend implements BackendService {
     await sendMsg(msg);
     msg.sentTimestamp = DateTime.now().millisecondsSinceEpoch;
     chat.apnTitle = newName;
-    chat.save(updateAPNTitle: true);
+    chat.ckSyncState = false;
+    chat.save(updateAPNTitle: true, updateCkSyncState: true);
     inq.queue(IncomingItem(
       chat: chat,
       message: (await pushService.reflectMessageDyn(msg))!,
@@ -1642,6 +1644,9 @@ class RustPushService extends GetxService {
     } else if (myMsg.message is api.Message_RenameMessage) {
       var msg = myMsg.message as api.Message_RenameMessage;
       if (myMsg.verificationFailed) return null;
+
+      chat!.ckSyncState = false;
+      chat.save(updateCkSyncState: true);
       
       return Message(
         guid: myMsg.id,
@@ -2129,6 +2134,8 @@ class RustPushService extends GetxService {
     var isInClique = await api.isInClique(state: pushService.state);
     if (!isInClique) {
       Logger.warn("Skipping sync because we are no longer in the clique!");
+      ss.settings.cloudSyncingEnabled.value = false;
+      ss.saveSettings();
       return;
     }
 
@@ -2168,7 +2175,7 @@ class RustPushService extends GetxService {
       var chat = await Chat.findFromCloud(item.value!);
       if (item.value!.serviceName != "iMessage") continue; // skip SMS chats for now
       var didSync = chat.applyFromCloud(item.value!, item.key);
-      if (didSync) {
+      if (didSync && item.value!.groupPhoto != null) {
         downloadPfPics.add((chat.customAvatarPath!, item.key));
       }
     }
@@ -2197,8 +2204,8 @@ class RustPushService extends GetxService {
         continue;
       } // don't overwrite existing
       Logger.info("Syncing new attachment");
-      var message = Attachment();
-      message.applyFromCloud(item.value!, item.key);
+      var attachment = Attachment();
+      attachment.applyFromCloud(item.value!, item.key);
     }
 
     var (token2, items2) = await api.syncMessages(state: pushService.state, 
@@ -2840,6 +2847,18 @@ class RustPushService extends GetxService {
 
   bool authing = false;
   Future handleMsgInner(api.PushMessage push) async {
+    if (push is api.PushMessage_CircleFinishEvent) {
+      if (await api.isInClique(state: pushService.state)) {
+        // enable after battle testing
+        
+        // Logger.info("Joined clique, enabling sync!");
+        // ss.settings.cloudSyncingEnabled.value = true;
+        // ss.settings.attachmentSyncEnabled.value = false;
+        // ss.saveSettings();
+        // pushService.doCloudKitSync();
+      }
+      return;
+    }
     if (push is api.PushMessage_StatusUpdate) {
       var status = push.field0;
       final result = (await Chat.findByRust(api.ConversationData(participants: [status.user]), "iMessage", soft: true));
@@ -4037,11 +4056,11 @@ class RustPushService extends GetxService {
       Timer.periodic(const Duration(days: 1), (timer) => validateSubState());
       validateSubState();
       Timer.periodic(const Duration(days: 1), (timer) async {
-        if (!ss.settings.cloudSyncingEnabled.value) return;
+        if (!ss.settings.cloudSyncingEnabled.value || (await api.getPhase(state: state)) != api.RegistrationPhase.registered) return;
         Logger.info("Doing cloudkit sync!");
         await pushService.doCloudKitSync();
       });
-      if (ss.settings.cloudSyncingEnabled.value) {
+      if (ss.settings.cloudSyncingEnabled.value && (await api.getPhase(state: state)) == api.RegistrationPhase.registered) {
         Logger.info("Doing cloudkit sync!");
         await pushService.doCloudKitSync();
       }

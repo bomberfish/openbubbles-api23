@@ -17179,6 +17179,7 @@ mixin _$PushMessage {
     required TResult Function(StatusKitMessage field0) statusUpdate,
     required TResult Function(IdmsMessage field0) idms,
     required TResult Function(bool field0) twoFaAuthEvent,
+    required TResult Function() circleFinishEvent,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -17191,6 +17192,7 @@ mixin _$PushMessage {
     TResult? Function(StatusKitMessage field0)? statusUpdate,
     TResult? Function(IdmsMessage field0)? idms,
     TResult? Function(bool field0)? twoFaAuthEvent,
+    TResult? Function()? circleFinishEvent,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -17203,6 +17205,7 @@ mixin _$PushMessage {
     TResult Function(StatusKitMessage field0)? statusUpdate,
     TResult Function(IdmsMessage field0)? idms,
     TResult Function(bool field0)? twoFaAuthEvent,
+    TResult Function()? circleFinishEvent,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -17217,6 +17220,8 @@ mixin _$PushMessage {
     required TResult Function(PushMessage_StatusUpdate value) statusUpdate,
     required TResult Function(PushMessage_Idms value) idms,
     required TResult Function(PushMessage_TwoFaAuthEvent value) twoFaAuthEvent,
+    required TResult Function(PushMessage_CircleFinishEvent value)
+        circleFinishEvent,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -17229,6 +17234,7 @@ mixin _$PushMessage {
     TResult? Function(PushMessage_StatusUpdate value)? statusUpdate,
     TResult? Function(PushMessage_Idms value)? idms,
     TResult? Function(PushMessage_TwoFaAuthEvent value)? twoFaAuthEvent,
+    TResult? Function(PushMessage_CircleFinishEvent value)? circleFinishEvent,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -17241,6 +17247,7 @@ mixin _$PushMessage {
     TResult Function(PushMessage_StatusUpdate value)? statusUpdate,
     TResult Function(PushMessage_Idms value)? idms,
     TResult Function(PushMessage_TwoFaAuthEvent value)? twoFaAuthEvent,
+    TResult Function(PushMessage_CircleFinishEvent value)? circleFinishEvent,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -17345,6 +17352,7 @@ class _$PushMessage_IMessageImpl extends PushMessage_IMessage {
     required TResult Function(StatusKitMessage field0) statusUpdate,
     required TResult Function(IdmsMessage field0) idms,
     required TResult Function(bool field0) twoFaAuthEvent,
+    required TResult Function() circleFinishEvent,
   }) {
     return iMessage(field0);
   }
@@ -17360,6 +17368,7 @@ class _$PushMessage_IMessageImpl extends PushMessage_IMessage {
     TResult? Function(StatusKitMessage field0)? statusUpdate,
     TResult? Function(IdmsMessage field0)? idms,
     TResult? Function(bool field0)? twoFaAuthEvent,
+    TResult? Function()? circleFinishEvent,
   }) {
     return iMessage?.call(field0);
   }
@@ -17375,6 +17384,7 @@ class _$PushMessage_IMessageImpl extends PushMessage_IMessage {
     TResult Function(StatusKitMessage field0)? statusUpdate,
     TResult Function(IdmsMessage field0)? idms,
     TResult Function(bool field0)? twoFaAuthEvent,
+    TResult Function()? circleFinishEvent,
     required TResult orElse(),
   }) {
     if (iMessage != null) {
@@ -17395,6 +17405,8 @@ class _$PushMessage_IMessageImpl extends PushMessage_IMessage {
     required TResult Function(PushMessage_StatusUpdate value) statusUpdate,
     required TResult Function(PushMessage_Idms value) idms,
     required TResult Function(PushMessage_TwoFaAuthEvent value) twoFaAuthEvent,
+    required TResult Function(PushMessage_CircleFinishEvent value)
+        circleFinishEvent,
   }) {
     return iMessage(this);
   }
@@ -17410,6 +17422,7 @@ class _$PushMessage_IMessageImpl extends PushMessage_IMessage {
     TResult? Function(PushMessage_StatusUpdate value)? statusUpdate,
     TResult? Function(PushMessage_Idms value)? idms,
     TResult? Function(PushMessage_TwoFaAuthEvent value)? twoFaAuthEvent,
+    TResult? Function(PushMessage_CircleFinishEvent value)? circleFinishEvent,
   }) {
     return iMessage?.call(this);
   }
@@ -17425,6 +17438,7 @@ class _$PushMessage_IMessageImpl extends PushMessage_IMessage {
     TResult Function(PushMessage_StatusUpdate value)? statusUpdate,
     TResult Function(PushMessage_Idms value)? idms,
     TResult Function(PushMessage_TwoFaAuthEvent value)? twoFaAuthEvent,
+    TResult Function(PushMessage_CircleFinishEvent value)? circleFinishEvent,
     required TResult orElse(),
   }) {
     if (iMessage != null) {
@@ -17536,6 +17550,7 @@ class _$PushMessage_SendConfirmImpl extends PushMessage_SendConfirm {
     required TResult Function(StatusKitMessage field0) statusUpdate,
     required TResult Function(IdmsMessage field0) idms,
     required TResult Function(bool field0) twoFaAuthEvent,
+    required TResult Function() circleFinishEvent,
   }) {
     return sendConfirm(uuid, error);
   }
@@ -17551,6 +17566,7 @@ class _$PushMessage_SendConfirmImpl extends PushMessage_SendConfirm {
     TResult? Function(StatusKitMessage field0)? statusUpdate,
     TResult? Function(IdmsMessage field0)? idms,
     TResult? Function(bool field0)? twoFaAuthEvent,
+    TResult? Function()? circleFinishEvent,
   }) {
     return sendConfirm?.call(uuid, error);
   }
@@ -17566,6 +17582,7 @@ class _$PushMessage_SendConfirmImpl extends PushMessage_SendConfirm {
     TResult Function(StatusKitMessage field0)? statusUpdate,
     TResult Function(IdmsMessage field0)? idms,
     TResult Function(bool field0)? twoFaAuthEvent,
+    TResult Function()? circleFinishEvent,
     required TResult orElse(),
   }) {
     if (sendConfirm != null) {
@@ -17586,6 +17603,8 @@ class _$PushMessage_SendConfirmImpl extends PushMessage_SendConfirm {
     required TResult Function(PushMessage_StatusUpdate value) statusUpdate,
     required TResult Function(PushMessage_Idms value) idms,
     required TResult Function(PushMessage_TwoFaAuthEvent value) twoFaAuthEvent,
+    required TResult Function(PushMessage_CircleFinishEvent value)
+        circleFinishEvent,
   }) {
     return sendConfirm(this);
   }
@@ -17601,6 +17620,7 @@ class _$PushMessage_SendConfirmImpl extends PushMessage_SendConfirm {
     TResult? Function(PushMessage_StatusUpdate value)? statusUpdate,
     TResult? Function(PushMessage_Idms value)? idms,
     TResult? Function(PushMessage_TwoFaAuthEvent value)? twoFaAuthEvent,
+    TResult? Function(PushMessage_CircleFinishEvent value)? circleFinishEvent,
   }) {
     return sendConfirm?.call(this);
   }
@@ -17616,6 +17636,7 @@ class _$PushMessage_SendConfirmImpl extends PushMessage_SendConfirm {
     TResult Function(PushMessage_StatusUpdate value)? statusUpdate,
     TResult Function(PushMessage_Idms value)? idms,
     TResult Function(PushMessage_TwoFaAuthEvent value)? twoFaAuthEvent,
+    TResult Function(PushMessage_CircleFinishEvent value)? circleFinishEvent,
     required TResult orElse(),
   }) {
     if (sendConfirm != null) {
@@ -17734,6 +17755,7 @@ class _$PushMessage_RegistrationStateImpl
     required TResult Function(StatusKitMessage field0) statusUpdate,
     required TResult Function(IdmsMessage field0) idms,
     required TResult Function(bool field0) twoFaAuthEvent,
+    required TResult Function() circleFinishEvent,
   }) {
     return registrationState(field0);
   }
@@ -17749,6 +17771,7 @@ class _$PushMessage_RegistrationStateImpl
     TResult? Function(StatusKitMessage field0)? statusUpdate,
     TResult? Function(IdmsMessage field0)? idms,
     TResult? Function(bool field0)? twoFaAuthEvent,
+    TResult? Function()? circleFinishEvent,
   }) {
     return registrationState?.call(field0);
   }
@@ -17764,6 +17787,7 @@ class _$PushMessage_RegistrationStateImpl
     TResult Function(StatusKitMessage field0)? statusUpdate,
     TResult Function(IdmsMessage field0)? idms,
     TResult Function(bool field0)? twoFaAuthEvent,
+    TResult Function()? circleFinishEvent,
     required TResult orElse(),
   }) {
     if (registrationState != null) {
@@ -17784,6 +17808,8 @@ class _$PushMessage_RegistrationStateImpl
     required TResult Function(PushMessage_StatusUpdate value) statusUpdate,
     required TResult Function(PushMessage_Idms value) idms,
     required TResult Function(PushMessage_TwoFaAuthEvent value) twoFaAuthEvent,
+    required TResult Function(PushMessage_CircleFinishEvent value)
+        circleFinishEvent,
   }) {
     return registrationState(this);
   }
@@ -17799,6 +17825,7 @@ class _$PushMessage_RegistrationStateImpl
     TResult? Function(PushMessage_StatusUpdate value)? statusUpdate,
     TResult? Function(PushMessage_Idms value)? idms,
     TResult? Function(PushMessage_TwoFaAuthEvent value)? twoFaAuthEvent,
+    TResult? Function(PushMessage_CircleFinishEvent value)? circleFinishEvent,
   }) {
     return registrationState?.call(this);
   }
@@ -17814,6 +17841,7 @@ class _$PushMessage_RegistrationStateImpl
     TResult Function(PushMessage_StatusUpdate value)? statusUpdate,
     TResult Function(PushMessage_Idms value)? idms,
     TResult Function(PushMessage_TwoFaAuthEvent value)? twoFaAuthEvent,
+    TResult Function(PushMessage_CircleFinishEvent value)? circleFinishEvent,
     required TResult orElse(),
   }) {
     if (registrationState != null) {
@@ -17917,6 +17945,7 @@ class _$PushMessage_NewPhotostreamImpl extends PushMessage_NewPhotostream {
     required TResult Function(StatusKitMessage field0) statusUpdate,
     required TResult Function(IdmsMessage field0) idms,
     required TResult Function(bool field0) twoFaAuthEvent,
+    required TResult Function() circleFinishEvent,
   }) {
     return newPhotostream(field0);
   }
@@ -17932,6 +17961,7 @@ class _$PushMessage_NewPhotostreamImpl extends PushMessage_NewPhotostream {
     TResult? Function(StatusKitMessage field0)? statusUpdate,
     TResult? Function(IdmsMessage field0)? idms,
     TResult? Function(bool field0)? twoFaAuthEvent,
+    TResult? Function()? circleFinishEvent,
   }) {
     return newPhotostream?.call(field0);
   }
@@ -17947,6 +17977,7 @@ class _$PushMessage_NewPhotostreamImpl extends PushMessage_NewPhotostream {
     TResult Function(StatusKitMessage field0)? statusUpdate,
     TResult Function(IdmsMessage field0)? idms,
     TResult Function(bool field0)? twoFaAuthEvent,
+    TResult Function()? circleFinishEvent,
     required TResult orElse(),
   }) {
     if (newPhotostream != null) {
@@ -17967,6 +17998,8 @@ class _$PushMessage_NewPhotostreamImpl extends PushMessage_NewPhotostream {
     required TResult Function(PushMessage_StatusUpdate value) statusUpdate,
     required TResult Function(PushMessage_Idms value) idms,
     required TResult Function(PushMessage_TwoFaAuthEvent value) twoFaAuthEvent,
+    required TResult Function(PushMessage_CircleFinishEvent value)
+        circleFinishEvent,
   }) {
     return newPhotostream(this);
   }
@@ -17982,6 +18015,7 @@ class _$PushMessage_NewPhotostreamImpl extends PushMessage_NewPhotostream {
     TResult? Function(PushMessage_StatusUpdate value)? statusUpdate,
     TResult? Function(PushMessage_Idms value)? idms,
     TResult? Function(PushMessage_TwoFaAuthEvent value)? twoFaAuthEvent,
+    TResult? Function(PushMessage_CircleFinishEvent value)? circleFinishEvent,
   }) {
     return newPhotostream?.call(this);
   }
@@ -17997,6 +18031,7 @@ class _$PushMessage_NewPhotostreamImpl extends PushMessage_NewPhotostream {
     TResult Function(PushMessage_StatusUpdate value)? statusUpdate,
     TResult Function(PushMessage_Idms value)? idms,
     TResult Function(PushMessage_TwoFaAuthEvent value)? twoFaAuthEvent,
+    TResult Function(PushMessage_CircleFinishEvent value)? circleFinishEvent,
     required TResult orElse(),
   }) {
     if (newPhotostream != null) {
@@ -18110,6 +18145,7 @@ class _$PushMessage_FaceTimeImpl extends PushMessage_FaceTime {
     required TResult Function(StatusKitMessage field0) statusUpdate,
     required TResult Function(IdmsMessage field0) idms,
     required TResult Function(bool field0) twoFaAuthEvent,
+    required TResult Function() circleFinishEvent,
   }) {
     return faceTime(field0);
   }
@@ -18125,6 +18161,7 @@ class _$PushMessage_FaceTimeImpl extends PushMessage_FaceTime {
     TResult? Function(StatusKitMessage field0)? statusUpdate,
     TResult? Function(IdmsMessage field0)? idms,
     TResult? Function(bool field0)? twoFaAuthEvent,
+    TResult? Function()? circleFinishEvent,
   }) {
     return faceTime?.call(field0);
   }
@@ -18140,6 +18177,7 @@ class _$PushMessage_FaceTimeImpl extends PushMessage_FaceTime {
     TResult Function(StatusKitMessage field0)? statusUpdate,
     TResult Function(IdmsMessage field0)? idms,
     TResult Function(bool field0)? twoFaAuthEvent,
+    TResult Function()? circleFinishEvent,
     required TResult orElse(),
   }) {
     if (faceTime != null) {
@@ -18160,6 +18198,8 @@ class _$PushMessage_FaceTimeImpl extends PushMessage_FaceTime {
     required TResult Function(PushMessage_StatusUpdate value) statusUpdate,
     required TResult Function(PushMessage_Idms value) idms,
     required TResult Function(PushMessage_TwoFaAuthEvent value) twoFaAuthEvent,
+    required TResult Function(PushMessage_CircleFinishEvent value)
+        circleFinishEvent,
   }) {
     return faceTime(this);
   }
@@ -18175,6 +18215,7 @@ class _$PushMessage_FaceTimeImpl extends PushMessage_FaceTime {
     TResult? Function(PushMessage_StatusUpdate value)? statusUpdate,
     TResult? Function(PushMessage_Idms value)? idms,
     TResult? Function(PushMessage_TwoFaAuthEvent value)? twoFaAuthEvent,
+    TResult? Function(PushMessage_CircleFinishEvent value)? circleFinishEvent,
   }) {
     return faceTime?.call(this);
   }
@@ -18190,6 +18231,7 @@ class _$PushMessage_FaceTimeImpl extends PushMessage_FaceTime {
     TResult Function(PushMessage_StatusUpdate value)? statusUpdate,
     TResult Function(PushMessage_Idms value)? idms,
     TResult Function(PushMessage_TwoFaAuthEvent value)? twoFaAuthEvent,
+    TResult Function(PushMessage_CircleFinishEvent value)? circleFinishEvent,
     required TResult orElse(),
   }) {
     if (faceTime != null) {
@@ -18304,6 +18346,7 @@ class _$PushMessage_StatusUpdateImpl extends PushMessage_StatusUpdate {
     required TResult Function(StatusKitMessage field0) statusUpdate,
     required TResult Function(IdmsMessage field0) idms,
     required TResult Function(bool field0) twoFaAuthEvent,
+    required TResult Function() circleFinishEvent,
   }) {
     return statusUpdate(field0);
   }
@@ -18319,6 +18362,7 @@ class _$PushMessage_StatusUpdateImpl extends PushMessage_StatusUpdate {
     TResult? Function(StatusKitMessage field0)? statusUpdate,
     TResult? Function(IdmsMessage field0)? idms,
     TResult? Function(bool field0)? twoFaAuthEvent,
+    TResult? Function()? circleFinishEvent,
   }) {
     return statusUpdate?.call(field0);
   }
@@ -18334,6 +18378,7 @@ class _$PushMessage_StatusUpdateImpl extends PushMessage_StatusUpdate {
     TResult Function(StatusKitMessage field0)? statusUpdate,
     TResult Function(IdmsMessage field0)? idms,
     TResult Function(bool field0)? twoFaAuthEvent,
+    TResult Function()? circleFinishEvent,
     required TResult orElse(),
   }) {
     if (statusUpdate != null) {
@@ -18354,6 +18399,8 @@ class _$PushMessage_StatusUpdateImpl extends PushMessage_StatusUpdate {
     required TResult Function(PushMessage_StatusUpdate value) statusUpdate,
     required TResult Function(PushMessage_Idms value) idms,
     required TResult Function(PushMessage_TwoFaAuthEvent value) twoFaAuthEvent,
+    required TResult Function(PushMessage_CircleFinishEvent value)
+        circleFinishEvent,
   }) {
     return statusUpdate(this);
   }
@@ -18369,6 +18416,7 @@ class _$PushMessage_StatusUpdateImpl extends PushMessage_StatusUpdate {
     TResult? Function(PushMessage_StatusUpdate value)? statusUpdate,
     TResult? Function(PushMessage_Idms value)? idms,
     TResult? Function(PushMessage_TwoFaAuthEvent value)? twoFaAuthEvent,
+    TResult? Function(PushMessage_CircleFinishEvent value)? circleFinishEvent,
   }) {
     return statusUpdate?.call(this);
   }
@@ -18384,6 +18432,7 @@ class _$PushMessage_StatusUpdateImpl extends PushMessage_StatusUpdate {
     TResult Function(PushMessage_StatusUpdate value)? statusUpdate,
     TResult Function(PushMessage_Idms value)? idms,
     TResult Function(PushMessage_TwoFaAuthEvent value)? twoFaAuthEvent,
+    TResult Function(PushMessage_CircleFinishEvent value)? circleFinishEvent,
     required TResult orElse(),
   }) {
     if (statusUpdate != null) {
@@ -18496,6 +18545,7 @@ class _$PushMessage_IdmsImpl extends PushMessage_Idms {
     required TResult Function(StatusKitMessage field0) statusUpdate,
     required TResult Function(IdmsMessage field0) idms,
     required TResult Function(bool field0) twoFaAuthEvent,
+    required TResult Function() circleFinishEvent,
   }) {
     return idms(field0);
   }
@@ -18511,6 +18561,7 @@ class _$PushMessage_IdmsImpl extends PushMessage_Idms {
     TResult? Function(StatusKitMessage field0)? statusUpdate,
     TResult? Function(IdmsMessage field0)? idms,
     TResult? Function(bool field0)? twoFaAuthEvent,
+    TResult? Function()? circleFinishEvent,
   }) {
     return idms?.call(field0);
   }
@@ -18526,6 +18577,7 @@ class _$PushMessage_IdmsImpl extends PushMessage_Idms {
     TResult Function(StatusKitMessage field0)? statusUpdate,
     TResult Function(IdmsMessage field0)? idms,
     TResult Function(bool field0)? twoFaAuthEvent,
+    TResult Function()? circleFinishEvent,
     required TResult orElse(),
   }) {
     if (idms != null) {
@@ -18546,6 +18598,8 @@ class _$PushMessage_IdmsImpl extends PushMessage_Idms {
     required TResult Function(PushMessage_StatusUpdate value) statusUpdate,
     required TResult Function(PushMessage_Idms value) idms,
     required TResult Function(PushMessage_TwoFaAuthEvent value) twoFaAuthEvent,
+    required TResult Function(PushMessage_CircleFinishEvent value)
+        circleFinishEvent,
   }) {
     return idms(this);
   }
@@ -18561,6 +18615,7 @@ class _$PushMessage_IdmsImpl extends PushMessage_Idms {
     TResult? Function(PushMessage_StatusUpdate value)? statusUpdate,
     TResult? Function(PushMessage_Idms value)? idms,
     TResult? Function(PushMessage_TwoFaAuthEvent value)? twoFaAuthEvent,
+    TResult? Function(PushMessage_CircleFinishEvent value)? circleFinishEvent,
   }) {
     return idms?.call(this);
   }
@@ -18576,6 +18631,7 @@ class _$PushMessage_IdmsImpl extends PushMessage_Idms {
     TResult Function(PushMessage_StatusUpdate value)? statusUpdate,
     TResult Function(PushMessage_Idms value)? idms,
     TResult Function(PushMessage_TwoFaAuthEvent value)? twoFaAuthEvent,
+    TResult Function(PushMessage_CircleFinishEvent value)? circleFinishEvent,
     required TResult orElse(),
   }) {
     if (idms != null) {
@@ -18678,6 +18734,7 @@ class _$PushMessage_TwoFaAuthEventImpl extends PushMessage_TwoFaAuthEvent {
     required TResult Function(StatusKitMessage field0) statusUpdate,
     required TResult Function(IdmsMessage field0) idms,
     required TResult Function(bool field0) twoFaAuthEvent,
+    required TResult Function() circleFinishEvent,
   }) {
     return twoFaAuthEvent(field0);
   }
@@ -18693,6 +18750,7 @@ class _$PushMessage_TwoFaAuthEventImpl extends PushMessage_TwoFaAuthEvent {
     TResult? Function(StatusKitMessage field0)? statusUpdate,
     TResult? Function(IdmsMessage field0)? idms,
     TResult? Function(bool field0)? twoFaAuthEvent,
+    TResult? Function()? circleFinishEvent,
   }) {
     return twoFaAuthEvent?.call(field0);
   }
@@ -18708,6 +18766,7 @@ class _$PushMessage_TwoFaAuthEventImpl extends PushMessage_TwoFaAuthEvent {
     TResult Function(StatusKitMessage field0)? statusUpdate,
     TResult Function(IdmsMessage field0)? idms,
     TResult Function(bool field0)? twoFaAuthEvent,
+    TResult Function()? circleFinishEvent,
     required TResult orElse(),
   }) {
     if (twoFaAuthEvent != null) {
@@ -18728,6 +18787,8 @@ class _$PushMessage_TwoFaAuthEventImpl extends PushMessage_TwoFaAuthEvent {
     required TResult Function(PushMessage_StatusUpdate value) statusUpdate,
     required TResult Function(PushMessage_Idms value) idms,
     required TResult Function(PushMessage_TwoFaAuthEvent value) twoFaAuthEvent,
+    required TResult Function(PushMessage_CircleFinishEvent value)
+        circleFinishEvent,
   }) {
     return twoFaAuthEvent(this);
   }
@@ -18743,6 +18804,7 @@ class _$PushMessage_TwoFaAuthEventImpl extends PushMessage_TwoFaAuthEvent {
     TResult? Function(PushMessage_StatusUpdate value)? statusUpdate,
     TResult? Function(PushMessage_Idms value)? idms,
     TResult? Function(PushMessage_TwoFaAuthEvent value)? twoFaAuthEvent,
+    TResult? Function(PushMessage_CircleFinishEvent value)? circleFinishEvent,
   }) {
     return twoFaAuthEvent?.call(this);
   }
@@ -18758,6 +18820,7 @@ class _$PushMessage_TwoFaAuthEventImpl extends PushMessage_TwoFaAuthEvent {
     TResult Function(PushMessage_StatusUpdate value)? statusUpdate,
     TResult Function(PushMessage_Idms value)? idms,
     TResult Function(PushMessage_TwoFaAuthEvent value)? twoFaAuthEvent,
+    TResult Function(PushMessage_CircleFinishEvent value)? circleFinishEvent,
     required TResult orElse(),
   }) {
     if (twoFaAuthEvent != null) {
@@ -18779,6 +18842,161 @@ abstract class PushMessage_TwoFaAuthEvent extends PushMessage {
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$PushMessage_TwoFaAuthEventImplCopyWith<_$PushMessage_TwoFaAuthEventImpl>
       get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$PushMessage_CircleFinishEventImplCopyWith<$Res> {
+  factory _$$PushMessage_CircleFinishEventImplCopyWith(
+          _$PushMessage_CircleFinishEventImpl value,
+          $Res Function(_$PushMessage_CircleFinishEventImpl) then) =
+      __$$PushMessage_CircleFinishEventImplCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$PushMessage_CircleFinishEventImplCopyWithImpl<$Res>
+    extends _$PushMessageCopyWithImpl<$Res, _$PushMessage_CircleFinishEventImpl>
+    implements _$$PushMessage_CircleFinishEventImplCopyWith<$Res> {
+  __$$PushMessage_CircleFinishEventImplCopyWithImpl(
+      _$PushMessage_CircleFinishEventImpl _value,
+      $Res Function(_$PushMessage_CircleFinishEventImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of PushMessage
+  /// with the given fields replaced by the non-null parameter values.
+}
+
+/// @nodoc
+
+class _$PushMessage_CircleFinishEventImpl
+    extends PushMessage_CircleFinishEvent {
+  const _$PushMessage_CircleFinishEventImpl() : super._();
+
+  @override
+  String toString() {
+    return 'PushMessage.circleFinishEvent()';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$PushMessage_CircleFinishEventImpl);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(MessageInst field0) iMessage,
+    required TResult Function(String uuid, String? error) sendConfirm,
+    required TResult Function(RegisterState field0) registrationState,
+    required TResult Function(SharedAlbum field0) newPhotostream,
+    required TResult Function(FTMessage field0) faceTime,
+    required TResult Function(StatusKitMessage field0) statusUpdate,
+    required TResult Function(IdmsMessage field0) idms,
+    required TResult Function(bool field0) twoFaAuthEvent,
+    required TResult Function() circleFinishEvent,
+  }) {
+    return circleFinishEvent();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(MessageInst field0)? iMessage,
+    TResult? Function(String uuid, String? error)? sendConfirm,
+    TResult? Function(RegisterState field0)? registrationState,
+    TResult? Function(SharedAlbum field0)? newPhotostream,
+    TResult? Function(FTMessage field0)? faceTime,
+    TResult? Function(StatusKitMessage field0)? statusUpdate,
+    TResult? Function(IdmsMessage field0)? idms,
+    TResult? Function(bool field0)? twoFaAuthEvent,
+    TResult? Function()? circleFinishEvent,
+  }) {
+    return circleFinishEvent?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(MessageInst field0)? iMessage,
+    TResult Function(String uuid, String? error)? sendConfirm,
+    TResult Function(RegisterState field0)? registrationState,
+    TResult Function(SharedAlbum field0)? newPhotostream,
+    TResult Function(FTMessage field0)? faceTime,
+    TResult Function(StatusKitMessage field0)? statusUpdate,
+    TResult Function(IdmsMessage field0)? idms,
+    TResult Function(bool field0)? twoFaAuthEvent,
+    TResult Function()? circleFinishEvent,
+    required TResult orElse(),
+  }) {
+    if (circleFinishEvent != null) {
+      return circleFinishEvent();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(PushMessage_IMessage value) iMessage,
+    required TResult Function(PushMessage_SendConfirm value) sendConfirm,
+    required TResult Function(PushMessage_RegistrationState value)
+        registrationState,
+    required TResult Function(PushMessage_NewPhotostream value) newPhotostream,
+    required TResult Function(PushMessage_FaceTime value) faceTime,
+    required TResult Function(PushMessage_StatusUpdate value) statusUpdate,
+    required TResult Function(PushMessage_Idms value) idms,
+    required TResult Function(PushMessage_TwoFaAuthEvent value) twoFaAuthEvent,
+    required TResult Function(PushMessage_CircleFinishEvent value)
+        circleFinishEvent,
+  }) {
+    return circleFinishEvent(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(PushMessage_IMessage value)? iMessage,
+    TResult? Function(PushMessage_SendConfirm value)? sendConfirm,
+    TResult? Function(PushMessage_RegistrationState value)? registrationState,
+    TResult? Function(PushMessage_NewPhotostream value)? newPhotostream,
+    TResult? Function(PushMessage_FaceTime value)? faceTime,
+    TResult? Function(PushMessage_StatusUpdate value)? statusUpdate,
+    TResult? Function(PushMessage_Idms value)? idms,
+    TResult? Function(PushMessage_TwoFaAuthEvent value)? twoFaAuthEvent,
+    TResult? Function(PushMessage_CircleFinishEvent value)? circleFinishEvent,
+  }) {
+    return circleFinishEvent?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(PushMessage_IMessage value)? iMessage,
+    TResult Function(PushMessage_SendConfirm value)? sendConfirm,
+    TResult Function(PushMessage_RegistrationState value)? registrationState,
+    TResult Function(PushMessage_NewPhotostream value)? newPhotostream,
+    TResult Function(PushMessage_FaceTime value)? faceTime,
+    TResult Function(PushMessage_StatusUpdate value)? statusUpdate,
+    TResult Function(PushMessage_Idms value)? idms,
+    TResult Function(PushMessage_TwoFaAuthEvent value)? twoFaAuthEvent,
+    TResult Function(PushMessage_CircleFinishEvent value)? circleFinishEvent,
+    required TResult orElse(),
+  }) {
+    if (circleFinishEvent != null) {
+      return circleFinishEvent(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class PushMessage_CircleFinishEvent extends PushMessage {
+  const factory PushMessage_CircleFinishEvent() =
+      _$PushMessage_CircleFinishEventImpl;
+  const PushMessage_CircleFinishEvent._() : super._();
 }
 
 /// @nodoc
