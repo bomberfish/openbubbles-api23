@@ -690,7 +690,7 @@ class _ProfilePanelState extends OptimizedState<ProfilePanel> with WidgetsBindin
                       Obx(() => SettingsSwitch(
                         onChanged: (bool val) async {
                           var supportsKeychain = await api.supportsKeychain(state: pushService.state);
-                          if (val && !supportsKeychain) {
+                          if (!supportsKeychain) {
                             showSnackbar("Relog required!", "Relog required to use Backup! Relog in Settings -> Reconfigure");
                             return;
                           }

@@ -460,16 +460,16 @@ abstract class RustLibApi extends BaseApi {
 
   Future<String> crateApiApiSaveAttachment({required Attachment att});
 
-  Future<void> crateApiApiSaveAttachments(
+  Future<Map<String, bool>> crateApiApiSaveAttachments(
       {required ArcPushState state,
       required Map<String, CloudAttachment> attachments});
 
-  Future<void> crateApiApiSaveChats(
+  Future<Map<String, bool>> crateApiApiSaveChats(
       {required ArcPushState state, required Map<String, CloudChat> chats});
 
   Uint8List crateApiApiSaveCloudChat({required CloudChat value});
 
-  Future<void> crateApiApiSaveMessages(
+  Future<Map<String, bool>> crateApiApiSaveMessages(
       {required ArcPushState state,
       required Map<String, CloudMessage> messages});
 
@@ -4273,7 +4273,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
-  Future<void> crateApiApiSaveAttachments(
+  Future<Map<String, bool>> crateApiApiSaveAttachments(
       {required ArcPushState state,
       required Map<String, CloudAttachment> attachments}) {
     return handler.executeNormal(NormalTask(
@@ -4286,7 +4286,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             funcId: 132, port: port_);
       },
       codec: SseCodec(
-        decodeSuccessData: sse_decode_unit,
+        decodeSuccessData: sse_decode_Map_String_bool,
         decodeErrorData: sse_decode_AnyhowException,
       ),
       constMeta: kCrateApiApiSaveAttachmentsConstMeta,
@@ -4301,7 +4301,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
-  Future<void> crateApiApiSaveChats(
+  Future<Map<String, bool>> crateApiApiSaveChats(
       {required ArcPushState state, required Map<String, CloudChat> chats}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
@@ -4313,7 +4313,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             funcId: 133, port: port_);
       },
       codec: SseCodec(
-        decodeSuccessData: sse_decode_unit,
+        decodeSuccessData: sse_decode_Map_String_bool,
         decodeErrorData: sse_decode_AnyhowException,
       ),
       constMeta: kCrateApiApiSaveChatsConstMeta,
@@ -4351,7 +4351,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
-  Future<void> crateApiApiSaveMessages(
+  Future<Map<String, bool>> crateApiApiSaveMessages(
       {required ArcPushState state,
       required Map<String, CloudMessage> messages}) {
     return handler.executeNormal(NormalTask(
@@ -4364,7 +4364,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             funcId: 135, port: port_);
       },
       codec: SseCodec(
-        decodeSuccessData: sse_decode_unit,
+        decodeSuccessData: sse_decode_Map_String_bool,
         decodeErrorData: sse_decode_AnyhowException,
       ),
       constMeta: kCrateApiApiSaveMessagesConstMeta,

@@ -1163,7 +1163,7 @@ class RustPushBackend implements BackendService {
     await sendMsg(msg);
 
     if (msgObj.ckRecordId != null) {
-      await api.saveMessages(state: pushService.state, messages: {msgObj.ckRecordId!: msgObj.toCloud()});
+      await api.saveMessages(state: pushService.state, messages: {msgObj.ckRecordId!: msgObj.toCloud(false)});
     }
 
     return await pushService.reflectMessageDyn(msg);
@@ -1188,7 +1188,7 @@ class RustPushBackend implements BackendService {
     await sendMsg(msg);
 
     if (msgObj.ckRecordId != null) {
-      await api.saveMessages(state: pushService.state, messages: {msgObj.ckRecordId!: msgObj.toCloud()});
+      await api.saveMessages(state: pushService.state, messages: {msgObj.ckRecordId!: msgObj.toCloud(false)});
     }
 
     msg.sentTimestamp = DateTime.now().millisecondsSinceEpoch;
@@ -1494,7 +1494,7 @@ class RustPushService extends GetxService {
       appId: appData.appId,
       bundleId: appData.bundleId,
       balloon: api.Balloon(
-        icon: appData.appIcon != null ? base64Decode(appData.appIcon!) : null,
+        icon: appData.appIcon != null && appData.appIcon!.length < 100000 ? base64Decode(appData.appIcon!) : null,
         url: appData.url!,
         session: appData.session,
         ldText: appData.ldText,
@@ -2074,7 +2074,37 @@ class RustPushService extends GetxService {
 
   bool syncStopDelete = false;
 
+  void eraseCloudKitSync() {
+    if (ss.settings.chatSyncToken.value == null) return;
+    ss.settings.chatSyncToken.value = null;
+    ss.settings.messageSyncToken.value = null;
+    ss.settings.attachmentSyncToken.value = null;
+    ss.settings.chatDeletionIds.clear();
+    ss.settings.messageDeletionIds.clear();
+    ss.settings.attachmentDeletionIds.clear();
+    ss.saveSettings();
+    var messages = Database.messages.getAll();
+    for (var message in messages) {
+      message.ckRecordId = null;
+    }
+    Database.messages.putMany(messages);
+    var chats = Database.chats.getAll();
+    for (var chat in chats) {
+      chat.ckRecordId = null;
+      chat.ckSyncState = false;
+      chat.cloudData = null;
+      chat.photoAttachmentGuid = null;
+    }
+    Database.chats.putMany(chats);
+    var attachments = Database.attachments.getAll();
+    for (var attachment in attachments) {
+      attachment.ckRecordId = null;
+    }
+    Database.attachments.putMany(attachments);
+  }
+
   Future<void> doCloudKitSync() async {
+    bool noAttachments = true;
     var isInClique = await api.isInClique(state: pushService.state);
     if (!isInClique) {
       Logger.warn("Skipping sync because we are no longer in the clique!");
@@ -2209,8 +2239,13 @@ class RustPushService extends GetxService {
         }
       }
 
-      await api.saveChats(state: pushService.state, chats: saveChats);
-
+      var result = await api.saveChats(state: pushService.state, chats: saveChats);
+      for (var result in result.entries) {
+        if (result.value) continue; // success
+        var failedChat = useChats.firstWhere((c) => c.ckRecordId == result.key);
+        failedChat.ckRecordId = null;
+        Logger.warn("Failed to save chat ${failedChat.guid}");
+      }
       for (var result in useChats) {
         result.save(updateCkRecordId: true); // save ckRecordId
       }
@@ -2220,24 +2255,34 @@ class RustPushService extends GetxService {
     var messages = unsyncedMessages.find();
 
     Map<String, api.CloudMessage> saveMessages = {};
+    var totalSize = 0;
+    // var counter = 0;
     for (var message in messages) {
+      // counter += 1;
+      // Logger.info("Processing message $counter of ${messages.length}");
       message.fetchAttachments();
 
+      // remember: otehr invocations
       message.ckRecordId = generateCloudKitId();
       try {
-        saveMessages[message.ckRecordId!] = message.toCloud();
+        saveMessages[message.ckRecordId!] = message.toCloud(noAttachments);
       } catch (e, s) {
         Logger.warn("Failure to convert to cloud", error: e, trace: s);
         continue;
       }
 
-      for (var attachment in message.attachments) {
-        if (!attachment!.getFile().exists() || attachment.ckRecordId != null) continue;
-        attachment.ckRecordId = generateCloudKitId();
-        uploadAttachments.add((attachment.path, attachment.ckRecordId!));
-        idToAttachment[attachment.ckRecordId!] = attachment;
+      if (!noAttachments) {
+        for (var attachment in message.attachments) {
+          if (!attachment!.getFile().exists() || attachment.ckRecordId != null) continue;
+          totalSize += File(attachment.path).lengthSync();
+          attachment.ckRecordId = generateCloudKitId();
+          uploadAttachments.add((attachment.path, attachment.ckRecordId!));
+          idToAttachment[attachment.ckRecordId!] = attachment;
+        }
       }
     }
+
+    Logger.info("Attachment total size $totalSize!");
 
     if (uploadAttachments.isNotEmpty) {
       Map<String, api.CloudAttachment> saveAttachments = {};
@@ -2249,7 +2294,14 @@ class RustPushService extends GetxService {
           lqa: result.value,
         );
       }
-      await api.saveAttachments(state: pushService.state, attachments: saveAttachments);
+      var result = await api.saveAttachments(state: pushService.state, attachments: saveAttachments);
+
+      for (var result in result.entries) {
+        if (result.value) continue; // success
+        var failedAttachment = idToAttachment.values.firstWhere((c) => c.ckRecordId == result.key);
+        failedAttachment.ckRecordId = null;
+        Logger.warn("Failed to save attachment ${failedAttachment.guid}");
+      }
 
       for (var result in idToAttachment.values) {
         result.save(null); // save ckRecordId
@@ -2257,13 +2309,21 @@ class RustPushService extends GetxService {
     }
 
     if (saveMessages.isNotEmpty) {
-      await api.saveMessages(state: pushService.state, messages: saveMessages);
+      var result = await api.saveMessages(state: pushService.state, messages: saveMessages);
+
+      for (var result in result.entries) {
+        if (result.value) continue; // success
+        var failedMessage = messages.firstWhere((c) => c.ckRecordId == result.key);
+        failedMessage.ckRecordId = null;
+        Logger.warn("Failed to save message ${failedMessage.guid}");
+      }
 
       for (var result in messages) {
         result.save(); // save ckRecordId
         getActiveMwc(result.guid!)?.message.ckRecordId = result.ckRecordId;
       }
     }
+    Logger.info("Syncing completed");
   }
 
   Future<PurchaseWrapper?> getPurchaseDetails() async {

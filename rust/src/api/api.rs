@@ -1919,6 +1919,8 @@ pub async fn reset_clique(state: &Arc<PushState>, device_password: String) -> an
     let keychain = inner.keychain.clone().unwrap();
 
     keychain.reset_clique(device_password.as_bytes()).await?;
+
+    inner.cloud_messages_client.as_ref().unwrap().reset().await?;
     Ok(())
 }
 
@@ -1984,10 +1986,10 @@ pub async fn sync_chats(
 pub async fn save_chats(
     state: &Arc<PushState>,
     chats: HashMap<String, CloudChat>,
-) -> anyhow::Result<()> {
+) -> anyhow::Result<HashMap<String, bool>> {
     let inner = state.0.read().await;
     let cloud_messages_client = inner.cloud_messages_client.as_ref().unwrap();
-    Ok(cloud_messages_client.save_chats(chats).await?)
+    Ok(cloud_messages_client.save_chats(chats).await?.into_iter().map(|(a, b)| (a, b.is_ok())).collect())
 }
 
 pub async fn delete_chats(
@@ -2011,10 +2013,10 @@ pub async fn sync_messages(
 pub async fn save_messages(
     state: &Arc<PushState>,
     messages: HashMap<String, CloudMessage>,
-) -> anyhow::Result<()> {
+) -> anyhow::Result<HashMap<String, bool>> {
     let inner = state.0.read().await;
     let cloud_messages_client = inner.cloud_messages_client.as_ref().unwrap();
-    Ok(cloud_messages_client.save_messages(messages).await?)
+    Ok(cloud_messages_client.save_messages(messages).await?.into_iter().map(|(a, b)| (a, b.is_ok())).collect())
 }
 
 pub async fn delete_messages(
@@ -2056,10 +2058,10 @@ pub async fn sync_attachments(
 pub async fn save_attachments(
     state: &Arc<PushState>,
     attachments: HashMap<String, CloudAttachment>,
-) -> anyhow::Result<()> {
+) -> anyhow::Result<HashMap<String, bool>> {
     let inner = state.0.read().await;
     let cloud_messages_client = inner.cloud_messages_client.as_ref().unwrap();
-    Ok(cloud_messages_client.save_attachments(attachments).await?)
+    Ok(cloud_messages_client.save_attachments(attachments).await?.into_iter().map(|(a, b)| (a, b.is_ok())).collect())
 }
 
 pub async fn delete_attachments(
@@ -2168,7 +2170,7 @@ pub async fn circle_setup_clique(state: &Arc<PushState>, device_password: String
     let inner = state.0.read().await;
 
     let mut locked = inner.idms_circle_client.lock().await;
-    let Some(client) = &mut *locked else { return Err(anyhow!("Missing client circle session!")) };
+    let Some(client) = &mut *locked else { return Ok(()) };
 
     client.setup_trusted_peers(inner.keychain.clone().unwrap(), device_password.as_bytes()).await?;
     Ok(())

@@ -520,7 +520,7 @@ Future<(Uint8List, Map<String, CloudChat?>)> syncChats(
     RustLib.instance.api.crateApiApiSyncChats(
         state: state, continuationToken: continuationToken);
 
-Future<void> saveChats(
+Future<Map<String, bool>> saveChats(
         {required ArcPushState state, required Map<String, CloudChat> chats}) =>
     RustLib.instance.api.crateApiApiSaveChats(state: state, chats: chats);
 
@@ -533,7 +533,7 @@ Future<(Uint8List, Map<String, CloudMessage?>)> syncMessages(
     RustLib.instance.api.crateApiApiSyncMessages(
         state: state, continuationToken: continuationToken);
 
-Future<void> saveMessages(
+Future<Map<String, bool>> saveMessages(
         {required ArcPushState state,
         required Map<String, CloudMessage> messages}) =>
     RustLib.instance.api
@@ -555,7 +555,7 @@ Future<(Uint8List, Map<String, CloudAttachment?>)> syncAttachments(
     RustLib.instance.api.crateApiApiSyncAttachments(
         state: state, continuationToken: continuationToken);
 
-Future<void> saveAttachments(
+Future<Map<String, bool>> saveAttachments(
         {required ArcPushState state,
         required Map<String, CloudAttachment> attachments}) =>
     RustLib.instance.api

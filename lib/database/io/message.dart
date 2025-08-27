@@ -483,6 +483,7 @@ class Message {
     this.associatedMessageEmoji,
     this.dateScheduled,
     this.temp = false,
+    this.ckRecordId,
   }) {
       if (handle != null && handleId == null) handleId = handle!.originalROWID;
       if (error != null) _error.value = error;
@@ -584,6 +585,7 @@ class Message {
       sendingServiceId: json['sendingServiceId'],
       associatedMessageEmoji: json['associatedMessageEmoji'],
       dateScheduled: parseDate(json['dateScheduled']),
+      ckRecordId: json['ckRecordId'],
     );
   }
 
@@ -949,10 +951,10 @@ class Message {
     return "at_${items[1]}_${items[0]}";
   }
 
-  Uint8List encodeAttributedBody(List<AttributedBody> body) {
+  Uint8List encodeAttributedBody(List<AttributedBody> body, bool noAttachments) {
     return api.nscoderEncode(value: body.map((b) => api.NSAttributedString(
       text: b.string,
-      ranges: b.runs.map((run) => (run.range[1], api.NSDictionaryTypedCoder(field0: {
+      ranges: b.runs.filter((run) => !noAttachments || run.attributes?.attachmentGuid == null).map((run) => (run.range[1], api.NSDictionaryTypedCoder(field0: {
         if (run.attributes?.messagePart != null)
         "__kIMMessagePartAttributeName": api.NSNumber(field0: run.attributes!.messagePart!).encode(),
         if (run.attributes?.attachmentGuid != null)
@@ -1003,7 +1005,7 @@ class Message {
     }).toList();
   }
 
-  api.CloudMessage toCloud() {
+  api.CloudMessage toCloud(bool noAttachments) {
     int? amt;
     if (associatedMessageType == "sticker") {
       amt = 2;
@@ -1013,12 +1015,21 @@ class Message {
       amt = idx + (associatedMessageType!.startsWith("-") ? 3000 : 2000);
     }
 
+    // attributebody is null here, should really be Liked "text", but i am lazy
+    if (attributedBody.isEmpty && associatedMessageType != null) {
+      attributedBody = [AttributedBody.raw(" ")];
+    }
+
+    if (noAttachments && attributedBody.isNotEmpty && attributedBody[0].runs.every((run) => run.attributes?.attachmentGuid != null)) {
+      throw Exception("No Attachments!");
+    }
+
     return api.CloudMessage(
       utm: api.utmNow(),
-      type: 1,
+      type: associatedMessageGuid != null ? 2 : 1,
       error: error, 
       chatId: chat.target!.chatIdentifier!, 
-      sender: isFromMe == true ? "" : handle?.address ?? "", 
+      sender: isFromMe == true ? "" : getHandle()?.address ?? "", 
       time: RustPushBBUtils.nsSinceAppleEpoch(dateCreated!), 
       msgProto2: threadOriginatorGuid != null ? api.encodeMessageproto2(messageproto2: api.MessageProto2(
         reply: "r:$threadOriginatorPart:$threadOriginatorGuid"
@@ -1029,13 +1040,13 @@ class Message {
         unk1: 1,
         groupTitle: groupTitle, 
         text: attributedBody[0].string, 
-        attributedBody: encodeAttributedBody(attributedBody),
+        attributedBody: encodeAttributedBody(attributedBody, noAttachments),
         balloonBundleId: balloonBundleId,
         payloadData: payloadData != null ? pushService.dataToApp(payloadData!).toRaw().$2 : null,
         messageSummaryInfo: messageSummaryInfo.isEmpty ? null : api.encodeMessageInfo(info: api.MessageSummaryInfo(
           ec: messageSummaryInfo.first.editedContent.map((key, value) => 
             MapEntry(key, value.map((i) => api.MessageEdit(
-              t: encodeAttributedBody(i.text!.values), 
+              t: encodeAttributedBody(i.text!.values, noAttachments), 
               d: i.date!,
             )).toList())), 
           ep: Uint32List.fromList(messageSummaryInfo.first.editedParts), 
@@ -1052,9 +1063,9 @@ class Message {
         dateDelivered: dateDelivered != null ? RustPushBBUtils.nsSinceAppleEpoch(dateDelivered!) : 0,
         unk14: 0,
         associatedMessageType: amt,
-        associatedMessageGuid: associatedMessageGuid,
-        associatedMessageRangeLength: associatedMessagePart != null ? attributedBody[0].runs.firstWhere((r) => r.attributes!.messagePart == associatedMessagePart).range[1] : null,
-        associatedMessageRangeLocation: associatedMessagePart != null ? attributedBody[0].runs.firstWhere((r) => r.attributes!.messagePart == associatedMessagePart).range[0] : null
+        associatedMessageGuid: associatedMessageGuid != null ? "p:$associatedMessagePart/$associatedMessageGuid" : null,
+        associatedMessageRangeLength: associatedMessagePart != null ? Message.findOne(guid: associatedMessageGuid!)?.attributedBody[0].runs.firstWhere((r) => r.attributes!.messagePart == associatedMessagePart).range[1] : null,
+        associatedMessageRangeLocation: associatedMessagePart != null ? Message.findOne(guid: associatedMessageGuid!)?.attributedBody[0].runs.firstWhere((r) => r.attributes!.messagePart == associatedMessagePart).range[0] : null
       )),
       flags: api.MessageFlags.fromBitsTruncate(val: 
         IS_FINISHED |
@@ -1749,6 +1760,7 @@ class Message {
       "sendingServiceId": sendingServiceId,
       "associatedMessageEmoji": associatedMessageEmoji,
       "dateScheduled": dateScheduled?.millisecondsSinceEpoch,
+      "ckRecordId": ckRecordId
     };
     if (includeObjects) {
       map['attachments'] = (attachments).map((e) => e!.toMap()).toList();

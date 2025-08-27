@@ -808,7 +808,7 @@ class Chat {
     } else {
       chatIdentifier = participants.length == 1 ? participants[0].address : "chat${(Random().nextInt(pow(2, 32).toInt()) << 32) | Random().nextInt(pow(2, 32).toInt())}";
       existing = api.CloudChat(
-        style: isGroup ? 45 : 43, 
+        style: isGroup ? 43 : 45, 
         isFiltered: 0, 
         successfulQuery: 1, 
         state: 3, // seems to be a constant 
@@ -820,17 +820,18 @@ class Chat {
           numberOfTimesRespondedtoThread: 3, // always 3?
           shouldForceToSms: false,
           legacyGroupIdentifiers: [],
+          messageHandshakeState: 1,
         ),
         participants: participants.map((p) => api.CloudParticipant(uri: p.address)).toList(), 
         prop001: const api.CloudProp001(syndicationType: 0), 
         lastReadMessageTimestamp: dbOnlyLatestMessageDate == null ? 0 : RustPushBBUtils.nsSinceAppleEpoch(dbOnlyLatestMessageDate!), 
         lastAddressedHandle: (await ensureHandle()).replaceFirst("mailto:", "").replaceFirst("tel:", ""), 
-        guid: "iMessage;-;$chatIdentifier",
+        guid: "iMessage;${isGroup ? '+' : '-'};$chatIdentifier",
         displayName: displayName,
         proto001: api.encodeChatproto(chat: const api.ChatProto(unk1: 0)),
       );
     }
-    existing.style = isGroup ? 45 : 43;
+    existing.style = isGroup ? 43 : 45;
     existing.chatIdentifier = chatIdentifier!;
     existing.participants = participants.map((p) => api.CloudParticipant(uri: p.address)).toList();
     existing.lastReadMessageTimestamp = dbOnlyLatestMessageDate == null ? 0 : RustPushBBUtils.nsSinceAppleEpoch(dbOnlyLatestMessageDate!);
@@ -838,7 +839,7 @@ class Chat {
     existing.displayName = displayName;
     if (existing.properties != null) {
       existing.properties!.pv = groupVersion ?? 1;
-      existing.properties!.gpufc = groupVersion ?? 1;
+      // existing.properties!.gpufc = groupVersion ?? 1;
       existing.properties!.lastSeenMessageGuid = lastReadMessageGuid;
       existing.properties!.lastModificationDate = api.dateNow();
       existing.properties!.groupPhotoGuid = photoAttachmentGuid != null ? unconvertAttachmentGuid(photoAttachmentGuid!) : null;
