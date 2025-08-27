@@ -512,7 +512,7 @@ final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
       id: const obx_int.IdUid(13, 4148278195232901830),
       name: 'Message',
-      lastPropertyId: const obx_int.IdUid(58, 5464844875358527751),
+      lastPropertyId: const obx_int.IdUid(59, 8549583242275112644),
       flags: 0,
       properties: <obx_int.ModelProperty>[
         obx_int.ModelProperty(
@@ -758,6 +758,11 @@ final _entities = <obx_int.ModelEntity>[
             id: const obx_int.IdUid(58, 5464844875358527751),
             name: 'ckRecordId',
             type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(59, 8549583242275112644),
+            name: 'ckSyncState',
+            type: 1,
             flags: 0)
       ],
       relations: <obx_int.ModelRelation>[],
@@ -1702,7 +1707,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
           final ckRecordIdOffset = object.ckRecordId == null
               ? null
               : fbb.writeString(object.ckRecordId!);
-          fbb.startTable(59);
+          fbb.startTable(60);
           fbb.addInt64(0, object.id ?? 0);
           fbb.addInt64(1, object.originalROWID);
           fbb.addOffset(2, guidOffset);
@@ -1751,6 +1756,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
           fbb.addOffset(55, associatedMessageEmojiOffset);
           fbb.addInt64(56, object.dateScheduled?.millisecondsSinceEpoch);
           fbb.addOffset(57, ckRecordIdOffset);
+          fbb.addBool(58, object.ckSyncState);
           fbb.finish(fbb.endTable());
           return object.id ?? 0;
         },
@@ -1868,6 +1874,8 @@ obx_int.ModelDefinition getObjectBoxModel() {
           final dateScheduledParam = dateScheduledValue == null
               ? null
               : DateTime.fromMillisecondsSinceEpoch(dateScheduledValue);
+          final ckRecordIdParam = const fb.StringReader(asciiOptimization: true)
+              .vTableGetNullable(buffer, rootOffset, 118);
           final object = Message(
               id: idParam,
               originalROWID: originalROWIDParam,
@@ -1908,7 +1916,8 @@ obx_int.ModelDefinition getObjectBoxModel() {
               verificationFailed: verificationFailedParam,
               sendingServiceId: sendingServiceIdParam,
               associatedMessageEmoji: associatedMessageEmojiParam,
-              dateScheduled: dateScheduledParam)
+              dateScheduled: dateScheduledParam,
+              ckRecordId: ckRecordIdParam)
             ..bigEmoji =
                 const fb.BoolReader().vTableGetNullable(buffer, rootOffset, 76)
             ..dbAttributedBody = const fb.StringReader(asciiOptimization: true)
@@ -1922,8 +1931,8 @@ obx_int.ModelDefinition getObjectBoxModel() {
                 .vTableGetNullable(buffer, rootOffset, 94)
             ..isDelivered =
                 const fb.BoolReader().vTableGet(buffer, rootOffset, 108, false)
-            ..ckRecordId = const fb.StringReader(asciiOptimization: true)
-                .vTableGetNullable(buffer, rootOffset, 118);
+            ..ckSyncState =
+                const fb.BoolReader().vTableGet(buffer, rootOffset, 120, false);
           object.chat.targetId =
               const fb.Int64Reader().vTableGet(buffer, rootOffset, 80, 0);
           object.chat.attach(store);
@@ -2666,6 +2675,10 @@ class Message_ {
   /// See [Message.ckRecordId].
   static final ckRecordId =
       obx.QueryStringProperty<Message>(_entities[5].properties[47]);
+
+  /// See [Message.ckSyncState].
+  static final ckSyncState =
+      obx.QueryBooleanProperty<Message>(_entities[5].properties[48]);
 
   /// see [Message.dbAttachments]
   static final dbAttachments =

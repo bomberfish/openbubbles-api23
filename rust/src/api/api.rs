@@ -1757,6 +1757,24 @@ pub async fn refresh_background_following(state: &Arc<PushState>) -> anyhow::Res
     Ok(x.following.clone())
 }
 
+#[frb(type_64bit_int)]
+pub struct QuotaInfo {
+    pub total_bytes: u64,
+    pub available_bytes: u64,
+    pub messages_bytes: u64,
+}
+
+pub async fn get_quota_info(state: &Arc<PushState>) -> anyhow::Result<QuotaInfo> {
+    let inner = state.0.read().await;
+    let info = inner.token_provider.as_ref().expect("No token provider!");
+    let storage_info = info.get_storage_info().await?;
+    Ok(QuotaInfo {
+        total_bytes: storage_info.storage_data.quota_info_in_bytes.total_quota, 
+        available_bytes: storage_info.storage_data.quota_info_in_bytes.total_available, 
+        messages_bytes: storage_info.storage_usage_by_media.iter().find(|m| &m.media_key == "messages").map(|m| m.usage_in_bytes).unwrap_or(0),
+    })
+}
+
 #[derive(Serialize, Deserialize)]
 struct GSAConfig {
     username: String,

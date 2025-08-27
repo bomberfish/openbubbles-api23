@@ -491,7 +491,7 @@
     },
     {
       "id": "13:4148278195232901830",
-      "lastPropertyId": "58:5464844875358527751",
+      "lastPropertyId": "59:8549583242275112644",
       "name": "Message",
       "properties": [
         {
@@ -741,6 +741,11 @@
           "id": "58:5464844875358527751",
           "name": "ckRecordId",
           "type": 9
+        },
+        {
+          "id": "59:8549583242275112644",
+          "name": "ckSyncState",
+          "type": 1
         }
       ],
       "relations": []

@@ -330,6 +330,8 @@ class Message {
   String? stagingGuid;
 
   String? ckRecordId;
+  // used differently from chat syncState, used to mark messages we have crawled
+  bool ckSyncState = false;
 
   final RxInt _error = RxInt(0);
   int get error => _error.value;

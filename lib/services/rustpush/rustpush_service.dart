@@ -2103,8 +2103,29 @@ class RustPushService extends GetxService {
     Database.attachments.putMany(attachments);
   }
 
+  RxBool isSyncing = false.obs;
   Future<void> doCloudKitSync() async {
-    bool noAttachments = true;
+    isSyncing.value = true;
+    try {
+      await doCloudKitSyncPrivate();
+    } catch (e) {
+      showSnackbar("iCloud Sync failed", "$e");
+      rethrow;
+    } finally {
+      isSyncing.value = false;
+    }
+  }
+
+  String formatBytes(int bytes, [int decimals = 2]) {
+    if (bytes <= 0) return "0 B";
+    const suffixes = ["B", "KB", "MB", "GB", "TB"];
+    var i = (log(bytes) / log(1024)).floor();
+    var size = bytes / pow(1024, i);
+    return "${size.toStringAsFixed(decimals)} ${suffixes[i]}";
+  }
+
+  Future<void> doCloudKitSyncPrivate() async {
+    var availableSize = await api.getQuotaInfo(state: pushService.state);
     var isInClique = await api.isInClique(state: pushService.state);
     if (!isInClique) {
       Logger.warn("Skipping sync because we are no longer in the clique!");
@@ -2251,8 +2272,10 @@ class RustPushService extends GetxService {
       }
     }
 
-    var unsyncedMessages = Database.messages.query(Message_.ckRecordId.isNull().and(Message_.itemType.equals(0))).build();
+    var unsyncedMessages = Database.messages.query(Message_.ckRecordId.isNull().and(Message_.itemType.equals(0)).and(Message_.ckSyncState.equals(false).or(Message_.ckSyncState.isNull()))).build();
     var messages = unsyncedMessages.find();
+
+    bool noAttachments = ss.settings.attachmentSyncEnabled.value;
 
     Map<String, api.CloudMessage> saveMessages = {};
     var totalSize = 0;
@@ -2262,13 +2285,15 @@ class RustPushService extends GetxService {
       // Logger.info("Processing message $counter of ${messages.length}");
       message.fetchAttachments();
 
-      // remember: otehr invocations
+      // remember: other invocations
       message.ckRecordId = generateCloudKitId();
       try {
         saveMessages[message.ckRecordId!] = message.toCloud(noAttachments);
       } catch (e, s) {
         Logger.warn("Failure to convert to cloud", error: e, trace: s);
         continue;
+      } finally {
+        message.ckSyncState = true;
       }
 
       if (!noAttachments) {
@@ -2280,6 +2305,11 @@ class RustPushService extends GetxService {
           idToAttachment[attachment.ckRecordId!] = attachment;
         }
       }
+    }
+
+    // sub 25 mb off the top just for other things
+    if (totalSize != 0 && totalSize > availableSize.availableBytes - (25 * 1024 * 1024)) {
+      throw Exception("Not enough space for attachments, needed ${formatBytes(totalSize)}!");
     }
 
     Logger.info("Attachment total size $totalSize!");
@@ -2317,12 +2347,13 @@ class RustPushService extends GetxService {
         failedMessage.ckRecordId = null;
         Logger.warn("Failed to save message ${failedMessage.guid}");
       }
-
-      for (var result in messages) {
-        result.save(); // save ckRecordId
-        getActiveMwc(result.guid!)?.message.ckRecordId = result.ckRecordId;
-      }
     }
+
+    for (var result in messages) {
+      result.save(); // save ckRecordId
+      getActiveMwc(result.guid!)?.message.ckRecordId = result.ckRecordId;
+    }
+    ss.settings.lastSynced.value = DateTime.now().millisecondsSinceEpoch;
     Logger.info("Syncing completed");
   }
 
@@ -4005,6 +4036,15 @@ class RustPushService extends GetxService {
       pushService.sharedStreams = await api.supportsSharedStreams(state: state);
       Timer.periodic(const Duration(days: 1), (timer) => validateSubState());
       validateSubState();
+      Timer.periodic(const Duration(days: 1), (timer) async {
+        if (!ss.settings.cloudSyncingEnabled.value) return;
+        Logger.info("Doing cloudkit sync!");
+        await pushService.doCloudKitSync();
+      });
+      if (ss.settings.cloudSyncingEnabled.value) {
+        Logger.info("Doing cloudkit sync!");
+        await pushService.doCloudKitSync();
+      }
     })();
     initAppLinks();
     initMixPanel();

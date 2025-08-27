@@ -452,6 +452,9 @@ Future<List<Follow>> refreshBackgroundFollowing(
         {required ArcPushState state}) =>
     RustLib.instance.api.crateApiApiRefreshBackgroundFollowing(state: state);
 
+Future<QuotaInfo> getQuotaInfo({required ArcPushState state}) =>
+    RustLib.instance.api.crateApiApiGetQuotaInfo(state: state);
+
 Future<(LoginState, IdsUser?)> tryAuth(
         {required ArcPushState state,
         required String username,
@@ -3928,6 +3931,31 @@ sealed class PushMessage with _$PushMessage {
   const factory PushMessage.twoFaAuthEvent(
     bool field0,
   ) = PushMessage_TwoFaAuthEvent;
+}
+
+class QuotaInfo {
+  final int totalBytes;
+  final int availableBytes;
+  final int messagesBytes;
+
+  const QuotaInfo({
+    required this.totalBytes,
+    required this.availableBytes,
+    required this.messagesBytes,
+  });
+
+  @override
+  int get hashCode =>
+      totalBytes.hashCode ^ availableBytes.hashCode ^ messagesBytes.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is QuotaInfo &&
+          runtimeType == other.runtimeType &&
+          totalBytes == other.totalBytes &&
+          availableBytes == other.availableBytes &&
+          messagesBytes == other.messagesBytes;
 }
 
 class ReactMessage {

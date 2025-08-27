@@ -50,6 +50,8 @@ class _ProfilePanelState extends OptimizedState<ProfilePanel> with WidgetsBindin
 
   RxList<api.PrivateDeviceInfo> forwardingTargets = RxList([]);
 
+  Rxn<api.QuotaInfo> quotaInfo = Rxn(null);
+
   Future<void> handleSubscriptionToken(String subscription) async {
     var activated = await http.dio.post("https://hw.openbubbles.app/ticket/${ticket!}/activate", data: {"purchase_token": subscription});
     var useTicket = activated.data["ticket"];
@@ -128,6 +130,7 @@ class _ProfilePanelState extends OptimizedState<ProfilePanel> with WidgetsBindin
     subscription = pushService.client.purchasesUpdatedStream.listen((PurchasesResultWrapper details) {
       handlePurchases(details);
     });
+    api.getQuotaInfo(state: pushService.state).then((quota) => quotaInfo.value = quota);
   }
 
   @override
@@ -684,27 +687,72 @@ class _ProfilePanelState extends OptimizedState<ProfilePanel> with WidgetsBindin
                     iosSubtitle: iosSubtitle,
                     materialSubtitle: materialSubtitle,
                     text: "Backup"),
-                SettingsSection(
+                Obx(() => SettingsSection(
                     backgroundColor: tileColor,
                     children: [
-                      Obx(() => SettingsSwitch(
+                      SettingsSwitch(
                         onChanged: (bool val) async {
                           var supportsKeychain = await api.supportsKeychain(state: pushService.state);
-                          if (!supportsKeychain) {
+                          if (!supportsKeychain && val) {
                             showSnackbar("Relog required!", "Relog required to use Backup! Relog in Settings -> Reconfigure");
                             return;
                           }
-                          if (!await joinClique()) return;
+                          if (val) {
+                            if (!await joinClique()) return;
+                            pushService.eraseCloudKitSync();
+                          }
 
                           Logger.info("Enabling messages in iCloud!");
-                          await pushService.doCloudKitSync();
+                          ss.settings.cloudSyncingEnabled.value = val;
+                          ss.saveSettings();
                         },
-                        initialVal: ss.settings.nameAndPhotoSharing.value,
+                        initialVal: ss.settings.cloudSyncingEnabled.value,
                         title: "Messages in iCloud",
                         backgroundColor: tileColor,
-                      )),
+                      ),
+                      if(ss.settings.cloudSyncingEnabled.value)
+                      SettingsSwitch(
+                        onChanged: (bool val) async {
+                          ss.settings.attachmentSyncEnabled.value = val;
+                        },
+                        initialVal: ss.settings.attachmentSyncEnabled.value,
+                        title: "Upload attachments",
+                        subtitle: "Disable to reduce iCloud storage usage",
+                        backgroundColor: tileColor,
+                      ),
+                      if (quotaInfo.value != null && ss.settings.cloudSyncingEnabled.value)
+                      Container(
+                          child: Padding(
+                            padding: const EdgeInsets.only(bottom: 8.0, left: 15, top: 8.0, right: 15),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text("Used ${pushService.formatBytes(quotaInfo.value!.messagesBytes)}. ${pushService.formatBytes(quotaInfo.value!.availableBytes)} available in iCloud."),
+                                Text("Upgrade to iCloud+ on any Apple device or Windows PC for more storage space.", style: context.theme.textTheme.bodySmall!.copyWith(color: context.theme.colorScheme.properOnSurface.withOpacity(0.75), height: 1.5),)
+                              ]
+                            ),
+                          ),
+                      ),
+                      if(ss.settings.cloudSyncingEnabled.value && !pushService.isSyncing.value)
+                      SettingsTile(
+                        title: "Sync Now",
+                        onTap: () async {
+                          await pushService.doCloudKitSync();
+                        },
+                        trailing: const NextButton(),
+                      ),
+                      if(ss.settings.cloudSyncingEnabled.value)
+                      Container(
+                          child: Padding(
+                            padding: const EdgeInsets.only(bottom: 8.0, left: 15, top: 8.0, right: 15),
+                            child: Text(
+                              pushService.isSyncing.value ? "Syncing Now..." :
+                              ss.settings.lastSynced.value == 0 ? "Not Synced" : "Synced ${buildChatListDateMaterial(DateTime.fromMillisecondsSinceEpoch(ss.settings.lastSynced.value))}"
+                            )
+                          ),
+                      ),
                     ]
-                ),
+                )),
                 SettingsHeader(
                     iosSubtitle: iosSubtitle,
                     materialSubtitle: materialSubtitle,

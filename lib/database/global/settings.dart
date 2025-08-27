@@ -210,6 +210,9 @@ class Settings {
   final RxBool developerEnabled = false.obs;
   final RxList<String> developerMode = <String>[].obs;
 
+  final RxBool cloudSyncingEnabled = false.obs;
+  final RxBool attachmentSyncEnabled = true.obs;
+  final RxInt lastSynced = 0.obs;
   final RxnString keychainDefaultPassword = RxnString();
   final RxnString chatSyncToken = RxnString();
   final RxnString messageSyncToken = RxnString();
@@ -438,6 +441,9 @@ class Settings {
       'warnedTextChats': warnedTextChats.value,
       'zenModeAware': zenModeAware.value,
       'isTester': isTester.value,
+      'cloudSyncingEnabled': cloudSyncingEnabled.value,
+      'lastSynced': lastSynced.value,
+      'attachmentSyncEnabled': attachmentSyncEnabled.value,
     };
     if (includeAll) {
       map.addAll({
@@ -614,6 +620,9 @@ class Settings {
     ss.settings.attachmentDeletionIds.value = (map['attachmentDeletionIds']?.runtimeType == String ? jsonDecode(map['attachmentDeletionIds']) as List : []).cast<String>();
     ss.settings.lastLocation.value = map['lastLocation'];
     ss.settings.isTester.value = map['isTester'] ?? false;
+    ss.settings.cloudSyncingEnabled.value = map['cloudSyncingEnabled'] ?? false;
+    ss.settings.lastSynced.value = map['lastSynced'] ?? 0;
+    ss.settings.attachmentSyncEnabled.value = map['attachmentSyncEnabled'] ?? true;
     ss.settings.save();
 
     eventDispatcher.emit("theme-update", null);
@@ -786,6 +795,9 @@ class Settings {
     s.attachmentDeletionIds.value = (map['attachmentDeletionIds']?.runtimeType == String ? jsonDecode(map['attachmentDeletionIds']) as List : []).cast<String>();
     s.lastLocation.value = map['lastLocation'];
     s.isTester.value = map['isTester'] ?? false;
+    s.cloudSyncingEnabled.value = map['cloudSyncingEnabled'] ?? false;
+    s.lastSynced.value = map['lastSynced'] ?? 0;
+    s.attachmentSyncEnabled.value = map['attachmentSyncEnabled'] ?? true;
     return s;
   }
 

@@ -1538,6 +1538,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   PushMessage dco_decode_push_message(dynamic raw);
 
   @protected
+  QuotaInfo dco_decode_quota_info(dynamic raw);
+
+  @protected
   ReactMessage dco_decode_react_message(dynamic raw);
 
   @protected
@@ -3336,6 +3339,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   PushMessage sse_decode_push_message(SseDeserializer deserializer);
+
+  @protected
+  QuotaInfo sse_decode_quota_info(SseDeserializer deserializer);
 
   @protected
   ReactMessage sse_decode_react_message(SseDeserializer deserializer);
@@ -5192,6 +5198,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void sse_encode_push_message(PushMessage self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_quota_info(QuotaInfo self, SseSerializer serializer);
 
   @protected
   void sse_encode_react_message(ReactMessage self, SseSerializer serializer);
