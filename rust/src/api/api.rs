@@ -368,7 +368,26 @@ async fn restore(curr_state: &PushState) {
     }
 
 
-    let Ok(state) = plist::from_file::<_, SavedHardwareState>(&hw_config_path) else { return };
+    let Ok(mut state) = plist::from_file::<_, SavedHardwareState>(&hw_config_path) else { return };
+
+    match &mut state.os_config {
+        JoinedOSConfig::MacOS(m) => {
+            if m.udid.is_none() {
+                let mut config = (&**m).clone();
+                config.udid = Some(generate_udid());
+                *m = Arc::new(config);
+                plist::to_file_xml(&hw_config_path, &state).unwrap();
+            }
+        },
+        JoinedOSConfig::Relay(m) => {
+            if m.udid.is_none() {
+                let mut config = (&**m).clone();
+                config.udid = Some(generate_udid());
+                *m = Arc::new(config);
+                plist::to_file_xml(&hw_config_path, &state).unwrap();
+            }
+        }
+    }
 
     // even if we failed on the initial connection, we don't care cuz we're restoring.
     inner.os_config = Some(state.os_config);
@@ -729,12 +748,26 @@ pub async fn refresh_token(state: &Arc<PushState>) -> anyhow::Result<()> {
     Ok(())
 }
 
+pub fn encode_hex(bytes: &[u8]) -> String {
+    use std::fmt::Write;
+    let mut s = String::with_capacity(bytes.len() * 2);
+    for &b in bytes {
+        write!(&mut s, "{:02x}", b).unwrap();
+    }
+    s
+}
+
 pub struct HwExtra {
     pub version: String,
     pub protocol_version: u32,
     pub device_id: String,
     pub icloud_ua: String,
     pub aoskit_version: String,
+}
+
+pub fn generate_udid() -> String {
+    let udid: [u8; 32] = rand::thread_rng().gen();
+    encode_hex(&udid).to_uppercase()
 }
 
 pub fn config_from_validation_data(data: Vec<u8>, extra: HwExtra) -> anyhow::Result<JoinedOSConfig> {
@@ -746,6 +779,7 @@ pub fn config_from_validation_data(data: Vec<u8>, extra: HwExtra) -> anyhow::Res
         device_id: extra.device_id,
         icloud_ua: extra.icloud_ua,
         aoskit_version: extra.aoskit_version,
+        udid: Some(generate_udid()),
     })))
 }
 
@@ -759,6 +793,7 @@ pub async fn config_from_relay(code: String, host: String, token: &Option<String
         host: host.clone(),
         code: code.clone(),
         beeper_token: token.clone(),
+        udid: Some(generate_udid()),
     })))
 }
 
@@ -925,6 +960,7 @@ pub fn config_from_encoded(encoded: Vec<u8>) -> anyhow::Result<JoinedOSConfig> {
         device_id: copied.device_id,
         icloud_ua: copied.icloud_ua,
         aoskit_version: copied.aoskit_version,
+        udid: Some(generate_udid()),
     })))
 }
 
