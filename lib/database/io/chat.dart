@@ -508,7 +508,7 @@ class Chat {
         if (isRoutingStub) {
           usingHandle = (await api.getMyPhoneHandles(state: pushService.state))[0];
         } else {
-          usingHandle = ss.settings.smsForwardingTargets.keys.firstOrNull;
+          usingHandle = ss.settings.smsForwardingTargets.keys.firstOrNull!;
         }
         save(updateUsingHandle: true);
       } else {

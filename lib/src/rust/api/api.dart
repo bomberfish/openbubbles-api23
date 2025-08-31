@@ -963,7 +963,7 @@ class AttachmentMeta {
   final String guid;
   final bool hideAttachment;
   final MMCSAttachmentMeta? userInfo;
-  final String filename;
+  final String? filename;
   final AttachmentMetaExtra? extras;
   final bool isOutgoing;
   final String transferName;
@@ -982,7 +982,7 @@ class AttachmentMeta {
     required this.guid,
     required this.hideAttachment,
     this.userInfo,
-    required this.filename,
+    this.filename,
     this.extras,
     required this.isOutgoing,
     required this.transferName,
@@ -3131,35 +3131,41 @@ sealed class MessageType with _$MessageType {
 }
 
 class MMCSAttachmentMeta {
-  final String mmcsSignatureHex;
+  final String? mmcsSignatureHex;
+  final String? mmcsOwner;
+  final String? mmcsUrl;
+  final String? decryptionKey;
+  final String? inlineAttachment;
+  final String? messagePart;
   final NumOrString fileSize;
-  final String decryptionKey;
   final String? utiType;
-  final String mmcsOwner;
   final String? mimeType;
-  final String mmcsUrl;
   final String? name;
 
   const MMCSAttachmentMeta({
-    required this.mmcsSignatureHex,
+    this.mmcsSignatureHex,
+    this.mmcsOwner,
+    this.mmcsUrl,
+    this.decryptionKey,
+    this.inlineAttachment,
+    this.messagePart,
     required this.fileSize,
-    required this.decryptionKey,
     this.utiType,
-    required this.mmcsOwner,
     this.mimeType,
-    required this.mmcsUrl,
     this.name,
   });
 
   @override
   int get hashCode =>
       mmcsSignatureHex.hashCode ^
-      fileSize.hashCode ^
-      decryptionKey.hashCode ^
-      utiType.hashCode ^
       mmcsOwner.hashCode ^
-      mimeType.hashCode ^
       mmcsUrl.hashCode ^
+      decryptionKey.hashCode ^
+      inlineAttachment.hashCode ^
+      messagePart.hashCode ^
+      fileSize.hashCode ^
+      utiType.hashCode ^
+      mimeType.hashCode ^
       name.hashCode;
 
   @override
@@ -3168,12 +3174,14 @@ class MMCSAttachmentMeta {
       other is MMCSAttachmentMeta &&
           runtimeType == other.runtimeType &&
           mmcsSignatureHex == other.mmcsSignatureHex &&
-          fileSize == other.fileSize &&
-          decryptionKey == other.decryptionKey &&
-          utiType == other.utiType &&
           mmcsOwner == other.mmcsOwner &&
-          mimeType == other.mimeType &&
           mmcsUrl == other.mmcsUrl &&
+          decryptionKey == other.decryptionKey &&
+          inlineAttachment == other.inlineAttachment &&
+          messagePart == other.messagePart &&
+          fileSize == other.fileSize &&
+          utiType == other.utiType &&
+          mimeType == other.mimeType &&
           name == other.name;
 }
 

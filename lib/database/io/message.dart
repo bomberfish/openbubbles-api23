@@ -1094,7 +1094,7 @@ class Message {
 
   void applyFromCloud(api.CloudMessage c, String cloudkitId) {
     Logger.info("item ${c.chatId}");
-    final query = Database.chats.query(Chat_.chatIdentifier.equals(c.chatId.split(";")[2])).build();
+    final query = Database.chats.query(Chat_.chatIdentifier.equals(c.chatId.contains(";") ? c.chatId.split(";")[2] : c.chatId)).build();
     final chat = query.findFirst();
     query.close();
 

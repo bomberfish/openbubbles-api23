@@ -1165,7 +1165,7 @@ class RustPushBackend implements BackendService {
     await sendMsg(msg);
 
     if (msgObj.ckRecordId != null) {
-      await api.saveMessages(state: pushService.state, messages: {msgObj.ckRecordId!: msgObj.toCloud(false)});
+      await api.saveMessages(state: pushService.state, messages: {msgObj.ckRecordId!: msgObj.toCloud(true)});
     }
 
     return await pushService.reflectMessageDyn(msg);
@@ -1190,7 +1190,7 @@ class RustPushBackend implements BackendService {
     await sendMsg(msg);
 
     if (msgObj.ckRecordId != null) {
-      await api.saveMessages(state: pushService.state, messages: {msgObj.ckRecordId!: msgObj.toCloud(false)});
+      await pushService.uploadMessages([msgObj], [], {}, true);
     }
 
     msg.sentTimestamp = DateTime.now().millisecondsSinceEpoch;
@@ -2129,8 +2129,112 @@ class RustPushService extends GetxService {
     return "${size.toStringAsFixed(decimals)} ${suffixes[i]}";
   }
 
-  Future<void> doCloudKitSyncPrivate() async {
+  Future<void> uploadMessages(
+      List<Message> messages, 
+      List<(String, String)> uploadAttachments, 
+      Map<String, Attachment> idToAttachment,
+      bool noAttachments,
+    ) async {
     var availableSize = await api.getQuotaInfo(state: pushService.state);
+    Map<String, api.CloudMessage> saveMessages = {};
+    var totalSize = 0;
+
+    List<String> newCloudKitIds = [];
+
+    String createNewCloudKitId() {
+      var id = generateCloudKitId();
+      newCloudKitIds.add(id);
+      return id;
+    }
+
+    // var counter = 0;
+    for (var message in messages) {
+      // counter += 1;
+      // Logger.info("Processing message $counter of ${messages.length}");
+      message.fetchAttachments();
+
+      // remember: other invocations
+      message.ckRecordId ??= createNewCloudKitId();
+      var saveMessageAttachments = !noAttachments || message.attachments.any((a) => a!.ckRecordId != null);
+      try {
+        saveMessages[message.ckRecordId!] = message.toCloud(noAttachments);
+      } catch (e, s) {
+        Logger.warn("Failure to convert to cloud", error: e, trace: s);
+        continue;
+      } finally {
+        message.ckSyncState = true;
+      }
+
+      if (saveMessageAttachments) {
+        for (var attachment in message.attachments) {
+          if (!attachment!.getFile().exists() || attachment.ckRecordId != null) continue;
+          totalSize += File(attachment.path).lengthSync();
+          attachment.ckRecordId ??= createNewCloudKitId();
+          uploadAttachments.add((attachment.path, attachment.ckRecordId!));
+          idToAttachment[attachment.ckRecordId!] = attachment;
+        }
+      }
+    }
+
+    // sub 25 mb off the top just for other things
+    if (totalSize != 0 && totalSize > availableSize.availableBytes - (25 * 1024 * 1024)) {
+      throw Exception("Not enough space for attachments, needed ${formatBytes(totalSize)}!");
+    }
+
+    Logger.info("Attachment total size $totalSize!");
+
+    if (uploadAttachments.isNotEmpty) {
+      Map<String, api.CloudAttachment> saveAttachments = {};
+      var results = await api.uploadCloudAttachments(state: pushService.state, files: uploadAttachments);
+      for (var result in results.entries) {
+        var attachment = idToAttachment[result.key]!;
+        saveAttachments[attachment.ckRecordId!] = api.CloudAttachment(
+          cm: api.encodeAttachmentmeta(attachmentmeta: await attachment.getAttachmentMeta()),
+          lqa: result.value,
+        );
+      }
+      var result = await api.saveAttachments(state: pushService.state, attachments: saveAttachments);
+
+      for (var result in result.entries) {
+        if (result.value) continue; // success
+        var failedAttachment = idToAttachment.values.firstWhere((c) => c.ckRecordId == result.key);
+        if (newCloudKitIds.contains(failedAttachment.ckRecordId!)) failedAttachment.ckRecordId = null;
+        Logger.warn("Failed to save attachment ${failedAttachment.guid}");
+      }
+
+      for (var result in idToAttachment.values) {
+        result.save(null); // save ckRecordId
+      }
+    }
+
+    if (saveMessages.isNotEmpty) {
+      var result = await api.saveMessages(state: pushService.state, messages: saveMessages);
+
+      for (var result in result.entries) {
+        if (result.value) continue; // success
+        var failedMessage = messages.firstWhere((c) => c.ckRecordId == result.key);
+        if (newCloudKitIds.contains(failedMessage.ckRecordId!)) failedMessage.ckRecordId = null;
+        Logger.warn("Failed to save message ${failedMessage.guid}");
+      }
+    }
+
+    for (var result in messages) {
+      result.save(); // save ckRecordId
+      getActiveMwc(result.guid!)?.message.ckRecordId = result.ckRecordId;
+    }
+  }
+
+  Future<void> uploadAttachment(Message message) async {
+    if (message.attachments.every((att) => att!.ckRecordId != null)) {
+      showSnackbar("Success", "Attachment already uploaded");
+      return;
+    }
+    await wrapPromise(uploadMessages([message], [], {}, false), "Uploading to iCloud...");
+    showSnackbar("Success", "Attachment uploaded");
+  }
+
+  Future<void> doCloudKitSyncPrivate() async {
+
     var isInClique = await api.isInClique(state: pushService.state);
     if (!isInClique) {
       Logger.warn("Skipping sync because we are no longer in the clique!");
@@ -2161,6 +2265,7 @@ class RustPushService extends GetxService {
       continuationToken: ss.settings.chatSyncToken.value != null ? base64Decode(ss.settings.chatSyncToken.value!) : null);
     ss.settings.chatSyncToken.value = base64Encode(token);
     for (var item in items.entries) {
+      if (item.value!.serviceName != "iMessage") continue; // skip SMS chats for now
       if (item.value == null) {
         final query = Database.chats.query(Chat_.ckRecordId.equals(item.key)).build();
         final result = query.findFirst();
@@ -2173,7 +2278,6 @@ class RustPushService extends GetxService {
         continue;
       }
       var chat = await Chat.findFromCloud(item.value!);
-      if (item.value!.serviceName != "iMessage") continue; // skip SMS chats for now
       var didSync = chat.applyFromCloud(item.value!, item.key);
       if (didSync && item.value!.groupPhoto != null) {
         downloadPfPics.add((chat.customAvatarPath!, item.key));
@@ -2284,82 +2388,8 @@ class RustPushService extends GetxService {
 
     bool noAttachments = ss.settings.attachmentSyncEnabled.value;
 
-    Map<String, api.CloudMessage> saveMessages = {};
-    var totalSize = 0;
-    // var counter = 0;
-    for (var message in messages) {
-      // counter += 1;
-      // Logger.info("Processing message $counter of ${messages.length}");
-      message.fetchAttachments();
+    uploadMessages(messages, uploadAttachments, idToAttachment, noAttachments);
 
-      // remember: other invocations
-      message.ckRecordId = generateCloudKitId();
-      try {
-        saveMessages[message.ckRecordId!] = message.toCloud(noAttachments);
-      } catch (e, s) {
-        Logger.warn("Failure to convert to cloud", error: e, trace: s);
-        continue;
-      } finally {
-        message.ckSyncState = true;
-      }
-
-      if (!noAttachments) {
-        for (var attachment in message.attachments) {
-          if (!attachment!.getFile().exists() || attachment.ckRecordId != null) continue;
-          totalSize += File(attachment.path).lengthSync();
-          attachment.ckRecordId = generateCloudKitId();
-          uploadAttachments.add((attachment.path, attachment.ckRecordId!));
-          idToAttachment[attachment.ckRecordId!] = attachment;
-        }
-      }
-    }
-
-    // sub 25 mb off the top just for other things
-    if (totalSize != 0 && totalSize > availableSize.availableBytes - (25 * 1024 * 1024)) {
-      throw Exception("Not enough space for attachments, needed ${formatBytes(totalSize)}!");
-    }
-
-    Logger.info("Attachment total size $totalSize!");
-
-    if (uploadAttachments.isNotEmpty) {
-      Map<String, api.CloudAttachment> saveAttachments = {};
-      var results = await api.uploadCloudAttachments(state: pushService.state, files: uploadAttachments);
-      for (var result in results.entries) {
-        var attachment = idToAttachment[result.key]!;
-        saveAttachments[attachment.ckRecordId!] = api.CloudAttachment(
-          cm: api.encodeAttachmentmeta(attachmentmeta: await attachment.getAttachmentMeta()),
-          lqa: result.value,
-        );
-      }
-      var result = await api.saveAttachments(state: pushService.state, attachments: saveAttachments);
-
-      for (var result in result.entries) {
-        if (result.value) continue; // success
-        var failedAttachment = idToAttachment.values.firstWhere((c) => c.ckRecordId == result.key);
-        failedAttachment.ckRecordId = null;
-        Logger.warn("Failed to save attachment ${failedAttachment.guid}");
-      }
-
-      for (var result in idToAttachment.values) {
-        result.save(null); // save ckRecordId
-      }
-    }
-
-    if (saveMessages.isNotEmpty) {
-      var result = await api.saveMessages(state: pushService.state, messages: saveMessages);
-
-      for (var result in result.entries) {
-        if (result.value) continue; // success
-        var failedMessage = messages.firstWhere((c) => c.ckRecordId == result.key);
-        failedMessage.ckRecordId = null;
-        Logger.warn("Failed to save message ${failedMessage.guid}");
-      }
-    }
-
-    for (var result in messages) {
-      result.save(); // save ckRecordId
-      getActiveMwc(result.guid!)?.message.ckRecordId = result.ckRecordId;
-    }
     ss.settings.lastSynced.value = DateTime.now().millisecondsSinceEpoch;
     Logger.info("Syncing completed");
   }
@@ -4327,14 +4357,16 @@ class RustPushService extends GetxService {
       pushService.sharedStreams = await api.supportsSharedStreams(state: state);
       Timer.periodic(const Duration(days: 1), (timer) => validateSubState());
       validateSubState();
-      Timer.periodic(const Duration(days: 1), (timer) async {
-        if (!ss.settings.cloudSyncingEnabled.value || (await api.getPhase(state: state)) != api.RegistrationPhase.registered) return;
-        Logger.info("Doing cloudkit sync!");
-        await pushService.doCloudKitSync();
-      });
-      if (ss.settings.cloudSyncingEnabled.value && (await api.getPhase(state: state)) == api.RegistrationPhase.registered) {
-        Logger.info("Doing cloudkit sync!");
-        await pushService.doCloudKitSync();
+      if (ls.isUiThread) {
+        Timer.periodic(const Duration(days: 1), (timer) async {
+          if (!ss.settings.cloudSyncingEnabled.value || (await api.getPhase(state: state)) != api.RegistrationPhase.registered) return;
+          Logger.info("Doing cloudkit sync!");
+          await pushService.doCloudKitSync();
+        });
+        if (ss.settings.cloudSyncingEnabled.value && (await api.getPhase(state: state)) == api.RegistrationPhase.registered) {
+          Logger.info("Doing cloudkit sync!");
+          pushService.doCloudKitSync();
+        }
       }
     })();
     initAppLinks();

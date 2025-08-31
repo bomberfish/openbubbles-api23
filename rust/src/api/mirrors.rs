@@ -688,13 +688,19 @@ pub enum DartNumOrString {
 
 #[frb(non_opaque, mirror(MMCSAttachmentMeta))]
 pub struct DartMMCSAttachmentMeta {
-    pub mmcs_signature_hex: String,
+    // MMCS attachments
+    pub mmcs_signature_hex: Option<String>,
+    pub mmcs_owner: Option<String>,
+    pub mmcs_url: Option<String>,
+    pub decryption_key: Option<String>,
+
+    // inline attachments
+    pub inline_attachment: Option<String>,
+    pub message_part: Option<String>,
+
     pub file_size: NumOrString,
-    pub decryption_key: String,
     pub uti_type: Option<String>,
-    pub mmcs_owner: String,
     pub mime_type: Option<String>,
-    pub mmcs_url: String,
     pub name: Option<String>,
 }
 
@@ -708,7 +714,7 @@ pub struct DartAttachmentMeta {
     pub guid: String,
     pub hide_attachment: bool,
     pub user_info: Option<MMCSAttachmentMeta>,
-    pub filename: String, //path
+    pub filename: Option<String>, //path
     pub extras: Option<AttachmentMetaExtra>,
     pub is_outgoing: bool,
     pub transfer_name: String,

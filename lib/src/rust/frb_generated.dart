@@ -7018,7 +7018,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       guid: dco_decode_String(arr[5]),
       hideAttachment: dco_decode_bool(arr[6]),
       userInfo: dco_decode_opt_box_autoadd_mmcs_attachment_meta(arr[7]),
-      filename: dco_decode_String(arr[8]),
+      filename: dco_decode_opt_String(arr[8]),
       extras: dco_decode_opt_box_autoadd_attachment_meta_extra(arr[9]),
       isOutgoing: dco_decode_bool(arr[10]),
       transferName: dco_decode_String(arr[11]),
@@ -9194,17 +9194,19 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   MMCSAttachmentMeta dco_decode_mmcs_attachment_meta(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     final arr = raw as List<dynamic>;
-    if (arr.length != 8)
-      throw Exception('unexpected arr length: expect 8 but see ${arr.length}');
+    if (arr.length != 10)
+      throw Exception('unexpected arr length: expect 10 but see ${arr.length}');
     return MMCSAttachmentMeta(
-      mmcsSignatureHex: dco_decode_String(arr[0]),
-      fileSize: dco_decode_num_or_string(arr[1]),
-      decryptionKey: dco_decode_String(arr[2]),
-      utiType: dco_decode_opt_String(arr[3]),
-      mmcsOwner: dco_decode_String(arr[4]),
-      mimeType: dco_decode_opt_String(arr[5]),
-      mmcsUrl: dco_decode_String(arr[6]),
-      name: dco_decode_opt_String(arr[7]),
+      mmcsSignatureHex: dco_decode_opt_String(arr[0]),
+      mmcsOwner: dco_decode_opt_String(arr[1]),
+      mmcsUrl: dco_decode_opt_String(arr[2]),
+      decryptionKey: dco_decode_opt_String(arr[3]),
+      inlineAttachment: dco_decode_opt_String(arr[4]),
+      messagePart: dco_decode_opt_String(arr[5]),
+      fileSize: dco_decode_num_or_string(arr[6]),
+      utiType: dco_decode_opt_String(arr[7]),
+      mimeType: dco_decode_opt_String(arr[8]),
+      name: dco_decode_opt_String(arr[9]),
     );
   }
 
@@ -12086,7 +12088,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     var var_hideAttachment = sse_decode_bool(deserializer);
     var var_userInfo =
         sse_decode_opt_box_autoadd_mmcs_attachment_meta(deserializer);
-    var var_filename = sse_decode_String(deserializer);
+    var var_filename = sse_decode_opt_String(deserializer);
     var var_extras =
         sse_decode_opt_box_autoadd_attachment_meta_extra(deserializer);
     var var_isOutgoing = sse_decode_bool(deserializer);
@@ -14654,22 +14656,26 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   MMCSAttachmentMeta sse_decode_mmcs_attachment_meta(
       SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    var var_mmcsSignatureHex = sse_decode_String(deserializer);
+    var var_mmcsSignatureHex = sse_decode_opt_String(deserializer);
+    var var_mmcsOwner = sse_decode_opt_String(deserializer);
+    var var_mmcsUrl = sse_decode_opt_String(deserializer);
+    var var_decryptionKey = sse_decode_opt_String(deserializer);
+    var var_inlineAttachment = sse_decode_opt_String(deserializer);
+    var var_messagePart = sse_decode_opt_String(deserializer);
     var var_fileSize = sse_decode_num_or_string(deserializer);
-    var var_decryptionKey = sse_decode_String(deserializer);
     var var_utiType = sse_decode_opt_String(deserializer);
-    var var_mmcsOwner = sse_decode_String(deserializer);
     var var_mimeType = sse_decode_opt_String(deserializer);
-    var var_mmcsUrl = sse_decode_String(deserializer);
     var var_name = sse_decode_opt_String(deserializer);
     return MMCSAttachmentMeta(
         mmcsSignatureHex: var_mmcsSignatureHex,
-        fileSize: var_fileSize,
-        decryptionKey: var_decryptionKey,
-        utiType: var_utiType,
         mmcsOwner: var_mmcsOwner,
-        mimeType: var_mimeType,
         mmcsUrl: var_mmcsUrl,
+        decryptionKey: var_decryptionKey,
+        inlineAttachment: var_inlineAttachment,
+        messagePart: var_messagePart,
+        fileSize: var_fileSize,
+        utiType: var_utiType,
+        mimeType: var_mimeType,
         name: var_name);
   }
 
@@ -17778,7 +17784,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     sse_encode_String(self.guid, serializer);
     sse_encode_bool(self.hideAttachment, serializer);
     sse_encode_opt_box_autoadd_mmcs_attachment_meta(self.userInfo, serializer);
-    sse_encode_String(self.filename, serializer);
+    sse_encode_opt_String(self.filename, serializer);
     sse_encode_opt_box_autoadd_attachment_meta_extra(self.extras, serializer);
     sse_encode_bool(self.isOutgoing, serializer);
     sse_encode_String(self.transferName, serializer);
@@ -19883,13 +19889,15 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   void sse_encode_mmcs_attachment_meta(
       MMCSAttachmentMeta self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_String(self.mmcsSignatureHex, serializer);
+    sse_encode_opt_String(self.mmcsSignatureHex, serializer);
+    sse_encode_opt_String(self.mmcsOwner, serializer);
+    sse_encode_opt_String(self.mmcsUrl, serializer);
+    sse_encode_opt_String(self.decryptionKey, serializer);
+    sse_encode_opt_String(self.inlineAttachment, serializer);
+    sse_encode_opt_String(self.messagePart, serializer);
     sse_encode_num_or_string(self.fileSize, serializer);
-    sse_encode_String(self.decryptionKey, serializer);
     sse_encode_opt_String(self.utiType, serializer);
-    sse_encode_String(self.mmcsOwner, serializer);
     sse_encode_opt_String(self.mimeType, serializer);
-    sse_encode_String(self.mmcsUrl, serializer);
     sse_encode_opt_String(self.name, serializer);
   }
 

@@ -9606,7 +9606,7 @@ const _: fn() = || {
         let _: String = AttachmentMeta.guid;
         let _: bool = AttachmentMeta.hide_attachment;
         let _: Option<crate::api::api::MMCSAttachmentMeta> = AttachmentMeta.user_info;
-        let _: String = AttachmentMeta.filename;
+        let _: Option<String> = AttachmentMeta.filename;
         let _: Option<crate::api::api::AttachmentMetaExtra> = AttachmentMeta.extras;
         let _: bool = AttachmentMeta.is_outgoing;
         let _: String = AttachmentMeta.transfer_name;
@@ -10240,13 +10240,15 @@ const _: fn() = || {
     }
     {
         let MMCSAttachmentMeta = None::<crate::api::api::MMCSAttachmentMeta>.unwrap();
-        let _: String = MMCSAttachmentMeta.mmcs_signature_hex;
+        let _: Option<String> = MMCSAttachmentMeta.mmcs_signature_hex;
+        let _: Option<String> = MMCSAttachmentMeta.mmcs_owner;
+        let _: Option<String> = MMCSAttachmentMeta.mmcs_url;
+        let _: Option<String> = MMCSAttachmentMeta.decryption_key;
+        let _: Option<String> = MMCSAttachmentMeta.inline_attachment;
+        let _: Option<String> = MMCSAttachmentMeta.message_part;
         let _: crate::api::api::NumOrString = MMCSAttachmentMeta.file_size;
-        let _: String = MMCSAttachmentMeta.decryption_key;
         let _: Option<String> = MMCSAttachmentMeta.uti_type;
-        let _: String = MMCSAttachmentMeta.mmcs_owner;
         let _: Option<String> = MMCSAttachmentMeta.mime_type;
-        let _: String = MMCSAttachmentMeta.mmcs_url;
         let _: Option<String> = MMCSAttachmentMeta.name;
     }
     {
@@ -11693,7 +11695,7 @@ impl SseDecode for crate::api::api::AttachmentMeta {
         let mut var_hideAttachment = <bool>::sse_decode(deserializer);
         let mut var_userInfo =
             <Option<crate::api::api::MMCSAttachmentMeta>>::sse_decode(deserializer);
-        let mut var_filename = <String>::sse_decode(deserializer);
+        let mut var_filename = <Option<String>>::sse_decode(deserializer);
         let mut var_extras =
             <Option<crate::api::api::AttachmentMetaExtra>>::sse_decode(deserializer);
         let mut var_isOutgoing = <bool>::sse_decode(deserializer);
@@ -13704,22 +13706,26 @@ impl SseDecode for crate::api::api::MessageType {
 impl SseDecode for crate::api::api::MMCSAttachmentMeta {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
-        let mut var_mmcsSignatureHex = <String>::sse_decode(deserializer);
+        let mut var_mmcsSignatureHex = <Option<String>>::sse_decode(deserializer);
+        let mut var_mmcsOwner = <Option<String>>::sse_decode(deserializer);
+        let mut var_mmcsUrl = <Option<String>>::sse_decode(deserializer);
+        let mut var_decryptionKey = <Option<String>>::sse_decode(deserializer);
+        let mut var_inlineAttachment = <Option<String>>::sse_decode(deserializer);
+        let mut var_messagePart = <Option<String>>::sse_decode(deserializer);
         let mut var_fileSize = <crate::api::api::NumOrString>::sse_decode(deserializer);
-        let mut var_decryptionKey = <String>::sse_decode(deserializer);
         let mut var_utiType = <Option<String>>::sse_decode(deserializer);
-        let mut var_mmcsOwner = <String>::sse_decode(deserializer);
         let mut var_mimeType = <Option<String>>::sse_decode(deserializer);
-        let mut var_mmcsUrl = <String>::sse_decode(deserializer);
         let mut var_name = <Option<String>>::sse_decode(deserializer);
         return crate::api::api::MMCSAttachmentMeta {
             mmcs_signature_hex: var_mmcsSignatureHex,
-            file_size: var_fileSize,
-            decryption_key: var_decryptionKey,
-            uti_type: var_utiType,
             mmcs_owner: var_mmcsOwner,
-            mime_type: var_mimeType,
             mmcs_url: var_mmcsUrl,
+            decryption_key: var_decryptionKey,
+            inline_attachment: var_inlineAttachment,
+            message_part: var_messagePart,
+            file_size: var_fileSize,
+            uti_type: var_utiType,
+            mime_type: var_mimeType,
             name: var_name,
         };
     }
@@ -18621,12 +18627,14 @@ impl flutter_rust_bridge::IntoDart for FrbWrapper<crate::api::api::MMCSAttachmen
     fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
         [
             self.0.mmcs_signature_hex.into_into_dart().into_dart(),
-            self.0.file_size.into_into_dart().into_dart(),
-            self.0.decryption_key.into_into_dart().into_dart(),
-            self.0.uti_type.into_into_dart().into_dart(),
             self.0.mmcs_owner.into_into_dart().into_dart(),
-            self.0.mime_type.into_into_dart().into_dart(),
             self.0.mmcs_url.into_into_dart().into_dart(),
+            self.0.decryption_key.into_into_dart().into_dart(),
+            self.0.inline_attachment.into_into_dart().into_dart(),
+            self.0.message_part.into_into_dart().into_dart(),
+            self.0.file_size.into_into_dart().into_dart(),
+            self.0.uti_type.into_into_dart().into_dart(),
+            self.0.mime_type.into_into_dart().into_dart(),
             self.0.name.into_into_dart().into_dart(),
         ]
         .into_dart()
@@ -21262,7 +21270,7 @@ impl SseEncode for crate::api::api::AttachmentMeta {
         <String>::sse_encode(self.guid, serializer);
         <bool>::sse_encode(self.hide_attachment, serializer);
         <Option<crate::api::api::MMCSAttachmentMeta>>::sse_encode(self.user_info, serializer);
-        <String>::sse_encode(self.filename, serializer);
+        <Option<String>>::sse_encode(self.filename, serializer);
         <Option<crate::api::api::AttachmentMetaExtra>>::sse_encode(self.extras, serializer);
         <bool>::sse_encode(self.is_outgoing, serializer);
         <String>::sse_encode(self.transfer_name, serializer);
@@ -22730,13 +22738,15 @@ impl SseEncode for crate::api::api::MessageType {
 impl SseEncode for crate::api::api::MMCSAttachmentMeta {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
-        <String>::sse_encode(self.mmcs_signature_hex, serializer);
+        <Option<String>>::sse_encode(self.mmcs_signature_hex, serializer);
+        <Option<String>>::sse_encode(self.mmcs_owner, serializer);
+        <Option<String>>::sse_encode(self.mmcs_url, serializer);
+        <Option<String>>::sse_encode(self.decryption_key, serializer);
+        <Option<String>>::sse_encode(self.inline_attachment, serializer);
+        <Option<String>>::sse_encode(self.message_part, serializer);
         <crate::api::api::NumOrString>::sse_encode(self.file_size, serializer);
-        <String>::sse_encode(self.decryption_key, serializer);
         <Option<String>>::sse_encode(self.uti_type, serializer);
-        <String>::sse_encode(self.mmcs_owner, serializer);
         <Option<String>>::sse_encode(self.mime_type, serializer);
-        <String>::sse_encode(self.mmcs_url, serializer);
         <Option<String>>::sse_encode(self.name, serializer);
     }
 }

@@ -952,6 +952,10 @@ class _MessagePopupState extends OptimizedState<MessagePopup> with SingleTickerP
     popDetails();
   }
 
+  Future<void> uploadAttachment() async {
+    pushService.uploadAttachment(message);
+  }
+
   Future<void> reportIssue() async {
     final TextEditingController participantController = TextEditingController();
     Uint8List? attachment;
@@ -1263,6 +1267,11 @@ class _MessagePopupState extends OptimizedState<MessagePopup> with SingleTickerP
           DetailsMenuActionWidget(
             onTap: reportIssue,
             action: DetailsMenuAction.ReportIssue,
+          ),
+        if (message.attachments.isNotEmpty && !ss.settings.attachmentSyncEnabled.value && ss.settings.cloudSyncingEnabled.value)
+          DetailsMenuActionWidget(
+            onTap: uploadAttachment,
+            action: DetailsMenuAction.UploadAttachment,
           ),
         if (!kIsWeb && !kIsDesktop && !message.isFromMe! && message.handle != null && message.handle!.contact == null)
           DetailsMenuActionWidget(
