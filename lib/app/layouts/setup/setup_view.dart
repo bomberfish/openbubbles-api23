@@ -75,7 +75,7 @@ class SetupViewController extends StatefulController {
   RxString noCapErrorMsg = "Currently full. If you got an invite, enter your code from your email. Otherwise, sign up to get notified!".obs;
 
   bool errorIsProblem() {
-    return error.isNotEmpty && !error.contains("Enter the correct password") && !error.contains("Your account information was entered incorrectly") && (!error.contains("Relay device offline") || !ss.settings.deviceIsHosted.value);
+    return error.isNotEmpty && !error.contains("Enter the correct password") && !error.contains("Your account information was entered incorrectly") && !error.contains("Sorry, your hosted device is currently offline!") && (!error.contains("Relay device offline") || !ss.settings.deviceIsHosted.value);
   }
 
   bool hasValidToken() {
@@ -303,6 +303,40 @@ class SetupViewController extends StatefulController {
     return ret;
   }
 
+  Future<T> wrapPromise<T>(Future<T> inner, String text) async {
+    showDialog(
+      context: Get.context!,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: context.theme.colorScheme.properSurface,
+          title: Text(
+            text,
+            style: context.theme.textTheme.titleLarge,
+          ),
+          content: Container(
+            height: 70,
+            child: Center(
+              child: CircularProgressIndicator(
+                backgroundColor: context.theme.colorScheme.properSurface,
+                valueColor: AlwaysStoppedAnimation<Color>(context.theme.colorScheme.primary),
+              ),
+            ),
+          ),
+        );
+      }
+    );
+    T result;
+    try {
+      result = await inner;
+    } catch (e, s) {
+      Get.back();
+      showSnackbar("Failure! Please try again", e.toString());
+      rethrow;
+    }
+    Get.back();
+    return result;
+  }
+
   Future<void> doRegister() async {
     List<api.IdsUser> users = [];
 
@@ -459,7 +493,71 @@ class SetupViewController extends StatefulController {
     updateWidgets<NumberOfMessagesText>(num);
   }
 
+  void handleOfflineError(String newError, String? currentTicket) {
+    if (newError.contains("Sorry, your hosted device is currently offline!")) {
+      showDialog(
+        context: Get.context!,
+        builder: (context) => AlertDialog(
+          title: Text(
+            "Sorry, your hosted device is currently offline!",
+            style: context.theme.textTheme.titleLarge,
+          ),
+          backgroundColor: context.theme.colorScheme.properSurface,
+          content: Text("You can wait for it to come back, or change your device.", style: context.theme.textTheme.bodyLarge),
+          actions: [
+            TextButton(
+              child: Text(
+                  "Cancel",
+                  style: context.theme.textTheme.bodyLarge!.copyWith(color: context.theme.colorScheme.primary)
+              ),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+            TextButton(
+              child: Text(
+                  "Change",
+                  style: context.theme.textTheme.bodyLarge!.copyWith(color: context.theme.colorScheme.primary)
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+                wrapPromise((() async {
+                  var relay = currentTicket ?? await api.validateRelay(state: pushService.state);
+                  if (relay == null) {
+                    throw Exception("Failed to validate!");
+                  }
+                  final status = await http.dio.post("https://hw.openbubbles.app/swap-token", options: Options(
+                    headers: {
+                      "Authorization": "Bearer $relay"
+                    }
+                  ));
+
+                  if (status.statusCode != 200) {
+                    throw Exception("Failed to swap ${status.statusCode}");
+                  }
+
+                  var newTicket = status.data["new_ticket"];
+
+                  var config = await api.configFromRelay(code: newTicket, host: "https://hw.openbubbles.app");
+                  await api.configureMacos(state: pushService.state, config: config);
+
+                  var list = ss.settings.cachedCodes.entries.toList();
+                  for (var items in list) {
+                    if (!items.key.startsWith("sms-auth-")) continue;
+                    ss.settings.cachedCodes.remove(items.key);
+                  }
+                  ss.saveSettings();
+                  pageController.jumpToPage(4);
+                  updateConnectError('');
+                })(), "Changing device...");
+              },
+            ),
+          ],
+        ),
+      );
+    }
+  }
+
   void updateConnectError(String newError) {
+    handleOfflineError(newError, null);
     if (newError.contains("6001")) {
       newError += " Make sure Contact Key Verification and Advanced Data Protection are off.";
     }

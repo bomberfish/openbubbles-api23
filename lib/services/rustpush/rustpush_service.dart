@@ -338,7 +338,7 @@ class RustPushBackend implements BackendService {
   }
   
   bool loggingOut = false;
-  void markFailedToLogin({bool hw = false, bool logout = false}) async {
+  Future<void> markFailedToLogin({bool hw = false, bool logout = false}) async {
     Logger.error("markingfailed");
     if (loggingOut) return;
     try {
@@ -3610,6 +3610,278 @@ class RustPushService extends GetxService {
     }
 
     markBackgroundChange(myhandle, DateTime.now().millisecondsSinceEpoch, chat);
+  }
+
+  
+
+  Future<(bool, String?)> promptPassword(api.ViableBottle bottle, String desc) async {
+    var context = Get.context!;
+    bool change = false;
+    String? text;
+    var codeController = TextEditingController();
+    await showDialog(
+      context: context,
+      builder: (_) {
+        return AlertDialog(
+          actions: [
+            TextButton(
+              child: Text("Choose Device", style: context.theme.textTheme.bodyLarge!.copyWith(color: context.theme.colorScheme.primary)),
+              onPressed: () {
+                text = null;
+                change = true;
+                Get.back();
+              },
+            ),
+            TextButton(
+              child: Text("OK", style: context.theme.textTheme.bodyLarge!.copyWith(color: context.theme.colorScheme.primary)),
+              onPressed: () async {
+                text = codeController.text;
+                Get.back();
+              },
+            ),
+          ],
+          title: Text("Enter the ${bottle.numericLength > 0 ? "passcode" : "password"} for “${bottle.deviceName}”", style: context.theme.textTheme.titleLarge),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(desc),
+              const SizedBox(height: 20,),
+              bottle.numericLength > 0 ? StatefulBuilder(builder: (context, state) => Stack(
+                children: [
+                  Row(
+                    children: List.generate(bottle.numericLength, (index) {
+                      var text = index < codeController.text.length ? codeController.text[index] : "";
+                      return Expanded(child: 
+                        Container(
+                          decoration: index == codeController.text.length ? 
+                            BoxDecoration(
+                              border: Border.all(
+                                color: context.theme.colorScheme.primary,
+                                width: 2
+                              ),
+                              borderRadius: const BorderRadius.all(Radius.circular(10)),
+                            )
+                          : BoxDecoration(
+                            border: Border.all(
+                              color: context.theme.colorScheme.outline,
+                            ),
+                            borderRadius: const BorderRadius.all(Radius.circular(10)),
+                          ),
+                          margin: const EdgeInsets.all(3),
+                          height: 50,
+                          child: Center(
+                            child: Text(
+                              text,
+                              style: context.theme.textTheme.titleLarge
+                            ),
+                          )
+                        )
+                      );
+                    }),
+                  ),
+                  Opacity(
+                    opacity: 0,
+                    child: TextField(
+                      cursorColor: context.theme.colorScheme.primary,
+                      autocorrect: false,
+                      autofocus: true,
+                      controller: codeController,
+                      textInputAction: TextInputAction.next,
+                      keyboardType: TextInputType.number,
+                      onChanged: (v) {
+                        state(() {});
+                      },
+                    )),
+                ],
+              )) : TextField(
+                controller: codeController,
+                decoration: const InputDecoration(
+                  labelText: "Password",
+                  border: OutlineInputBorder(),
+                ),
+                autofocus: true,
+              )
+            ],
+          ),
+          backgroundColor: context.theme.colorScheme.properSurface,
+        );
+      }
+    );
+    return (change, text);
+  }
+
+  Future<api.ViableBottle?> promptChange(List<api.ViableBottle> bottles) async {
+    var context = Get.context!;
+    api.ViableBottle? newBottle;
+    var promptReset = false;
+    await showDialog(
+      context: context,
+      builder: (_) {
+        return AlertDialog(
+          actions: [
+            TextButton(
+              child: Text("Don't know any passwords", style: context.theme.textTheme.bodyLarge!.copyWith(color: context.theme.colorScheme.primary)),
+              onPressed: () {
+                promptReset = true;
+                Get.back();
+              },
+            ),
+          ],
+          title: Text("Choose a device", style: context.theme.textTheme.titleLarge),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: bottles.map((bottle) => Material( // provides a Material ancestor for the ripple
+                color: Colors.transparent,
+                child: InkWell(
+                  onTap: () {
+                    newBottle = bottle;
+                    Get.back();
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 12),
+                    child: Text(
+                      bottle.deviceName,
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                  ),
+                ),
+                
+              )).toList(),
+            ),
+          ),
+          backgroundColor: context.theme.colorScheme.properSurface,
+        );
+      }
+    );
+    if (promptReset) {
+      await promptResetData(false);
+    }
+    return newBottle;
+  }
+
+  Future<void> promptResetData(bool mandatory) async {
+    var context = Get.context!;
+    await showDialog(
+      context: context,
+      builder: (_) {
+        return AlertDialog(
+          actions: [
+            TextButton(
+              child: Text("Cancel", style: context.theme.textTheme.bodyLarge!.copyWith(color: context.theme.colorScheme.primary)),
+              onPressed: () {
+                Get.back();
+              },
+            ),
+            TextButton(
+              child: Text("Reset encrypted data", style: context.theme.textTheme.bodyLarge!.copyWith(color: context.theme.colorScheme.primary)),
+              onPressed: () async {
+                var defaultPassword = Random.secure().nextInt(1000000).toString().padLeft(6, '0');
+                ss.settings.keychainDefaultPassword.value = defaultPassword;
+                ss.saveSettings();
+
+                Get.back();
+                await wrapPromise(api.resetClique(state: pushService.state, devicePassword: defaultPassword), "Resetting clique...");
+              },
+            ),
+          ],
+          title: Text("Reset data?", style: context.theme.textTheme.titleLarge),
+          content: Text(mandatory ? "Your encrypted data needs to be reset." : "If you can't remember the credentials to any of your devices, you won't be able to recover your data.", style: context.theme.textTheme.bodyLarge),
+          backgroundColor: context.theme.colorScheme.properSurface,
+        );
+      }
+    );
+  }
+
+  Future<int> attemptBottle(api.ViableBottle bottle) async {
+    var desc = "Your device's password is required to access end-to-end encrypted data in iCloud.";
+    while (true) {
+      var (change, password) = await promptPassword(bottle, desc);
+      if (change) return 2;
+      if (password == null) return 1;
+
+      var defaultPassword = Random.secure().nextInt(1000000).toString().padLeft(6, '0');
+      ss.settings.keychainDefaultPassword.value = defaultPassword;
+      ss.saveSettings();
+
+      if(!await wrapPromise((() async {
+        try {
+          await api.joinCliqueWithBottle(state: pushService.state, bottle: bottle.escrow, password: password, devicePassword: defaultPassword);
+        } catch (e) {
+          if (e is AnyhowException) {
+            if (e.message.contains("Credential is not verified.")) {
+              desc = "Invalid Credential";
+              return false;
+            }
+          }
+          rethrow;
+        }
+        return true;
+      })(), "Opening bottle...")) {
+        continue;
+      }
+      break;
+    }
+
+    return 0;
+  }
+
+  Future<T> wrapPromise<T>(Future<T> inner, String text) async {
+    showDialog(
+      context: Get.context!,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: context.theme.colorScheme.properSurface,
+          title: Text(
+            text,
+            style: context.theme.textTheme.titleLarge,
+          ),
+          content: Container(
+            height: 70,
+            child: Center(
+              child: CircularProgressIndicator(
+                backgroundColor: context.theme.colorScheme.properSurface,
+                valueColor: AlwaysStoppedAnimation<Color>(context.theme.colorScheme.primary),
+              ),
+            ),
+          ),
+        );
+      }
+    );
+    T result;
+    try {
+      result = await inner;
+    } catch (e, s) {
+      Get.back();
+      showSnackbar("Failure! Please try again", e.toString());
+      rethrow;
+    }
+    Get.back();
+    return result;
+  }
+
+  Future<bool> joinClique() async {
+    var isInClique = await api.isInClique(state: pushService.state);
+    if (isInClique) return true;
+
+    var bottles = await wrapPromise(api.getBottles(state: pushService.state), "Fetching Bottles...");
+
+    if (bottles.isEmpty) {
+      await promptResetData(true);
+      return await api.isInClique(state: pushService.state);
+    }
+    
+    api.ViableBottle? bottle = bottles[0];
+
+    while(await attemptBottle(bottle!) == 2) {
+      bottle = await promptChange(bottles);
+      if (bottle == null) {
+        return await api.isInClique(state: pushService.state);
+      }
+    }
+    return await api.isInClique(state: pushService.state);
   }
 
   void markBackgroundChange(String sender, int ms, Chat chat) async {

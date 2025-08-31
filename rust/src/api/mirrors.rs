@@ -839,6 +839,26 @@ pub enum DartPartExtension {
     }
 }
 
+pub use rustpush::findmy::{BeaconNamingRecord, LocationReport};
+
+#[frb(type_64bit_int, mirror(LocationReport))]
+pub struct DartLocationReport {
+    pub lat: f32,
+    pub long: f32,
+    pub horizontal_accuracy: u8,
+    pub status: u8,
+    pub confidence: u8,
+    pub timestamp: SystemTime,
+    pub key_index: usize,
+}
+#[frb(type_64bit_int, mirror(BeaconNamingRecord))]
+pub struct DartBeaconNamingRecord {
+    pub emoji: String,
+    pub name: String,
+    pub associated_beacon: String,
+    pub role_id: i64,
+}
+
 #[repr(C)]
 #[frb(type_64bit_int, mirror(IndexedMessagePart))]
 pub struct DartIndexedMessagePart {

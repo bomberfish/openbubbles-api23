@@ -7,6 +7,7 @@ import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:bluebubbles/app/components/avatars/contact_avatar_widget.dart';
 import 'package:bluebubbles/app/layouts/findmy/findmy_location_clipper.dart';
 import 'package:bluebubbles/app/layouts/findmy/findmy_pin_clipper.dart';
+import 'package:bluebubbles/app/layouts/settings/widgets/content/next_button.dart';
 import 'package:bluebubbles/app/wrappers/scrollbar_wrapper.dart';
 import 'package:bluebubbles/app/wrappers/theme_switcher.dart';
 import 'package:bluebubbles/helpers/helpers.dart';
@@ -64,6 +65,10 @@ class _FindMyPageState extends OptimizedState<FindMyPage> with SingleTickerProvi
   bool? fetching2 = true;
   bool refreshing2 = false;
   bool canRefresh = false;
+  bool isInClique = true;
+
+  List<api.DartBeacon> cachedBeacons = [];
+  DateTime? beaconCacheDate;
 
   Timer? myTimer;
 
@@ -230,7 +235,7 @@ class _FindMyPageState extends OptimizedState<FindMyPage> with SingleTickerProvi
 
       var following = await api.getDevices(client: fmipClient!);
     
-      devices = following
+      var devices = following
           .map((e) => 
             FindMyDevice(
               deviceModel: e.deviceModel, 
@@ -296,6 +301,95 @@ class _FindMyPageState extends OptimizedState<FindMyPage> with SingleTickerProvi
             )
           )
           .toList().cast<FindMyDevice>();
+      
+
+      if (beaconCacheDate == null || DateTime.now().difference(beaconCacheDate!).inMinutes > 3) {
+        isInClique = await api.isInClique(state: pushService.state);
+        try {
+          cachedBeacons = isInClique ? await api.getBeaconItems(state: pushService.state) : [];
+        } catch (e, s) {
+          // used for PCS key missing catching after we reset the clique.
+          Logger.error("Failed to fetch beacon data", error: e, trace: s);
+        }
+        beaconCacheDate = DateTime.now();
+      }
+      for (api.DartBeacon e in cachedBeacons) {
+        var location = e.lastReport != null ? Location(
+            positionType: null, 
+            verticalAccuracy: e.lastReport!.confidence, 
+            longitude: e.lastReport!.long, 
+            floorLevel: null, 
+            isInaccurate: null, 
+            isOld: null, 
+            horizontalAccuracy: e.lastReport!.horizontalAccuracy.toDouble(), 
+            latitude: e.lastReport!.lat, 
+            timeStamp: api.systemtimeToMillis(time: e.lastReport!.timestamp), 
+            altitude: null, 
+            locationFinished: true,
+            ) : null;
+        if (e.productId == -1) {
+          var existingDevice = devices.firstWhereOrNull((d) => d.name == e.naming.name && !d.isConsideredAccessory);
+          if (existingDevice == null || e.lastReport == null) continue;
+          if (existingDevice.location?.timeStamp != null && api.systemtimeToMillis(time: e.lastReport!.timestamp) < existingDevice.location!.timeStamp!) continue; // report is older
+          existingDevice.location = location;
+          continue; // this is an iDevice
+        }
+        devices.add(FindMyDevice(
+          deviceModel: e.model, 
+          lowPowerMode: false, 
+          passcodeLength: null, 
+          itemGroup: null, 
+          id: e.id, 
+          batteryStatus: null, 
+          audioChannels: [], 
+          lostModeCapable: true, 
+          snd: null, 
+          batteryLevel: e.batteryLevel.toDouble(), 
+          locationEnabled: true, 
+          isConsideredAccessory: true, 
+          address: null, 
+          location: location, 
+          modelDisplayName: null, 
+          deviceColor: null, 
+          activationLocked: false, 
+          rm2State: null, 
+          locFoundEnabled: false, 
+          nwd: null, 
+          deviceStatus: null, 
+          remoteWipe: null, 
+          fmlyShare: null, 
+          thisDevice: false, 
+          lostDevice: null, 
+          lostModeEnabled: false, 
+          deviceDisplayName: e.naming.name, 
+          safeLocations: null, 
+          name: e.naming.name, 
+          canWipeAfterLock: false, 
+          isMac: false, 
+          rawDeviceModel: e.model,
+          baUuid: null,
+          trackingInfo: null,
+          features: null,
+          deviceDiscoveryId: null,
+          prsId: null, 
+          scd: null,
+          locationCapable: null,
+          remoteLock: null, 
+          wipeInProgress: null,
+          darkWake: null,
+          deviceWithYou: false,
+          maxMsgChar: null,
+          deviceClass: null,
+          crowdSourcedLocation: null, 
+          role: {
+            "emoji": e.naming.emoji,
+          },
+          lostModeMetadata: null
+        ));
+      }
+
+      this.devices = devices;
+
       for (FindMyDevice e in devices.where((e) => e.location?.latitude != null && e.location?.longitude != null)) {
           markers[e.id ?? randomString(6)] = Marker(
             key: ValueKey('device-${e.id ?? randomString(6)}'),
@@ -574,8 +668,28 @@ class _FindMyPageState extends OptimizedState<FindMyPage> with SingleTickerProvi
                 ),
               ],
             ),
-          if (itemsWithLocation.isNotEmpty)
+          if (itemsWithLocation.isNotEmpty || !isInClique)
             SettingsHeader(iosSubtitle: iosSubtitle, materialSubtitle: materialSubtitle, text: "Items"),
+          if (!isInClique)
+          Obx(() => SettingsSection(
+            backgroundColor: tileColor,
+            children: [
+              SettingsTile(
+                title: "Show Airtags",
+                onTap: () async {
+                  var supportsKeychain = await api.supportsKeychain(state: pushService.state);
+                  if (!supportsKeychain) {
+                    showSnackbar("Relog required!", "Relog required to use Backup! Relog in Settings -> Reconfigure");
+                    return;
+                  }
+                  if (!await pushService.joinClique()) return;
+                  beaconCacheDate = null;
+                  getLocations();
+                },
+                trailing: const NextButton(),
+              ),
+            ]
+        )),
           if (itemsWithLocation.isNotEmpty)
             SettingsSection(
               backgroundColor: tileColor,

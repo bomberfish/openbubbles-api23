@@ -29,6 +29,134 @@ class _DevicePanelState extends CustomState<DevicePanel, void, DevicePanelContro
 
   api.DeviceInfo? deviceInfo;
   String deviceName = "";
+  RxBool isInClique = false.obs;
+
+  Future<T> wrapPromise<T>(Future<T> inner, String text) async {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: context.theme.colorScheme.properSurface,
+          title: Text(
+            text,
+            style: context.theme.textTheme.titleLarge,
+          ),
+          content: Container(
+            height: 70,
+            child: Center(
+              child: CircularProgressIndicator(
+                backgroundColor: context.theme.colorScheme.properSurface,
+                valueColor: AlwaysStoppedAnimation<Color>(context.theme.colorScheme.primary),
+              ),
+            ),
+          ),
+        );
+      }
+    );
+    T result;
+    try {
+      result = await inner;
+    } catch (e, s) {
+      Get.back();
+      showSnackbar("Failure! Please try again", e.toString());
+      rethrow;
+    }
+    Get.back();
+    return result;
+  }
+
+  void choosePassword(bool pin) async {
+    var codeController = TextEditingController();
+    await showDialog(
+      context: context,
+      builder: (_) {
+        return AlertDialog(
+          actions: [
+            TextButton(
+              child: Text("Use ${pin ? "Password" : "Passcode"}", style: context.theme.textTheme.bodyLarge!.copyWith(color: context.theme.colorScheme.primary)),
+              onPressed: () {
+                Get.back();
+                choosePassword(!pin);
+              },
+            ),
+            TextButton(
+              child: Text("OK", style: context.theme.textTheme.bodyLarge!.copyWith(color: context.theme.colorScheme.primary)),
+              onPressed: () async {
+                Get.back();
+                await wrapPromise(api.changeEscrowPassword(state: pushService.state, devicePassword: codeController.text), "Changing password...");
+                ss.settings.keychainDefaultPassword.value = null;
+                ss.saveSettings();
+              },
+            ),
+          ],
+          title: Text("Enter a ${pin ? "passcode" : "password"} to protect your iCloud data.", style: context.theme.textTheme.titleLarge),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 20,),
+              pin ? StatefulBuilder(builder: (context, state) => Stack(
+                children: [
+                  Row(
+                    children: List.generate(6, (index) {
+                      var text = index < codeController.text.length ? codeController.text[index] : "";
+                      return Expanded(child: 
+                        Container(
+                          decoration: index == codeController.text.length ? 
+                            BoxDecoration(
+                              border: Border.all(
+                                color: context.theme.colorScheme.primary,
+                                width: 2
+                              ),
+                              borderRadius: const BorderRadius.all(Radius.circular(10)),
+                            )
+                          : BoxDecoration(
+                            border: Border.all(
+                              color: context.theme.colorScheme.outline,
+                            ),
+                            borderRadius: const BorderRadius.all(Radius.circular(10)),
+                          ),
+                          margin: const EdgeInsets.all(3),
+                          height: 50,
+                          child: Center(
+                            child: Text(
+                              text,
+                              style: context.theme.textTheme.titleLarge
+                            ),
+                          )
+                        )
+                      );
+                    }),
+                  ),
+                  Opacity(
+                    opacity: 0,
+                    child: TextField(
+                      cursorColor: context.theme.colorScheme.primary,
+                      autocorrect: false,
+                      autofocus: true,
+                      controller: codeController,
+                      textInputAction: TextInputAction.next,
+                      keyboardType: TextInputType.number,
+                      onChanged: (v) {
+                        state(() {});
+                      },
+                    )),
+                ],
+              )) : TextField(
+                controller: codeController,
+                decoration: const InputDecoration(
+                  labelText: "Password",
+                  border: OutlineInputBorder(),
+                ),
+                autofocus: true,
+              )
+            ],
+          ),
+          backgroundColor: context.theme.colorScheme.properSurface,
+        );
+      }
+    );
+  }
 
   @override
   void initState() {
@@ -39,6 +167,7 @@ class _DevicePanelState extends CustomState<DevicePanel, void, DevicePanelContro
         deviceName = RustPushBBUtils.modelToUser(deviceInfo!.name);
       });
     });
+    api.isInClique(state: pushService.state).then((clique) => isInClique.value = clique);
   }
 
   @override
@@ -89,6 +218,39 @@ class _DevicePanelState extends CustomState<DevicePanel, void, DevicePanelContro
                       title: "Manage subscription",
                       onTap: () async {
                         launchUrl(Uri.parse("https://play.google.com/store/account/subscriptions?sku=monthly_hosted&package=com.openbubbles.messaging"), mode: LaunchMode.externalNonBrowserApplication);
+                      },
+                      trailing: const NextButton()
+                      ),
+                    if (isInClique.value)
+                      SettingsTile(
+                      title: "Manage iCloud Keychain Password",
+                      subtitle: "Protects your Apple ID, saved passwords, and other data stored in iCloud",
+                      onTap: () async {
+                        await showDialog(
+                          context: context,
+                          builder: (_) {
+                            return AlertDialog(
+                              actions: [
+                                TextButton(
+                                  child: Text("Change Password", style: context.theme.textTheme.bodyLarge!.copyWith(color: context.theme.colorScheme.primary)),
+                                  onPressed: () async {
+                                    Get.back();
+                                    choosePassword(true);
+                                  },
+                                ),
+                                TextButton(
+                                  child: Text("Ok", style: context.theme.textTheme.bodyLarge!.copyWith(color: context.theme.colorScheme.primary)),
+                                  onPressed: () {
+                                    Get.back();
+                                  },
+                                ),
+                              ],
+                              title: Text("Keychain Password", style: context.theme.textTheme.titleLarge),
+                              content: Text(ss.settings.keychainDefaultPassword.value != null ? "This device's default keychain passcode is ${ss.settings.keychainDefaultPassword.value}." : "You have set a custom keychain password.", style: context.theme.textTheme.bodyLarge),
+                              backgroundColor: context.theme.colorScheme.properSurface,
+                            );
+                          }
+                        );
                       },
                       trailing: const NextButton()
                       ),

@@ -428,6 +428,15 @@ Future<FindMyFriendsClientDefaultAnisetteProvider> makeFindMyFriends(
         {required ArcPushState state}) =>
     RustLib.instance.api.crateApiApiMakeFindMyFriends(state: state);
 
+Future<List<DartBeacon>> getBeaconItems({required ArcPushState state}) =>
+    RustLib.instance.api.crateApiApiGetBeaconItems(state: state);
+
+Future<void> updateBeaconName(
+        {required ArcPushState state,
+        required BeaconNamingRecord namingRecord}) =>
+    RustLib.instance.api
+        .crateApiApiUpdateBeaconName(state: state, namingRecord: namingRecord);
+
 Future<List<Follow>> getFollowing(
         {required FindMyFriendsClientDefaultAnisetteProvider client}) =>
     RustLib.instance.api.crateApiApiGetFollowing(client: client);
@@ -579,6 +588,9 @@ Future<void> downloadCloudAttachments(
     RustLib.instance.api
         .crateApiApiDownloadCloudAttachments(state: state, files: files);
 
+int systemtimeToMillis({required SystemTime time}) =>
+    RustLib.instance.api.crateApiApiSystemtimeToMillis(time: time);
+
 SystemTime utmNow() => RustLib.instance.api.crateApiApiUtmNow();
 
 Date dateNow() => RustLib.instance.api.crateApiApiDateNow();
@@ -597,6 +609,11 @@ Future<Map<String, Asset>> uploadGroupPhoto(
         {required ArcPushState state, required List<(String, String)> files}) =>
     RustLib.instance.api
         .crateApiApiUploadGroupPhoto(state: state, files: files);
+
+Future<void> changeEscrowPassword(
+        {required ArcPushState state, required String devicePassword}) =>
+    RustLib.instance.api.crateApiApiChangeEscrowPassword(
+        state: state, devicePassword: devicePassword);
 
 Future<void> circleSetupClique(
         {required ArcPushState state, required String devicePassword}) =>
@@ -702,6 +719,37 @@ abstract class IdsUser implements RustOpaqueInterface {}
 
 // Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<JoinedOSConfig>>
 abstract class JoinedOsConfig implements RustOpaqueInterface {}
+
+// Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<LocationReport>>
+abstract class LocationReport implements RustOpaqueInterface {
+  int get confidence;
+
+  int get horizontalAccuracy;
+
+  int get keyIndex;
+
+  double get lat;
+
+  double get long;
+
+  int get status;
+
+  SystemTime get timestamp;
+
+  set confidence(int confidence);
+
+  set horizontalAccuracy(int horizontalAccuracy);
+
+  set keyIndex(int keyIndex);
+
+  set lat(double lat);
+
+  set long(double long);
+
+  set status(int status);
+
+  set timestamp(SystemTime timestamp);
+}
 
 // Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<MessageFlags>>
 abstract class MessageFlags implements RustOpaqueInterface {
@@ -1071,6 +1119,37 @@ sealed class BalloonLayout with _$BalloonLayout {
     required String subcaption,
     required NSDictionaryClass class_,
   }) = BalloonLayout_TemplateLayout;
+}
+
+class BeaconNamingRecord {
+  final String emoji;
+  final String name;
+  final String associatedBeacon;
+  final int roleId;
+
+  const BeaconNamingRecord({
+    required this.emoji,
+    required this.name,
+    required this.associatedBeacon,
+    required this.roleId,
+  });
+
+  @override
+  int get hashCode =>
+      emoji.hashCode ^
+      name.hashCode ^
+      associatedBeacon.hashCode ^
+      roleId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is BeaconNamingRecord &&
+          runtimeType == other.runtimeType &&
+          emoji == other.emoji &&
+          name == other.name &&
+          associatedBeacon == other.associatedBeacon &&
+          roleId == other.roleId;
 }
 
 class CertifiedContext {
@@ -1447,6 +1526,53 @@ class ConversationData {
           cvName == other.cvName &&
           senderGuid == other.senderGuid &&
           afterGuid == other.afterGuid;
+}
+
+class DartBeacon {
+  final BeaconNamingRecord naming;
+  final LocationReport? lastReport;
+  final int productId;
+  final int batteryLevel;
+  final int vendorId;
+  final String model;
+  final String systemVersion;
+  final String id;
+
+  const DartBeacon({
+    required this.naming,
+    this.lastReport,
+    required this.productId,
+    required this.batteryLevel,
+    required this.vendorId,
+    required this.model,
+    required this.systemVersion,
+    required this.id,
+  });
+
+  @override
+  int get hashCode =>
+      naming.hashCode ^
+      lastReport.hashCode ^
+      productId.hashCode ^
+      batteryLevel.hashCode ^
+      vendorId.hashCode ^
+      model.hashCode ^
+      systemVersion.hashCode ^
+      id.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is DartBeacon &&
+          runtimeType == other.runtimeType &&
+          naming == other.naming &&
+          lastReport == other.lastReport &&
+          productId == other.productId &&
+          batteryLevel == other.batteryLevel &&
+          vendorId == other.vendorId &&
+          model == other.model &&
+          systemVersion == other.systemVersion &&
+          id == other.id;
 }
 
 @freezed

@@ -80,6 +80,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
           ._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerJoinedOSConfigPtr;
 
   CrossPlatformFinalizerArg
+      get rust_arc_decrement_strong_count_LocationReportPtr => wire
+          ._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerLocationReportPtr;
+
+  CrossPlatformFinalizerArg
       get rust_arc_decrement_strong_count_MessageFlagsPtr => wire
           ._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerMessageFlagsPtr;
 
@@ -192,6 +196,11 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
           dynamic raw);
 
   @protected
+  LocationReport
+      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerLocationReport(
+          dynamic raw);
+
+  @protected
   MessageFlags
       dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerMessageFlags(
           dynamic raw);
@@ -239,6 +248,11 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   FindMyPhoneClientDefaultAnisetteProvider
       dco_decode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerFindMyPhoneClientDefaultAnisetteProvider(
+          dynamic raw);
+
+  @protected
+  LocationReport
+      dco_decode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerLocationReport(
           dynamic raw);
 
   @protected
@@ -297,6 +311,11 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
           dynamic raw);
 
   @protected
+  LocationReport
+      dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerLocationReport(
+          dynamic raw);
+
+  @protected
   MessageFlags
       dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerMessageFlags(
           dynamic raw);
@@ -315,6 +334,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   ViableBottle
       dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerViableBottle(
           dynamic raw);
+
+  @protected
+  int dco_decode_CastedPrimitive_i_64(dynamic raw);
 
   @protected
   int dco_decode_CastedPrimitive_u_64(dynamic raw);
@@ -466,6 +488,11 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
           dynamic raw);
 
   @protected
+  LocationReport
+      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerLocationReport(
+          dynamic raw);
+
+  @protected
   MessageFlags
       dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerMessageFlags(
           dynamic raw);
@@ -550,6 +577,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   BalloonLayout dco_decode_balloon_layout(dynamic raw);
 
   @protected
+  BeaconNamingRecord dco_decode_beacon_naming_record(dynamic raw);
+
+  @protected
   bool dco_decode_bool(dynamic raw);
 
   @protected
@@ -603,6 +633,11 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
           dynamic raw);
 
   @protected
+  LocationReport
+      dco_decode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerLocationReport(
+          dynamic raw);
+
+  @protected
   NsArrayLpIconMetadata
       dco_decode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerNSArrayLPIconMetadata(
           dynamic raw);
@@ -634,6 +669,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   BalloonLayout dco_decode_box_autoadd_balloon_layout(dynamic raw);
+
+  @protected
+  BeaconNamingRecord dco_decode_box_autoadd_beacon_naming_record(dynamic raw);
 
   @protected
   bool dco_decode_box_autoadd_bool(dynamic raw);
@@ -924,6 +962,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   ConversationData dco_decode_conversation_data(dynamic raw);
 
   @protected
+  DartBeacon dco_decode_dart_beacon(dynamic raw);
+
+  @protected
   DeleteTarget dco_decode_delete_target(dynamic raw);
 
   @protected
@@ -1027,6 +1068,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   List<CloudParticipant> dco_decode_list_cloud_participant(dynamic raw);
+
+  @protected
+  List<DartBeacon> dco_decode_list_dart_beacon(dynamic raw);
 
   @protected
   List<Follow> dco_decode_list_follow(dynamic raw);
@@ -1320,6 +1364,11 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   JoinedOsConfig?
       dco_decode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerJoinedOSConfig(
+          dynamic raw);
+
+  @protected
+  LocationReport?
+      dco_decode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerLocationReport(
           dynamic raw);
 
   @protected
@@ -1876,6 +1925,11 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
           SseDeserializer deserializer);
 
   @protected
+  LocationReport
+      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerLocationReport(
+          SseDeserializer deserializer);
+
+  @protected
   MessageFlags
       sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerMessageFlags(
           SseDeserializer deserializer);
@@ -1923,6 +1977,11 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   FindMyPhoneClientDefaultAnisetteProvider
       sse_decode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerFindMyPhoneClientDefaultAnisetteProvider(
+          SseDeserializer deserializer);
+
+  @protected
+  LocationReport
+      sse_decode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerLocationReport(
           SseDeserializer deserializer);
 
   @protected
@@ -1981,6 +2040,11 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
           SseDeserializer deserializer);
 
   @protected
+  LocationReport
+      sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerLocationReport(
+          SseDeserializer deserializer);
+
+  @protected
   MessageFlags
       sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerMessageFlags(
           SseDeserializer deserializer);
@@ -1999,6 +2063,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   ViableBottle
       sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerViableBottle(
           SseDeserializer deserializer);
+
+  @protected
+  int sse_decode_CastedPrimitive_i_64(SseDeserializer deserializer);
 
   @protected
   int sse_decode_CastedPrimitive_u_64(SseDeserializer deserializer);
@@ -2159,6 +2226,11 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
           SseDeserializer deserializer);
 
   @protected
+  LocationReport
+      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerLocationReport(
+          SseDeserializer deserializer);
+
+  @protected
   MessageFlags
       sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerMessageFlags(
           SseDeserializer deserializer);
@@ -2245,6 +2317,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   BalloonLayout sse_decode_balloon_layout(SseDeserializer deserializer);
 
   @protected
+  BeaconNamingRecord sse_decode_beacon_naming_record(
+      SseDeserializer deserializer);
+
+  @protected
   bool sse_decode_bool(SseDeserializer deserializer);
 
   @protected
@@ -2298,6 +2374,11 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
           SseDeserializer deserializer);
 
   @protected
+  LocationReport
+      sse_decode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerLocationReport(
+          SseDeserializer deserializer);
+
+  @protected
   NsArrayLpIconMetadata
       sse_decode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerNSArrayLPIconMetadata(
           SseDeserializer deserializer);
@@ -2331,6 +2412,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   BalloonLayout sse_decode_box_autoadd_balloon_layout(
+      SseDeserializer deserializer);
+
+  @protected
+  BeaconNamingRecord sse_decode_box_autoadd_beacon_naming_record(
       SseDeserializer deserializer);
 
   @protected
@@ -2664,6 +2749,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   ConversationData sse_decode_conversation_data(SseDeserializer deserializer);
 
   @protected
+  DartBeacon sse_decode_dart_beacon(SseDeserializer deserializer);
+
+  @protected
   DeleteTarget sse_decode_delete_target(SseDeserializer deserializer);
 
   @protected
@@ -2775,6 +2863,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   List<CloudParticipant> sse_decode_list_cloud_participant(
       SseDeserializer deserializer);
+
+  @protected
+  List<DartBeacon> sse_decode_list_dart_beacon(SseDeserializer deserializer);
 
   @protected
   List<Follow> sse_decode_list_follow(SseDeserializer deserializer);
@@ -3091,6 +3182,11 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   JoinedOsConfig?
       sse_decode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerJoinedOSConfig(
+          SseDeserializer deserializer);
+
+  @protected
+  LocationReport?
+      sse_decode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerLocationReport(
           SseDeserializer deserializer);
 
   @protected
@@ -3700,6 +3796,11 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void
+      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerLocationReport(
+          LocationReport self, SseSerializer serializer);
+
+  @protected
+  void
       sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerMessageFlags(
           MessageFlags self, SseSerializer serializer);
 
@@ -3749,6 +3850,11 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerFindMyPhoneClientDefaultAnisetteProvider(
           FindMyPhoneClientDefaultAnisetteProvider self,
           SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerLocationReport(
+          LocationReport self, SseSerializer serializer);
 
   @protected
   void
@@ -3807,6 +3913,11 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void
+      sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerLocationReport(
+          LocationReport self, SseSerializer serializer);
+
+  @protected
+  void
       sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerMessageFlags(
           MessageFlags self, SseSerializer serializer);
 
@@ -3824,6 +3935,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   void
       sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerViableBottle(
           ViableBottle self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_CastedPrimitive_i_64(int self, SseSerializer serializer);
 
   @protected
   void sse_encode_CastedPrimitive_u_64(int self, SseSerializer serializer);
@@ -3985,6 +4099,11 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void
+      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerLocationReport(
+          LocationReport self, SseSerializer serializer);
+
+  @protected
+  void
       sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerMessageFlags(
           MessageFlags self, SseSerializer serializer);
 
@@ -4071,6 +4190,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   void sse_encode_balloon_layout(BalloonLayout self, SseSerializer serializer);
 
   @protected
+  void sse_encode_beacon_naming_record(
+      BeaconNamingRecord self, SseSerializer serializer);
+
+  @protected
   void sse_encode_bool(bool self, SseSerializer serializer);
 
   @protected
@@ -4125,6 +4248,11 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void
+      sse_encode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerLocationReport(
+          LocationReport self, SseSerializer serializer);
+
+  @protected
+  void
       sse_encode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerNSArrayLPIconMetadata(
           NsArrayLpIconMetadata self, SseSerializer serializer);
 
@@ -4159,6 +4287,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   void sse_encode_box_autoadd_balloon_layout(
       BalloonLayout self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_box_autoadd_beacon_naming_record(
+      BeaconNamingRecord self, SseSerializer serializer);
 
   @protected
   void sse_encode_box_autoadd_bool(bool self, SseSerializer serializer);
@@ -4509,6 +4641,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       ConversationData self, SseSerializer serializer);
 
   @protected
+  void sse_encode_dart_beacon(DartBeacon self, SseSerializer serializer);
+
+  @protected
   void sse_encode_delete_target(DeleteTarget self, SseSerializer serializer);
 
   @protected
@@ -4622,6 +4757,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   void sse_encode_list_cloud_participant(
       List<CloudParticipant> self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_list_dart_beacon(
+      List<DartBeacon> self, SseSerializer serializer);
 
   @protected
   void sse_encode_list_follow(List<Follow> self, SseSerializer serializer);
@@ -4946,6 +5085,11 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   void
       sse_encode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerJoinedOSConfig(
           JoinedOsConfig? self, SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerLocationReport(
+          LocationReport? self, SseSerializer serializer);
 
   @protected
   void
@@ -5987,6 +6131,38 @@ class RustLibWire implements BaseWire {
           'frbgen_bluebubbles_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerJoinedOSConfig');
   late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerJoinedOSConfig =
       _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerJoinedOSConfigPtr
+          .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
+
+  void
+      rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerLocationReport(
+    ffi.Pointer<ffi.Void> ptr,
+  ) {
+    return _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerLocationReport(
+      ptr,
+    );
+  }
+
+  late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerLocationReportPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
+          'frbgen_bluebubbles_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerLocationReport');
+  late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerLocationReport =
+      _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerLocationReportPtr
+          .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
+
+  void
+      rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerLocationReport(
+    ffi.Pointer<ffi.Void> ptr,
+  ) {
+    return _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerLocationReport(
+      ptr,
+    );
+  }
+
+  late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerLocationReportPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
+          'frbgen_bluebubbles_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerLocationReport');
+  late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerLocationReport =
+      _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerLocationReportPtr
           .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
 
   void

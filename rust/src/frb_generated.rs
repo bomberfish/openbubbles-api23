@@ -39,7 +39,7 @@ flutter_rust_bridge::frb_generated_boilerplate!(
     default_rust_auto_opaque = RustAutoOpaqueMoi,
 );
 pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_VERSION: &str = "2.3.0";
-pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = -1364151702;
+pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = 338760630;
 
 // Section: executor
 
@@ -47,6 +47,685 @@ pub use crate::api::api::FLUTTER_RUST_BRIDGE_HANDLER;
 
 // Section: wire_funcs
 
+fn wire__crate__api__api__LocationReport_auto_accessor_get_confidence_impl(
+    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
+    rust_vec_len_: i32,
+    data_len_: i32,
+) -> flutter_rust_bridge::for_generated::WireSyncRust2DartSse {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_sync::<flutter_rust_bridge::for_generated::SseCodec, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "LocationReport_auto_accessor_get_confidence",
+            port: None,
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Sync,
+        },
+        move || {
+            let message = unsafe {
+                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
+                    ptr_,
+                    rust_vec_len_,
+                    data_len_,
+                )
+            };
+            let mut deserializer =
+                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            let api_that = <RustOpaqueMoi<
+                flutter_rust_bridge::for_generated::RustAutoOpaqueInner<LocationReport>,
+            >>::sse_decode(&mut deserializer);
+            deserializer.end();
+            transform_result_sse::<_, ()>((move || {
+                let mut api_that_guard = None;
+                let decode_indices_ =
+                    flutter_rust_bridge::for_generated::lockable_compute_decode_order(vec![
+                        flutter_rust_bridge::for_generated::LockableOrderInfo::new(
+                            &api_that, 0, false,
+                        ),
+                    ]);
+                for i in decode_indices_ {
+                    match i {
+                        0 => api_that_guard = Some(api_that.lockable_decode_sync_ref()),
+                        _ => unreachable!(),
+                    }
+                }
+                let api_that_guard = api_that_guard.unwrap();
+                let output_ok = Result::<_, ()>::Ok(api_that_guard.confidence.clone())?;
+                Ok(output_ok)
+            })())
+        },
+    )
+}
+fn wire__crate__api__api__LocationReport_auto_accessor_get_horizontal_accuracy_impl(
+    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
+    rust_vec_len_: i32,
+    data_len_: i32,
+) -> flutter_rust_bridge::for_generated::WireSyncRust2DartSse {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_sync::<flutter_rust_bridge::for_generated::SseCodec, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "LocationReport_auto_accessor_get_horizontal_accuracy",
+            port: None,
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Sync,
+        },
+        move || {
+            let message = unsafe {
+                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
+                    ptr_,
+                    rust_vec_len_,
+                    data_len_,
+                )
+            };
+            let mut deserializer =
+                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            let api_that = <RustOpaqueMoi<
+                flutter_rust_bridge::for_generated::RustAutoOpaqueInner<LocationReport>,
+            >>::sse_decode(&mut deserializer);
+            deserializer.end();
+            transform_result_sse::<_, ()>((move || {
+                let mut api_that_guard = None;
+                let decode_indices_ =
+                    flutter_rust_bridge::for_generated::lockable_compute_decode_order(vec![
+                        flutter_rust_bridge::for_generated::LockableOrderInfo::new(
+                            &api_that, 0, false,
+                        ),
+                    ]);
+                for i in decode_indices_ {
+                    match i {
+                        0 => api_that_guard = Some(api_that.lockable_decode_sync_ref()),
+                        _ => unreachable!(),
+                    }
+                }
+                let api_that_guard = api_that_guard.unwrap();
+                let output_ok = Result::<_, ()>::Ok(api_that_guard.horizontal_accuracy.clone())?;
+                Ok(output_ok)
+            })())
+        },
+    )
+}
+fn wire__crate__api__api__LocationReport_auto_accessor_get_key_index_impl(
+    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
+    rust_vec_len_: i32,
+    data_len_: i32,
+) -> flutter_rust_bridge::for_generated::WireSyncRust2DartSse {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_sync::<flutter_rust_bridge::for_generated::SseCodec, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "LocationReport_auto_accessor_get_key_index",
+            port: None,
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Sync,
+        },
+        move || {
+            let message = unsafe {
+                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
+                    ptr_,
+                    rust_vec_len_,
+                    data_len_,
+                )
+            };
+            let mut deserializer =
+                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            let api_that = <RustOpaqueMoi<
+                flutter_rust_bridge::for_generated::RustAutoOpaqueInner<LocationReport>,
+            >>::sse_decode(&mut deserializer);
+            deserializer.end();
+            transform_result_sse::<_, ()>((move || {
+                let mut api_that_guard = None;
+                let decode_indices_ =
+                    flutter_rust_bridge::for_generated::lockable_compute_decode_order(vec![
+                        flutter_rust_bridge::for_generated::LockableOrderInfo::new(
+                            &api_that, 0, false,
+                        ),
+                    ]);
+                for i in decode_indices_ {
+                    match i {
+                        0 => api_that_guard = Some(api_that.lockable_decode_sync_ref()),
+                        _ => unreachable!(),
+                    }
+                }
+                let api_that_guard = api_that_guard.unwrap();
+                let output_ok = Result::<_, ()>::Ok(api_that_guard.key_index.clone())?;
+                Ok(output_ok)
+            })())
+        },
+    )
+}
+fn wire__crate__api__api__LocationReport_auto_accessor_get_lat_impl(
+    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
+    rust_vec_len_: i32,
+    data_len_: i32,
+) -> flutter_rust_bridge::for_generated::WireSyncRust2DartSse {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_sync::<flutter_rust_bridge::for_generated::SseCodec, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "LocationReport_auto_accessor_get_lat",
+            port: None,
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Sync,
+        },
+        move || {
+            let message = unsafe {
+                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
+                    ptr_,
+                    rust_vec_len_,
+                    data_len_,
+                )
+            };
+            let mut deserializer =
+                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            let api_that = <RustOpaqueMoi<
+                flutter_rust_bridge::for_generated::RustAutoOpaqueInner<LocationReport>,
+            >>::sse_decode(&mut deserializer);
+            deserializer.end();
+            transform_result_sse::<_, ()>((move || {
+                let mut api_that_guard = None;
+                let decode_indices_ =
+                    flutter_rust_bridge::for_generated::lockable_compute_decode_order(vec![
+                        flutter_rust_bridge::for_generated::LockableOrderInfo::new(
+                            &api_that, 0, false,
+                        ),
+                    ]);
+                for i in decode_indices_ {
+                    match i {
+                        0 => api_that_guard = Some(api_that.lockable_decode_sync_ref()),
+                        _ => unreachable!(),
+                    }
+                }
+                let api_that_guard = api_that_guard.unwrap();
+                let output_ok = Result::<_, ()>::Ok(api_that_guard.lat.clone())?;
+                Ok(output_ok)
+            })())
+        },
+    )
+}
+fn wire__crate__api__api__LocationReport_auto_accessor_get_long_impl(
+    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
+    rust_vec_len_: i32,
+    data_len_: i32,
+) -> flutter_rust_bridge::for_generated::WireSyncRust2DartSse {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_sync::<flutter_rust_bridge::for_generated::SseCodec, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "LocationReport_auto_accessor_get_long",
+            port: None,
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Sync,
+        },
+        move || {
+            let message = unsafe {
+                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
+                    ptr_,
+                    rust_vec_len_,
+                    data_len_,
+                )
+            };
+            let mut deserializer =
+                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            let api_that = <RustOpaqueMoi<
+                flutter_rust_bridge::for_generated::RustAutoOpaqueInner<LocationReport>,
+            >>::sse_decode(&mut deserializer);
+            deserializer.end();
+            transform_result_sse::<_, ()>((move || {
+                let mut api_that_guard = None;
+                let decode_indices_ =
+                    flutter_rust_bridge::for_generated::lockable_compute_decode_order(vec![
+                        flutter_rust_bridge::for_generated::LockableOrderInfo::new(
+                            &api_that, 0, false,
+                        ),
+                    ]);
+                for i in decode_indices_ {
+                    match i {
+                        0 => api_that_guard = Some(api_that.lockable_decode_sync_ref()),
+                        _ => unreachable!(),
+                    }
+                }
+                let api_that_guard = api_that_guard.unwrap();
+                let output_ok = Result::<_, ()>::Ok(api_that_guard.long.clone())?;
+                Ok(output_ok)
+            })())
+        },
+    )
+}
+fn wire__crate__api__api__LocationReport_auto_accessor_get_status_impl(
+    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
+    rust_vec_len_: i32,
+    data_len_: i32,
+) -> flutter_rust_bridge::for_generated::WireSyncRust2DartSse {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_sync::<flutter_rust_bridge::for_generated::SseCodec, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "LocationReport_auto_accessor_get_status",
+            port: None,
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Sync,
+        },
+        move || {
+            let message = unsafe {
+                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
+                    ptr_,
+                    rust_vec_len_,
+                    data_len_,
+                )
+            };
+            let mut deserializer =
+                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            let api_that = <RustOpaqueMoi<
+                flutter_rust_bridge::for_generated::RustAutoOpaqueInner<LocationReport>,
+            >>::sse_decode(&mut deserializer);
+            deserializer.end();
+            transform_result_sse::<_, ()>((move || {
+                let mut api_that_guard = None;
+                let decode_indices_ =
+                    flutter_rust_bridge::for_generated::lockable_compute_decode_order(vec![
+                        flutter_rust_bridge::for_generated::LockableOrderInfo::new(
+                            &api_that, 0, false,
+                        ),
+                    ]);
+                for i in decode_indices_ {
+                    match i {
+                        0 => api_that_guard = Some(api_that.lockable_decode_sync_ref()),
+                        _ => unreachable!(),
+                    }
+                }
+                let api_that_guard = api_that_guard.unwrap();
+                let output_ok = Result::<_, ()>::Ok(api_that_guard.status.clone())?;
+                Ok(output_ok)
+            })())
+        },
+    )
+}
+fn wire__crate__api__api__LocationReport_auto_accessor_get_timestamp_impl(
+    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
+    rust_vec_len_: i32,
+    data_len_: i32,
+) -> flutter_rust_bridge::for_generated::WireSyncRust2DartSse {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_sync::<flutter_rust_bridge::for_generated::SseCodec, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "LocationReport_auto_accessor_get_timestamp",
+            port: None,
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Sync,
+        },
+        move || {
+            let message = unsafe {
+                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
+                    ptr_,
+                    rust_vec_len_,
+                    data_len_,
+                )
+            };
+            let mut deserializer =
+                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            let api_that = <RustOpaqueMoi<
+                flutter_rust_bridge::for_generated::RustAutoOpaqueInner<LocationReport>,
+            >>::sse_decode(&mut deserializer);
+            deserializer.end();
+            transform_result_sse::<_, ()>((move || {
+                let mut api_that_guard = None;
+                let decode_indices_ =
+                    flutter_rust_bridge::for_generated::lockable_compute_decode_order(vec![
+                        flutter_rust_bridge::for_generated::LockableOrderInfo::new(
+                            &api_that, 0, false,
+                        ),
+                    ]);
+                for i in decode_indices_ {
+                    match i {
+                        0 => api_that_guard = Some(api_that.lockable_decode_sync_ref()),
+                        _ => unreachable!(),
+                    }
+                }
+                let api_that_guard = api_that_guard.unwrap();
+                let output_ok = Result::<_, ()>::Ok(api_that_guard.timestamp.clone())?;
+                Ok(output_ok)
+            })())
+        },
+    )
+}
+fn wire__crate__api__api__LocationReport_auto_accessor_set_confidence_impl(
+    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
+    rust_vec_len_: i32,
+    data_len_: i32,
+) -> flutter_rust_bridge::for_generated::WireSyncRust2DartSse {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_sync::<flutter_rust_bridge::for_generated::SseCodec, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "LocationReport_auto_accessor_set_confidence",
+            port: None,
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Sync,
+        },
+        move || {
+            let message = unsafe {
+                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
+                    ptr_,
+                    rust_vec_len_,
+                    data_len_,
+                )
+            };
+            let mut deserializer =
+                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            let api_that = <RustOpaqueMoi<
+                flutter_rust_bridge::for_generated::RustAutoOpaqueInner<LocationReport>,
+            >>::sse_decode(&mut deserializer);
+            let api_confidence = <u8>::sse_decode(&mut deserializer);
+            deserializer.end();
+            transform_result_sse::<_, ()>((move || {
+                let mut api_that_guard = None;
+                let decode_indices_ =
+                    flutter_rust_bridge::for_generated::lockable_compute_decode_order(vec![
+                        flutter_rust_bridge::for_generated::LockableOrderInfo::new(
+                            &api_that, 0, true,
+                        ),
+                    ]);
+                for i in decode_indices_ {
+                    match i {
+                        0 => api_that_guard = Some(api_that.lockable_decode_sync_ref_mut()),
+                        _ => unreachable!(),
+                    }
+                }
+                let mut api_that_guard = api_that_guard.unwrap();
+                let output_ok = Result::<_, ()>::Ok({
+                    {
+                        api_that_guard.confidence = api_confidence;
+                    };
+                })?;
+                Ok(output_ok)
+            })())
+        },
+    )
+}
+fn wire__crate__api__api__LocationReport_auto_accessor_set_horizontal_accuracy_impl(
+    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
+    rust_vec_len_: i32,
+    data_len_: i32,
+) -> flutter_rust_bridge::for_generated::WireSyncRust2DartSse {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_sync::<flutter_rust_bridge::for_generated::SseCodec, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "LocationReport_auto_accessor_set_horizontal_accuracy",
+            port: None,
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Sync,
+        },
+        move || {
+            let message = unsafe {
+                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
+                    ptr_,
+                    rust_vec_len_,
+                    data_len_,
+                )
+            };
+            let mut deserializer =
+                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            let api_that = <RustOpaqueMoi<
+                flutter_rust_bridge::for_generated::RustAutoOpaqueInner<LocationReport>,
+            >>::sse_decode(&mut deserializer);
+            let api_horizontal_accuracy = <u8>::sse_decode(&mut deserializer);
+            deserializer.end();
+            transform_result_sse::<_, ()>((move || {
+                let mut api_that_guard = None;
+                let decode_indices_ =
+                    flutter_rust_bridge::for_generated::lockable_compute_decode_order(vec![
+                        flutter_rust_bridge::for_generated::LockableOrderInfo::new(
+                            &api_that, 0, true,
+                        ),
+                    ]);
+                for i in decode_indices_ {
+                    match i {
+                        0 => api_that_guard = Some(api_that.lockable_decode_sync_ref_mut()),
+                        _ => unreachable!(),
+                    }
+                }
+                let mut api_that_guard = api_that_guard.unwrap();
+                let output_ok = Result::<_, ()>::Ok({
+                    {
+                        api_that_guard.horizontal_accuracy = api_horizontal_accuracy;
+                    };
+                })?;
+                Ok(output_ok)
+            })())
+        },
+    )
+}
+fn wire__crate__api__api__LocationReport_auto_accessor_set_key_index_impl(
+    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
+    rust_vec_len_: i32,
+    data_len_: i32,
+) -> flutter_rust_bridge::for_generated::WireSyncRust2DartSse {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_sync::<flutter_rust_bridge::for_generated::SseCodec, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "LocationReport_auto_accessor_set_key_index",
+            port: None,
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Sync,
+        },
+        move || {
+            let message = unsafe {
+                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
+                    ptr_,
+                    rust_vec_len_,
+                    data_len_,
+                )
+            };
+            let mut deserializer =
+                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            let api_that = <RustOpaqueMoi<
+                flutter_rust_bridge::for_generated::RustAutoOpaqueInner<LocationReport>,
+            >>::sse_decode(&mut deserializer);
+            let api_key_index = <usize>::sse_decode(&mut deserializer);
+            deserializer.end();
+            transform_result_sse::<_, ()>((move || {
+                let mut api_that_guard = None;
+                let decode_indices_ =
+                    flutter_rust_bridge::for_generated::lockable_compute_decode_order(vec![
+                        flutter_rust_bridge::for_generated::LockableOrderInfo::new(
+                            &api_that, 0, true,
+                        ),
+                    ]);
+                for i in decode_indices_ {
+                    match i {
+                        0 => api_that_guard = Some(api_that.lockable_decode_sync_ref_mut()),
+                        _ => unreachable!(),
+                    }
+                }
+                let mut api_that_guard = api_that_guard.unwrap();
+                let output_ok = Result::<_, ()>::Ok({
+                    {
+                        api_that_guard.key_index = api_key_index;
+                    };
+                })?;
+                Ok(output_ok)
+            })())
+        },
+    )
+}
+fn wire__crate__api__api__LocationReport_auto_accessor_set_lat_impl(
+    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
+    rust_vec_len_: i32,
+    data_len_: i32,
+) -> flutter_rust_bridge::for_generated::WireSyncRust2DartSse {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_sync::<flutter_rust_bridge::for_generated::SseCodec, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "LocationReport_auto_accessor_set_lat",
+            port: None,
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Sync,
+        },
+        move || {
+            let message = unsafe {
+                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
+                    ptr_,
+                    rust_vec_len_,
+                    data_len_,
+                )
+            };
+            let mut deserializer =
+                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            let api_that = <RustOpaqueMoi<
+                flutter_rust_bridge::for_generated::RustAutoOpaqueInner<LocationReport>,
+            >>::sse_decode(&mut deserializer);
+            let api_lat = <f32>::sse_decode(&mut deserializer);
+            deserializer.end();
+            transform_result_sse::<_, ()>((move || {
+                let mut api_that_guard = None;
+                let decode_indices_ =
+                    flutter_rust_bridge::for_generated::lockable_compute_decode_order(vec![
+                        flutter_rust_bridge::for_generated::LockableOrderInfo::new(
+                            &api_that, 0, true,
+                        ),
+                    ]);
+                for i in decode_indices_ {
+                    match i {
+                        0 => api_that_guard = Some(api_that.lockable_decode_sync_ref_mut()),
+                        _ => unreachable!(),
+                    }
+                }
+                let mut api_that_guard = api_that_guard.unwrap();
+                let output_ok = Result::<_, ()>::Ok({
+                    {
+                        api_that_guard.lat = api_lat;
+                    };
+                })?;
+                Ok(output_ok)
+            })())
+        },
+    )
+}
+fn wire__crate__api__api__LocationReport_auto_accessor_set_long_impl(
+    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
+    rust_vec_len_: i32,
+    data_len_: i32,
+) -> flutter_rust_bridge::for_generated::WireSyncRust2DartSse {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_sync::<flutter_rust_bridge::for_generated::SseCodec, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "LocationReport_auto_accessor_set_long",
+            port: None,
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Sync,
+        },
+        move || {
+            let message = unsafe {
+                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
+                    ptr_,
+                    rust_vec_len_,
+                    data_len_,
+                )
+            };
+            let mut deserializer =
+                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            let api_that = <RustOpaqueMoi<
+                flutter_rust_bridge::for_generated::RustAutoOpaqueInner<LocationReport>,
+            >>::sse_decode(&mut deserializer);
+            let api_long = <f32>::sse_decode(&mut deserializer);
+            deserializer.end();
+            transform_result_sse::<_, ()>((move || {
+                let mut api_that_guard = None;
+                let decode_indices_ =
+                    flutter_rust_bridge::for_generated::lockable_compute_decode_order(vec![
+                        flutter_rust_bridge::for_generated::LockableOrderInfo::new(
+                            &api_that, 0, true,
+                        ),
+                    ]);
+                for i in decode_indices_ {
+                    match i {
+                        0 => api_that_guard = Some(api_that.lockable_decode_sync_ref_mut()),
+                        _ => unreachable!(),
+                    }
+                }
+                let mut api_that_guard = api_that_guard.unwrap();
+                let output_ok = Result::<_, ()>::Ok({
+                    {
+                        api_that_guard.long = api_long;
+                    };
+                })?;
+                Ok(output_ok)
+            })())
+        },
+    )
+}
+fn wire__crate__api__api__LocationReport_auto_accessor_set_status_impl(
+    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
+    rust_vec_len_: i32,
+    data_len_: i32,
+) -> flutter_rust_bridge::for_generated::WireSyncRust2DartSse {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_sync::<flutter_rust_bridge::for_generated::SseCodec, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "LocationReport_auto_accessor_set_status",
+            port: None,
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Sync,
+        },
+        move || {
+            let message = unsafe {
+                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
+                    ptr_,
+                    rust_vec_len_,
+                    data_len_,
+                )
+            };
+            let mut deserializer =
+                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            let api_that = <RustOpaqueMoi<
+                flutter_rust_bridge::for_generated::RustAutoOpaqueInner<LocationReport>,
+            >>::sse_decode(&mut deserializer);
+            let api_status = <u8>::sse_decode(&mut deserializer);
+            deserializer.end();
+            transform_result_sse::<_, ()>((move || {
+                let mut api_that_guard = None;
+                let decode_indices_ =
+                    flutter_rust_bridge::for_generated::lockable_compute_decode_order(vec![
+                        flutter_rust_bridge::for_generated::LockableOrderInfo::new(
+                            &api_that, 0, true,
+                        ),
+                    ]);
+                for i in decode_indices_ {
+                    match i {
+                        0 => api_that_guard = Some(api_that.lockable_decode_sync_ref_mut()),
+                        _ => unreachable!(),
+                    }
+                }
+                let mut api_that_guard = api_that_guard.unwrap();
+                let output_ok = Result::<_, ()>::Ok({
+                    {
+                        api_that_guard.status = api_status;
+                    };
+                })?;
+                Ok(output_ok)
+            })())
+        },
+    )
+}
+fn wire__crate__api__api__LocationReport_auto_accessor_set_timestamp_impl(
+    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
+    rust_vec_len_: i32,
+    data_len_: i32,
+) -> flutter_rust_bridge::for_generated::WireSyncRust2DartSse {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_sync::<flutter_rust_bridge::for_generated::SseCodec, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "LocationReport_auto_accessor_set_timestamp",
+            port: None,
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Sync,
+        },
+        move || {
+            let message = unsafe {
+                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
+                    ptr_,
+                    rust_vec_len_,
+                    data_len_,
+                )
+            };
+            let mut deserializer =
+                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            let api_that = <RustOpaqueMoi<
+                flutter_rust_bridge::for_generated::RustAutoOpaqueInner<LocationReport>,
+            >>::sse_decode(&mut deserializer);
+            let api_timestamp = <SystemTime>::sse_decode(&mut deserializer);
+            deserializer.end();
+            transform_result_sse::<_, ()>((move || {
+                let mut api_that_guard = None;
+                let decode_indices_ =
+                    flutter_rust_bridge::for_generated::lockable_compute_decode_order(vec![
+                        flutter_rust_bridge::for_generated::LockableOrderInfo::new(
+                            &api_that, 0, true,
+                        ),
+                    ]);
+                for i in decode_indices_ {
+                    match i {
+                        0 => api_that_guard = Some(api_that.lockable_decode_sync_ref_mut()),
+                        _ => unreachable!(),
+                    }
+                }
+                let mut api_that_guard = api_that_guard.unwrap();
+                let output_ok = Result::<_, ()>::Ok({
+                    {
+                        api_that_guard.timestamp = api_timestamp;
+                    };
+                })?;
+                Ok(output_ok)
+            })())
+        },
+    )
+}
 fn wire__crate__api__api__MessageFlags_bits_impl(
     ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
     rust_vec_len_: i32,
@@ -1094,6 +1773,66 @@ fn wire__crate__api__api__certify_delivery_impl(
                             &*api_state_guard,
                             api_context,
                             api_notify,
+                        )
+                        .await?;
+                        Ok(output_ok)
+                    })()
+                    .await,
+                )
+            }
+        },
+    )
+}
+fn wire__crate__api__api__change_escrow_password_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
+    rust_vec_len_: i32,
+    data_len_: i32,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec, _, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "change_escrow_password",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let message = unsafe {
+                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
+                    ptr_,
+                    rust_vec_len_,
+                    data_len_,
+                )
+            };
+            let mut deserializer =
+                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            let api_state = <RustOpaqueMoi<
+                flutter_rust_bridge::for_generated::RustAutoOpaqueInner<Arc<PushState>>,
+            >>::sse_decode(&mut deserializer);
+            let api_device_password = <String>::sse_decode(&mut deserializer);
+            deserializer.end();
+            move |context| async move {
+                transform_result_sse::<_, flutter_rust_bridge::for_generated::anyhow::Error>(
+                    (move || async move {
+                        let mut api_state_guard = None;
+                        let decode_indices_ =
+                            flutter_rust_bridge::for_generated::lockable_compute_decode_order(
+                                vec![flutter_rust_bridge::for_generated::LockableOrderInfo::new(
+                                    &api_state, 0, false,
+                                )],
+                            );
+                        for i in decode_indices_ {
+                            match i {
+                                0 => {
+                                    api_state_guard =
+                                        Some(api_state.lockable_decode_async_ref().await)
+                                }
+                                _ => unreachable!(),
+                            }
+                        }
+                        let api_state_guard = api_state_guard.unwrap();
+                        let output_ok = crate::api::api::change_escrow_password(
+                            &*api_state_guard,
+                            api_device_password,
                         )
                         .await?;
                         Ok(output_ok)
@@ -3614,6 +4353,62 @@ fn wire__crate__api__api__get_background_following_impl(
                         let output_ok = Result::<_, ()>::Ok(
                             crate::api::api::get_background_following(&*api_state_guard).await,
                         )?;
+                        Ok(output_ok)
+                    })()
+                    .await,
+                )
+            }
+        },
+    )
+}
+fn wire__crate__api__api__get_beacon_items_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
+    rust_vec_len_: i32,
+    data_len_: i32,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec, _, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "get_beacon_items",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let message = unsafe {
+                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
+                    ptr_,
+                    rust_vec_len_,
+                    data_len_,
+                )
+            };
+            let mut deserializer =
+                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            let api_state = <RustOpaqueMoi<
+                flutter_rust_bridge::for_generated::RustAutoOpaqueInner<Arc<PushState>>,
+            >>::sse_decode(&mut deserializer);
+            deserializer.end();
+            move |context| async move {
+                transform_result_sse::<_, flutter_rust_bridge::for_generated::anyhow::Error>(
+                    (move || async move {
+                        let mut api_state_guard = None;
+                        let decode_indices_ =
+                            flutter_rust_bridge::for_generated::lockable_compute_decode_order(
+                                vec![flutter_rust_bridge::for_generated::LockableOrderInfo::new(
+                                    &api_state, 0, false,
+                                )],
+                            );
+                        for i in decode_indices_ {
+                            match i {
+                                0 => {
+                                    api_state_guard =
+                                        Some(api_state.lockable_decode_async_ref().await)
+                                }
+                                _ => unreachable!(),
+                            }
+                        }
+                        let api_state_guard = api_state_guard.unwrap();
+                        let output_ok =
+                            crate::api::api::get_beacon_items(&*api_state_guard).await?;
                         Ok(output_ok)
                     })()
                     .await,
@@ -7672,6 +8467,37 @@ fn wire__crate__api__api__sync_now_impl(
         },
     )
 }
+fn wire__crate__api__api__systemtime_to_millis_impl(
+    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
+    rust_vec_len_: i32,
+    data_len_: i32,
+) -> flutter_rust_bridge::for_generated::WireSyncRust2DartSse {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_sync::<flutter_rust_bridge::for_generated::SseCodec, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "systemtime_to_millis",
+            port: None,
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Sync,
+        },
+        move || {
+            let message = unsafe {
+                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
+                    ptr_,
+                    rust_vec_len_,
+                    data_len_,
+                )
+            };
+            let mut deserializer =
+                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            let api_time = <SystemTime>::sse_decode(&mut deserializer);
+            deserializer.end();
+            transform_result_sse::<_, ()>((move || {
+                let output_ok =
+                    Result::<_, ()>::Ok(crate::api::api::systemtime_to_millis(api_time))?;
+                Ok(output_ok)
+            })())
+        },
+    )
+}
 fn wire__crate__api__api__teardown_2fa_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
@@ -7934,6 +8760,67 @@ fn wire__crate__api__api__update_account_headers_impl(
                         let api_state_guard = api_state_guard.unwrap();
                         let output_ok =
                             crate::api::api::update_account_headers(&*api_state_guard).await?;
+                        Ok(output_ok)
+                    })()
+                    .await,
+                )
+            }
+        },
+    )
+}
+fn wire__crate__api__api__update_beacon_name_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
+    rust_vec_len_: i32,
+    data_len_: i32,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec, _, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "update_beacon_name",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let message = unsafe {
+                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
+                    ptr_,
+                    rust_vec_len_,
+                    data_len_,
+                )
+            };
+            let mut deserializer =
+                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            let api_state = <RustOpaqueMoi<
+                flutter_rust_bridge::for_generated::RustAutoOpaqueInner<Arc<PushState>>,
+            >>::sse_decode(&mut deserializer);
+            let api_naming_record =
+                <crate::api::api::BeaconNamingRecord>::sse_decode(&mut deserializer);
+            deserializer.end();
+            move |context| async move {
+                transform_result_sse::<_, flutter_rust_bridge::for_generated::anyhow::Error>(
+                    (move || async move {
+                        let mut api_state_guard = None;
+                        let decode_indices_ =
+                            flutter_rust_bridge::for_generated::lockable_compute_decode_order(
+                                vec![flutter_rust_bridge::for_generated::LockableOrderInfo::new(
+                                    &api_state, 0, false,
+                                )],
+                            );
+                        for i in decode_indices_ {
+                            match i {
+                                0 => {
+                                    api_state_guard =
+                                        Some(api_state.lockable_decode_async_ref().await)
+                                }
+                                _ => unreachable!(),
+                            }
+                        }
+                        let api_state_guard = api_state_guard.unwrap();
+                        let output_ok = crate::api::api::update_beacon_name(
+                            &*api_state_guard,
+                            &api_naming_record,
+                        )
+                        .await?;
                         Ok(output_ok)
                     })()
                     .await,
@@ -8768,6 +9655,13 @@ const _: fn() = || {
             let _: String = subcaption;
             let _: crate::api::api::NSDictionaryClass = class;
         }
+    }
+    {
+        let BeaconNamingRecord = None::<crate::api::api::BeaconNamingRecord>.unwrap();
+        let _: String = BeaconNamingRecord.emoji;
+        let _: String = BeaconNamingRecord.name;
+        let _: String = BeaconNamingRecord.associated_beacon;
+        let _: i64 = BeaconNamingRecord.role_id;
     }
     {
         let CertifiedContext = None::<crate::api::api::CertifiedContext>.unwrap();
@@ -9963,6 +10857,9 @@ flutter_rust_bridge::frb_generated_moi_arc_impl_value!(
     flutter_rust_bridge::for_generated::RustAutoOpaqueInner<JoinedOSConfig>
 );
 flutter_rust_bridge::frb_generated_moi_arc_impl_value!(
+    flutter_rust_bridge::for_generated::RustAutoOpaqueInner<LocationReport>
+);
+flutter_rust_bridge::frb_generated_moi_arc_impl_value!(
     flutter_rust_bridge::for_generated::RustAutoOpaqueInner<MessageFlags>
 );
 flutter_rust_bridge::frb_generated_moi_arc_impl_value!(
@@ -10156,6 +11053,16 @@ impl SseDecode for JoinedOSConfig {
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
         let mut inner = <RustOpaqueMoi<
             flutter_rust_bridge::for_generated::RustAutoOpaqueInner<JoinedOSConfig>,
+        >>::sse_decode(deserializer);
+        return flutter_rust_bridge::for_generated::rust_auto_opaque_decode_owned(inner);
+    }
+}
+
+impl SseDecode for LocationReport {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut inner = <RustOpaqueMoi<
+            flutter_rust_bridge::for_generated::RustAutoOpaqueInner<LocationReport>,
         >>::sse_decode(deserializer);
         return flutter_rust_bridge::for_generated::rust_auto_opaque_decode_owned(inner);
     }
@@ -10560,6 +11467,16 @@ impl SseDecode
 }
 
 impl SseDecode
+    for RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<LocationReport>>
+{
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut inner = <usize>::sse_decode(deserializer);
+        return decode_rust_opaque_moi(inner);
+    }
+}
+
+impl SseDecode
     for RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<MessageFlags>>
 {
     // Codec=Sse (Serialization based), see doc to use other codecs
@@ -10888,6 +11805,22 @@ impl SseDecode for crate::api::api::BalloonLayout {
     }
 }
 
+impl SseDecode for crate::api::api::BeaconNamingRecord {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut var_emoji = <String>::sse_decode(deserializer);
+        let mut var_name = <String>::sse_decode(deserializer);
+        let mut var_associatedBeacon = <String>::sse_decode(deserializer);
+        let mut var_roleId = <i64>::sse_decode(deserializer);
+        return crate::api::api::BeaconNamingRecord {
+            emoji: var_emoji,
+            name: var_name,
+            associated_beacon: var_associatedBeacon,
+            role_id: var_roleId,
+        };
+    }
+}
+
 impl SseDecode for bool {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
@@ -11084,6 +12017,30 @@ impl SseDecode for crate::api::api::ConversationData {
             cv_name: var_cvName,
             sender_guid: var_senderGuid,
             after_guid: var_afterGuid,
+        };
+    }
+}
+
+impl SseDecode for crate::api::api::DartBeacon {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut var_naming = <crate::api::api::BeaconNamingRecord>::sse_decode(deserializer);
+        let mut var_lastReport = <Option<LocationReport>>::sse_decode(deserializer);
+        let mut var_productId = <i64>::sse_decode(deserializer);
+        let mut var_batteryLevel = <i64>::sse_decode(deserializer);
+        let mut var_vendorId = <i64>::sse_decode(deserializer);
+        let mut var_model = <String>::sse_decode(deserializer);
+        let mut var_systemVersion = <String>::sse_decode(deserializer);
+        let mut var_id = <String>::sse_decode(deserializer);
+        return crate::api::api::DartBeacon {
+            naming: var_naming,
+            last_report: var_lastReport,
+            product_id: var_productId,
+            battery_level: var_batteryLevel,
+            vendor_id: var_vendorId,
+            model: var_model,
+            system_version: var_systemVersion,
+            id: var_id,
         };
     }
 }
@@ -11723,6 +12680,18 @@ impl SseDecode for Vec<crate::api::api::CloudParticipant> {
             ans_.push(<crate::api::api::CloudParticipant>::sse_decode(
                 deserializer,
             ));
+        }
+        return ans_;
+    }
+}
+
+impl SseDecode for Vec<crate::api::api::DartBeacon> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut len_ = <i32>::sse_decode(deserializer);
+        let mut ans_ = vec![];
+        for idx_ in 0..len_ {
+            ans_.push(<crate::api::api::DartBeacon>::sse_decode(deserializer));
         }
         return ans_;
     }
@@ -13093,6 +14062,17 @@ impl SseDecode for Option<JoinedOSConfig> {
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
         if (<bool>::sse_decode(deserializer)) {
             return Some(<JoinedOSConfig>::sse_decode(deserializer));
+        } else {
+            return None;
+        }
+    }
+}
+
+impl SseDecode for Option<LocationReport> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        if (<bool>::sse_decode(deserializer)) {
+            return Some(<LocationReport>::sse_decode(deserializer));
         } else {
             return None;
         }
@@ -15062,186 +16042,189 @@ fn pde_ffi_dispatcher_primary_impl(
 ) {
     // Codec=Pde (Serialization + dispatch), see doc to use other codecs
     match func_id {
-        11 => wire__crate__api__api__add_album_impl(port, ptr, rust_vec_len, data_len),
-        12 => wire__crate__api__api__answer_ft_request_impl(port, ptr, rust_vec_len, data_len),
-        13 => wire__crate__api__api__approve_circle_impl(port, ptr, rust_vec_len, data_len),
-        14 => wire__crate__api__api__attachment_get_size_impl(port, ptr, rust_vec_len, data_len),
-        16 => wire__crate__api__api__auth_phone_impl(port, ptr, rust_vec_len, data_len),
-        17 => wire__crate__api__api__can_find_my_impl(port, ptr, rust_vec_len, data_len),
-        18 => wire__crate__api__api__can_profile_share_impl(port, ptr, rust_vec_len, data_len),
-        19 => wire__crate__api__api__can_statuskit_impl(port, ptr, rust_vec_len, data_len),
-        20 => wire__crate__api__api__cancel_facetime_impl(port, ptr, rust_vec_len, data_len),
-        21 => wire__crate__api__api__certify_delivery_impl(port, ptr, rust_vec_len, data_len),
-        22 => wire__crate__api__api__circle_setup_clique_impl(port, ptr, rust_vec_len, data_len),
-        25 => wire__crate__api__api__complete_msg_impl(port, ptr, rust_vec_len, data_len),
-        26 => wire__crate__api__api__config_from_encoded_impl(port, ptr, rust_vec_len, data_len),
-        27 => wire__crate__api__api__config_from_relay_impl(port, ptr, rust_vec_len, data_len),
-        28 => wire__crate__api__api__config_from_validation_data_impl(
+        25 => wire__crate__api__api__add_album_impl(port, ptr, rust_vec_len, data_len),
+        26 => wire__crate__api__api__answer_ft_request_impl(port, ptr, rust_vec_len, data_len),
+        27 => wire__crate__api__api__approve_circle_impl(port, ptr, rust_vec_len, data_len),
+        28 => wire__crate__api__api__attachment_get_size_impl(port, ptr, rust_vec_len, data_len),
+        30 => wire__crate__api__api__auth_phone_impl(port, ptr, rust_vec_len, data_len),
+        31 => wire__crate__api__api__can_find_my_impl(port, ptr, rust_vec_len, data_len),
+        32 => wire__crate__api__api__can_profile_share_impl(port, ptr, rust_vec_len, data_len),
+        33 => wire__crate__api__api__can_statuskit_impl(port, ptr, rust_vec_len, data_len),
+        34 => wire__crate__api__api__cancel_facetime_impl(port, ptr, rust_vec_len, data_len),
+        35 => wire__crate__api__api__certify_delivery_impl(port, ptr, rust_vec_len, data_len),
+        36 => wire__crate__api__api__change_escrow_password_impl(port, ptr, rust_vec_len, data_len),
+        37 => wire__crate__api__api__circle_setup_clique_impl(port, ptr, rust_vec_len, data_len),
+        40 => wire__crate__api__api__complete_msg_impl(port, ptr, rust_vec_len, data_len),
+        41 => wire__crate__api__api__config_from_encoded_impl(port, ptr, rust_vec_len, data_len),
+        42 => wire__crate__api__api__config_from_relay_impl(port, ptr, rust_vec_len, data_len),
+        43 => wire__crate__api__api__config_from_validation_data_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        29 => wire__crate__api__api__configure_app_review_impl(port, ptr, rust_vec_len, data_len),
-        30 => wire__crate__api__api__configure_macos_impl(port, ptr, rust_vec_len, data_len),
-        31 => wire__crate__api__api__convert_token_to_uuid_impl(port, ptr, rust_vec_len, data_len),
-        32 => wire__crate__api__api__create_facetime_impl(port, ptr, rust_vec_len, data_len),
-        33 => wire__crate__api__api__create_icon_array_impl(port, ptr, rust_vec_len, data_len),
-        34 => wire__crate__api__api__create_image_array_impl(port, ptr, rust_vec_len, data_len),
-        36 => wire__crate__api__api__decline_facetime_impl(port, ptr, rust_vec_len, data_len),
-        44 => wire__crate__api__api__decode_profile_message_impl(port, ptr, rust_vec_len, data_len),
-        45 => wire__crate__api__api__decode_summary_info_impl(port, ptr, rust_vec_len, data_len),
-        46 => wire__crate__api__api__delete_attachments_impl(port, ptr, rust_vec_len, data_len),
-        47 => wire__crate__api__api__delete_chats_impl(port, ptr, rust_vec_len, data_len),
-        48 => wire__crate__api__api__delete_messages_impl(port, ptr, rust_vec_len, data_len),
-        49 => wire__crate__api__api__do_reregister_impl(port, ptr, rust_vec_len, data_len),
-        50 => wire__crate__api__api__download_attachment_impl(port, ptr, rust_vec_len, data_len),
-        51 => wire__crate__api__api__download_cloud_attachments_impl(
+        44 => wire__crate__api__api__configure_app_review_impl(port, ptr, rust_vec_len, data_len),
+        45 => wire__crate__api__api__configure_macos_impl(port, ptr, rust_vec_len, data_len),
+        46 => wire__crate__api__api__convert_token_to_uuid_impl(port, ptr, rust_vec_len, data_len),
+        47 => wire__crate__api__api__create_facetime_impl(port, ptr, rust_vec_len, data_len),
+        48 => wire__crate__api__api__create_icon_array_impl(port, ptr, rust_vec_len, data_len),
+        49 => wire__crate__api__api__create_image_array_impl(port, ptr, rust_vec_len, data_len),
+        51 => wire__crate__api__api__decline_facetime_impl(port, ptr, rust_vec_len, data_len),
+        59 => wire__crate__api__api__decode_profile_message_impl(port, ptr, rust_vec_len, data_len),
+        60 => wire__crate__api__api__decode_summary_info_impl(port, ptr, rust_vec_len, data_len),
+        61 => wire__crate__api__api__delete_attachments_impl(port, ptr, rust_vec_len, data_len),
+        62 => wire__crate__api__api__delete_chats_impl(port, ptr, rust_vec_len, data_len),
+        63 => wire__crate__api__api__delete_messages_impl(port, ptr, rust_vec_len, data_len),
+        64 => wire__crate__api__api__do_reregister_impl(port, ptr, rust_vec_len, data_len),
+        65 => wire__crate__api__api__download_attachment_impl(port, ptr, rust_vec_len, data_len),
+        66 => wire__crate__api__api__download_cloud_attachments_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        52 => wire__crate__api__api__download_cloud_group_photos_impl(
+        67 => wire__crate__api__api__download_cloud_group_photos_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        53 => wire__crate__api__api__download_mmcs_impl(port, ptr, rust_vec_len, data_len),
-        56 => wire__crate__api__api__encode_hex_impl(port, ptr, rust_vec_len, data_len),
-        62 => wire__crate__api__api__encode_profile_message_impl(port, ptr, rust_vec_len, data_len),
-        63 => wire__crate__api__api__encode_summary_info_impl(port, ptr, rust_vec_len, data_len),
-        66 => wire__crate__api__api__fetch_profile_impl(port, ptr, rust_vec_len, data_len),
-        67 => {
+        68 => wire__crate__api__api__download_mmcs_impl(port, ptr, rust_vec_len, data_len),
+        71 => wire__crate__api__api__encode_hex_impl(port, ptr, rust_vec_len, data_len),
+        77 => wire__crate__api__api__encode_profile_message_impl(port, ptr, rust_vec_len, data_len),
+        78 => wire__crate__api__api__encode_summary_info_impl(port, ptr, rust_vec_len, data_len),
+        81 => wire__crate__api__api__fetch_profile_impl(port, ptr, rust_vec_len, data_len),
+        82 => {
             wire__crate__api__api__ffi_file_packager_default_impl(port, ptr, rust_vec_len, data_len)
         }
-        68 => wire__crate__api__api__from_poster_impl(port, ptr, rust_vec_len, data_len),
-        69 => wire__crate__api__api__from_poster_save_impl(port, ptr, rust_vec_len, data_len),
-        70 => wire__crate__api__api__from_transcript_poster_save_impl(
+        83 => wire__crate__api__api__from_poster_impl(port, ptr, rust_vec_len, data_len),
+        84 => wire__crate__api__api__from_poster_save_impl(port, ptr, rust_vec_len, data_len),
+        85 => wire__crate__api__api__from_transcript_poster_save_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        71 => wire__crate__api__api__ft_sessions_impl(port, ptr, rust_vec_len, data_len),
-        72 => wire__crate__api__api__generate_udid_impl(port, ptr, rust_vec_len, data_len),
-        73 => wire__crate__api__api__get_2fa_code_impl(port, ptr, rust_vec_len, data_len),
-        74 => wire__crate__api__api__get_2fa_sms_opts_impl(port, ptr, rust_vec_len, data_len),
-        75 => wire__crate__api__api__get_albums_impl(port, ptr, rust_vec_len, data_len),
-        76 => wire__crate__api__api__get_anisette_headers_impl(port, ptr, rust_vec_len, data_len),
-        77 => {
+        86 => wire__crate__api__api__ft_sessions_impl(port, ptr, rust_vec_len, data_len),
+        87 => wire__crate__api__api__generate_udid_impl(port, ptr, rust_vec_len, data_len),
+        88 => wire__crate__api__api__get_2fa_code_impl(port, ptr, rust_vec_len, data_len),
+        89 => wire__crate__api__api__get_2fa_sms_opts_impl(port, ptr, rust_vec_len, data_len),
+        90 => wire__crate__api__api__get_albums_impl(port, ptr, rust_vec_len, data_len),
+        91 => wire__crate__api__api__get_anisette_headers_impl(port, ptr, rust_vec_len, data_len),
+        92 => {
             wire__crate__api__api__get_background_following_impl(port, ptr, rust_vec_len, data_len)
         }
-        78 => wire__crate__api__api__get_bottles_impl(port, ptr, rust_vec_len, data_len),
-        79 => wire__crate__api__api__get_config_state_impl(port, ptr, rust_vec_len, data_len),
-        80 => wire__crate__api__api__get_device_info_impl(port, ptr, rust_vec_len, data_len),
-        81 => wire__crate__api__api__get_device_info_state_impl(port, ptr, rust_vec_len, data_len),
-        82 => wire__crate__api__api__get_devices_impl(port, ptr, rust_vec_len, data_len),
-        83 => wire__crate__api__api__get_following_impl(port, ptr, rust_vec_len, data_len),
-        84 => wire__crate__api__api__get_ft_link_impl(port, ptr, rust_vec_len, data_len),
-        85 => wire__crate__api__api__get_handles_impl(port, ptr, rust_vec_len, data_len),
-        86 => wire__crate__api__api__get_my_phone_handles_impl(port, ptr, rust_vec_len, data_len),
-        87 => wire__crate__api__api__get_phase_impl(port, ptr, rust_vec_len, data_len),
-        88 => wire__crate__api__api__get_quota_info_impl(port, ptr, rust_vec_len, data_len),
-        89 => wire__crate__api__api__get_regstate_impl(port, ptr, rust_vec_len, data_len),
-        90 => wire__crate__api__api__get_sms_targets_impl(port, ptr, rust_vec_len, data_len),
-        91 => wire__crate__api__api__get_syncstatus_impl(port, ptr, rust_vec_len, data_len),
-        92 => wire__crate__api__api__get_token_impl(port, ptr, rust_vec_len, data_len),
-        93 => wire__crate__api__api__get_user_name_impl(port, ptr, rust_vec_len, data_len),
-        94 => wire__crate__api__api__invalidate_id_cache_impl(port, ptr, rust_vec_len, data_len),
-        95 => wire__crate__api__api__invite_to_channel_impl(port, ptr, rust_vec_len, data_len),
-        96 => wire__crate__api__api__is_in_clique_impl(port, ptr, rust_vec_len, data_len),
-        97 => {
+        93 => wire__crate__api__api__get_beacon_items_impl(port, ptr, rust_vec_len, data_len),
+        94 => wire__crate__api__api__get_bottles_impl(port, ptr, rust_vec_len, data_len),
+        95 => wire__crate__api__api__get_config_state_impl(port, ptr, rust_vec_len, data_len),
+        96 => wire__crate__api__api__get_device_info_impl(port, ptr, rust_vec_len, data_len),
+        97 => wire__crate__api__api__get_device_info_state_impl(port, ptr, rust_vec_len, data_len),
+        98 => wire__crate__api__api__get_devices_impl(port, ptr, rust_vec_len, data_len),
+        99 => wire__crate__api__api__get_following_impl(port, ptr, rust_vec_len, data_len),
+        100 => wire__crate__api__api__get_ft_link_impl(port, ptr, rust_vec_len, data_len),
+        101 => wire__crate__api__api__get_handles_impl(port, ptr, rust_vec_len, data_len),
+        102 => wire__crate__api__api__get_my_phone_handles_impl(port, ptr, rust_vec_len, data_len),
+        103 => wire__crate__api__api__get_phase_impl(port, ptr, rust_vec_len, data_len),
+        104 => wire__crate__api__api__get_quota_info_impl(port, ptr, rust_vec_len, data_len),
+        105 => wire__crate__api__api__get_regstate_impl(port, ptr, rust_vec_len, data_len),
+        106 => wire__crate__api__api__get_sms_targets_impl(port, ptr, rust_vec_len, data_len),
+        107 => wire__crate__api__api__get_syncstatus_impl(port, ptr, rust_vec_len, data_len),
+        108 => wire__crate__api__api__get_token_impl(port, ptr, rust_vec_len, data_len),
+        109 => wire__crate__api__api__get_user_name_impl(port, ptr, rust_vec_len, data_len),
+        110 => wire__crate__api__api__invalidate_id_cache_impl(port, ptr, rust_vec_len, data_len),
+        111 => wire__crate__api__api__invite_to_channel_impl(port, ptr, rust_vec_len, data_len),
+        112 => wire__crate__api__api__is_in_clique_impl(port, ptr, rust_vec_len, data_len),
+        113 => {
             wire__crate__api__api__join_clique_with_bottle_impl(port, ptr, rust_vec_len, data_len)
         }
-        98 => wire__crate__api__api__make_find_my_friends_impl(port, ptr, rust_vec_len, data_len),
-        99 => wire__crate__api__api__make_find_my_phone_impl(port, ptr, rust_vec_len, data_len),
-        100 => {
+        114 => wire__crate__api__api__make_find_my_friends_impl(port, ptr, rust_vec_len, data_len),
+        115 => wire__crate__api__api__make_find_my_phone_impl(port, ptr, rust_vec_len, data_len),
+        116 => {
             wire__crate__api__api__message_parts_raw_text_impl(port, ptr, rust_vec_len, data_len)
         }
-        101 => {
+        117 => {
             wire__crate__api__api__my_async_runtime_default_impl(port, ptr, rust_vec_len, data_len)
         }
-        102 => wire__crate__api__api__new_msg_impl(port, ptr, rust_vec_len, data_len),
-        103 => wire__crate__api__api__new_push_state_impl(port, ptr, rust_vec_len, data_len),
-        113 => {
+        118 => wire__crate__api__api__new_msg_impl(port, ptr, rust_vec_len, data_len),
+        119 => wire__crate__api__api__new_push_state_impl(port, ptr, rust_vec_len, data_len),
+        129 => {
             wire__crate__api__api__pack_transcript_poster_impl(port, ptr, rust_vec_len, data_len)
         }
-        114 => wire__crate__api__api__parse_poster_impl(port, ptr, rust_vec_len, data_len),
-        115 => wire__crate__api__api__parse_poster_save_impl(port, ptr, rust_vec_len, data_len),
-        116 => {
+        130 => wire__crate__api__api__parse_poster_impl(port, ptr, rust_vec_len, data_len),
+        131 => wire__crate__api__api__parse_poster_save_impl(port, ptr, rust_vec_len, data_len),
+        132 => {
             wire__crate__api__api__parse_transcript_poster_impl(port, ptr, rust_vec_len, data_len)
         }
-        117 => wire__crate__api__api__ptr_to_dart_impl(port, ptr, rust_vec_len, data_len),
-        118 => wire__crate__api__api__recv_wait_impl(port, ptr, rust_vec_len, data_len),
-        119 => wire__crate__api__api__refresh_background_following_impl(
+        133 => wire__crate__api__api__ptr_to_dart_impl(port, ptr, rust_vec_len, data_len),
+        134 => wire__crate__api__api__recv_wait_impl(port, ptr, rust_vec_len, data_len),
+        135 => wire__crate__api__api__refresh_background_following_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        120 => wire__crate__api__api__refresh_devices_impl(port, ptr, rust_vec_len, data_len),
-        121 => wire__crate__api__api__refresh_following_impl(port, ptr, rust_vec_len, data_len),
-        122 => wire__crate__api__api__refresh_token_impl(port, ptr, rust_vec_len, data_len),
-        123 => wire__crate__api__api__register_ids_impl(port, ptr, rust_vec_len, data_len),
-        124 => wire__crate__api__api__remove_album_impl(port, ptr, rust_vec_len, data_len),
-        125 => wire__crate__api__api__report_messages_impl(port, ptr, rust_vec_len, data_len),
-        126 => wire__crate__api__api__request_handles_impl(port, ptr, rust_vec_len, data_len),
-        127 => wire__crate__api__api__reset_channel_keys_impl(port, ptr, rust_vec_len, data_len),
-        128 => wire__crate__api__api__reset_clique_impl(port, ptr, rust_vec_len, data_len),
-        129 => wire__crate__api__api__reset_state_impl(port, ptr, rust_vec_len, data_len),
-        132 => wire__crate__api__api__restore_user_impl(port, ptr, rust_vec_len, data_len),
-        133 => wire__crate__api__api__retry_login_impl(port, ptr, rust_vec_len, data_len),
-        134 => wire__crate__api__api__save_attachment_impl(port, ptr, rust_vec_len, data_len),
-        135 => wire__crate__api__api__save_attachments_impl(port, ptr, rust_vec_len, data_len),
-        136 => wire__crate__api__api__save_chats_impl(port, ptr, rust_vec_len, data_len),
-        138 => wire__crate__api__api__save_messages_impl(port, ptr, rust_vec_len, data_len),
-        139 => wire__crate__api__api__save_user_impl(port, ptr, rust_vec_len, data_len),
-        140 => {
+        136 => wire__crate__api__api__refresh_devices_impl(port, ptr, rust_vec_len, data_len),
+        137 => wire__crate__api__api__refresh_following_impl(port, ptr, rust_vec_len, data_len),
+        138 => wire__crate__api__api__refresh_token_impl(port, ptr, rust_vec_len, data_len),
+        139 => wire__crate__api__api__register_ids_impl(port, ptr, rust_vec_len, data_len),
+        140 => wire__crate__api__api__remove_album_impl(port, ptr, rust_vec_len, data_len),
+        141 => wire__crate__api__api__report_messages_impl(port, ptr, rust_vec_len, data_len),
+        142 => wire__crate__api__api__request_handles_impl(port, ptr, rust_vec_len, data_len),
+        143 => wire__crate__api__api__reset_channel_keys_impl(port, ptr, rust_vec_len, data_len),
+        144 => wire__crate__api__api__reset_clique_impl(port, ptr, rust_vec_len, data_len),
+        145 => wire__crate__api__api__reset_state_impl(port, ptr, rust_vec_len, data_len),
+        148 => wire__crate__api__api__restore_user_impl(port, ptr, rust_vec_len, data_len),
+        149 => wire__crate__api__api__retry_login_impl(port, ptr, rust_vec_len, data_len),
+        150 => wire__crate__api__api__save_attachment_impl(port, ptr, rust_vec_len, data_len),
+        151 => wire__crate__api__api__save_attachments_impl(port, ptr, rust_vec_len, data_len),
+        152 => wire__crate__api__api__save_chats_impl(port, ptr, rust_vec_len, data_len),
+        154 => wire__crate__api__api__save_messages_impl(port, ptr, rust_vec_len, data_len),
+        155 => wire__crate__api__api__save_user_impl(port, ptr, rust_vec_len, data_len),
+        156 => {
             wire__crate__api__api__select_background_friend_impl(port, ptr, rust_vec_len, data_len)
         }
-        141 => wire__crate__api__api__select_friend_impl(port, ptr, rust_vec_len, data_len),
-        142 => wire__crate__api__api__send_impl(port, ptr, rust_vec_len, data_len),
-        143 => wire__crate__api__api__send_2fa_sms_impl(port, ptr, rust_vec_len, data_len),
-        144 => wire__crate__api__api__send_2fa_to_devices_impl(port, ptr, rust_vec_len, data_len),
-        145 => wire__crate__api__api__service_from_ptr_impl(port, ptr, rust_vec_len, data_len),
-        146 => wire__crate__api__api__set_profile_impl(port, ptr, rust_vec_len, data_len),
-        147 => wire__crate__api__api__set_status_impl(port, ptr, rust_vec_len, data_len),
-        148 => wire__crate__api__api__subscribe_impl(port, ptr, rust_vec_len, data_len),
-        149 => wire__crate__api__api__subscribe_token_impl(port, ptr, rust_vec_len, data_len),
-        150 => wire__crate__api__api__supports_keychain_impl(port, ptr, rust_vec_len, data_len),
-        151 => {
+        157 => wire__crate__api__api__select_friend_impl(port, ptr, rust_vec_len, data_len),
+        158 => wire__crate__api__api__send_impl(port, ptr, rust_vec_len, data_len),
+        159 => wire__crate__api__api__send_2fa_sms_impl(port, ptr, rust_vec_len, data_len),
+        160 => wire__crate__api__api__send_2fa_to_devices_impl(port, ptr, rust_vec_len, data_len),
+        161 => wire__crate__api__api__service_from_ptr_impl(port, ptr, rust_vec_len, data_len),
+        162 => wire__crate__api__api__set_profile_impl(port, ptr, rust_vec_len, data_len),
+        163 => wire__crate__api__api__set_status_impl(port, ptr, rust_vec_len, data_len),
+        164 => wire__crate__api__api__subscribe_impl(port, ptr, rust_vec_len, data_len),
+        165 => wire__crate__api__api__subscribe_token_impl(port, ptr, rust_vec_len, data_len),
+        166 => wire__crate__api__api__supports_keychain_impl(port, ptr, rust_vec_len, data_len),
+        167 => {
             wire__crate__api__api__supports_shared_streams_impl(port, ptr, rust_vec_len, data_len)
         }
-        152 => wire__crate__api__api__sync_attachments_impl(port, ptr, rust_vec_len, data_len),
-        153 => wire__crate__api__api__sync_chats_impl(port, ptr, rust_vec_len, data_len),
-        154 => wire__crate__api__api__sync_messages_impl(port, ptr, rust_vec_len, data_len),
-        155 => wire__crate__api__api__sync_now_impl(port, ptr, rust_vec_len, data_len),
-        156 => wire__crate__api__api__teardown_2fa_impl(port, ptr, rust_vec_len, data_len),
-        157 => {
+        168 => wire__crate__api__api__sync_attachments_impl(port, ptr, rust_vec_len, data_len),
+        169 => wire__crate__api__api__sync_chats_impl(port, ptr, rust_vec_len, data_len),
+        170 => wire__crate__api__api__sync_messages_impl(port, ptr, rust_vec_len, data_len),
+        171 => wire__crate__api__api__sync_now_impl(port, ptr, rust_vec_len, data_len),
+        173 => wire__crate__api__api__teardown_2fa_impl(port, ptr, rust_vec_len, data_len),
+        174 => {
             wire__crate__api__api__transcript_poster_save_impl(port, ptr, rust_vec_len, data_len)
         }
-        158 => wire__crate__api__api__try_auth_impl(port, ptr, rust_vec_len, data_len),
-        159 => wire__crate__api__api__unsubscribe_impl(port, ptr, rust_vec_len, data_len),
-        160 => {
+        175 => wire__crate__api__api__try_auth_impl(port, ptr, rust_vec_len, data_len),
+        176 => wire__crate__api__api__unsubscribe_impl(port, ptr, rust_vec_len, data_len),
+        177 => {
             wire__crate__api__api__update_account_headers_impl(port, ptr, rust_vec_len, data_len)
         }
-        161 => wire__crate__api__api__upload_attachment_impl(port, ptr, rust_vec_len, data_len),
-        162 => {
+        178 => wire__crate__api__api__update_beacon_name_impl(port, ptr, rust_vec_len, data_len),
+        179 => wire__crate__api__api__upload_attachment_impl(port, ptr, rust_vec_len, data_len),
+        180 => {
             wire__crate__api__api__upload_cloud_attachments_impl(port, ptr, rust_vec_len, data_len)
         }
-        163 => wire__crate__api__api__upload_group_photo_impl(port, ptr, rust_vec_len, data_len),
-        164 => wire__crate__api__api__upload_mmcs_impl(port, ptr, rust_vec_len, data_len),
-        165 => wire__crate__api__api__use_link_for_impl(port, ptr, rust_vec_len, data_len),
-        167 => wire__crate__api__api__validate_cert_impl(port, ptr, rust_vec_len, data_len),
-        168 => wire__crate__api__api__validate_relay_impl(port, ptr, rust_vec_len, data_len),
-        169 => wire__crate__api__api__validate_targets_impl(port, ptr, rust_vec_len, data_len),
-        170 => {
+        181 => wire__crate__api__api__upload_group_photo_impl(port, ptr, rust_vec_len, data_len),
+        182 => wire__crate__api__api__upload_mmcs_impl(port, ptr, rust_vec_len, data_len),
+        183 => wire__crate__api__api__use_link_for_impl(port, ptr, rust_vec_len, data_len),
+        185 => wire__crate__api__api__validate_cert_impl(port, ptr, rust_vec_len, data_len),
+        186 => wire__crate__api__api__validate_relay_impl(port, ptr, rust_vec_len, data_len),
+        187 => wire__crate__api__api__validate_targets_impl(port, ptr, rust_vec_len, data_len),
+        188 => {
             wire__crate__api__api__validate_targets_facetime_impl(port, ptr, rust_vec_len, data_len)
         }
-        171 => wire__crate__api__api__verify_2fa_impl(port, ptr, rust_vec_len, data_len),
-        172 => wire__crate__api__api__verify_2fa_sms_impl(port, ptr, rust_vec_len, data_len),
+        189 => wire__crate__api__api__verify_2fa_impl(port, ptr, rust_vec_len, data_len),
+        190 => wire__crate__api__api__verify_2fa_sms_impl(port, ptr, rust_vec_len, data_len),
         _ => unreachable!(),
     }
 }
@@ -15254,83 +16237,154 @@ fn pde_ffi_dispatcher_sync_impl(
 ) -> flutter_rust_bridge::for_generated::WireSyncRust2DartSse {
     // Codec=Pde (Serialization + dispatch), see doc to use other codecs
     match func_id {
-        1 => wire__crate__api__api__MessageFlags_bits_impl(ptr, rust_vec_len, data_len),
-        2 => {
+        1 => wire__crate__api__api__LocationReport_auto_accessor_get_confidence_impl(
+            ptr,
+            rust_vec_len,
+            data_len,
+        ),
+        2 => wire__crate__api__api__LocationReport_auto_accessor_get_horizontal_accuracy_impl(
+            ptr,
+            rust_vec_len,
+            data_len,
+        ),
+        3 => wire__crate__api__api__LocationReport_auto_accessor_get_key_index_impl(
+            ptr,
+            rust_vec_len,
+            data_len,
+        ),
+        4 => wire__crate__api__api__LocationReport_auto_accessor_get_lat_impl(
+            ptr,
+            rust_vec_len,
+            data_len,
+        ),
+        5 => wire__crate__api__api__LocationReport_auto_accessor_get_long_impl(
+            ptr,
+            rust_vec_len,
+            data_len,
+        ),
+        6 => wire__crate__api__api__LocationReport_auto_accessor_get_status_impl(
+            ptr,
+            rust_vec_len,
+            data_len,
+        ),
+        7 => wire__crate__api__api__LocationReport_auto_accessor_get_timestamp_impl(
+            ptr,
+            rust_vec_len,
+            data_len,
+        ),
+        8 => wire__crate__api__api__LocationReport_auto_accessor_set_confidence_impl(
+            ptr,
+            rust_vec_len,
+            data_len,
+        ),
+        9 => wire__crate__api__api__LocationReport_auto_accessor_set_horizontal_accuracy_impl(
+            ptr,
+            rust_vec_len,
+            data_len,
+        ),
+        10 => wire__crate__api__api__LocationReport_auto_accessor_set_key_index_impl(
+            ptr,
+            rust_vec_len,
+            data_len,
+        ),
+        11 => wire__crate__api__api__LocationReport_auto_accessor_set_lat_impl(
+            ptr,
+            rust_vec_len,
+            data_len,
+        ),
+        12 => wire__crate__api__api__LocationReport_auto_accessor_set_long_impl(
+            ptr,
+            rust_vec_len,
+            data_len,
+        ),
+        13 => wire__crate__api__api__LocationReport_auto_accessor_set_status_impl(
+            ptr,
+            rust_vec_len,
+            data_len,
+        ),
+        14 => wire__crate__api__api__LocationReport_auto_accessor_set_timestamp_impl(
+            ptr,
+            rust_vec_len,
+            data_len,
+        ),
+        15 => wire__crate__api__api__MessageFlags_bits_impl(ptr, rust_vec_len, data_len),
+        16 => {
             wire__crate__api__api__MessageFlags_from_bits_truncate_impl(ptr, rust_vec_len, data_len)
         }
-        3 => wire__crate__api__api__ViableBottle_auto_accessor_get_device_name_impl(
+        17 => wire__crate__api__api__ViableBottle_auto_accessor_get_device_name_impl(
             ptr,
             rust_vec_len,
             data_len,
         ),
-        4 => wire__crate__api__api__ViableBottle_auto_accessor_get_escrow_impl(
+        18 => wire__crate__api__api__ViableBottle_auto_accessor_get_escrow_impl(
             ptr,
             rust_vec_len,
             data_len,
         ),
-        5 => wire__crate__api__api__ViableBottle_auto_accessor_get_model_class_impl(
+        19 => wire__crate__api__api__ViableBottle_auto_accessor_get_model_class_impl(
             ptr,
             rust_vec_len,
             data_len,
         ),
-        6 => wire__crate__api__api__ViableBottle_auto_accessor_get_numeric_length_impl(
+        20 => wire__crate__api__api__ViableBottle_auto_accessor_get_numeric_length_impl(
             ptr,
             rust_vec_len,
             data_len,
         ),
-        7 => wire__crate__api__api__ViableBottle_auto_accessor_set_device_name_impl(
+        21 => wire__crate__api__api__ViableBottle_auto_accessor_set_device_name_impl(
             ptr,
             rust_vec_len,
             data_len,
         ),
-        8 => wire__crate__api__api__ViableBottle_auto_accessor_set_escrow_impl(
+        22 => wire__crate__api__api__ViableBottle_auto_accessor_set_escrow_impl(
             ptr,
             rust_vec_len,
             data_len,
         ),
-        9 => wire__crate__api__api__ViableBottle_auto_accessor_set_model_class_impl(
+        23 => wire__crate__api__api__ViableBottle_auto_accessor_set_model_class_impl(
             ptr,
             rust_vec_len,
             data_len,
         ),
-        10 => wire__crate__api__api__ViableBottle_auto_accessor_set_numeric_length_impl(
+        24 => wire__crate__api__api__ViableBottle_auto_accessor_set_numeric_length_impl(
             ptr,
             rust_vec_len,
             data_len,
         ),
-        15 => wire__crate__api__api__attachment_to_cloud_impl(ptr, rust_vec_len, data_len),
-        23 => wire__crate__api__api__clone_poster_impl(ptr, rust_vec_len, data_len),
-        24 => wire__crate__api__api__clone_transcript_poster_impl(ptr, rust_vec_len, data_len),
-        35 => wire__crate__api__api__date_now_impl(ptr, rust_vec_len, data_len),
-        37 => wire__crate__api__api__decode_attachmentmeta_impl(ptr, rust_vec_len, data_len),
-        38 => wire__crate__api__api__decode_chatproto_impl(ptr, rust_vec_len, data_len),
-        39 => wire__crate__api__api__decode_message_info_impl(ptr, rust_vec_len, data_len),
-        40 => wire__crate__api__api__decode_messageproto_impl(ptr, rust_vec_len, data_len),
-        41 => wire__crate__api__api__decode_messageproto2_impl(ptr, rust_vec_len, data_len),
-        42 => wire__crate__api__api__decode_messageproto3_impl(ptr, rust_vec_len, data_len),
-        43 => wire__crate__api__api__decode_messageproto4_impl(ptr, rust_vec_len, data_len),
-        54 => wire__crate__api__api__encode_attachmentmeta_impl(ptr, rust_vec_len, data_len),
-        55 => wire__crate__api__api__encode_chatproto_impl(ptr, rust_vec_len, data_len),
-        57 => wire__crate__api__api__encode_message_info_impl(ptr, rust_vec_len, data_len),
-        58 => wire__crate__api__api__encode_messageproto_impl(ptr, rust_vec_len, data_len),
-        59 => wire__crate__api__api__encode_messageproto2_impl(ptr, rust_vec_len, data_len),
-        60 => wire__crate__api__api__encode_messageproto3_impl(ptr, rust_vec_len, data_len),
-        61 => wire__crate__api__api__encode_messageproto4_impl(ptr, rust_vec_len, data_len),
-        64 => wire__crate__api__api__extension_app_from_bp_impl(ptr, rust_vec_len, data_len),
-        65 => wire__crate__api__api__extension_app_to_raw_impl(ptr, rust_vec_len, data_len),
-        104 => wire__crate__api__api__ns_attributed_string_decode_impl(ptr, rust_vec_len, data_len),
-        105 => wire__crate__api__api__ns_attributed_string_encode_impl(ptr, rust_vec_len, data_len),
-        106 => wire__crate__api__api__ns_null_impl(ptr, rust_vec_len, data_len),
-        107 => wire__crate__api__api__ns_number_decode_impl(ptr, rust_vec_len, data_len),
-        108 => wire__crate__api__api__ns_number_encode_impl(ptr, rust_vec_len, data_len),
-        109 => wire__crate__api__api__ns_string_decode_impl(ptr, rust_vec_len, data_len),
-        110 => wire__crate__api__api__ns_string_encode_impl(ptr, rust_vec_len, data_len),
-        111 => wire__crate__api__api__nscoder_decode_impl(ptr, rust_vec_len, data_len),
-        112 => wire__crate__api__api__nscoder_encode_impl(ptr, rust_vec_len, data_len),
-        130 => wire__crate__api__api__restore_attachment_impl(ptr, rust_vec_len, data_len),
-        131 => wire__crate__api__api__restore_cloud_chat_impl(ptr, rust_vec_len, data_len),
-        137 => wire__crate__api__api__save_cloud_chat_impl(ptr, rust_vec_len, data_len),
-        166 => wire__crate__api__api__utm_now_impl(ptr, rust_vec_len, data_len),
+        29 => wire__crate__api__api__attachment_to_cloud_impl(ptr, rust_vec_len, data_len),
+        38 => wire__crate__api__api__clone_poster_impl(ptr, rust_vec_len, data_len),
+        39 => wire__crate__api__api__clone_transcript_poster_impl(ptr, rust_vec_len, data_len),
+        50 => wire__crate__api__api__date_now_impl(ptr, rust_vec_len, data_len),
+        52 => wire__crate__api__api__decode_attachmentmeta_impl(ptr, rust_vec_len, data_len),
+        53 => wire__crate__api__api__decode_chatproto_impl(ptr, rust_vec_len, data_len),
+        54 => wire__crate__api__api__decode_message_info_impl(ptr, rust_vec_len, data_len),
+        55 => wire__crate__api__api__decode_messageproto_impl(ptr, rust_vec_len, data_len),
+        56 => wire__crate__api__api__decode_messageproto2_impl(ptr, rust_vec_len, data_len),
+        57 => wire__crate__api__api__decode_messageproto3_impl(ptr, rust_vec_len, data_len),
+        58 => wire__crate__api__api__decode_messageproto4_impl(ptr, rust_vec_len, data_len),
+        69 => wire__crate__api__api__encode_attachmentmeta_impl(ptr, rust_vec_len, data_len),
+        70 => wire__crate__api__api__encode_chatproto_impl(ptr, rust_vec_len, data_len),
+        72 => wire__crate__api__api__encode_message_info_impl(ptr, rust_vec_len, data_len),
+        73 => wire__crate__api__api__encode_messageproto_impl(ptr, rust_vec_len, data_len),
+        74 => wire__crate__api__api__encode_messageproto2_impl(ptr, rust_vec_len, data_len),
+        75 => wire__crate__api__api__encode_messageproto3_impl(ptr, rust_vec_len, data_len),
+        76 => wire__crate__api__api__encode_messageproto4_impl(ptr, rust_vec_len, data_len),
+        79 => wire__crate__api__api__extension_app_from_bp_impl(ptr, rust_vec_len, data_len),
+        80 => wire__crate__api__api__extension_app_to_raw_impl(ptr, rust_vec_len, data_len),
+        120 => wire__crate__api__api__ns_attributed_string_decode_impl(ptr, rust_vec_len, data_len),
+        121 => wire__crate__api__api__ns_attributed_string_encode_impl(ptr, rust_vec_len, data_len),
+        122 => wire__crate__api__api__ns_null_impl(ptr, rust_vec_len, data_len),
+        123 => wire__crate__api__api__ns_number_decode_impl(ptr, rust_vec_len, data_len),
+        124 => wire__crate__api__api__ns_number_encode_impl(ptr, rust_vec_len, data_len),
+        125 => wire__crate__api__api__ns_string_decode_impl(ptr, rust_vec_len, data_len),
+        126 => wire__crate__api__api__ns_string_encode_impl(ptr, rust_vec_len, data_len),
+        127 => wire__crate__api__api__nscoder_decode_impl(ptr, rust_vec_len, data_len),
+        128 => wire__crate__api__api__nscoder_encode_impl(ptr, rust_vec_len, data_len),
+        146 => wire__crate__api__api__restore_attachment_impl(ptr, rust_vec_len, data_len),
+        147 => wire__crate__api__api__restore_cloud_chat_impl(ptr, rust_vec_len, data_len),
+        153 => wire__crate__api__api__save_cloud_chat_impl(ptr, rust_vec_len, data_len),
+        172 => wire__crate__api__api__systemtime_to_millis_impl(ptr, rust_vec_len, data_len),
+        184 => wire__crate__api__api__utm_now_impl(ptr, rust_vec_len, data_len),
         _ => unreachable!(),
     }
 }
@@ -15618,6 +16672,21 @@ impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive for FrbWrapper<
 
 impl flutter_rust_bridge::IntoIntoDart<FrbWrapper<JoinedOSConfig>> for JoinedOSConfig {
     fn into_into_dart(self) -> FrbWrapper<JoinedOSConfig> {
+        self.into()
+    }
+}
+
+// Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart for FrbWrapper<LocationReport> {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        flutter_rust_bridge::for_generated::rust_auto_opaque_encode::<_, MoiArc<_>>(self.0)
+            .into_dart()
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive for FrbWrapper<LocationReport> {}
+
+impl flutter_rust_bridge::IntoIntoDart<FrbWrapper<LocationReport>> for LocationReport {
+    fn into_into_dart(self) -> FrbWrapper<LocationReport> {
         self.into()
     }
 }
@@ -16012,6 +17081,29 @@ impl flutter_rust_bridge::IntoIntoDart<FrbWrapper<crate::api::api::BalloonLayout
     }
 }
 // Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart for FrbWrapper<crate::api::api::BeaconNamingRecord> {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        [
+            self.0.emoji.into_into_dart().into_dart(),
+            self.0.name.into_into_dart().into_dart(),
+            self.0.associated_beacon.into_into_dart().into_dart(),
+            self.0.role_id.into_into_dart().into_dart(),
+        ]
+        .into_dart()
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
+    for FrbWrapper<crate::api::api::BeaconNamingRecord>
+{
+}
+impl flutter_rust_bridge::IntoIntoDart<FrbWrapper<crate::api::api::BeaconNamingRecord>>
+    for crate::api::api::BeaconNamingRecord
+{
+    fn into_into_dart(self) -> FrbWrapper<crate::api::api::BeaconNamingRecord> {
+        self.into()
+    }
+}
+// Codec=Dco (DartCObject based), see doc to use other codecs
 impl flutter_rust_bridge::IntoDart for FrbWrapper<crate::api::api::CertifiedContext> {
     fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
         [
@@ -16254,6 +17346,30 @@ impl flutter_rust_bridge::IntoIntoDart<FrbWrapper<crate::api::api::ConversationD
 {
     fn into_into_dart(self) -> FrbWrapper<crate::api::api::ConversationData> {
         self.into()
+    }
+}
+// Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart for crate::api::api::DartBeacon {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        [
+            self.naming.into_into_dart().into_dart(),
+            self.last_report.into_into_dart().into_dart(),
+            self.product_id.into_into_dart().into_dart(),
+            self.battery_level.into_into_dart().into_dart(),
+            self.vendor_id.into_into_dart().into_dart(),
+            self.model.into_into_dart().into_dart(),
+            self.system_version.into_into_dart().into_dart(),
+            self.id.into_into_dart().into_dart(),
+        ]
+        .into_dart()
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive for crate::api::api::DartBeacon {}
+impl flutter_rust_bridge::IntoIntoDart<crate::api::api::DartBeacon>
+    for crate::api::api::DartBeacon
+{
+    fn into_into_dart(self) -> crate::api::api::DartBeacon {
+        self
     }
 }
 // Codec=Dco (DartCObject based), see doc to use other codecs
@@ -19528,6 +20644,13 @@ impl SseEncode for JoinedOSConfig {
     }
 }
 
+impl SseEncode for LocationReport {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<LocationReport>>>::sse_encode(flutter_rust_bridge::for_generated::rust_auto_opaque_encode::<_, MoiArc<_>>(self), serializer);
+    }
+}
+
 impl SseEncode for MessageFlags {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
@@ -19939,6 +21062,17 @@ impl SseEncode
 }
 
 impl SseEncode
+    for RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<LocationReport>>
+{
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        let (ptr, size) = self.sse_encode_raw();
+        <usize>::sse_encode(ptr, serializer);
+        <i32>::sse_encode(size, serializer);
+    }
+}
+
+impl SseEncode
     for RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<MessageFlags>>
 {
     // Codec=Sse (Serialization based), see doc to use other codecs
@@ -20207,6 +21341,16 @@ impl SseEncode for crate::api::api::BalloonLayout {
     }
 }
 
+impl SseEncode for crate::api::api::BeaconNamingRecord {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <String>::sse_encode(self.emoji, serializer);
+        <String>::sse_encode(self.name, serializer);
+        <String>::sse_encode(self.associated_beacon, serializer);
+        <i64>::sse_encode(self.role_id, serializer);
+    }
+}
+
 impl SseEncode for bool {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
@@ -20329,6 +21473,20 @@ impl SseEncode for crate::api::api::ConversationData {
         <Option<String>>::sse_encode(self.cv_name, serializer);
         <Option<String>>::sse_encode(self.sender_guid, serializer);
         <Option<String>>::sse_encode(self.after_guid, serializer);
+    }
+}
+
+impl SseEncode for crate::api::api::DartBeacon {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <crate::api::api::BeaconNamingRecord>::sse_encode(self.naming, serializer);
+        <Option<LocationReport>>::sse_encode(self.last_report, serializer);
+        <i64>::sse_encode(self.product_id, serializer);
+        <i64>::sse_encode(self.battery_level, serializer);
+        <i64>::sse_encode(self.vendor_id, serializer);
+        <String>::sse_encode(self.model, serializer);
+        <String>::sse_encode(self.system_version, serializer);
+        <String>::sse_encode(self.id, serializer);
     }
 }
 
@@ -20787,6 +21945,16 @@ impl SseEncode for Vec<crate::api::api::CloudParticipant> {
         <i32>::sse_encode(self.len() as _, serializer);
         for item in self {
             <crate::api::api::CloudParticipant>::sse_encode(item, serializer);
+        }
+    }
+}
+
+impl SseEncode for Vec<crate::api::api::DartBeacon> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <i32>::sse_encode(self.len() as _, serializer);
+        for item in self {
+            <crate::api::api::DartBeacon>::sse_encode(item, serializer);
         }
     }
 }
@@ -21848,6 +23016,16 @@ impl SseEncode for Option<JoinedOSConfig> {
         <bool>::sse_encode(self.is_some(), serializer);
         if let Some(value) = self {
             <JoinedOSConfig>::sse_encode(value, serializer);
+        }
+    }
+}
+
+impl SseEncode for Option<LocationReport> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <bool>::sse_encode(self.is_some(), serializer);
+        if let Some(value) = self {
+            <LocationReport>::sse_encode(value, serializer);
         }
     }
 }
@@ -23737,6 +24915,20 @@ mod io {
         ptr: *const std::ffi::c_void,
     ) {
         MoiArc::<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<JoinedOSConfig>>::decrement_strong_count(ptr as _);
+    }
+
+    #[no_mangle]
+    pub extern "C" fn frbgen_bluebubbles_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerLocationReport(
+        ptr: *const std::ffi::c_void,
+    ) {
+        MoiArc::<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<LocationReport>>::increment_strong_count(ptr as _);
+    }
+
+    #[no_mangle]
+    pub extern "C" fn frbgen_bluebubbles_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerLocationReport(
+        ptr: *const std::ffi::c_void,
+    ) {
+        MoiArc::<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<LocationReport>>::decrement_strong_count(ptr as _);
     }
 
     #[no_mangle]

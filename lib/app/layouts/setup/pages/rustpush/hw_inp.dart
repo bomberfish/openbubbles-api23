@@ -364,6 +364,12 @@ class HwInpState extends OptimizedState<HwInp> {
       result = await inner;
     } catch (e, s) {
       Get.back();
+      if (e.toString().contains("Ticket not reserved!")) {
+        controller.token = null;
+        controller.tokenExpiry = DateTime.fromMillisecondsSinceEpoch(0);
+        controller.updateIAPState();
+      }
+      controller.handleOfflineError(e.toString(), currentTicket);
       showSnackbar("Failure handling subscription! Please try again", e.toString());
       pushService.mixpanel.track("hosted-device-failure");
       rethrow;
@@ -371,6 +377,8 @@ class HwInpState extends OptimizedState<HwInp> {
     Get.back();
     return result;
   }
+
+  String? currentTicket;
 
   Future<void> handleSubscriptionToken(String subscription) async {
     String token;
@@ -401,8 +409,8 @@ class HwInpState extends OptimizedState<HwInp> {
     }
     
     var activated = await http.dio.post("https://hw.openbubbles.app/ticket/$token/activate", data: {"purchase_token": subscription});
-    var ticket = activated.data["ticket"];
-    var parsed = await api.configFromRelay(code: ticket, host: "https://hw.openbubbles.app");
+    currentTicket = activated.data["ticket"];
+    var parsed = await api.configFromRelay(code: currentTicket!, host: "https://hw.openbubbles.app");
     usingBeeper = false;
     await connect(parsed, isHosted: true);
   }

@@ -14,7 +14,7 @@ use sha2::Digest;
 use prost::Message as prostMessage;
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use tokio::{runtime::Runtime, select, sync::{broadcast, mpsc, oneshot::{self, Sender}, watch, Mutex, RwLock}};
-use rustpush::{authenticate_apple, authenticate_phone, TokenProvider, cloud_messages::CloudMessagesClient, cloudkit::{CloudKitClient, CloudKitState}, facetime::{FTClient, FTState, FACETIME_SERVICE, VIDEO_SERVICE}, findmy::{FindMyClient, FindMyState, FindMyStateManager, MULTIPLEX_SERVICE}, keychain::{KeychainClient, KeychainClientState}, login_apple_delegates, name_photo_sharing::ProfilesClient, sharedstreams::{AssetMetadata, FFMpegFilePackager, FileMetadata, FilePackager, PreparedAsset, PreparedFile, SharedStreamClient, SharedStreamsState, SyncController, SyncManager, SyncState}, statuskit::{ChannelInterestToken, StatusKitClient, StatusKitState, StatusKitStatus}, APSMessage, CircleClientSession, CircleServerSession, IDSNGMIdentity, LoginDelegate, MADRID_SERVICE};
+use rustpush::{authenticate_apple, authenticate_phone, cloud_messages::CloudMessagesClient, cloudkit::{CloudKitClient, CloudKitState}, facetime::{FTClient, FTState, FACETIME_SERVICE, VIDEO_SERVICE}, findmy::{FindMyClient, FindMyState, FindMyStateManager, MULTIPLEX_SERVICE}, keychain::{KeychainClient, KeychainClientState}, login_apple_delegates, name_photo_sharing::ProfilesClient, sharedstreams::{AssetMetadata, FFMpegFilePackager, FileMetadata, FilePackager, PreparedAsset, PreparedFile, SharedStreamClient, SharedStreamsState, SyncController, SyncManager, SyncState}, statuskit::{ChannelInterestToken, StatusKitClient, StatusKitState, StatusKitStatus}, APSMessage, CircleClientSession, CircleServerSession, IDSNGMIdentity, LoginDelegate, TokenProvider, MADRID_SERVICE};
 use rustpush::AnisetteProvider;
 pub use rustpush::findmy::{FindMyFriendsClient, FindMyPhoneClient};
 pub use rustpush::sharedstreams::{SharedAlbum, SyncStatus};
@@ -398,6 +398,8 @@ async fn restore(curr_state: &PushState) {
     let provider = Some(default_provider(inner.os_config.as_ref().unwrap().get_gsa_config(&*inner.conn.as_ref().unwrap().state.read().await), inner.conf_dir.join("anisette_test")));
     inner.anisette = provider;
 
+    inner.idms_client = Some(IdmsAuthListener::new(inner.conn.as_ref().unwrap().clone()).await);
+
     // id may not exist yet; that's fine
     let Ok(users) = plist::from_file::<_, Vec<IDSUser>>(&id_path) else { return };
 
@@ -439,16 +441,6 @@ async fn restore(curr_state: &PushState) {
     if let Some(account) = &inner.account {
         let token_provider = TokenProvider::new(account.clone(), inner.os_config.as_ref().unwrap().config());
         inner.token_provider = Some(token_provider.clone());
-
-        let id_path = inner.conf_dir.join("findmy.plist");
-        if let Ok(state) = plist::from_file(&id_path) {
-            inner.fmfd = Some(FindMyClient::new(inner.conn.as_ref().unwrap().clone(), inner.os_config.as_ref().unwrap().config(), Arc::new(FindMyStateManager {
-                state: Mutex::new(state),
-                update: Box::new(move |state| {
-                    plist::to_file_xml(&id_path, state).expect("Failed to serialize plist!");
-                }),
-            }), token_provider.clone(), inner.anisette.clone().unwrap(), inner.client.as_ref().unwrap().identity.clone()).await.unwrap());
-        }
 
         let stream_path = inner.conf_dir.join("sharedstreams.plist");
         if let Ok(state) = plist::from_file(&stream_path) {
@@ -507,9 +499,19 @@ async fn restore(curr_state: &PushState) {
 
             inner.keychain = Some(keychain.clone());
             inner.cloud_messages_client = Some(CloudMessagesClient::new(cloudkit.clone(), keychain.clone()));
+
+            let id_path = inner.conf_dir.join("findmy.plist");
+            if let Ok(state) = plist::from_file(&id_path) {
+                let token_provider = inner.token_provider.as_ref().unwrap();
+                inner.fmfd = Some(FindMyClient::new(inner.conn.as_ref().unwrap().clone(), cloudkit.clone(), keychain.clone(), inner.os_config.as_ref().unwrap().config(), Arc::new(FindMyStateManager {
+                    state: Mutex::new(state),
+                    update: Box::new(move |state| {
+                        plist::to_file_xml(&id_path, state).expect("Failed to serialize plist!");
+                    }),
+                }), token_provider.clone(), inner.anisette.clone().unwrap(), inner.client.as_ref().unwrap().identity.clone()).await.unwrap());
+            }
         }
     }
-    inner.idms_client = Some(IdmsAuthListener::new(inner.conn.as_ref().unwrap().clone()).await);
 }
 
 async fn shared_items<P: AnisetteProvider + Send + Sync + 'static, F: FilePackager + Send + Sync + 'static>(manager: &SyncManager<P, F>, seen_paths: &mut HashSet<PathBuf>) -> HashSet<PathBuf> {
@@ -588,15 +590,6 @@ pub async fn register_ids(state: &Arc<PushState>, users: &Vec<IDSUser>) -> anyho
     let token_provider = TokenProvider::new(inner.account.clone().unwrap(), inner.os_config.as_ref().unwrap().config());
     inner.token_provider = Some(token_provider.clone());
 
-    let id_path = inner.conf_dir.join("findmy.plist");
-    if let Ok(state) = plist::from_file(&id_path) {
-        inner.fmfd = Some(FindMyClient::new(inner.conn.as_ref().unwrap().clone(), inner.os_config.as_ref().unwrap().config(), Arc::new(FindMyStateManager {
-            state: Mutex::new(state),
-            update: Box::new(move |state| {
-                plist::to_file_xml(&id_path, state).expect("Failed to serialize plist!");
-            }),
-        }), token_provider.clone(), inner.anisette.clone().unwrap(), inner.client.as_ref().unwrap().identity.clone()).await.unwrap());
-    }
     let stream_path = inner.conf_dir.join("sharedstreams.plist");
     if let Ok(state) = plist::from_file(&stream_path) {
         let client = SharedStreamClient::new(state, Box::new(move |update| {
@@ -650,9 +643,18 @@ pub async fn register_ids(state: &Arc<PushState>, users: &Vec<IDSUser>) -> anyho
 
             inner.keychain = Some(keychain.clone());
             inner.cloud_messages_client = Some(CloudMessagesClient::new(cloudkit.clone(), keychain.clone()));
+
+            let id_path = inner.conf_dir.join("findmy.plist");
+            if let Ok(state) = plist::from_file(&id_path) {
+                inner.fmfd = Some(FindMyClient::new(inner.conn.as_ref().unwrap().clone(), cloudkit.clone(), keychain.clone(), inner.os_config.as_ref().unwrap().config(), Arc::new(FindMyStateManager {
+                    state: Mutex::new(state),
+                    update: Box::new(move |state| {
+                        plist::to_file_xml(&id_path, state).expect("Failed to serialize plist!");
+                    }),
+                }), token_provider.clone(), inner.anisette.clone().unwrap(), inner.client.as_ref().unwrap().identity.clone()).await.unwrap());
+            }
         }
     }
-    inner.idms_client = Some(IdmsAuthListener::new(inner.conn.as_ref().unwrap().clone()).await);
     Ok(None)
 }
 
@@ -804,7 +806,7 @@ pub async fn validate_relay(state: &Arc<PushState>) -> anyhow::Result<Option<Str
         JoinedOSConfig::MacOS(macos) => None,
         JoinedOSConfig::Relay(relay) => Some(relay.code.clone())
     }) };
-    if !message.contains("Subscription not active!") && !message.contains("Ticket not activated!") {
+    if !message.contains("Subscription not active!") && !message.contains("Ticket not activated!") && !message.contains("Sorry, your hosted device is currently offline!") {
         info!("Validation failed {message}");
         return Ok(None);
     }
@@ -1737,7 +1739,7 @@ pub async fn make_find_my_phone(state: &Arc<PushState>) -> anyhow::Result<FindMy
     let id_path = inner.conf_dir.join("findmy.plist");
     let state: FindMyState = plist::from_file(id_path)?;
 
-    Ok(FindMyPhoneClient::new(inner.os_config.as_deref().unwrap(), state, inner.conn.clone().unwrap(), inner.anisette.clone().unwrap(), inner.token_provider.clone().unwrap()).await?)
+    Ok(FindMyPhoneClient::new(inner.os_config.as_deref().unwrap(), state.dsid.clone(), inner.conn.clone().unwrap(), inner.anisette.clone().unwrap(), inner.token_provider.clone().unwrap()).await?)
 }
 
 pub async fn get_devices(client: &mut FindMyPhoneClient<DefaultAnisetteProvider>) -> Vec<FoundDevice> {
@@ -1755,7 +1757,49 @@ pub async fn make_find_my_friends(state: &Arc<PushState>) -> anyhow::Result<Find
 
     let fmfd = inner.fmfd.as_ref().ok_or(anyhow!("Fmfd!"))?;
 
-    Ok(FindMyFriendsClient::new(inner.os_config.as_deref().unwrap(), fmfd.state.clone(), inner.token_provider.clone().unwrap(), inner.conn.clone().unwrap(), inner.anisette.clone().unwrap(), false).await?)
+    let fmf_client = FindMyFriendsClient::new(inner.os_config.as_deref().unwrap(), fmfd.state.state.lock().await.dsid.clone(), inner.token_provider.clone().unwrap(), inner.conn.clone().unwrap(), inner.anisette.clone().unwrap(), false).await?;
+    Ok(fmf_client)
+}
+
+#[frb(type_64bit_int)]
+pub struct DartBeacon {
+    pub naming: BeaconNamingRecord,
+    pub last_report: Option<LocationReport>,
+    pub product_id: i64,
+    pub battery_level: i64,
+    pub vendor_id: i64,
+    pub model: String,
+    pub system_version: String,
+    pub id: String,
+}
+
+pub async fn get_beacon_items(state: &Arc<PushState>) -> anyhow::Result<Vec<DartBeacon>> {
+    let inner = state.0.read().await;
+
+    let items = inner.fmfd.as_ref().unwrap();
+    items.sync_item_positions().await?;
+
+    let records = items.state.state.lock().await;
+
+    Ok(records.accessories.iter().map(|(id, a)| DartBeacon {
+        naming: a.naming.clone(),
+        last_report: a.last_report.clone(),
+        product_id: a.master_record.product_id,
+        battery_level: a.master_record.battery_level,
+        vendor_id: a.master_record.vendor_id,
+        model: a.master_record.model.clone(),
+        system_version: a.master_record.system_version.clone(),
+        id: id.clone(),
+    }).collect())
+}
+
+pub async fn update_beacon_name(state: &Arc<PushState>, naming_record: &BeaconNamingRecord) -> anyhow::Result<()> {
+    let inner = state.0.read().await;
+
+    let items = inner.fmfd.as_ref().unwrap();
+    items.update_beacon_name(naming_record).await?;
+
+    Ok(())
 }
 
 pub async fn get_following(client: &mut FindMyFriendsClient<DefaultAnisetteProvider>) -> Vec<Follow> {
@@ -1846,7 +1890,7 @@ async fn do_login(conf_dir: &Path, account: &mut AppleAccount<DefaultAnisettePro
     }).unwrap()).unwrap();
     
     let mobileme = delegates.mobileme.unwrap();
-    let findmy = FindMyState::new(dsid.clone(), acname);
+    let findmy = FindMyState::new(dsid.clone());
 
     if let Some(findmy) = findmy {
         let id_path = conf_dir.join("findmy.plist");
@@ -2149,6 +2193,11 @@ pub async fn download_cloud_attachments(state: &Arc<PushState>, files: Vec<(Stri
     Ok(())
 }
 
+#[frb(sync, type_64bit_int)]
+pub fn systemtime_to_millis(time: SystemTime) -> u64 {
+    time.duration_since(SystemTime::UNIX_EPOCH).unwrap().as_millis() as u64
+}
+
 #[frb(sync)]
 pub fn utm_now() -> SystemTime {
     SystemTime::now()
@@ -2222,6 +2271,13 @@ pub async fn upload_group_photo(state: &Arc<PushState>, files: Vec<(String, Stri
     Ok(finish)
 }
 
+pub async fn change_escrow_password(state: &Arc<PushState>, device_password: String) -> anyhow::Result<()> {
+    let inner = state.0.read().await;
+    let keychain = inner.keychain.clone().unwrap();
+    keychain.change_escrow_password(device_password.as_bytes()).await?;
+    Ok(())
+}
+
 pub async fn circle_setup_clique(state: &Arc<PushState>, device_password: String) -> anyhow::Result<()> {
     let inner = state.0.read().await;
 
@@ -2242,7 +2298,7 @@ pub async fn verify_2fa(state: &Arc<PushState>, code: String) -> anyhow::Result<
 
     let mut login_state = loop {
         let msg = inner.inq_queue.as_ref().expect("No inq que 2fa?").lock().await.recv().await.unwrap();
-        if let Some(test) = inner.idms_client.as_ref().unwrap().handle(msg)? {
+        if let Some(test) = inner.idms_client.as_ref().expect("No idms!").handle(msg)? {
             match test {
                 IdmsMessage::CircleRequest(c, _) => {
                     if let Some(state) = client.handle_circle_request(&c).await? {

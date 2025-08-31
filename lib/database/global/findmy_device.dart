@@ -63,7 +63,7 @@ class FindMyDevice {
   final dynamic locationEnabled;
   final bool isConsideredAccessory;
   final Address? address;
-  final Location? location;
+  Location? location;
   final String? modelDisplayName;
   final dynamic deviceColor;
   final dynamic activationLocked;
