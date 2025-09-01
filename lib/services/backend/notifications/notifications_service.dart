@@ -688,25 +688,24 @@ class NotificationsService extends GetxService {
     var title = message.aps.alert.title.replaceAll("Apple ID", "Apple Account");
     var subtitle = message.aps.alert.body.replaceAll("Apple ID", "Apple Account");
     try {
-      var request = await http.dio.get("https://nominatim.openstreetmap.org/reverse?lat=${message.akdata.lat}&lon=${message.akdata.lng}&format=jsonv2&zoom=10");
+      var geocode = await pushService.reverseGeocode(message.akdata.lat, message.akdata.lng);
 
       String text;
-      var address = request.data["address"];
-      if (address != null) {
-        String? city = address["city"];
+      if (geocode!.administrativeArea != null) {
+        String? city = geocode.locality;
         if (city != null) {
-          String? state = address["state"]?.substring(0, 2).toUpperCase();
-          String? country = address["country_code"];
+          String? state = geocode.administrativeArea?.substring(0, 2).toUpperCase();
+          String? country = geocode.isoCountryCode;
           if (state != null) {
             text = "$city, $state";
           } else {
             text = "$city, $country";
           }
         } else {
-          text = address["state"] ?? address["country"];
+          text = geocode.administrativeArea ?? geocode.country!;
         }
       } else {
-        text = request.data["name"];
+        text = geocode.name!;
       }
       
       subtitle = subtitle.replaceAll("%loc%", text);

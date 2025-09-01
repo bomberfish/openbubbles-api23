@@ -11,6 +11,7 @@ import com.bluebubbles.messaging.models.MethodCallHandlerImpl
 import com.bluebubbles.messaging.services.notifications.DeleteNotificationHandler
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
+import java.util.UUID
 
 class AppleAccountLoginHandler: MethodCallHandlerImpl() {
 
@@ -71,6 +72,7 @@ class AppleAccountLoginHandler: MethodCallHandlerImpl() {
             .setContentText(body)
             .setSmallIcon(R.mipmap.ic_stat_icon)
             .setAutoCancel(true)
+            .setGroup(UUID.randomUUID().toString())
             .setPriority(NotificationCompat.PRIORITY_MAX)
             .setColor(4888294)
 

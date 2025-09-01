@@ -67,6 +67,8 @@ class _FindMyPageState extends OptimizedState<FindMyPage> with SingleTickerProvi
   bool canRefresh = false;
   bool isInClique = true;
 
+  Map<(double, double), Address> cachedAddresses = {};
+
   List<api.DartBeacon> cachedBeacons = [];
   DateTime? beaconCacheDate;
 
@@ -312,6 +314,38 @@ class _FindMyPageState extends OptimizedState<FindMyPage> with SingleTickerProvi
           Logger.error("Failed to fetch beacon data", error: e, trace: s);
         }
         beaconCacheDate = DateTime.now();
+        for (var cached in cachedBeacons) {
+          if (cached.lastReport == null) continue;
+          try {
+            var placemark = await pushService.reverseGeocode(cached.lastReport!.lat, cached.lastReport!.long);
+            if (placemark != null) {
+              cachedAddresses[(cached.lastReport!.lat, cached.lastReport!.long)] = Address(
+                subAdministrativeArea: placemark.subAdministrativeArea,
+                label: placemark.thoroughfare,
+                streetAddress: placemark.thoroughfare,
+                country: placemark.country,
+                countryCode: placemark.isoCountryCode,
+                administrativeArea: placemark.administrativeArea,
+                streetName: placemark.thoroughfare,
+                formattedAddressLines: [
+                  if (placemark.thoroughfare != null)
+                  placemark.thoroughfare!,
+                  if (placemark.locality != null)
+                  placemark.locality!,
+                  if (placemark.administrativeArea != null)
+                  placemark.administrativeArea!,
+                ],
+                locality: placemark.locality,
+                stateCode: placemark.administrativeArea?.substring(0, 2).toUpperCase(),
+                mapItemFullAddress: null,
+                fullThroroughfare: null,
+                areaOfInterest: [],
+              );
+            }
+          } catch (e, s) {
+            Logger.warn("Geocoding failed", error: e, trace: s);
+          }
+        }
       }
       for (api.DartBeacon e in cachedBeacons) {
         var location = e.lastReport != null ? Location(
@@ -347,7 +381,7 @@ class _FindMyPageState extends OptimizedState<FindMyPage> with SingleTickerProvi
           batteryLevel: e.batteryLevel.toDouble(), 
           locationEnabled: true, 
           isConsideredAccessory: true, 
-          address: null, 
+          address: cachedAddresses[(e.lastReport!.lat, e.lastReport!.long)], 
           location: location, 
           modelDisplayName: null, 
           deviceColor: null, 

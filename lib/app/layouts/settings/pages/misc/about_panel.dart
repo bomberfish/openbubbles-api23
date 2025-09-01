@@ -221,6 +221,20 @@ class _AboutPanelState extends OptimizedState<AboutPanel> {
                     ),
                     const SettingsDivider(),
                     SettingsTile(
+                      title: "OpenStreetMap",
+                      subtitle: "Used for geocoding services",
+                      onTap: () async {
+                        await launchUrl(Uri.parse("https://openstreetmap.org/copyright"), mode: LaunchMode.externalApplication);
+                      },
+                      leading: const SettingsLeadingIcon(
+                        iosIcon: CupertinoIcons.globe,
+                        materialIcon: Icons.language,
+                        containerColor: Colors.green,
+                      ),
+                      trailing: const NextButton()
+                    ),
+                    const SettingsDivider(),
+                    SettingsTile(
                       title: "Report a Bug",
                       subtitle: "Found a bug? Report it here!",
                       onTap: () async {

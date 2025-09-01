@@ -28,6 +28,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rust_bridge/flutter_rust_bridge.dart';
 import 'package:get/get.dart';
 import 'package:in_app_purchase_android/billing_client_wrappers.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:mime_type/mime_type.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
@@ -3533,6 +3534,28 @@ class RustPushService extends GetxService {
         message: reflected,
         type: QueueType.newMessage
       ));
+    }
+  }
+
+  Future<Placemark?> reverseGeocode(double lat, double lng) async {
+    try {
+      var result = await placemarkFromCoordinates(lat, lng);
+      return result.firstOrNull;
+    } catch (e, s) {
+      Logger.warn("failed to native geocode, falling back to nominatim", error: e, trace: s);
+      var request = await http.dio.get("https://nominatim.openstreetmap.org/reverse?lat=$lat&lon=$lng&format=jsonv2&zoom=10", options: Options(
+        headers: {
+          "User-Agent": "OpenBubbles"
+        }
+      ));
+      return Placemark(
+        name: request.data["name"],
+        isoCountryCode: request.data["address"]?["country_code"],
+        country: request.data["address"]?["country"],
+        locality: request.data["address"]?["city"],
+        administrativeArea: request.data["address"]?["state"],
+        subAdministrativeArea: request.data["address"]?["county"],
+      );
     }
   }
   
