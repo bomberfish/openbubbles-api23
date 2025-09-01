@@ -483,7 +483,7 @@ Future<IdsUser> authPhone(
     RustLib.instance.api
         .crateApiApiAuthPhone(state: state, number: number, sig: sig);
 
-Future<LoginState> send2FaToDevices({required ArcPushState state}) =>
+Future<(LoginState, String?)> send2FaToDevices({required ArcPushState state}) =>
     RustLib.instance.api.crateApiApiSend2FaToDevices(state: state);
 
 Future<bool> supportsKeychain({required ArcPushState state}) =>

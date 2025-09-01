@@ -40,6 +40,8 @@ import com.bluebubbles.messaging.services.foreground.StopForegroundServiceHandle
 import com.bluebubbles.messaging.services.notifications.CreateMissedFaceTimeNotification
 import com.bluebubbles.messaging.services.rustpush.AppleAccountLoginHandler
 import com.bluebubbles.messaging.services.rustpush.GetNativeHandleHandler
+import com.bluebubbles.messaging.services.system.EnableBTHandler
+import com.bluebubbles.messaging.services.system.CircleProximitySessionHandler
 import com.bluebubbles.messaging.services.system.ConversationExemptHandler
 import com.bluebubbles.messaging.services.system.CreateDocumentHandler
 import com.bluebubbles.messaging.services.system.GetFullResolution
@@ -125,6 +127,8 @@ class MethodCallHandler {
             CreateDocumentHandler.tag -> CreateDocumentHandler().handleMethodCall(call, result, context)
             AppleAccountLoginHandler.tag -> AppleAccountLoginHandler().handleMethodCall(call, result, context)
             HeifEncoder.tag -> HeifEncoder().handleMethodCall(call, result, context)
+            CircleProximitySessionHandler.tag -> CircleProximitySessionHandler().handleMethodCall(call, result, context)
+            EnableBTHandler.tag -> EnableBTHandler().handleMethodCall(call, result, context)
             "ready" -> { MainActivity.engine_ready = true }
             else -> {
                 val error = "Could not find method call handler for ${call.method}!"

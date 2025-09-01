@@ -15238,6 +15238,15 @@ impl SseDecode for (crate::api::api::LoginState, Option<IDSUser>) {
     }
 }
 
+impl SseDecode for (crate::api::api::LoginState, Option<String>) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut var_field0 = <crate::api::api::LoginState>::sse_decode(deserializer);
+        let mut var_field1 = <Option<String>>::sse_decode(deserializer);
+        return (var_field0, var_field1);
+    }
+}
+
 impl SseDecode
     for (
         std::collections::HashMap<String, crate::api::api::SyncStatus>,
@@ -24007,6 +24016,14 @@ impl SseEncode for (crate::api::api::LoginState, Option<IDSUser>) {
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         <crate::api::api::LoginState>::sse_encode(self.0, serializer);
         <Option<IDSUser>>::sse_encode(self.1, serializer);
+    }
+}
+
+impl SseEncode for (crate::api::api::LoginState, Option<String>) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <crate::api::api::LoginState>::sse_encode(self.0, serializer);
+        <Option<String>>::sse_encode(self.1, serializer);
     }
 }
 

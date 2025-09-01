@@ -1641,6 +1641,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       dynamic raw);
 
   @protected
+  (LoginState, String?) dco_decode_record_login_state_opt_string(dynamic raw);
+
+  @protected
   (
     Map<String, SyncStatus>,
     (String, BigInt)?
@@ -3489,6 +3492,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
     LoginState,
     IdsUser?
   ) sse_decode_record_login_state_opt_box_autoadd_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_ids_user(
+      SseDeserializer deserializer);
+
+  @protected
+  (LoginState, String?) sse_decode_record_login_state_opt_string(
       SseDeserializer deserializer);
 
   @protected
@@ -5389,6 +5396,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   void
       sse_encode_record_login_state_opt_box_autoadd_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_ids_user(
           (LoginState, IdsUser?) self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_record_login_state_opt_string(
+      (LoginState, String?) self, SseSerializer serializer);
 
   @protected
   void

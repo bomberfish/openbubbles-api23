@@ -16,6 +16,7 @@ import com.bluebubbles.messaging.services.extension.LiveExtensionFactory
 import com.bluebubbles.messaging.services.extension.MessageViewHandle
 import com.bluebubbles.messaging.services.rustpush.APNService
 import com.bluebubbles.messaging.services.system.CreateDocumentHandler
+import com.bluebubbles.messaging.services.system.EnableBTHandler
 import io.flutter.embedding.android.FlutterFragmentActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
@@ -113,6 +114,10 @@ class MainActivity : FlutterFragmentActivity(), ComponentCallbacks2 {
             } catch (e: Exception) {
                 result.error("FILE_WRITE_ERROR", e.message, null)
             }
+        }
+        if (requestCode == Constants.enableBtRequestCode) {
+            var result = EnableBTHandler.savedResult!!
+            result.success(true)
         }
     }
 }

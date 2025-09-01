@@ -23,6 +23,7 @@ class Constants {
         const val notificationListenerRequestCode = 1000
         const val documentSaveRequestCode = 2000
         const val dartWorkerNotificationId = 1000000
+        const val enableBtRequestCode = 50001
     }
 }
 

@@ -241,10 +241,16 @@ class _AppleId2FAState extends OptimizedState<AppleId2FA> {
     setState(() {
       appleHelping = true;
     });
-    await controller.updateLoginState(const api.LoginState.needsSms2Fa());
-    setState(() {
-      appleHelping = false;
-    });
+    try {
+      await controller.updateLoginState(const api.LoginState.needsSms2Fa());
+    } catch (e) {
+      controller.updateConnectError("$e");
+      rethrow;
+    } finally {
+      setState(() {
+        appleHelping = false;
+      });
+    }
   }
 
   void goBack() {

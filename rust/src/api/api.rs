@@ -1970,7 +1970,7 @@ pub async fn auth_phone(state: &Arc<PushState>, number: String, sig: Vec<u8>) ->
     Ok(identity)
 }
 
-pub async fn send_2fa_to_devices(state: &Arc<PushState>) -> anyhow::Result<LoginState> {
+pub async fn send_2fa_to_devices(state: &Arc<PushState>) -> anyhow::Result<(LoginState, Option<String>)> {
     let mut inner = state.0.write().await;
     let account = inner.account.as_ref().unwrap().lock().await;
 
@@ -1981,9 +1981,11 @@ pub async fn send_2fa_to_devices(state: &Arc<PushState>) -> anyhow::Result<Login
 
     let conn = inner.conn.as_ref().unwrap();
 
-    *inner.idms_circle_client.lock().await = Some(CircleClientSession::new(dsid, inner.account.clone().unwrap(), conn.get_token().await).await?);
+    let client_session = CircleClientSession::new(dsid, inner.account.clone().unwrap(), conn.get_token().await).await?;
+    let sid = client_session.session_id.clone();
+    *inner.idms_circle_client.lock().await = Some(client_session);
 
-    Ok(LoginState::Needs2FAVerification)
+    Ok((LoginState::Needs2FAVerification, sid))
 }
 
 #[frb(type_64bit_int)]
@@ -2284,7 +2286,13 @@ pub async fn circle_setup_clique(state: &Arc<PushState>, device_password: String
     let mut locked = inner.idms_circle_client.lock().await;
     let Some(client) = &mut *locked else { return Ok(()) };
 
-    client.setup_trusted_peers(inner.keychain.clone().unwrap(), device_password.as_bytes()).await?;
+    if let Err(e) = client.setup_trusted_peers(inner.keychain.clone().unwrap(), device_password.as_bytes()).await {
+        if let PushError::CircleOver = &e {
+            *locked = None;
+            return Ok(())
+        }
+        return Err(e.into())
+    }
     Ok(())
 }
 
@@ -2341,6 +2349,14 @@ pub async fn get_2fa_sms_opts(state: &Arc<PushState>) -> anyhow::Result<(Vec<Tru
 
 pub async fn send_2fa_sms(state: &Arc<PushState>, phone_id: u32) -> anyhow::Result<LoginState> {
     let inner = state.0.read().await;
+
+    let mut locked = inner.idms_circle_client.lock().await;
+    if let Some(l) = &mut *locked {
+        l.cancel().await?;
+        *locked = None;
+    }
+    drop(locked);
+
     let account = inner.account.as_ref().unwrap().lock().await;
     Ok(account.send_sms_2fa_to_devices(phone_id).await?)
 }

@@ -543,7 +543,8 @@ abstract class RustLibApi extends BaseApi {
   Future<LoginState> crateApiApiSend2FaSms(
       {required ArcPushState state, required int phoneId});
 
-  Future<LoginState> crateApiApiSend2FaToDevices({required ArcPushState state});
+  Future<(LoginState, String?)> crateApiApiSend2FaToDevices(
+      {required ArcPushState state});
 
   Future<ArcPushState> crateApiApiServiceFromPtr({required String ptr});
 
@@ -5094,7 +5095,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
-  Future<LoginState> crateApiApiSend2FaToDevices(
+  Future<(LoginState, String?)> crateApiApiSend2FaToDevices(
       {required ArcPushState state}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
@@ -5105,7 +5106,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             funcId: 160, port: port_);
       },
       codec: SseCodec(
-        decodeSuccessData: sse_decode_login_state,
+        decodeSuccessData: sse_decode_record_login_state_opt_string,
         decodeErrorData: sse_decode_AnyhowException,
       ),
       constMeta: kCrateApiApiSend2FaToDevicesConstMeta,
@@ -10381,6 +10382,19 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       dco_decode_login_state(arr[0]),
       dco_decode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIDSUser(
           arr[1]),
+    );
+  }
+
+  @protected
+  (LoginState, String?) dco_decode_record_login_state_opt_string(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    final arr = raw as List<dynamic>;
+    if (arr.length != 2) {
+      throw Exception('Expected 2 elements, got ${arr.length}');
+    }
+    return (
+      dco_decode_login_state(arr[0]),
+      dco_decode_opt_String(arr[1]),
     );
   }
 
@@ -16133,6 +16147,15 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  (LoginState, String?) sse_decode_record_login_state_opt_string(
+      SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    var var_field0 = sse_decode_login_state(deserializer);
+    var var_field1 = sse_decode_opt_String(deserializer);
+    return (var_field0, var_field1);
+  }
+
+  @protected
   (
     Map<String, SyncStatus>,
     (String, BigInt)?
@@ -21151,6 +21174,14 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     sse_encode_login_state(self.$1, serializer);
     sse_encode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIDSUser(
         self.$2, serializer);
+  }
+
+  @protected
+  void sse_encode_record_login_state_opt_string(
+      (LoginState, String?) self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_login_state(self.$1, serializer);
+    sse_encode_opt_String(self.$2, serializer);
   }
 
   @protected

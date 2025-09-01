@@ -15,6 +15,7 @@ import 'package:bluebubbles/app/layouts/setup/dialogs/failed_to_connect_dialog.d
 import 'package:bluebubbles/app/layouts/setup/pages/sync/sync_settings.dart';
 import 'package:bluebubbles/app/layouts/setup/pages/sync/server_credentials.dart';
 import 'package:bluebubbles/app/layouts/setup/pages/contacts/request_contacts.dart';
+import 'package:bluebubbles/app/layouts/setup/pages/bluetooth/request_bluetooth.dart';
 import 'package:bluebubbles/app/layouts/setup/pages/setup_checks/mac_setup_check.dart';
 import 'package:bluebubbles/app/layouts/setup/pages/sync/sync_progress.dart';
 import 'package:bluebubbles/app/layouts/setup/pages/welcome/welcome_page.dart';
@@ -241,10 +242,19 @@ class SetupViewController extends StatefulController {
       currentAppleUser = user;
     }
     if (ret is api.LoginState_NeedsDevice2FA) {
-      ret = await api.send2FaToDevices(state: pushService.state);
+      var (rett, sid) = await api.send2FaToDevices(state: pushService.state);
+      if (sid != null) {
+        mcs.invokeMethod("circle-proximity-session", {
+          'sid': sid
+        });
+      }
+      ret = rett;
       isSms.value = false;
     }
     if (ret is api.LoginState_NeedsSMS2FA) {
+      mcs.invokeMethod("circle-proximity-session", {
+        'sid': null
+      });
       var options = await api.get2FaSmsOpts(state: pushService.state);
       if (options.$2 != null) {
         ret = options.$2!;
@@ -297,6 +307,9 @@ class SetupViewController extends StatefulController {
     }
     state = ret;
     if (ret is api.LoginState_LoggedIn) {
+      mcs.invokeMethod("circle-proximity-session", {
+        'sid': null
+      });
       ss.settings.userName.value = await api.getUserName(state: pushService.state);
       await doRegister();
     }
@@ -776,7 +789,7 @@ class _PageNumberState extends CustomState<PageNumber, int, SetupViewController>
                 style: context.theme.textTheme.bodyLarge!.copyWith(color: Colors.white, fontWeight: FontWeight.bold)
               ),
               TextSpan(
-                text: " of ${kIsWeb ? "4" : kIsDesktop ? "5" : "8"}",
+                text: " of ${kIsWeb ? "4" : kIsDesktop ? "5" : "9"}",
                 style: context.theme.textTheme.bodyLarge!.copyWith(color: Colors.white38, fontWeight: FontWeight.bold)
               ),
             ],
@@ -816,6 +829,16 @@ class SetupPages extends StatelessWidget {
               }
             });
           }
+          if (!kIsWeb && !kIsDesktop && page == 3 && controller.currentPage == 3) {
+            mcs.invokeMethod("enable-bt").then((isEnabled) {
+              if (isEnabled ?? false) {
+                controller.pageController.nextPage(
+                  duration: const Duration(milliseconds: 300),
+                  curve: Curves.easeInOut,
+                );
+              }
+            });
+          }
           controller.updatePage(page + 1);
         },
         physics: const NeverScrollableScrollPhysics(),
@@ -824,6 +847,7 @@ class SetupPages extends StatelessWidget {
           WelcomePage(),
           if (!kIsWeb && !kIsDesktop) RequestContacts(),
           if (!kIsWeb && !kIsDesktop) BatteryOptimizationCheck(),
+          if (!kIsWeb && !kIsDesktop) RequestBluetooth(),
           if (!usingRustPush)
             MacSetupCheck(),
           if (!usingRustPush)
