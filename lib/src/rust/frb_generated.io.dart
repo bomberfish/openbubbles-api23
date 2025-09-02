@@ -823,6 +823,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   NSURL dco_decode_box_autoadd_nsurl(dynamic raw);
 
   @protected
+  NumOrString dco_decode_box_autoadd_num_or_string(dynamic raw);
+
+  @protected
   OperatedChat dco_decode_box_autoadd_operated_chat(dynamic raw);
 
   @protected
@@ -1470,6 +1473,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   NSURL? dco_decode_opt_box_autoadd_nsurl(dynamic raw);
+
+  @protected
+  NumOrString? dco_decode_opt_box_autoadd_num_or_string(dynamic raw);
 
   @protected
   PartExtension? dco_decode_opt_box_autoadd_part_extension(dynamic raw);
@@ -2592,6 +2598,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   NSURL sse_decode_box_autoadd_nsurl(SseDeserializer deserializer);
 
   @protected
+  NumOrString sse_decode_box_autoadd_num_or_string(
+      SseDeserializer deserializer);
+
+  @protected
   OperatedChat sse_decode_box_autoadd_operated_chat(
       SseDeserializer deserializer);
 
@@ -3303,6 +3313,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   NSURL? sse_decode_opt_box_autoadd_nsurl(SseDeserializer deserializer);
+
+  @protected
+  NumOrString? sse_decode_opt_box_autoadd_num_or_string(
+      SseDeserializer deserializer);
 
   @protected
   PartExtension? sse_decode_opt_box_autoadd_part_extension(
@@ -4484,6 +4498,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   void sse_encode_box_autoadd_nsurl(NSURL self, SseSerializer serializer);
 
   @protected
+  void sse_encode_box_autoadd_num_or_string(
+      NumOrString self, SseSerializer serializer);
+
+  @protected
   void sse_encode_box_autoadd_operated_chat(
       OperatedChat self, SseSerializer serializer);
 
@@ -5216,6 +5234,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void sse_encode_opt_box_autoadd_nsurl(NSURL? self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_opt_box_autoadd_num_or_string(
+      NumOrString? self, SseSerializer serializer);
 
   @protected
   void sse_encode_opt_box_autoadd_part_extension(

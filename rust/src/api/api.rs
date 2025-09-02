@@ -2422,8 +2422,8 @@ pub async fn reset_state(state: &Arc<PushState>, reset_hw: bool, logout: bool) -
     let _ = std::fs::remove_file(inner.conf_dir.join("id.plist"));
     let _ = std::fs::remove_file(inner.conf_dir.join("findmy.plist"));
     let _ = std::fs::remove_file(inner.conf_dir.join("facetime.plist"));
-    let _ = std::fs::remove_dir(inner.conf_dir.join("cloudkit.plist"));
-    let _ = std::fs::remove_dir(inner.conf_dir.join("keychain.plist"));
+    let _ = std::fs::remove_file(inner.conf_dir.join("cloudkit.plist"));
+    let _ = std::fs::remove_file(inner.conf_dir.join("keychain.plist"));
     let _ = std::fs::remove_file(inner.conf_dir.join("sharedstreams.plist"));
     let _ = std::fs::remove_file(inner.conf_dir.join("gsa.plist"));
     if let Ok(mut cache) = plist::from_file::<_, Dictionary>(inner.conf_dir.join("id_cache.plist")) {

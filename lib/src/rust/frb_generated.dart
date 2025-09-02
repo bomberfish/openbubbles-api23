@@ -7577,6 +7577,12 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  NumOrString dco_decode_box_autoadd_num_or_string(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return dco_decode_num_or_string(raw);
+  }
+
+  @protected
   OperatedChat dco_decode_box_autoadd_operated_chat(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return dco_decode_operated_chat(raw);
@@ -9204,7 +9210,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       decryptionKey: dco_decode_opt_String(arr[3]),
       inlineAttachment: dco_decode_opt_String(arr[4]),
       messagePart: dco_decode_opt_String(arr[5]),
-      fileSize: dco_decode_num_or_string(arr[6]),
+      fileSize: dco_decode_opt_box_autoadd_num_or_string(arr[6]),
       utiType: dco_decode_opt_String(arr[7]),
       mimeType: dco_decode_opt_String(arr[8]),
       name: dco_decode_opt_String(arr[9]),
@@ -9737,6 +9743,12 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   NSURL? dco_decode_opt_box_autoadd_nsurl(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return raw == null ? null : dco_decode_box_autoadd_nsurl(raw);
+  }
+
+  @protected
+  NumOrString? dco_decode_opt_box_autoadd_num_or_string(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return raw == null ? null : dco_decode_box_autoadd_num_or_string(raw);
   }
 
   @protected
@@ -12715,6 +12727,13 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  NumOrString sse_decode_box_autoadd_num_or_string(
+      SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return (sse_decode_num_or_string(deserializer));
+  }
+
+  @protected
   OperatedChat sse_decode_box_autoadd_operated_chat(
       SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
@@ -14676,7 +14695,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     var var_decryptionKey = sse_decode_opt_String(deserializer);
     var var_inlineAttachment = sse_decode_opt_String(deserializer);
     var var_messagePart = sse_decode_opt_String(deserializer);
-    var var_fileSize = sse_decode_num_or_string(deserializer);
+    var var_fileSize = sse_decode_opt_box_autoadd_num_or_string(deserializer);
     var var_utiType = sse_decode_opt_String(deserializer);
     var var_mimeType = sse_decode_opt_String(deserializer);
     var var_name = sse_decode_opt_String(deserializer);
@@ -15402,6 +15421,18 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
     if (sse_decode_bool(deserializer)) {
       return (sse_decode_box_autoadd_nsurl(deserializer));
+    } else {
+      return null;
+    }
+  }
+
+  @protected
+  NumOrString? sse_decode_opt_box_autoadd_num_or_string(
+      SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    if (sse_decode_bool(deserializer)) {
+      return (sse_decode_box_autoadd_num_or_string(deserializer));
     } else {
       return null;
     }
@@ -18397,6 +18428,13 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  void sse_encode_box_autoadd_num_or_string(
+      NumOrString self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_num_or_string(self, serializer);
+  }
+
+  @protected
   void sse_encode_box_autoadd_operated_chat(
       OperatedChat self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
@@ -19918,7 +19956,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     sse_encode_opt_String(self.decryptionKey, serializer);
     sse_encode_opt_String(self.inlineAttachment, serializer);
     sse_encode_opt_String(self.messagePart, serializer);
-    sse_encode_num_or_string(self.fileSize, serializer);
+    sse_encode_opt_box_autoadd_num_or_string(self.fileSize, serializer);
     sse_encode_opt_String(self.utiType, serializer);
     sse_encode_opt_String(self.mimeType, serializer);
     sse_encode_opt_String(self.name, serializer);
@@ -20555,6 +20593,17 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     sse_encode_bool(self != null, serializer);
     if (self != null) {
       sse_encode_box_autoadd_nsurl(self, serializer);
+    }
+  }
+
+  @protected
+  void sse_encode_opt_box_autoadd_num_or_string(
+      NumOrString? self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    sse_encode_bool(self != null, serializer);
+    if (self != null) {
+      sse_encode_box_autoadd_num_or_string(self, serializer);
     }
   }
 

@@ -3137,7 +3137,7 @@ class MMCSAttachmentMeta {
   final String? decryptionKey;
   final String? inlineAttachment;
   final String? messagePart;
-  final NumOrString fileSize;
+  final NumOrString? fileSize;
   final String? utiType;
   final String? mimeType;
   final String? name;
@@ -3149,7 +3149,7 @@ class MMCSAttachmentMeta {
     this.decryptionKey,
     this.inlineAttachment,
     this.messagePart,
-    required this.fileSize,
+    this.fileSize,
     this.utiType,
     this.mimeType,
     this.name,

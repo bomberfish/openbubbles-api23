@@ -793,9 +793,34 @@ class Chat {
     var chat = Chat.findByRustGuid(c.groupId);
     if (chat != null) return chat;
 
-    final query = Database.chats.query(Chat_.chatIdentifier.equals(c.chatIdentifier)).build();
-    final result = query.findFirst();
+    final query2= Database.chats.query(Chat_.chatIdentifier.equals(c.chatIdentifier)).build();
+    final result2 = query2.findFirst();
+    query2.close();
+    if (result2 != null) return result2;
+
+
+    var cond = Chat_.isRoutingStub.equals(false);
+    if (c.displayName != null) {
+      cond = cond.and(Chat_.apnTitle.equals(c.displayName!));
+    }
+    final query = (Database.chats.query(cond)
+          ..linkMany(Chat_.handles, Handle_.address.oneOf(c.participants.map((e) => e.uri).toList())))
+            .build();
+    final results = query.find();
     query.close();
+
+    var result = results.firstWhereOrNull((element) {
+      var participantsCopy = c.participants.map((e) => e.uri).toList();
+      for (var handle in element.handles) {
+        var included = participantsCopy.contains(handle.address);
+        if (!included) {
+          return false;
+        }
+        participantsCopy.remove(handle.address);
+      }
+      return participantsCopy.isEmpty;
+    });
+
     if (result != null) return result;
 
     return await backend.createChat(c.participants.map((p) => p.uri).toList(), null, c.serviceName, existingGuid: c.groupId);

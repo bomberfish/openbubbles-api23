@@ -698,7 +698,7 @@ pub struct DartMMCSAttachmentMeta {
     pub inline_attachment: Option<String>,
     pub message_part: Option<String>,
 
-    pub file_size: NumOrString,
+    pub file_size: Option<NumOrString>,
     pub uti_type: Option<String>,
     pub mime_type: Option<String>,
     pub name: Option<String>,
