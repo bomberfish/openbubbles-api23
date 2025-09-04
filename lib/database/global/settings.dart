@@ -211,7 +211,7 @@ class Settings {
   final RxList<String> developerMode = <String>[].obs;
 
   final RxBool cloudSyncingEnabled = false.obs;
-  final RxBool attachmentSyncEnabled = true.obs;
+  final RxBool attachmentSyncEnabled = false.obs;
   final RxInt lastSynced = 0.obs;
   final RxnString keychainDefaultPassword = RxnString();
   final RxnString chatSyncToken = RxnString();

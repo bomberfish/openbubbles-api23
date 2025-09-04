@@ -2092,6 +2092,7 @@ class RustPushService extends GetxService {
     var messages = Database.messages.getAll();
     for (var message in messages) {
       message.ckRecordId = null;
+      message.ckSyncState = false;
     }
     Database.messages.putMany(messages);
     var chats = Database.chats.getAll();
@@ -2262,85 +2263,218 @@ class RustPushService extends GetxService {
     ss.saveSettings();
 
     List<(String, String)> downloadPfPics = [];
-    var (token, items) = await api.syncChats(state: pushService.state, 
+    var (token, items, state) = await api.syncChats(state: pushService.state, 
       continuationToken: ss.settings.chatSyncToken.value != null ? base64Decode(ss.settings.chatSyncToken.value!) : null);
-    ss.settings.chatSyncToken.value = base64Encode(token);
-    for (var item in items.entries) {
-      if (item.value!.serviceName != "iMessage") continue; // skip SMS chats for now
-      if (item.value == null) {
-        final query = Database.chats.query(Chat_.ckRecordId.equals(item.key)).build();
-        final result = query.findFirst();
-        if (result != null) {
-          syncStopDelete = true;
-          chats.removeChat(result);
-          Chat.deleteChat(result);
-          syncStopDelete = false;
+    while (state != 3) {
+      List<String> dupDeleteChats = [];
+      for (var item in items.entries) {
+        try {
+          if (item.value!.serviceName != "iMessage") continue; // skip SMS chats for now
+          if (item.value == null) {
+            final query = Database.chats.query(Chat_.ckRecordId.equals(item.key)).build();
+            final result = query.findFirst();
+            if (result != null) {
+              syncStopDelete = true;
+              chats.removeChat(result);
+              Chat.deleteChat(result);
+              syncStopDelete = false;
+            }
+            continue;
+          }
+
+          // localized deduplication works fine, since it should not sync down items that have been deleted
+          if (dupDeleteChats.contains(item.key)) continue;
+
+          var chat = await Chat.findFromCloud(item.value!);
+
+          if (chat.ckRecordId != null && chat.ckRecordId != item.key) {
+            // we have a different record id
+            dupDeleteChats.add(chat.ckRecordId!);
+            dupDeleteChats.add(chat.ckRecordId!);
+          }
+
+          var didSync = chat.applyFromCloud(item.value!, item.key);
+          if (didSync && item.value!.groupPhoto != null) {
+            downloadPfPics.add((chat.customAvatarPath!, item.key));
+          }
+        } catch (e, s) {
+          Logger.error("Failed to sync item ${item.key}", error: e, trace: s);
         }
-        continue;
       }
-      var chat = await Chat.findFromCloud(item.value!);
-      var didSync = chat.applyFromCloud(item.value!, item.key);
-      if (didSync && item.value!.groupPhoto != null) {
-        downloadPfPics.add((chat.customAvatarPath!, item.key));
+
+      if (dupDeleteChats.isNotEmpty) {
+        Logger.info("Deleting ${dupDeleteChats.length} duplicate chats");
+        try {
+          await api.deleteChats(state: pushService.state, chats: dupDeleteChats);
+        } catch (e) {
+          if (e is AnyhowException) {
+            if (e.message.contains("Too many requests")) {
+              Logger.warn("Too many requests, waiting 10s");
+              await Future.delayed(const Duration(seconds: 10));
+              await api.deleteChats(state: pushService.state, chats: dupDeleteChats);
+            } else { rethrow; }
+          } else { rethrow; }
+        }
       }
+
+      ss.settings.chatSyncToken.value = base64Encode(token);
+      ss.saveSettings();
+
+      (token, items, state) = await api.syncChats(state: pushService.state, 
+        continuationToken: ss.settings.chatSyncToken.value != null ? base64Decode(ss.settings.chatSyncToken.value!) : null);
     }
+
+    ss.settings.chatSyncToken.value = base64Encode(token);
+    ss.saveSettings();
+
+  
 
     if (downloadPfPics.isNotEmpty) {
       await api.downloadCloudGroupPhotos(state: pushService.state, files: downloadPfPics);
     }
 
-    var (token3, items3) = await api.syncAttachments(state: pushService.state, 
+    var (token3, items3, state3) = await api.syncAttachments(state: pushService.state, 
       continuationToken: ss.settings.attachmentSyncToken.value != null ? base64Decode(ss.settings.attachmentSyncToken.value!) : null);
-    ss.settings.attachmentSyncToken.value = base64Encode(token3);
-    for (var item in items3.entries) {
-      if (item.value == null) {
-        final query = Database.attachments.query(Attachment_.ckRecordId.equals(item.key)).build();
-        final result = query.findFirst();
-        syncStopDelete = true;
-        if (result != null) Attachment.delete(result.guid!);
-        syncStopDelete = false;
-        continue;
+    while (state3 != 3) {
+      List<String> dupDeleteAttachments = [];
+      for (var item in items3.entries) {
+        try {
+          if (item.value == null) {
+            final query = Database.attachments.query(Attachment_.ckRecordId.equals(item.key)).build();
+            final result = query.findFirst();
+            syncStopDelete = true;
+            if (result != null) Attachment.delete(result.guid!);
+            syncStopDelete = false;
+            continue;
+          }
+          if (dupDeleteAttachments.contains(item.key)) continue;
+          var decoded = api.decodeAttachmentmeta(wrapped: item.value!.cm);
+          var existing = Attachment.findOne(convertAttachmentGuid(decoded.guid));
+          if (existing != null) {
+            if (existing.ckRecordId != null && existing.ckRecordId != item.key) {
+              // we have a different record id
+              dupDeleteAttachments.add(existing.ckRecordId!);
+              dupDeleteAttachments.add(existing.ckRecordId!);
+            }
+            existing.ckRecordId = item.key;
+            existing.save(null);
+            continue;
+          } // don't overwrite existing
+          Logger.info("Syncing new attachment");
+          var attachment = Attachment();
+          attachment.applyFromCloud(item.value!, item.key);
+        } catch (e, s) {
+          Logger.error("Failed to sync attachment ${item.key}", error: e, trace: s);
+        }
       }
-      var decoded = api.decodeAttachmentmeta(wrapped: item.value!.cm);
-      var existing = Attachment.findOne(convertAttachmentGuid(decoded.guid));
-      if (existing != null) {
-        existing.ckRecordId = item.key;
-        existing.save(null);
-        continue;
-      } // don't overwrite existing
-      Logger.info("Syncing new attachment");
-      var attachment = Attachment();
-      attachment.applyFromCloud(item.value!, item.key);
+
+      if (dupDeleteAttachments.isNotEmpty) {
+        Logger.info("Deleting ${dupDeleteAttachments.length} duplicate attachments");
+        try {
+          await api.deleteAttachments(state: pushService.state, attachments: dupDeleteAttachments);
+        } catch (e) {
+          if (e is AnyhowException) {
+            if (e.message.contains("Too many requests")) {
+              Logger.warn("Too many requests, waiting 10s");
+              await Future.delayed(const Duration(seconds: 10));
+              await api.deleteAttachments(state: pushService.state, attachments: dupDeleteAttachments);
+            } else { rethrow; }
+          } else { rethrow; }
+        }
+      }
+
+      ss.settings.attachmentSyncToken.value = base64Encode(token3);
+      ss.saveSettings();
+
+      (token3, items3, state3) = await api.syncAttachments(state: pushService.state, 
+        continuationToken: ss.settings.attachmentSyncToken.value != null ? base64Decode(ss.settings.attachmentSyncToken.value!) : null);
     }
 
-    var (token2, items2) = await api.syncMessages(state: pushService.state, 
-      continuationToken: ss.settings.messageSyncToken.value != null ? base64Decode(ss.settings.messageSyncToken.value!) : null);
-    ss.settings.messageSyncToken.value = base64Encode(token2);
-    for (var item in items2.entries) {
-      if (item.value == null) {
-        final query = Database.messages.query(Message_.ckRecordId.equals(item.key)).build();
-        final result = query.findFirst();
-        syncStopDelete = true;
-        if (result != null) Message.delete(result.guid!);
-        syncStopDelete = false;
-        continue;
-      }
-      var existing = Message.findOne(guid: item.value!.guid);
-      if (existing != null) {
-        existing.ckRecordId = item.key;
-        existing.save();
-        continue;
-      } // don't overwrite existing
-      var message = Message();
-      message.applyFromCloud(item.value!, item.key);
-    }
+    ss.settings.attachmentSyncToken.value = base64Encode(token3);
     ss.saveSettings();
+
+    int localUnchanged = 0;
+    int localChanged = 0;
+    int localSet = 0;
+    int remoteSaved = 0;
+    int totalMessages = 0;
+    int remoteNew = 0;
+
+
+    var (token2, items2, state2) = await api.syncMessages(state: pushService.state, 
+      continuationToken: ss.settings.messageSyncToken.value != null ? base64Decode(ss.settings.messageSyncToken.value!) : null);
+    while (state2 != 3) {
+      List<String> dupDeleteMessages = [];
+      Logger.info("Syncing group of ${items2.length} messages");
+      totalMessages += items2.length;
+
+      for (var item in items2.entries) {
+        try {
+          if (item.value == null) {
+            final query = Database.messages.query(Message_.ckRecordId.equals(item.key)).build();
+            final result = query.findFirst();
+            syncStopDelete = true;
+            if (result != null) Message.delete(result.guid!);
+            syncStopDelete = false;
+            continue;
+          }
+          if (dupDeleteMessages.contains(item.key)) continue;
+          var existing = Message.findOne(guid: item.value!.guid);
+          if (existing != null) {
+            if (existing.ckRecordId == item.key) {
+              localUnchanged++;
+            } else if (existing.ckRecordId != null) {
+              // we have a different record id
+              dupDeleteMessages.add(existing.ckRecordId!);
+              localChanged++;
+            } else {
+              localSet++;
+            }
+            existing.ckRecordId = item.key;
+            existing.save();
+            remoteSaved++;
+            continue;
+          } // don't overwrite existing
+          var message = Message();
+          message.applyFromCloud(item.value!, item.key);
+          remoteNew++;
+        } catch (e, s) {
+          Logger.error("Failed to sync attachment ${item.key}", error: e, trace: s);
+        }
+      }
+
+      if (dupDeleteMessages.isNotEmpty) {
+        Logger.info("Deleting ${dupDeleteMessages.length} duplicate messages");
+        try {
+          await api.deleteMessages(state: pushService.state, messages: dupDeleteMessages);
+        } catch (e) {
+          if (e is AnyhowException) {
+            if (e.message.contains("Too many requests")) {
+              Logger.warn("Too many requests, waiting 10s");
+              await Future.delayed(const Duration(seconds: 10));
+              await api.deleteMessages(state: pushService.state, messages: dupDeleteMessages);
+            } else { rethrow; }
+          } else { rethrow; }
+        }
+      }
+      
+      ss.settings.messageSyncToken.value = base64Encode(token2);
+      ss.saveSettings();
+      
+      (token2, items2, state2) = await api.syncMessages(state: pushService.state, 
+        continuationToken: ss.settings.messageSyncToken.value != null ? base64Decode(ss.settings.messageSyncToken.value!) : null);
+    }
+    ss.settings.messageSyncToken.value = base64Encode(token2);
+    ss.saveSettings();
+
+    Logger.info("Out");
 
     List<(String, String)> uploadAttachments = [];
     Map<String, Attachment> idToAttachment = {};
 
     var unsyncedChats = Database.chats.query(Chat_.ckSyncState.equals(false).and(Chat_.dateDeleted.isNull())).build();
     var useChats = unsyncedChats.find();
+    Logger.info("Out2");
     Map<String, api.CloudChat> saveChats = {};
     List<(String, String)> uploadPhotos = [];
     for (var chat in useChats) {
@@ -2384,15 +2518,30 @@ class RustPushService extends GetxService {
       }
     }
 
-    var unsyncedMessages = Database.messages.query(Message_.ckRecordId.isNull().and(Message_.itemType.equals(0)).and(Message_.ckSyncState.equals(false).or(Message_.ckSyncState.isNull()))).build();
-    var messages = unsyncedMessages.find();
-
+    Logger.info("Syncing messages");
     bool noAttachments = ss.settings.attachmentSyncEnabled.value;
 
-    uploadMessages(messages, uploadAttachments, idToAttachment, noAttachments);
+
+    var unsyncedMessages = Database.messages.query(Message_.ckRecordId.isNull().and(Message_.itemType.equals(0)).and(Message_.ckSyncState.equals(false).or(Message_.ckSyncState.isNull())))
+      .build()
+      ..limit = 3000;
+    var messages = unsyncedMessages.find();
+      int localUpload = messages.length;
+
+    while (messages.isNotEmpty) {
+      Logger.info("Syncing batch ${messages.length}");
+      await uploadMessages(messages, uploadAttachments, idToAttachment, noAttachments);
+
+      var unsyncedMessages = Database.messages.query(Message_.ckRecordId.isNull().and(Message_.itemType.equals(0)).and(Message_.ckSyncState.equals(false).or(Message_.ckSyncState.isNull())))
+        .build()
+        ..limit = 3000;
+      messages = unsyncedMessages.find();
+      localUpload += messages.length;
+    }
 
     ss.settings.lastSynced.value = DateTime.now().millisecondsSinceEpoch;
     Logger.info("Syncing completed");
+    Logger.info("Sync stats: $localUnchanged $localChanged $localSet $remoteSaved $localUpload $totalMessages $remoteNew");
   }
 
   Future<PurchaseWrapper?> getPurchaseDetails() async {
@@ -3837,6 +3986,46 @@ class RustPushService extends GetxService {
 
                 Get.back();
                 await wrapPromise(api.resetClique(state: pushService.state, devicePassword: defaultPassword), "Resetting clique...");
+
+                showDialog(
+                  context: Get.context!,
+                  builder: (_) {
+                    return AlertDialog(
+                      actions: [
+                        TextButton(
+                          child: Text("Ok", style: Get.context!.theme.textTheme.bodyLarge!.copyWith(color: Get.context!.theme.colorScheme.primary)),
+                          onPressed: () async {
+                            Get.back();
+                          },
+                        ),
+                      ],
+                      title: Text("Encrypted data reset", style: Get.context!.theme.textTheme.titleLarge),
+                      content: Text.rich(
+                        TextSpan(
+                          text: "This device's iCloud Keychain code is ",
+                          style: Get.context!.theme.textTheme.bodyLarge,
+                          children: <TextSpan>[
+                            TextSpan(
+                              text: '${ss.settings.keychainDefaultPassword.value}',
+                              style: const TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            const TextSpan(
+                              text: '.',
+                            ),
+                            const TextSpan(
+                              text: '\n\nYou will need this code to sync iCloud data on other devices. ',
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            const TextSpan(
+                              text: 'This code can be found again in Settings -> Device.',
+                            ),
+                          ],
+                        ),
+                      ),
+                      backgroundColor: Get.context!.theme.colorScheme.properSurface,
+                    );
+                  }
+                );
               },
             ),
           ],

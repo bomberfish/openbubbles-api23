@@ -39,7 +39,7 @@ flutter_rust_bridge::frb_generated_boilerplate!(
     default_rust_auto_opaque = RustAutoOpaqueMoi,
 );
 pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_VERSION: &str = "2.3.0";
-pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = 338760630;
+pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = -1703762075;
 
 // Section: executor
 
@@ -2629,6 +2629,39 @@ fn wire__crate__api__api__decode_chatproto_impl(
         },
     )
 }
+fn wire__crate__api__api__decode_extension_app_impl(
+    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
+    rust_vec_len_: i32,
+    data_len_: i32,
+) -> flutter_rust_bridge::for_generated::WireSyncRust2DartSse {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_sync::<flutter_rust_bridge::for_generated::SseCodec, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "decode_extension_app",
+            port: None,
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Sync,
+        },
+        move || {
+            let message = unsafe {
+                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
+                    ptr_,
+                    rust_vec_len_,
+                    data_len_,
+                )
+            };
+            let mut deserializer =
+                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            let api_bp = <Vec<u8>>::sse_decode(&mut deserializer);
+            let api_bid = <String>::sse_decode(&mut deserializer);
+            deserializer.end();
+            transform_result_sse::<_, flutter_rust_bridge::for_generated::anyhow::Error>(
+                (move || {
+                    let output_ok = crate::api::api::decode_extension_app(&api_bp, &api_bid)?;
+                    Ok(output_ok)
+                })(),
+            )
+        },
+    )
+}
 fn wire__crate__api__api__decode_message_info_impl(
     ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
     rust_vec_len_: i32,
@@ -3480,6 +3513,38 @@ fn wire__crate__api__api__encode_chatproto_impl(
         },
     )
 }
+fn wire__crate__api__api__encode_extension_app_impl(
+    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
+    rust_vec_len_: i32,
+    data_len_: i32,
+) -> flutter_rust_bridge::for_generated::WireSyncRust2DartSse {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_sync::<flutter_rust_bridge::for_generated::SseCodec, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "encode_extension_app",
+            port: None,
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Sync,
+        },
+        move || {
+            let message = unsafe {
+                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
+                    ptr_,
+                    rust_vec_len_,
+                    data_len_,
+                )
+            };
+            let mut deserializer =
+                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            let api_app = <crate::api::api::ExtensionApp>::sse_decode(&mut deserializer);
+            deserializer.end();
+            transform_result_sse::<_, flutter_rust_bridge::for_generated::anyhow::Error>(
+                (move || {
+                    let output_ok = crate::api::api::encode_extension_app(&api_app)?;
+                    Ok(output_ok)
+                })(),
+            )
+        },
+    )
+}
 fn wire__crate__api__api__encode_hex_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
@@ -3733,67 +3798,6 @@ fn wire__crate__api__api__encode_summary_info_impl(
                     Ok(output_ok)
                 })())
             }
-        },
-    )
-}
-fn wire__crate__api__api__extension_app_from_bp_impl(
-    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
-    rust_vec_len_: i32,
-    data_len_: i32,
-) -> flutter_rust_bridge::for_generated::WireSyncRust2DartSse {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_sync::<flutter_rust_bridge::for_generated::SseCodec, _>(
-        flutter_rust_bridge::for_generated::TaskInfo {
-            debug_name: "extension_app_from_bp",
-            port: None,
-            mode: flutter_rust_bridge::for_generated::FfiCallMode::Sync,
-        },
-        move || {
-            let message = unsafe {
-                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
-                    ptr_,
-                    rust_vec_len_,
-                    data_len_,
-                )
-            };
-            let mut deserializer =
-                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
-            let api_bp = <Vec<u8>>::sse_decode(&mut deserializer);
-            let api_bid = <String>::sse_decode(&mut deserializer);
-            deserializer.end();
-            transform_result_sse::<_, PushError>((move || {
-                let output_ok = crate::api::api::ExtensionApp::from_bp(&api_bp, &api_bid)?;
-                Ok(output_ok)
-            })())
-        },
-    )
-}
-fn wire__crate__api__api__extension_app_to_raw_impl(
-    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
-    rust_vec_len_: i32,
-    data_len_: i32,
-) -> flutter_rust_bridge::for_generated::WireSyncRust2DartSse {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_sync::<flutter_rust_bridge::for_generated::SseCodec, _>(
-        flutter_rust_bridge::for_generated::TaskInfo {
-            debug_name: "extension_app_to_raw",
-            port: None,
-            mode: flutter_rust_bridge::for_generated::FfiCallMode::Sync,
-        },
-        move || {
-            let message = unsafe {
-                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
-                    ptr_,
-                    rust_vec_len_,
-                    data_len_,
-                )
-            };
-            let mut deserializer =
-                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
-            let api_that = <crate::api::api::ExtensionApp>::sse_decode(&mut deserializer);
-            deserializer.end();
-            transform_result_sse::<_, PushError>((move || {
-                let output_ok = crate::api::api::ExtensionApp::to_raw(&api_that)?;
-                Ok(output_ok)
-            })())
         },
     )
 }
@@ -9601,7 +9605,7 @@ const _: fn() = || {
         let _: Option<String> = AttachmentMeta.mime_type;
         let _: u64 = AttachmentMeta.start_date;
         let _: u64 = AttachmentMeta.total_bytes;
-        let _: u32 = AttachmentMeta.transfer_state;
+        let _: i32 = AttachmentMeta.transfer_state;
         let _: bool = AttachmentMeta.is_sticker;
         let _: String = AttachmentMeta.guid;
         let _: bool = AttachmentMeta.hide_attachment;
@@ -9610,7 +9614,7 @@ const _: fn() = || {
         let _: Option<crate::api::api::AttachmentMetaExtra> = AttachmentMeta.extras;
         let _: bool = AttachmentMeta.is_outgoing;
         let _: String = AttachmentMeta.transfer_name;
-        let _: u32 = AttachmentMeta.version;
+        let _: i32 = AttachmentMeta.version;
         let _: Option<String> = AttachmentMeta.uti;
         let _: u64 = AttachmentMeta.created_date;
         let _: Option<String> = AttachmentMeta.pathc;
@@ -9618,7 +9622,7 @@ const _: fn() = || {
     }
     {
         let AttachmentMetaExtra = None::<crate::api::api::AttachmentMetaExtra>.unwrap();
-        let _: Option<u32> = AttachmentMetaExtra.preview_generation_state;
+        let _: Option<i32> = AttachmentMetaExtra.preview_generation_state;
     }
     match None::<crate::api::api::AttachmentType>.unwrap() {
         crate::api::api::AttachmentType::Inline(field0) => {
@@ -10165,8 +10169,8 @@ const _: fn() = || {
         let MessageProto = None::<crate::api::api::MessageProto>.unwrap();
         let _: u32 = MessageProto.unk1;
         let _: Option<String> = MessageProto.group_title;
-        let _: String = MessageProto.text;
-        let _: Vec<u8> = MessageProto.attributed_body;
+        let _: Option<String> = MessageProto.text;
+        let _: Option<Vec<u8>> = MessageProto.attributed_body;
         let _: Option<String> = MessageProto.balloon_bundle_id;
         let _: Option<Vec<u8>> = MessageProto.payload_data;
         let _: Option<Vec<u8>> = MessageProto.message_summary_info;
@@ -10871,9 +10875,6 @@ flutter_rust_bridge::frb_generated_moi_arc_impl_value!(
     flutter_rust_bridge::for_generated::RustAutoOpaqueInner<NSArray<LPImageMetadata>>
 );
 flutter_rust_bridge::frb_generated_moi_arc_impl_value!(
-    flutter_rust_bridge::for_generated::RustAutoOpaqueInner<PushError>
-);
-flutter_rust_bridge::frb_generated_moi_arc_impl_value!(
     flutter_rust_bridge::for_generated::RustAutoOpaqueInner<StCollapsedValue>
 );
 flutter_rust_bridge::frb_generated_moi_arc_impl_value!(
@@ -11095,16 +11096,6 @@ impl SseDecode for NSArray<LPImageMetadata> {
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
         let mut inner = <RustOpaqueMoi<
             flutter_rust_bridge::for_generated::RustAutoOpaqueInner<NSArray<LPImageMetadata>>,
-        >>::sse_decode(deserializer);
-        return flutter_rust_bridge::for_generated::rust_auto_opaque_decode_owned(inner);
-    }
-}
-
-impl SseDecode for PushError {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
-        let mut inner = <RustOpaqueMoi<
-            flutter_rust_bridge::for_generated::RustAutoOpaqueInner<PushError>,
         >>::sse_decode(deserializer);
         return flutter_rust_bridge::for_generated::rust_auto_opaque_decode_owned(inner);
     }
@@ -11513,16 +11504,6 @@ impl SseDecode
 }
 
 impl SseDecode
-    for RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<PushError>>
-{
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
-        let mut inner = <usize>::sse_decode(deserializer);
-        return decode_rust_opaque_moi(inner);
-    }
-}
-
-impl SseDecode
     for RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<StCollapsedValue>>
 {
     // Codec=Sse (Serialization based), see doc to use other codecs
@@ -11689,7 +11670,7 @@ impl SseDecode for crate::api::api::AttachmentMeta {
         let mut var_mimeType = <Option<String>>::sse_decode(deserializer);
         let mut var_startDate = <u64>::sse_decode(deserializer);
         let mut var_totalBytes = <u64>::sse_decode(deserializer);
-        let mut var_transferState = <u32>::sse_decode(deserializer);
+        let mut var_transferState = <i32>::sse_decode(deserializer);
         let mut var_isSticker = <bool>::sse_decode(deserializer);
         let mut var_guid = <String>::sse_decode(deserializer);
         let mut var_hideAttachment = <bool>::sse_decode(deserializer);
@@ -11700,7 +11681,7 @@ impl SseDecode for crate::api::api::AttachmentMeta {
             <Option<crate::api::api::AttachmentMetaExtra>>::sse_decode(deserializer);
         let mut var_isOutgoing = <bool>::sse_decode(deserializer);
         let mut var_transferName = <String>::sse_decode(deserializer);
-        let mut var_version = <u32>::sse_decode(deserializer);
+        let mut var_version = <i32>::sse_decode(deserializer);
         let mut var_uti = <Option<String>>::sse_decode(deserializer);
         let mut var_createdDate = <u64>::sse_decode(deserializer);
         let mut var_pathc = <Option<String>>::sse_decode(deserializer);
@@ -11730,7 +11711,7 @@ impl SseDecode for crate::api::api::AttachmentMeta {
 impl SseDecode for crate::api::api::AttachmentMetaExtra {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
-        let mut var_previewGenerationState = <Option<u32>>::sse_decode(deserializer);
+        let mut var_previewGenerationState = <Option<i32>>::sse_decode(deserializer);
         return crate::api::api::AttachmentMetaExtra {
             preview_generation_state: var_previewGenerationState,
         };
@@ -13539,8 +13520,8 @@ impl SseDecode for crate::api::api::MessageProto {
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
         let mut var_unk1 = <u32>::sse_decode(deserializer);
         let mut var_groupTitle = <Option<String>>::sse_decode(deserializer);
-        let mut var_text = <String>::sse_decode(deserializer);
-        let mut var_attributedBody = <Vec<u8>>::sse_decode(deserializer);
+        let mut var_text = <Option<String>>::sse_decode(deserializer);
+        let mut var_attributedBody = <Option<Vec<u8>>>::sse_decode(deserializer);
         let mut var_balloonBundleId = <Option<String>>::sse_decode(deserializer);
         let mut var_payloadData = <Option<Vec<u8>>>::sse_decode(deserializer);
         let mut var_messageSummaryInfo = <Option<Vec<u8>>>::sse_decode(deserializer);
@@ -15161,6 +15142,7 @@ impl SseDecode
     for (
         Vec<u8>,
         std::collections::HashMap<String, Option<crate::api::api::CloudAttachment>>,
+        i32,
     )
 {
     // Codec=Sse (Serialization based), see doc to use other codecs
@@ -15170,7 +15152,8 @@ impl SseDecode
             String,
             Option<crate::api::api::CloudAttachment>,
         >>::sse_decode(deserializer);
-        return (var_field0, var_field1);
+        let mut var_field2 = <i32>::sse_decode(deserializer);
+        return (var_field0, var_field1, var_field2);
     }
 }
 
@@ -15178,6 +15161,7 @@ impl SseDecode
     for (
         Vec<u8>,
         std::collections::HashMap<String, Option<crate::api::api::CloudChat>>,
+        i32,
     )
 {
     // Codec=Sse (Serialization based), see doc to use other codecs
@@ -15187,7 +15171,8 @@ impl SseDecode
             <std::collections::HashMap<String, Option<crate::api::api::CloudChat>>>::sse_decode(
                 deserializer,
             );
-        return (var_field0, var_field1);
+        let mut var_field2 = <i32>::sse_decode(deserializer);
+        return (var_field0, var_field1, var_field2);
     }
 }
 
@@ -15195,6 +15180,7 @@ impl SseDecode
     for (
         Vec<u8>,
         std::collections::HashMap<String, Option<crate::api::api::CloudMessage>>,
+        i32,
     )
 {
     // Codec=Sse (Serialization based), see doc to use other codecs
@@ -15204,7 +15190,8 @@ impl SseDecode
             String,
             Option<crate::api::api::CloudMessage>,
         >>::sse_decode(deserializer);
-        return (var_field0, var_field1);
+        let mut var_field2 = <i32>::sse_decode(deserializer);
+        return (var_field0, var_field1, var_field2);
     }
 }
 
@@ -16096,29 +16083,29 @@ fn pde_ffi_dispatcher_primary_impl(
         48 => wire__crate__api__api__create_icon_array_impl(port, ptr, rust_vec_len, data_len),
         49 => wire__crate__api__api__create_image_array_impl(port, ptr, rust_vec_len, data_len),
         51 => wire__crate__api__api__decline_facetime_impl(port, ptr, rust_vec_len, data_len),
-        59 => wire__crate__api__api__decode_profile_message_impl(port, ptr, rust_vec_len, data_len),
-        60 => wire__crate__api__api__decode_summary_info_impl(port, ptr, rust_vec_len, data_len),
-        61 => wire__crate__api__api__delete_attachments_impl(port, ptr, rust_vec_len, data_len),
-        62 => wire__crate__api__api__delete_chats_impl(port, ptr, rust_vec_len, data_len),
-        63 => wire__crate__api__api__delete_messages_impl(port, ptr, rust_vec_len, data_len),
-        64 => wire__crate__api__api__do_reregister_impl(port, ptr, rust_vec_len, data_len),
-        65 => wire__crate__api__api__download_attachment_impl(port, ptr, rust_vec_len, data_len),
-        66 => wire__crate__api__api__download_cloud_attachments_impl(
+        60 => wire__crate__api__api__decode_profile_message_impl(port, ptr, rust_vec_len, data_len),
+        61 => wire__crate__api__api__decode_summary_info_impl(port, ptr, rust_vec_len, data_len),
+        62 => wire__crate__api__api__delete_attachments_impl(port, ptr, rust_vec_len, data_len),
+        63 => wire__crate__api__api__delete_chats_impl(port, ptr, rust_vec_len, data_len),
+        64 => wire__crate__api__api__delete_messages_impl(port, ptr, rust_vec_len, data_len),
+        65 => wire__crate__api__api__do_reregister_impl(port, ptr, rust_vec_len, data_len),
+        66 => wire__crate__api__api__download_attachment_impl(port, ptr, rust_vec_len, data_len),
+        67 => wire__crate__api__api__download_cloud_attachments_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        67 => wire__crate__api__api__download_cloud_group_photos_impl(
+        68 => wire__crate__api__api__download_cloud_group_photos_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        68 => wire__crate__api__api__download_mmcs_impl(port, ptr, rust_vec_len, data_len),
-        71 => wire__crate__api__api__encode_hex_impl(port, ptr, rust_vec_len, data_len),
-        77 => wire__crate__api__api__encode_profile_message_impl(port, ptr, rust_vec_len, data_len),
-        78 => wire__crate__api__api__encode_summary_info_impl(port, ptr, rust_vec_len, data_len),
+        69 => wire__crate__api__api__download_mmcs_impl(port, ptr, rust_vec_len, data_len),
+        73 => wire__crate__api__api__encode_hex_impl(port, ptr, rust_vec_len, data_len),
+        79 => wire__crate__api__api__encode_profile_message_impl(port, ptr, rust_vec_len, data_len),
+        80 => wire__crate__api__api__encode_summary_info_impl(port, ptr, rust_vec_len, data_len),
         81 => wire__crate__api__api__fetch_profile_impl(port, ptr, rust_vec_len, data_len),
         82 => {
             wire__crate__api__api__ffi_file_packager_default_impl(port, ptr, rust_vec_len, data_len)
@@ -16383,20 +16370,20 @@ fn pde_ffi_dispatcher_sync_impl(
         50 => wire__crate__api__api__date_now_impl(ptr, rust_vec_len, data_len),
         52 => wire__crate__api__api__decode_attachmentmeta_impl(ptr, rust_vec_len, data_len),
         53 => wire__crate__api__api__decode_chatproto_impl(ptr, rust_vec_len, data_len),
-        54 => wire__crate__api__api__decode_message_info_impl(ptr, rust_vec_len, data_len),
-        55 => wire__crate__api__api__decode_messageproto_impl(ptr, rust_vec_len, data_len),
-        56 => wire__crate__api__api__decode_messageproto2_impl(ptr, rust_vec_len, data_len),
-        57 => wire__crate__api__api__decode_messageproto3_impl(ptr, rust_vec_len, data_len),
-        58 => wire__crate__api__api__decode_messageproto4_impl(ptr, rust_vec_len, data_len),
-        69 => wire__crate__api__api__encode_attachmentmeta_impl(ptr, rust_vec_len, data_len),
-        70 => wire__crate__api__api__encode_chatproto_impl(ptr, rust_vec_len, data_len),
-        72 => wire__crate__api__api__encode_message_info_impl(ptr, rust_vec_len, data_len),
-        73 => wire__crate__api__api__encode_messageproto_impl(ptr, rust_vec_len, data_len),
-        74 => wire__crate__api__api__encode_messageproto2_impl(ptr, rust_vec_len, data_len),
-        75 => wire__crate__api__api__encode_messageproto3_impl(ptr, rust_vec_len, data_len),
-        76 => wire__crate__api__api__encode_messageproto4_impl(ptr, rust_vec_len, data_len),
-        79 => wire__crate__api__api__extension_app_from_bp_impl(ptr, rust_vec_len, data_len),
-        80 => wire__crate__api__api__extension_app_to_raw_impl(ptr, rust_vec_len, data_len),
+        54 => wire__crate__api__api__decode_extension_app_impl(ptr, rust_vec_len, data_len),
+        55 => wire__crate__api__api__decode_message_info_impl(ptr, rust_vec_len, data_len),
+        56 => wire__crate__api__api__decode_messageproto_impl(ptr, rust_vec_len, data_len),
+        57 => wire__crate__api__api__decode_messageproto2_impl(ptr, rust_vec_len, data_len),
+        58 => wire__crate__api__api__decode_messageproto3_impl(ptr, rust_vec_len, data_len),
+        59 => wire__crate__api__api__decode_messageproto4_impl(ptr, rust_vec_len, data_len),
+        70 => wire__crate__api__api__encode_attachmentmeta_impl(ptr, rust_vec_len, data_len),
+        71 => wire__crate__api__api__encode_chatproto_impl(ptr, rust_vec_len, data_len),
+        72 => wire__crate__api__api__encode_extension_app_impl(ptr, rust_vec_len, data_len),
+        74 => wire__crate__api__api__encode_message_info_impl(ptr, rust_vec_len, data_len),
+        75 => wire__crate__api__api__encode_messageproto_impl(ptr, rust_vec_len, data_len),
+        76 => wire__crate__api__api__encode_messageproto2_impl(ptr, rust_vec_len, data_len),
+        77 => wire__crate__api__api__encode_messageproto3_impl(ptr, rust_vec_len, data_len),
+        78 => wire__crate__api__api__encode_messageproto4_impl(ptr, rust_vec_len, data_len),
         120 => wire__crate__api__api__ns_attributed_string_decode_impl(ptr, rust_vec_len, data_len),
         121 => wire__crate__api__api__ns_attributed_string_encode_impl(ptr, rust_vec_len, data_len),
         122 => wire__crate__api__api__ns_null_impl(ptr, rust_vec_len, data_len),
@@ -16768,21 +16755,6 @@ impl flutter_rust_bridge::IntoIntoDart<FrbWrapper<NSArray<LPImageMetadata>>>
     for NSArray<LPImageMetadata>
 {
     fn into_into_dart(self) -> FrbWrapper<NSArray<LPImageMetadata>> {
-        self.into()
-    }
-}
-
-// Codec=Dco (DartCObject based), see doc to use other codecs
-impl flutter_rust_bridge::IntoDart for FrbWrapper<PushError> {
-    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
-        flutter_rust_bridge::for_generated::rust_auto_opaque_encode::<_, MoiArc<_>>(self.0)
-            .into_dart()
-    }
-}
-impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive for FrbWrapper<PushError> {}
-
-impl flutter_rust_bridge::IntoIntoDart<FrbWrapper<PushError>> for PushError {
-    fn into_into_dart(self) -> FrbWrapper<PushError> {
         self.into()
     }
 }
@@ -20710,13 +20682,6 @@ impl SseEncode for NSArray<LPImageMetadata> {
     }
 }
 
-impl SseEncode for PushError {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
-        <RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<PushError>>>::sse_encode(flutter_rust_bridge::for_generated::rust_auto_opaque_encode::<_, MoiArc<_>>(self), serializer);
-    }
-}
-
 impl SseEncode for StCollapsedValue {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
@@ -21138,17 +21103,6 @@ impl SseEncode
 }
 
 impl SseEncode
-    for RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<PushError>>
-{
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
-        let (ptr, size) = self.sse_encode_raw();
-        <usize>::sse_encode(ptr, serializer);
-        <i32>::sse_encode(size, serializer);
-    }
-}
-
-impl SseEncode
     for RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<StCollapsedValue>>
 {
     // Codec=Sse (Serialization based), see doc to use other codecs
@@ -21285,7 +21239,7 @@ impl SseEncode for crate::api::api::AttachmentMeta {
         <Option<String>>::sse_encode(self.mime_type, serializer);
         <u64>::sse_encode(self.start_date, serializer);
         <u64>::sse_encode(self.total_bytes, serializer);
-        <u32>::sse_encode(self.transfer_state, serializer);
+        <i32>::sse_encode(self.transfer_state, serializer);
         <bool>::sse_encode(self.is_sticker, serializer);
         <String>::sse_encode(self.guid, serializer);
         <bool>::sse_encode(self.hide_attachment, serializer);
@@ -21294,7 +21248,7 @@ impl SseEncode for crate::api::api::AttachmentMeta {
         <Option<crate::api::api::AttachmentMetaExtra>>::sse_encode(self.extras, serializer);
         <bool>::sse_encode(self.is_outgoing, serializer);
         <String>::sse_encode(self.transfer_name, serializer);
-        <u32>::sse_encode(self.version, serializer);
+        <i32>::sse_encode(self.version, serializer);
         <Option<String>>::sse_encode(self.uti, serializer);
         <u64>::sse_encode(self.created_date, serializer);
         <Option<String>>::sse_encode(self.pathc, serializer);
@@ -21305,7 +21259,7 @@ impl SseEncode for crate::api::api::AttachmentMeta {
 impl SseEncode for crate::api::api::AttachmentMetaExtra {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
-        <Option<u32>>::sse_encode(self.preview_generation_state, serializer);
+        <Option<i32>>::sse_encode(self.preview_generation_state, serializer);
     }
 }
 
@@ -22643,8 +22597,8 @@ impl SseEncode for crate::api::api::MessageProto {
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         <u32>::sse_encode(self.unk1, serializer);
         <Option<String>>::sse_encode(self.group_title, serializer);
-        <String>::sse_encode(self.text, serializer);
-        <Vec<u8>>::sse_encode(self.attributed_body, serializer);
+        <Option<String>>::sse_encode(self.text, serializer);
+        <Option<Vec<u8>>>::sse_encode(self.attributed_body, serializer);
         <Option<String>>::sse_encode(self.balloon_bundle_id, serializer);
         <Option<Vec<u8>>>::sse_encode(self.payload_data, serializer);
         <Option<Vec<u8>>>::sse_encode(self.message_summary_info, serializer);
@@ -23962,6 +23916,7 @@ impl SseEncode
     for (
         Vec<u8>,
         std::collections::HashMap<String, Option<crate::api::api::CloudAttachment>>,
+        i32,
     )
 {
     // Codec=Sse (Serialization based), see doc to use other codecs
@@ -23970,6 +23925,7 @@ impl SseEncode
         <std::collections::HashMap<String, Option<crate::api::api::CloudAttachment>>>::sse_encode(
             self.1, serializer,
         );
+        <i32>::sse_encode(self.2, serializer);
     }
 }
 
@@ -23977,6 +23933,7 @@ impl SseEncode
     for (
         Vec<u8>,
         std::collections::HashMap<String, Option<crate::api::api::CloudChat>>,
+        i32,
     )
 {
     // Codec=Sse (Serialization based), see doc to use other codecs
@@ -23985,6 +23942,7 @@ impl SseEncode
         <std::collections::HashMap<String, Option<crate::api::api::CloudChat>>>::sse_encode(
             self.1, serializer,
         );
+        <i32>::sse_encode(self.2, serializer);
     }
 }
 
@@ -23992,6 +23950,7 @@ impl SseEncode
     for (
         Vec<u8>,
         std::collections::HashMap<String, Option<crate::api::api::CloudMessage>>,
+        i32,
     )
 {
     // Codec=Sse (Serialization based), see doc to use other codecs
@@ -24000,6 +23959,7 @@ impl SseEncode
         <std::collections::HashMap<String, Option<crate::api::api::CloudMessage>>>::sse_encode(
             self.1, serializer,
         );
+        <i32>::sse_encode(self.2, serializer);
     }
 }
 
@@ -25019,20 +24979,6 @@ mod io {
         ptr: *const std::ffi::c_void,
     ) {
         MoiArc::<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<NSArray < LPImageMetadata >>>::decrement_strong_count(ptr as _);
-    }
-
-    #[no_mangle]
-    pub extern "C" fn frbgen_bluebubbles_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPushError(
-        ptr: *const std::ffi::c_void,
-    ) {
-        MoiArc::<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<PushError>>::increment_strong_count(ptr as _);
-    }
-
-    #[no_mangle]
-    pub extern "C" fn frbgen_bluebubbles_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPushError(
-        ptr: *const std::ffi::c_void,
-    ) {
-        MoiArc::<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<PushError>>::decrement_strong_count(ptr as _);
     }
 
     #[no_mangle]

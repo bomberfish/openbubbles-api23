@@ -63,6 +63,12 @@ GZipWrapperAttachmentMeta encodeAttachmentmeta(
     RustLib.instance.api
         .crateApiApiEncodeAttachmentmeta(attachmentmeta: attachmentmeta);
 
+ExtensionApp decodeExtensionApp({required List<int> bp, required String bid}) =>
+    RustLib.instance.api.crateApiApiDecodeExtensionApp(bp: bp, bid: bid);
+
+(Uint8List, Uint8List?) encodeExtensionApp({required ExtensionApp app}) =>
+    RustLib.instance.api.crateApiApiEncodeExtensionApp(app: app);
+
 Future<ArcPushState> newPushState({required String dir}) =>
     RustLib.instance.api.crateApiApiNewPushState(dir: dir);
 
@@ -532,7 +538,7 @@ Uint8List saveCloudChat({required CloudChat value}) =>
 CloudChat restoreCloudChat({required List<int> data}) =>
     RustLib.instance.api.crateApiApiRestoreCloudChat(data: data);
 
-Future<(Uint8List, Map<String, CloudChat?>)> syncChats(
+Future<(Uint8List, Map<String, CloudChat?>, int)> syncChats(
         {required ArcPushState state, Uint8List? continuationToken}) =>
     RustLib.instance.api.crateApiApiSyncChats(
         state: state, continuationToken: continuationToken);
@@ -545,7 +551,7 @@ Future<void> deleteChats(
         {required ArcPushState state, required List<String> chats}) =>
     RustLib.instance.api.crateApiApiDeleteChats(state: state, chats: chats);
 
-Future<(Uint8List, Map<String, CloudMessage?>)> syncMessages(
+Future<(Uint8List, Map<String, CloudMessage?>, int)> syncMessages(
         {required ArcPushState state, Uint8List? continuationToken}) =>
     RustLib.instance.api.crateApiApiSyncMessages(
         state: state, continuationToken: continuationToken);
@@ -567,7 +573,7 @@ MessageSummaryInfo decodeMessageInfo({required List<int> data}) =>
 Uint8List encodeMessageInfo({required MessageSummaryInfo info}) =>
     RustLib.instance.api.crateApiApiEncodeMessageInfo(info: info);
 
-Future<(Uint8List, Map<String, CloudAttachment?>)> syncAttachments(
+Future<(Uint8List, Map<String, CloudAttachment?>, int)> syncAttachments(
         {required ArcPushState state, Uint8List? continuationToken}) =>
     RustLib.instance.api.crateApiApiSyncAttachments(
         state: state, continuationToken: continuationToken);
@@ -758,9 +764,6 @@ abstract class MessageFlags implements RustOpaqueInterface {
   static MessageFlags fromBitsTruncate({required PlatformInt64 val}) =>
       RustLib.instance.api.crateApiApiMessageFlagsFromBitsTruncate(val: val);
 }
-
-// Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<PushError>>
-abstract class PushError implements RustOpaqueInterface {}
 
 // Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<StCollapsedValue>>
 abstract class StCollapsedValue implements RustOpaqueInterface {}
@@ -1678,14 +1681,6 @@ class ExtensionApp {
     required this.bundleId,
     this.balloon,
   });
-
-  static ExtensionApp fromBp({required List<int> bp, required String bid}) =>
-      RustLib.instance.api.crateApiApiExtensionAppFromBp(bp: bp, bid: bid);
-
-  (Uint8List, Uint8List?) toRaw() =>
-      RustLib.instance.api.crateApiApiExtensionAppToRaw(
-        that: this,
-      );
 
   @override
   int get hashCode =>
@@ -2869,8 +2864,8 @@ class MessageProto {
   /// always 1, is finished or ck sync state
   final int unk1;
   final String? groupTitle;
-  final String text;
-  final Uint8List attributedBody;
+  final String? text;
+  final Uint8List? attributedBody;
   final String? balloonBundleId;
   final Uint8List? payloadData;
   final Uint8List? messageSummaryInfo;
@@ -2888,8 +2883,8 @@ class MessageProto {
   const MessageProto({
     required this.unk1,
     this.groupTitle,
-    required this.text,
-    required this.attributedBody,
+    this.text,
+    this.attributedBody,
     this.balloonBundleId,
     this.payloadData,
     this.messageSummaryInfo,

@@ -95,9 +95,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       get rust_arc_decrement_strong_count_NsArrayLpImageMetadataPtr => wire
           ._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerNSArrayLPImageMetadataPtr;
 
-  CrossPlatformFinalizerArg get rust_arc_decrement_strong_count_PushErrorPtr =>
-      wire._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPushErrorPtr;
-
   CrossPlatformFinalizerArg
       get rust_arc_decrement_strong_count_StCollapsedValuePtr => wire
           ._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerStCollapsedValuePtr;
@@ -213,11 +210,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   NsArrayLpImageMetadata
       dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerNSArrayLPImageMetadata(
-          dynamic raw);
-
-  @protected
-  PushError
-      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPushError(
           dynamic raw);
 
   @protected
@@ -505,11 +497,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   NsArrayLpImageMetadata
       dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerNSArrayLPImageMetadata(
-          dynamic raw);
-
-  @protected
-  PushError
-      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPushError(
           dynamic raw);
 
   @protected
@@ -1607,22 +1594,25 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   (
     Uint8List,
-    Map<String, CloudAttachment?>
-  ) dco_decode_record_list_prim_u_8_strict_map_string_opt_box_autoadd_cloud_attachment(
+    Map<String, CloudAttachment?>,
+    int
+  ) dco_decode_record_list_prim_u_8_strict_map_string_opt_box_autoadd_cloud_attachment_i_32(
       dynamic raw);
 
   @protected
   (
     Uint8List,
-    Map<String, CloudChat?>
-  ) dco_decode_record_list_prim_u_8_strict_map_string_opt_box_autoadd_cloud_chat(
+    Map<String, CloudChat?>,
+    int
+  ) dco_decode_record_list_prim_u_8_strict_map_string_opt_box_autoadd_cloud_chat_i_32(
       dynamic raw);
 
   @protected
   (
     Uint8List,
-    Map<String, CloudMessage?>
-  ) dco_decode_record_list_prim_u_8_strict_map_string_opt_box_autoadd_cloud_message(
+    Map<String, CloudMessage?>,
+    int
+  ) dco_decode_record_list_prim_u_8_strict_map_string_opt_box_autoadd_cloud_message_i_32(
       dynamic raw);
 
   @protected
@@ -1954,11 +1944,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
           SseDeserializer deserializer);
 
   @protected
-  PushError
-      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPushError(
-          SseDeserializer deserializer);
-
-  @protected
   StCollapsedValue
       sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerStCollapsedValue(
           SseDeserializer deserializer);
@@ -2252,11 +2237,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   NsArrayLpImageMetadata
       sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerNSArrayLPImageMetadata(
-          SseDeserializer deserializer);
-
-  @protected
-  PushError
-      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPushError(
           SseDeserializer deserializer);
 
   @protected
@@ -3468,22 +3448,25 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   (
     Uint8List,
-    Map<String, CloudAttachment?>
-  ) sse_decode_record_list_prim_u_8_strict_map_string_opt_box_autoadd_cloud_attachment(
+    Map<String, CloudAttachment?>,
+    int
+  ) sse_decode_record_list_prim_u_8_strict_map_string_opt_box_autoadd_cloud_attachment_i_32(
       SseDeserializer deserializer);
 
   @protected
   (
     Uint8List,
-    Map<String, CloudChat?>
-  ) sse_decode_record_list_prim_u_8_strict_map_string_opt_box_autoadd_cloud_chat(
+    Map<String, CloudChat?>,
+    int
+  ) sse_decode_record_list_prim_u_8_strict_map_string_opt_box_autoadd_cloud_chat_i_32(
       SseDeserializer deserializer);
 
   @protected
   (
     Uint8List,
-    Map<String, CloudMessage?>
-  ) sse_decode_record_list_prim_u_8_strict_map_string_opt_box_autoadd_cloud_message(
+    Map<String, CloudMessage?>,
+    int
+  ) sse_decode_record_list_prim_u_8_strict_map_string_opt_box_autoadd_cloud_message_i_32(
       SseDeserializer deserializer);
 
   @protected
@@ -3837,11 +3820,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void
-      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPushError(
-          PushError self, SseSerializer serializer);
-
-  @protected
-  void
       sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerStCollapsedValue(
           StCollapsedValue self, SseSerializer serializer);
 
@@ -4137,11 +4115,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   void
       sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerNSArrayLPImageMetadata(
           NsArrayLpImageMetadata self, SseSerializer serializer);
-
-  @protected
-  void
-      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPushError(
-          PushError self, SseSerializer serializer);
 
   @protected
   void
@@ -5387,19 +5360,20 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void
-      sse_encode_record_list_prim_u_8_strict_map_string_opt_box_autoadd_cloud_attachment(
-          (Uint8List, Map<String, CloudAttachment?>) self,
+      sse_encode_record_list_prim_u_8_strict_map_string_opt_box_autoadd_cloud_attachment_i_32(
+          (Uint8List, Map<String, CloudAttachment?>, int) self,
           SseSerializer serializer);
 
   @protected
   void
-      sse_encode_record_list_prim_u_8_strict_map_string_opt_box_autoadd_cloud_chat(
-          (Uint8List, Map<String, CloudChat?>) self, SseSerializer serializer);
+      sse_encode_record_list_prim_u_8_strict_map_string_opt_box_autoadd_cloud_chat_i_32(
+          (Uint8List, Map<String, CloudChat?>, int) self,
+          SseSerializer serializer);
 
   @protected
   void
-      sse_encode_record_list_prim_u_8_strict_map_string_opt_box_autoadd_cloud_message(
-          (Uint8List, Map<String, CloudMessage?>) self,
+      sse_encode_record_list_prim_u_8_strict_map_string_opt_box_autoadd_cloud_message_i_32(
+          (Uint8List, Map<String, CloudMessage?>, int) self,
           SseSerializer serializer);
 
   @protected
@@ -6292,38 +6266,6 @@ class RustLibWire implements BaseWire {
           'frbgen_bluebubbles_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerNSArrayLPImageMetadata');
   late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerNSArrayLPImageMetadata =
       _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerNSArrayLPImageMetadataPtr
-          .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
-
-  void
-      rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPushError(
-    ffi.Pointer<ffi.Void> ptr,
-  ) {
-    return _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPushError(
-      ptr,
-    );
-  }
-
-  late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPushErrorPtr =
-      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
-          'frbgen_bluebubbles_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPushError');
-  late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPushError =
-      _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPushErrorPtr
-          .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
-
-  void
-      rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPushError(
-    ffi.Pointer<ffi.Void> ptr,
-  ) {
-    return _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPushError(
-      ptr,
-    );
-  }
-
-  late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPushErrorPtr =
-      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
-          'frbgen_bluebubbles_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPushError');
-  late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPushError =
-      _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPushErrorPtr
           .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
 
   void

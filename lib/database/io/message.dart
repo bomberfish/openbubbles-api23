@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 import 'dart:math';
 
 import 'package:async_task/async_task.dart';
@@ -25,6 +26,7 @@ import 'package:telephony_plus/src/models/attachment.dart' as TelephonyAttachmen
 import 'package:bluebubbles/src/rust/api/api.dart' as api;
 import 'package:tuple/tuple.dart';
 import 'dart:typed_data';
+import 'package:convert/convert.dart';
 
 const IS_FINISHED               = 1 << 0; // this one probably, although there are some unset in db, all are set on local db
 const IS_EMOTE                  = 1 << 1;
@@ -953,7 +955,8 @@ class Message {
     return "at_${items[1]}_${items[0]}";
   }
 
-  Uint8List encodeAttributedBody(List<AttributedBody> body, bool noAttachments) {
+  Uint8List? encodeAttributedBody(List<AttributedBody> body, bool noAttachments) {
+    if (body.isEmpty) return null;
     return api.nscoderEncode(value: body.map((b) => api.NSAttributedString(
       text: b.string,
       ranges: b.runs.filter((run) => !noAttachments || run.attributes?.attachmentGuid == null).map((run) => (run.range[1], api.NSDictionaryTypedCoder(field0: {
@@ -979,7 +982,8 @@ class Message {
     ).encode()).toList());
   }
 
-  List<AttributedBody> decodeAttributedBody(Uint8List data) {
+  List<AttributedBody> decodeAttributedBody(Uint8List? data) {
+    if (data == null) return [];
     return api.nscoderDecode(data: data).map((val) {
       var decoded = api.NSAttributedString.decode(val: val);
       int length = 0;
@@ -1026,6 +1030,7 @@ class Message {
       throw Exception("No Attachments!");
     }
 
+    var p = payloadData?.appData?.firstOrNull != null ? api.encodeExtensionApp(app: pushService.dataToApp(payloadData!)).$2 : null;
     return api.CloudMessage(
       utm: api.utmNow(),
       type: associatedMessageGuid != null ? 2 : 1,
@@ -1044,11 +1049,11 @@ class Message {
         text: attributedBody[0].string, 
         attributedBody: encodeAttributedBody(attributedBody, noAttachments),
         balloonBundleId: balloonBundleId,
-        payloadData: payloadData != null ? pushService.dataToApp(payloadData!).toRaw().$2 : null,
+        payloadData: p != null ? Uint8List.fromList(gzip.decode(p)) : null,
         messageSummaryInfo: messageSummaryInfo.isEmpty ? null : api.encodeMessageInfo(info: api.MessageSummaryInfo(
           ec: messageSummaryInfo.first.editedContent.map((key, value) => 
             MapEntry(key, value.map((i) => api.MessageEdit(
-              t: encodeAttributedBody(i.text!.values, noAttachments), 
+              t: encodeAttributedBody(i.text!.values, noAttachments)!, 
               d: i.date!,
             )).toList())), 
           ep: Uint32List.fromList(messageSummaryInfo.first.editedParts), 
@@ -1111,9 +1116,15 @@ class Message {
     groupTitle = proto1.groupTitle;
     text = proto1.text;
     attributedBody = decodeAttributedBody(proto1.attributedBody);
-    hasAttachments = attributedBody[0].runs.any((run) => run.attributes?.attachmentGuid != null);
+    hasAttachments = attributedBody.firstOrNull?.runs.any((run) => run.attributes?.attachmentGuid != null) ?? false;
     balloonBundleId = proto1.balloonBundleId;
-    payloadData = proto1.payloadData != null ? pushService.appToData(api.ExtensionApp.fromBp(bp: proto1.payloadData!, bid: proto1.balloonBundleId!)) : null;
+    
+    try {
+      payloadData = proto1.payloadData != null && proto1.balloonBundleId != "com.apple.messages.URLBalloonProvider" ? pushService.appToData(api.decodeExtensionApp(bp: gzip.encode(proto1.payloadData!), bid: proto1.balloonBundleId!)) : null;
+    } catch (e, s) {
+      Logger.info("Failed item ${hex.encode(proto1.payloadData!)} ${proto1.balloonBundleId}", error: e, trace: s);
+    }
+
     if (proto1.messageSummaryInfo != null) {
       var summary = api.decodeMessageInfo(data: proto1.messageSummaryInfo!);
       messageSummaryInfo = [MessageSummaryInfo(
@@ -1138,7 +1149,7 @@ class Message {
       }
     }
     associatedMessageGuid = proto1.associatedMessageGuid;
-    associatedMessagePart = attributedBody[0].runs.firstWhereOrNull((b) => b.range[0] == proto1.associatedMessageRangeLocation && b.range[1] == proto1.associatedMessageRangeLength)?.attributes?.messagePart;
+    associatedMessagePart = attributedBody.firstOrNull?.runs.firstWhereOrNull((b) => b.range[0] == proto1.associatedMessageRangeLocation && b.range[1] == proto1.associatedMessageRangeLength)?.attributes?.messagePart;
     hasApplePayloadData = proto1.payloadData != null;
     guid = c.guid;
     var bits = c.flags.bits();

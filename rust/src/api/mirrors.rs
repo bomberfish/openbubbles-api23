@@ -658,8 +658,8 @@ pub struct DartMessageProto {
     /// always 1, is finished or ck sync state
     pub unk1: u32,
     pub group_title: Option<String>,
-    pub text: String,
-    pub attributed_body: Vec<u8>,
+    pub text: Option<String>,
+    pub attributed_body: Option<Vec<u8>>,
     pub balloon_bundle_id: Option<String>,
     pub payload_data: Option<Vec<u8>>,
     pub message_summary_info: Option<Vec<u8>>,
@@ -677,7 +677,7 @@ pub struct DartMessageProto {
 
 #[frb(non_opaque, mirror(AttachmentMetaExtra))]
 pub struct DartAttachmentMetaExtra {
-    pub preview_generation_state: Option<u32>, // set to 1
+    pub preview_generation_state: Option<i32>, // set to 1
 }
 
 #[frb(non_opaque, mirror(NumOrString))]
@@ -709,7 +709,7 @@ pub struct DartAttachmentMeta {
     pub mime_type: Option<String>,
     pub start_date: u64,
     pub total_bytes: u64,
-    pub transfer_state: u32,
+    pub transfer_state: i32,
     pub is_sticker: bool,
     pub guid: String,
     pub hide_attachment: bool,
@@ -718,7 +718,7 @@ pub struct DartAttachmentMeta {
     pub extras: Option<AttachmentMetaExtra>,
     pub is_outgoing: bool,
     pub transfer_name: String,
-    pub version: u32, // set to 1
+    pub version: i32, // set to 1
     pub uti: Option<String>, // uti type
     pub created_date: u64,
     pub pathc: Option<String>, // also transfer name
@@ -936,14 +936,6 @@ pub struct DartExtensionApp {
     pub bundle_id: String,
 
     pub balloon: Option<Balloon>,
-}
-
-#[frb(external)]
-impl ExtensionApp {
-    #[frb(sync)]
-    pub fn from_bp(bp: &[u8], bid: &str) -> Result<ExtensionApp, PushError> { }
-    #[frb(sync)]
-    pub fn to_raw(&self) -> Result<(Vec<u8>, Option<Vec<u8>>), PushError> { }
 }
 
 #[frb(mirror(PermanentDeleteMessage))]

@@ -67,7 +67,7 @@ class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
   String get codegenVersion => '2.3.0';
 
   @override
-  int get rustContentHash => 338760630;
+  int get rustContentHash => -1703762075;
 
   static const kDefaultExternalLibraryLoaderConfig =
       ExternalLibraryLoaderConfig(
@@ -240,6 +240,9 @@ abstract class RustLibApi extends BaseApi {
 
   ChatProto crateApiApiDecodeChatproto({required GZipWrapperChatProto wrapped});
 
+  ExtensionApp crateApiApiDecodeExtensionApp(
+      {required List<int> bp, required String bid});
+
   MessageSummaryInfo crateApiApiDecodeMessageInfo({required List<int> data});
 
   MessageProto crateApiApiDecodeMessageproto(
@@ -292,6 +295,9 @@ abstract class RustLibApi extends BaseApi {
 
   GZipWrapperChatProto crateApiApiEncodeChatproto({required ChatProto chat});
 
+  (Uint8List, Uint8List?) crateApiApiEncodeExtensionApp(
+      {required ExtensionApp app});
+
   Future<String> crateApiApiEncodeHex({required List<int> bytes});
 
   Uint8List crateApiApiEncodeMessageInfo({required MessageSummaryInfo info});
@@ -313,12 +319,6 @@ abstract class RustLibApi extends BaseApi {
 
   Future<Uint8List> crateApiApiEncodeSummaryInfo(
       {required MessageSummaryInfo info});
-
-  ExtensionApp crateApiApiExtensionAppFromBp(
-      {required List<int> bp, required String bid});
-
-  (Uint8List, Uint8List?) crateApiApiExtensionAppToRaw(
-      {required ExtensionApp that});
 
   Future<IMessageNicknameRecord> crateApiApiFetchProfile(
       {required ArcPushState state, required ShareProfileMessage message});
@@ -566,13 +566,14 @@ abstract class RustLibApi extends BaseApi {
 
   Future<bool> crateApiApiSupportsSharedStreams({required ArcPushState state});
 
-  Future<(Uint8List, Map<String, CloudAttachment?>)> crateApiApiSyncAttachments(
+  Future<(Uint8List, Map<String, CloudAttachment?>, int)>
+      crateApiApiSyncAttachments(
+          {required ArcPushState state, Uint8List? continuationToken});
+
+  Future<(Uint8List, Map<String, CloudChat?>, int)> crateApiApiSyncChats(
       {required ArcPushState state, Uint8List? continuationToken});
 
-  Future<(Uint8List, Map<String, CloudChat?>)> crateApiApiSyncChats(
-      {required ArcPushState state, Uint8List? continuationToken});
-
-  Future<(Uint8List, Map<String, CloudMessage?>)> crateApiApiSyncMessages(
+  Future<(Uint8List, Map<String, CloudMessage?>, int)> crateApiApiSyncMessages(
       {required ArcPushState state, Uint8List? continuationToken});
 
   Future<void> crateApiApiSyncNow({required ArcPushState state});
@@ -813,14 +814,6 @@ abstract class RustLibApi extends BaseApi {
 
   CrossPlatformFinalizerArg
       get rust_arc_decrement_strong_count_NsArrayLpImageMetadataPtr;
-
-  RustArcIncrementStrongCountFnType
-      get rust_arc_increment_strong_count_PushError;
-
-  RustArcDecrementStrongCountFnType
-      get rust_arc_decrement_strong_count_PushError;
-
-  CrossPlatformFinalizerArg get rust_arc_decrement_strong_count_PushErrorPtr;
 
   RustArcIncrementStrongCountFnType
       get rust_arc_increment_strong_count_StCollapsedValue;
@@ -2302,12 +2295,38 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
+  ExtensionApp crateApiApiDecodeExtensionApp(
+      {required List<int> bp, required String bid}) {
+    return handler.executeSync(SyncTask(
+      callFfi: () {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_list_prim_u_8_loose(bp, serializer);
+        sse_encode_String(bid, serializer);
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 54)!;
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_extension_app,
+        decodeErrorData: sse_decode_AnyhowException,
+      ),
+      constMeta: kCrateApiApiDecodeExtensionAppConstMeta,
+      argValues: [bp, bid],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiApiDecodeExtensionAppConstMeta =>
+      const TaskConstMeta(
+        debugName: "decode_extension_app",
+        argNames: ["bp", "bid"],
+      );
+
+  @override
   MessageSummaryInfo crateApiApiDecodeMessageInfo({required List<int> data}) {
     return handler.executeSync(SyncTask(
       callFfi: () {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_list_prim_u_8_loose(data, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 54)!;
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 55)!;
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_message_summary_info,
@@ -2333,7 +2352,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerGZipWrapperMessageProto(
             wrapped, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 55)!;
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 56)!;
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_message_proto,
@@ -2359,7 +2378,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerGZipWrapperMessageProto2(
             wrapped, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 56)!;
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 57)!;
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_message_proto_2,
@@ -2385,7 +2404,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerGZipWrapperMessageProto3(
             wrapped, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 57)!;
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 58)!;
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_message_proto_3,
@@ -2411,7 +2430,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerGZipWrapperMessageProto4(
             wrapped, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 58)!;
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 59)!;
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_message_proto_4,
@@ -2437,7 +2456,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_String(s, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 59, port: port_);
+            funcId: 60, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_share_profile_message,
@@ -2463,7 +2482,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_list_prim_u_8_loose(info, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 60, port: port_);
+            funcId: 61, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_message_summary_info,
@@ -2491,7 +2510,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             state, serializer);
         sse_encode_list_String(attachments, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 61, port: port_);
+            funcId: 62, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_unit,
@@ -2519,7 +2538,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             state, serializer);
         sse_encode_list_String(chats, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 62, port: port_);
+            funcId: 63, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_unit,
@@ -2546,7 +2565,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             state, serializer);
         sse_encode_list_String(messages, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 63, port: port_);
+            funcId: 64, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_unit,
@@ -2571,7 +2590,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
             state, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 64, port: port_);
+            funcId: 65, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_unit,
@@ -2603,7 +2622,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         sse_encode_box_autoadd_attachment(attachment, serializer);
         sse_encode_String(path, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 65, port: port_);
+            funcId: 66, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_unit,
@@ -2632,7 +2651,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             state, serializer);
         sse_encode_list_record_string_string(files, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 66, port: port_);
+            funcId: 67, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_unit,
@@ -2660,7 +2679,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             state, serializer);
         sse_encode_list_record_string_string(files, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 67, port: port_);
+            funcId: 68, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_unit,
@@ -2693,7 +2712,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         sse_encode_box_autoadd_mmcs_file(attachment, serializer);
         sse_encode_String(path, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 68, port: port_);
+            funcId: 69, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_unit,
@@ -2718,7 +2737,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       callFfi: () {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_box_autoadd_attachment_meta(attachmentmeta, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 69)!;
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 70)!;
       },
       codec: SseCodec(
         decodeSuccessData:
@@ -2743,7 +2762,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       callFfi: () {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_box_autoadd_chat_proto(chat, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 70)!;
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 71)!;
       },
       codec: SseCodec(
         decodeSuccessData:
@@ -2762,13 +2781,39 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
+  (Uint8List, Uint8List?) crateApiApiEncodeExtensionApp(
+      {required ExtensionApp app}) {
+    return handler.executeSync(SyncTask(
+      callFfi: () {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_box_autoadd_extension_app(app, serializer);
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 72)!;
+      },
+      codec: SseCodec(
+        decodeSuccessData:
+            sse_decode_record_list_prim_u_8_strict_opt_list_prim_u_8_strict,
+        decodeErrorData: sse_decode_AnyhowException,
+      ),
+      constMeta: kCrateApiApiEncodeExtensionAppConstMeta,
+      argValues: [app],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiApiEncodeExtensionAppConstMeta =>
+      const TaskConstMeta(
+        debugName: "encode_extension_app",
+        argNames: ["app"],
+      );
+
+  @override
   Future<String> crateApiApiEncodeHex({required List<int> bytes}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_list_prim_u_8_loose(bytes, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 71, port: port_);
+            funcId: 73, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_String,
@@ -2791,7 +2836,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       callFfi: () {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_box_autoadd_message_summary_info(info, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 72)!;
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 74)!;
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_list_prim_u_8_strict,
@@ -2816,7 +2861,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       callFfi: () {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_box_autoadd_message_proto(messageproto, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 73)!;
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 75)!;
       },
       codec: SseCodec(
         decodeSuccessData:
@@ -2842,7 +2887,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       callFfi: () {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_box_autoadd_message_proto_2(messageproto2, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 74)!;
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 76)!;
       },
       codec: SseCodec(
         decodeSuccessData:
@@ -2868,7 +2913,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       callFfi: () {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_box_autoadd_message_proto_3(messageproto3, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 75)!;
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 77)!;
       },
       codec: SseCodec(
         decodeSuccessData:
@@ -2894,7 +2939,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       callFfi: () {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_box_autoadd_message_proto_4(messageproto4, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 76)!;
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 78)!;
       },
       codec: SseCodec(
         decodeSuccessData:
@@ -2921,7 +2966,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_box_autoadd_share_profile_message(p, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 77, port: port_);
+            funcId: 79, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_String,
@@ -2947,7 +2992,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_box_autoadd_message_summary_info(info, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 78, port: port_);
+            funcId: 80, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_list_prim_u_8_strict,
@@ -2963,60 +3008,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       const TaskConstMeta(
         debugName: "encode_summary_info",
         argNames: ["info"],
-      );
-
-  @override
-  ExtensionApp crateApiApiExtensionAppFromBp(
-      {required List<int> bp, required String bid}) {
-    return handler.executeSync(SyncTask(
-      callFfi: () {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_list_prim_u_8_loose(bp, serializer);
-        sse_encode_String(bid, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 79)!;
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_extension_app,
-        decodeErrorData:
-            sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPushError,
-      ),
-      constMeta: kCrateApiApiExtensionAppFromBpConstMeta,
-      argValues: [bp, bid],
-      apiImpl: this,
-    ));
-  }
-
-  TaskConstMeta get kCrateApiApiExtensionAppFromBpConstMeta =>
-      const TaskConstMeta(
-        debugName: "extension_app_from_bp",
-        argNames: ["bp", "bid"],
-      );
-
-  @override
-  (Uint8List, Uint8List?) crateApiApiExtensionAppToRaw(
-      {required ExtensionApp that}) {
-    return handler.executeSync(SyncTask(
-      callFfi: () {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_box_autoadd_extension_app(that, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 80)!;
-      },
-      codec: SseCodec(
-        decodeSuccessData:
-            sse_decode_record_list_prim_u_8_strict_opt_list_prim_u_8_strict,
-        decodeErrorData:
-            sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPushError,
-      ),
-      constMeta: kCrateApiApiExtensionAppToRawConstMeta,
-      argValues: [that],
-      apiImpl: this,
-    ));
-  }
-
-  TaskConstMeta get kCrateApiApiExtensionAppToRawConstMeta =>
-      const TaskConstMeta(
-        debugName: "extension_app_to_raw",
-        argNames: ["that"],
       );
 
   @override
@@ -5310,8 +5301,9 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
-  Future<(Uint8List, Map<String, CloudAttachment?>)> crateApiApiSyncAttachments(
-      {required ArcPushState state, Uint8List? continuationToken}) {
+  Future<(Uint8List, Map<String, CloudAttachment?>, int)>
+      crateApiApiSyncAttachments(
+          {required ArcPushState state, Uint8List? continuationToken}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
@@ -5323,7 +5315,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       },
       codec: SseCodec(
         decodeSuccessData:
-            sse_decode_record_list_prim_u_8_strict_map_string_opt_box_autoadd_cloud_attachment,
+            sse_decode_record_list_prim_u_8_strict_map_string_opt_box_autoadd_cloud_attachment_i_32,
         decodeErrorData: sse_decode_AnyhowException,
       ),
       constMeta: kCrateApiApiSyncAttachmentsConstMeta,
@@ -5338,7 +5330,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
-  Future<(Uint8List, Map<String, CloudChat?>)> crateApiApiSyncChats(
+  Future<(Uint8List, Map<String, CloudChat?>, int)> crateApiApiSyncChats(
       {required ArcPushState state, Uint8List? continuationToken}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
@@ -5351,7 +5343,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       },
       codec: SseCodec(
         decodeSuccessData:
-            sse_decode_record_list_prim_u_8_strict_map_string_opt_box_autoadd_cloud_chat,
+            sse_decode_record_list_prim_u_8_strict_map_string_opt_box_autoadd_cloud_chat_i_32,
         decodeErrorData: sse_decode_AnyhowException,
       ),
       constMeta: kCrateApiApiSyncChatsConstMeta,
@@ -5366,7 +5358,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
-  Future<(Uint8List, Map<String, CloudMessage?>)> crateApiApiSyncMessages(
+  Future<(Uint8List, Map<String, CloudMessage?>, int)> crateApiApiSyncMessages(
       {required ArcPushState state, Uint8List? continuationToken}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
@@ -5379,7 +5371,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       },
       codec: SseCodec(
         decodeSuccessData:
-            sse_decode_record_list_prim_u_8_strict_map_string_opt_box_autoadd_cloud_message,
+            sse_decode_record_list_prim_u_8_strict_map_string_opt_box_autoadd_cloud_message_i_32,
         decodeErrorData: sse_decode_AnyhowException,
       ),
       constMeta: kCrateApiApiSyncMessagesConstMeta,
@@ -6122,14 +6114,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerNSArrayLPImageMetadata;
 
   RustArcIncrementStrongCountFnType
-      get rust_arc_increment_strong_count_PushError => wire
-          .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPushError;
-
-  RustArcDecrementStrongCountFnType
-      get rust_arc_decrement_strong_count_PushError => wire
-          .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPushError;
-
-  RustArcIncrementStrongCountFnType
       get rust_arc_increment_strong_count_StCollapsedValue => wire
           .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerStCollapsedValue;
 
@@ -6334,14 +6318,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return NsArrayLpImageMetadataImpl.frbInternalDcoDecode(
         raw as List<dynamic>);
-  }
-
-  @protected
-  PushError
-      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPushError(
-          dynamic raw) {
-    // Codec=Dco (DartCObject based), see doc to use other codecs
-    return PushErrorImpl.frbInternalDcoDecode(raw as List<dynamic>);
   }
 
   @protected
@@ -6867,14 +6843,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  PushError
-      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPushError(
-          dynamic raw) {
-    // Codec=Dco (DartCObject based), see doc to use other codecs
-    return PushErrorImpl.frbInternalDcoDecode(raw as List<dynamic>);
-  }
-
-  @protected
   StCollapsedValue
       dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerStCollapsedValue(
           dynamic raw) {
@@ -7014,7 +6982,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       mimeType: dco_decode_opt_String(arr[0]),
       startDate: dco_decode_CastedPrimitive_u_64(arr[1]),
       totalBytes: dco_decode_CastedPrimitive_u_64(arr[2]),
-      transferState: dco_decode_u_32(arr[3]),
+      transferState: dco_decode_i_32(arr[3]),
       isSticker: dco_decode_bool(arr[4]),
       guid: dco_decode_String(arr[5]),
       hideAttachment: dco_decode_bool(arr[6]),
@@ -7023,7 +6991,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       extras: dco_decode_opt_box_autoadd_attachment_meta_extra(arr[9]),
       isOutgoing: dco_decode_bool(arr[10]),
       transferName: dco_decode_String(arr[11]),
-      version: dco_decode_u_32(arr[12]),
+      version: dco_decode_i_32(arr[12]),
       uti: dco_decode_opt_String(arr[13]),
       createdDate: dco_decode_CastedPrimitive_u_64(arr[14]),
       pathc: dco_decode_opt_String(arr[15]),
@@ -7038,7 +7006,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     if (arr.length != 1)
       throw Exception('unexpected arr length: expect 1 but see ${arr.length}');
     return AttachmentMetaExtra(
-      previewGenerationState: dco_decode_opt_box_autoadd_u_32(arr[0]),
+      previewGenerationState: dco_decode_opt_box_autoadd_i_32(arr[0]),
     );
   }
 
@@ -9082,8 +9050,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     return MessageProto(
       unk1: dco_decode_u_32(arr[0]),
       groupTitle: dco_decode_opt_String(arr[1]),
-      text: dco_decode_String(arr[2]),
-      attributedBody: dco_decode_list_prim_u_8_strict(arr[3]),
+      text: dco_decode_opt_String(arr[2]),
+      attributedBody: dco_decode_opt_list_prim_u_8_strict(arr[3]),
       balloonBundleId: dco_decode_opt_String(arr[4]),
       payloadData: dco_decode_opt_list_prim_u_8_strict(arr[5]),
       messageSummaryInfo: dco_decode_opt_list_prim_u_8_strict(arr[6]),
@@ -10287,51 +10255,57 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   @protected
   (
     Uint8List,
-    Map<String, CloudAttachment?>
-  ) dco_decode_record_list_prim_u_8_strict_map_string_opt_box_autoadd_cloud_attachment(
+    Map<String, CloudAttachment?>,
+    int
+  ) dco_decode_record_list_prim_u_8_strict_map_string_opt_box_autoadd_cloud_attachment_i_32(
       dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     final arr = raw as List<dynamic>;
-    if (arr.length != 2) {
-      throw Exception('Expected 2 elements, got ${arr.length}');
+    if (arr.length != 3) {
+      throw Exception('Expected 3 elements, got ${arr.length}');
     }
     return (
       dco_decode_list_prim_u_8_strict(arr[0]),
       dco_decode_Map_String_opt_box_autoadd_cloud_attachment(arr[1]),
+      dco_decode_i_32(arr[2]),
     );
   }
 
   @protected
   (
     Uint8List,
-    Map<String, CloudChat?>
-  ) dco_decode_record_list_prim_u_8_strict_map_string_opt_box_autoadd_cloud_chat(
+    Map<String, CloudChat?>,
+    int
+  ) dco_decode_record_list_prim_u_8_strict_map_string_opt_box_autoadd_cloud_chat_i_32(
       dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     final arr = raw as List<dynamic>;
-    if (arr.length != 2) {
-      throw Exception('Expected 2 elements, got ${arr.length}');
+    if (arr.length != 3) {
+      throw Exception('Expected 3 elements, got ${arr.length}');
     }
     return (
       dco_decode_list_prim_u_8_strict(arr[0]),
       dco_decode_Map_String_opt_box_autoadd_cloud_chat(arr[1]),
+      dco_decode_i_32(arr[2]),
     );
   }
 
   @protected
   (
     Uint8List,
-    Map<String, CloudMessage?>
-  ) dco_decode_record_list_prim_u_8_strict_map_string_opt_box_autoadd_cloud_message(
+    Map<String, CloudMessage?>,
+    int
+  ) dco_decode_record_list_prim_u_8_strict_map_string_opt_box_autoadd_cloud_message_i_32(
       dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     final arr = raw as List<dynamic>;
-    if (arr.length != 2) {
-      throw Exception('Expected 2 elements, got ${arr.length}');
+    if (arr.length != 3) {
+      throw Exception('Expected 3 elements, got ${arr.length}');
     }
     return (
       dco_decode_list_prim_u_8_strict(arr[0]),
       dco_decode_Map_String_opt_box_autoadd_cloud_message(arr[1]),
+      dco_decode_i_32(arr[2]),
     );
   }
 
@@ -11391,15 +11365,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  PushError
-      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPushError(
-          SseDeserializer deserializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    return PushErrorImpl.frbInternalSseDecode(
-        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
-  }
-
-  @protected
   StCollapsedValue
       sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerStCollapsedValue(
           SseDeserializer deserializer) {
@@ -11958,15 +11923,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  PushError
-      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPushError(
-          SseDeserializer deserializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    return PushErrorImpl.frbInternalSseDecode(
-        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
-  }
-
-  @protected
   StCollapsedValue
       sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerStCollapsedValue(
           SseDeserializer deserializer) {
@@ -12108,7 +12064,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     var var_mimeType = sse_decode_opt_String(deserializer);
     var var_startDate = sse_decode_CastedPrimitive_u_64(deserializer);
     var var_totalBytes = sse_decode_CastedPrimitive_u_64(deserializer);
-    var var_transferState = sse_decode_u_32(deserializer);
+    var var_transferState = sse_decode_i_32(deserializer);
     var var_isSticker = sse_decode_bool(deserializer);
     var var_guid = sse_decode_String(deserializer);
     var var_hideAttachment = sse_decode_bool(deserializer);
@@ -12119,7 +12075,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         sse_decode_opt_box_autoadd_attachment_meta_extra(deserializer);
     var var_isOutgoing = sse_decode_bool(deserializer);
     var var_transferName = sse_decode_String(deserializer);
-    var var_version = sse_decode_u_32(deserializer);
+    var var_version = sse_decode_i_32(deserializer);
     var var_uti = sse_decode_opt_String(deserializer);
     var var_createdDate = sse_decode_CastedPrimitive_u_64(deserializer);
     var var_pathc = sse_decode_opt_String(deserializer);
@@ -12149,7 +12105,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     var var_previewGenerationState =
-        sse_decode_opt_box_autoadd_u_32(deserializer);
+        sse_decode_opt_box_autoadd_i_32(deserializer);
     return AttachmentMetaExtra(
         previewGenerationState: var_previewGenerationState);
   }
@@ -14539,8 +14495,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     // Codec=Sse (Serialization based), see doc to use other codecs
     var var_unk1 = sse_decode_u_32(deserializer);
     var var_groupTitle = sse_decode_opt_String(deserializer);
-    var var_text = sse_decode_String(deserializer);
-    var var_attributedBody = sse_decode_list_prim_u_8_strict(deserializer);
+    var var_text = sse_decode_opt_String(deserializer);
+    var var_attributedBody = sse_decode_opt_list_prim_u_8_strict(deserializer);
     var var_balloonBundleId = sse_decode_opt_String(deserializer);
     var var_payloadData = sse_decode_opt_list_prim_u_8_strict(deserializer);
     var var_messageSummaryInfo =
@@ -16097,40 +16053,46 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   @protected
   (
     Uint8List,
-    Map<String, CloudAttachment?>
-  ) sse_decode_record_list_prim_u_8_strict_map_string_opt_box_autoadd_cloud_attachment(
+    Map<String, CloudAttachment?>,
+    int
+  ) sse_decode_record_list_prim_u_8_strict_map_string_opt_box_autoadd_cloud_attachment_i_32(
       SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     var var_field0 = sse_decode_list_prim_u_8_strict(deserializer);
     var var_field1 =
         sse_decode_Map_String_opt_box_autoadd_cloud_attachment(deserializer);
-    return (var_field0, var_field1);
+    var var_field2 = sse_decode_i_32(deserializer);
+    return (var_field0, var_field1, var_field2);
   }
 
   @protected
   (
     Uint8List,
-    Map<String, CloudChat?>
-  ) sse_decode_record_list_prim_u_8_strict_map_string_opt_box_autoadd_cloud_chat(
+    Map<String, CloudChat?>,
+    int
+  ) sse_decode_record_list_prim_u_8_strict_map_string_opt_box_autoadd_cloud_chat_i_32(
       SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     var var_field0 = sse_decode_list_prim_u_8_strict(deserializer);
     var var_field1 =
         sse_decode_Map_String_opt_box_autoadd_cloud_chat(deserializer);
-    return (var_field0, var_field1);
+    var var_field2 = sse_decode_i_32(deserializer);
+    return (var_field0, var_field1, var_field2);
   }
 
   @protected
   (
     Uint8List,
-    Map<String, CloudMessage?>
-  ) sse_decode_record_list_prim_u_8_strict_map_string_opt_box_autoadd_cloud_message(
+    Map<String, CloudMessage?>,
+    int
+  ) sse_decode_record_list_prim_u_8_strict_map_string_opt_box_autoadd_cloud_message_i_32(
       SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     var var_field0 = sse_decode_list_prim_u_8_strict(deserializer);
     var var_field1 =
         sse_decode_Map_String_opt_box_autoadd_cloud_message(deserializer);
-    return (var_field0, var_field1);
+    var var_field2 = sse_decode_i_32(deserializer);
+    return (var_field0, var_field1, var_field2);
   }
 
   @protected
@@ -17097,15 +17059,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   void
-      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPushError(
-          PushError self, SseSerializer serializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_usize(
-        (self as PushErrorImpl).frbInternalSseEncode(move: true), serializer);
-  }
-
-  @protected
-  void
       sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerStCollapsedValue(
           StCollapsedValue self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
@@ -17696,15 +17649,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   void
-      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPushError(
-          PushError self, SseSerializer serializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_usize(
-        (self as PushErrorImpl).frbInternalSseEncode(move: null), serializer);
-  }
-
-  @protected
-  void
       sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerStCollapsedValue(
           StCollapsedValue self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
@@ -17833,7 +17777,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     sse_encode_opt_String(self.mimeType, serializer);
     sse_encode_CastedPrimitive_u_64(self.startDate, serializer);
     sse_encode_CastedPrimitive_u_64(self.totalBytes, serializer);
-    sse_encode_u_32(self.transferState, serializer);
+    sse_encode_i_32(self.transferState, serializer);
     sse_encode_bool(self.isSticker, serializer);
     sse_encode_String(self.guid, serializer);
     sse_encode_bool(self.hideAttachment, serializer);
@@ -17842,7 +17786,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     sse_encode_opt_box_autoadd_attachment_meta_extra(self.extras, serializer);
     sse_encode_bool(self.isOutgoing, serializer);
     sse_encode_String(self.transferName, serializer);
-    sse_encode_u_32(self.version, serializer);
+    sse_encode_i_32(self.version, serializer);
     sse_encode_opt_String(self.uti, serializer);
     sse_encode_CastedPrimitive_u_64(self.createdDate, serializer);
     sse_encode_opt_String(self.pathc, serializer);
@@ -17853,7 +17797,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   void sse_encode_attachment_meta_extra(
       AttachmentMetaExtra self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_opt_box_autoadd_u_32(self.previewGenerationState, serializer);
+    sse_encode_opt_box_autoadd_i_32(self.previewGenerationState, serializer);
   }
 
   @protected
@@ -19845,8 +19789,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_u_32(self.unk1, serializer);
     sse_encode_opt_String(self.groupTitle, serializer);
-    sse_encode_String(self.text, serializer);
-    sse_encode_list_prim_u_8_strict(self.attributedBody, serializer);
+    sse_encode_opt_String(self.text, serializer);
+    sse_encode_opt_list_prim_u_8_strict(self.attributedBody, serializer);
     sse_encode_opt_String(self.balloonBundleId, serializer);
     sse_encode_opt_list_prim_u_8_strict(self.payloadData, serializer);
     sse_encode_opt_list_prim_u_8_strict(self.messageSummaryInfo, serializer);
@@ -21164,31 +21108,35 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   void
-      sse_encode_record_list_prim_u_8_strict_map_string_opt_box_autoadd_cloud_attachment(
-          (Uint8List, Map<String, CloudAttachment?>) self,
+      sse_encode_record_list_prim_u_8_strict_map_string_opt_box_autoadd_cloud_attachment_i_32(
+          (Uint8List, Map<String, CloudAttachment?>, int) self,
           SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_list_prim_u_8_strict(self.$1, serializer);
     sse_encode_Map_String_opt_box_autoadd_cloud_attachment(self.$2, serializer);
+    sse_encode_i_32(self.$3, serializer);
   }
 
   @protected
   void
-      sse_encode_record_list_prim_u_8_strict_map_string_opt_box_autoadd_cloud_chat(
-          (Uint8List, Map<String, CloudChat?>) self, SseSerializer serializer) {
+      sse_encode_record_list_prim_u_8_strict_map_string_opt_box_autoadd_cloud_chat_i_32(
+          (Uint8List, Map<String, CloudChat?>, int) self,
+          SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_list_prim_u_8_strict(self.$1, serializer);
     sse_encode_Map_String_opt_box_autoadd_cloud_chat(self.$2, serializer);
+    sse_encode_i_32(self.$3, serializer);
   }
 
   @protected
   void
-      sse_encode_record_list_prim_u_8_strict_map_string_opt_box_autoadd_cloud_message(
-          (Uint8List, Map<String, CloudMessage?>) self,
+      sse_encode_record_list_prim_u_8_strict_map_string_opt_box_autoadd_cloud_message_i_32(
+          (Uint8List, Map<String, CloudMessage?>, int) self,
           SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_list_prim_u_8_strict(self.$1, serializer);
     sse_encode_Map_String_opt_box_autoadd_cloud_message(self.$2, serializer);
+    sse_encode_i_32(self.$3, serializer);
   }
 
   @protected
@@ -22314,26 +22262,6 @@ class NsArrayLpImageMetadataImpl extends RustOpaque
         .instance.api.rust_arc_decrement_strong_count_NsArrayLpImageMetadata,
     rustArcDecrementStrongCountPtr: RustLib
         .instance.api.rust_arc_decrement_strong_count_NsArrayLpImageMetadataPtr,
-  );
-}
-
-@sealed
-class PushErrorImpl extends RustOpaque implements PushError {
-  // Not to be used by end users
-  PushErrorImpl.frbInternalDcoDecode(List<dynamic> wire)
-      : super.frbInternalDcoDecode(wire, _kStaticData);
-
-  // Not to be used by end users
-  PushErrorImpl.frbInternalSseDecode(BigInt ptr, int externalSizeOnNative)
-      : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
-
-  static final _kStaticData = RustArcStaticData(
-    rustArcIncrementStrongCount:
-        RustLib.instance.api.rust_arc_increment_strong_count_PushError,
-    rustArcDecrementStrongCount:
-        RustLib.instance.api.rust_arc_decrement_strong_count_PushError,
-    rustArcDecrementStrongCountPtr:
-        RustLib.instance.api.rust_arc_decrement_strong_count_PushErrorPtr,
   );
 }
 

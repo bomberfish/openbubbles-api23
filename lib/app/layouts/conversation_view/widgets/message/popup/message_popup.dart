@@ -1268,7 +1268,7 @@ class _MessagePopupState extends OptimizedState<MessagePopup> with SingleTickerP
             onTap: reportIssue,
             action: DetailsMenuAction.ReportIssue,
           ),
-        if (message.attachments.isNotEmpty && !ss.settings.attachmentSyncEnabled.value && ss.settings.cloudSyncingEnabled.value)
+        if (message.attachments.isNotEmpty && ss.settings.cloudSyncingEnabled.value)
           DetailsMenuActionWidget(
             onTap: uploadAttachment,
             action: DetailsMenuAction.UploadAttachment,

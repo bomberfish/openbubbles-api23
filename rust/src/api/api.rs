@@ -113,6 +113,16 @@ pub struct FFIFilePackager {
 
 }
 
+#[frb(sync)]
+pub fn decode_extension_app(bp: &[u8], bid: &str) -> anyhow::Result<ExtensionApp> {
+    Ok(ExtensionApp::from_bp(bp, bid)?)
+}
+
+#[frb(sync)]
+pub fn encode_extension_app(app: &ExtensionApp) -> anyhow::Result<(Vec<u8>, Option<Vec<u8>>)> {
+    Ok(app.to_raw()?)
+}
+
 impl FilePackager for FFIFilePackager {
     type Reader = Box<dyn SeekRead + Send + Sync>;
     async fn get_files(&mut self, path: PathBuf) -> Result<PreparedAsset<Self::Reader>, PushError> {
@@ -2079,7 +2089,7 @@ pub fn restore_cloud_chat(data: &[u8]) -> CloudChat {
 pub async fn sync_chats(
     state: &Arc<PushState>,
     continuation_token: Option<Vec<u8>>,
-) -> anyhow::Result<(Vec<u8>, HashMap<String, Option<CloudChat>>)> {
+) -> anyhow::Result<(Vec<u8>, HashMap<String, Option<CloudChat>>, i32)> {
     let inner = state.0.read().await;
     let cloud_messages_client = inner.cloud_messages_client.as_ref().unwrap();
     Ok(cloud_messages_client.sync_chats(continuation_token).await?)
@@ -2106,7 +2116,7 @@ pub async fn delete_chats(
 pub async fn sync_messages(
     state: &Arc<PushState>,
     continuation_token: Option<Vec<u8>>,
-) -> anyhow::Result<(Vec<u8>, HashMap<String, Option<CloudMessage>>)> {
+) -> anyhow::Result<(Vec<u8>, HashMap<String, Option<CloudMessage>>, i32)> {
     let inner = state.0.read().await;
     let cloud_messages_client = inner.cloud_messages_client.as_ref().unwrap();
     Ok(cloud_messages_client.sync_messages(continuation_token).await?)
@@ -2151,7 +2161,7 @@ impl MessageFlags {
 pub async fn sync_attachments(
     state: &Arc<PushState>,
     continuation_token: Option<Vec<u8>>,
-) -> anyhow::Result<(Vec<u8>, HashMap<String, Option<CloudAttachment>>)> {
+) -> anyhow::Result<(Vec<u8>, HashMap<String, Option<CloudAttachment>>, i32)> {
     let inner = state.0.read().await;
     let cloud_messages_client = inner.cloud_messages_client.as_ref().unwrap();
     Ok(cloud_messages_client.sync_attachments(continuation_token).await?)
