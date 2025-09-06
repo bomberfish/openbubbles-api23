@@ -9603,7 +9603,7 @@ const _: fn() = || {
     {
         let AttachmentMeta = None::<crate::api::api::AttachmentMeta>.unwrap();
         let _: Option<String> = AttachmentMeta.mime_type;
-        let _: u64 = AttachmentMeta.start_date;
+        let _: i64 = AttachmentMeta.start_date;
         let _: u64 = AttachmentMeta.total_bytes;
         let _: i32 = AttachmentMeta.transfer_state;
         let _: bool = AttachmentMeta.is_sticker;
@@ -9616,7 +9616,7 @@ const _: fn() = || {
         let _: String = AttachmentMeta.transfer_name;
         let _: i32 = AttachmentMeta.version;
         let _: Option<String> = AttachmentMeta.uti;
-        let _: u64 = AttachmentMeta.created_date;
+        let _: i64 = AttachmentMeta.created_date;
         let _: Option<String> = AttachmentMeta.pathc;
         let _: Option<String> = AttachmentMeta.md5;
     }
@@ -10168,7 +10168,7 @@ const _: fn() = || {
     {
         let MessageProto = None::<crate::api::api::MessageProto>.unwrap();
         let _: u32 = MessageProto.unk1;
-        let _: Option<String> = MessageProto.group_title;
+        let _: Option<String> = MessageProto.subject;
         let _: Option<String> = MessageProto.text;
         let _: Option<Vec<u8>> = MessageProto.attributed_body;
         let _: Option<String> = MessageProto.balloon_bundle_id;
@@ -11668,7 +11668,7 @@ impl SseDecode for crate::api::api::AttachmentMeta {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
         let mut var_mimeType = <Option<String>>::sse_decode(deserializer);
-        let mut var_startDate = <u64>::sse_decode(deserializer);
+        let mut var_startDate = <i64>::sse_decode(deserializer);
         let mut var_totalBytes = <u64>::sse_decode(deserializer);
         let mut var_transferState = <i32>::sse_decode(deserializer);
         let mut var_isSticker = <bool>::sse_decode(deserializer);
@@ -11683,7 +11683,7 @@ impl SseDecode for crate::api::api::AttachmentMeta {
         let mut var_transferName = <String>::sse_decode(deserializer);
         let mut var_version = <i32>::sse_decode(deserializer);
         let mut var_uti = <Option<String>>::sse_decode(deserializer);
-        let mut var_createdDate = <u64>::sse_decode(deserializer);
+        let mut var_createdDate = <i64>::sse_decode(deserializer);
         let mut var_pathc = <Option<String>>::sse_decode(deserializer);
         let mut var_md5 = <Option<String>>::sse_decode(deserializer);
         return crate::api::api::AttachmentMeta {
@@ -13519,7 +13519,7 @@ impl SseDecode for crate::api::api::MessageProto {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
         let mut var_unk1 = <u32>::sse_decode(deserializer);
-        let mut var_groupTitle = <Option<String>>::sse_decode(deserializer);
+        let mut var_subject = <Option<String>>::sse_decode(deserializer);
         let mut var_text = <Option<String>>::sse_decode(deserializer);
         let mut var_attributedBody = <Option<Vec<u8>>>::sse_decode(deserializer);
         let mut var_balloonBundleId = <Option<String>>::sse_decode(deserializer);
@@ -13537,7 +13537,7 @@ impl SseDecode for crate::api::api::MessageProto {
         let mut var_associatedMessageRangeLength = <Option<u32>>::sse_decode(deserializer);
         return crate::api::api::MessageProto {
             unk1: var_unk1,
-            group_title: var_groupTitle,
+            subject: var_subject,
             text: var_text,
             attributed_body: var_attributedBody,
             balloon_bundle_id: var_balloonBundleId,
@@ -18418,7 +18418,7 @@ impl flutter_rust_bridge::IntoDart for FrbWrapper<crate::api::api::MessageProto>
     fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
         [
             self.0.unk1.into_into_dart().into_dart(),
-            self.0.group_title.into_into_dart().into_dart(),
+            self.0.subject.into_into_dart().into_dart(),
             self.0.text.into_into_dart().into_dart(),
             self.0.attributed_body.into_into_dart().into_dart(),
             self.0.balloon_bundle_id.into_into_dart().into_dart(),
@@ -21237,7 +21237,7 @@ impl SseEncode for crate::api::api::AttachmentMeta {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         <Option<String>>::sse_encode(self.mime_type, serializer);
-        <u64>::sse_encode(self.start_date, serializer);
+        <i64>::sse_encode(self.start_date, serializer);
         <u64>::sse_encode(self.total_bytes, serializer);
         <i32>::sse_encode(self.transfer_state, serializer);
         <bool>::sse_encode(self.is_sticker, serializer);
@@ -21250,7 +21250,7 @@ impl SseEncode for crate::api::api::AttachmentMeta {
         <String>::sse_encode(self.transfer_name, serializer);
         <i32>::sse_encode(self.version, serializer);
         <Option<String>>::sse_encode(self.uti, serializer);
-        <u64>::sse_encode(self.created_date, serializer);
+        <i64>::sse_encode(self.created_date, serializer);
         <Option<String>>::sse_encode(self.pathc, serializer);
         <Option<String>>::sse_encode(self.md5, serializer);
     }
@@ -22596,7 +22596,7 @@ impl SseEncode for crate::api::api::MessageProto {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         <u32>::sse_encode(self.unk1, serializer);
-        <Option<String>>::sse_encode(self.group_title, serializer);
+        <Option<String>>::sse_encode(self.subject, serializer);
         <Option<String>>::sse_encode(self.text, serializer);
         <Option<Vec<u8>>>::sse_encode(self.attributed_body, serializer);
         <Option<String>>::sse_encode(self.balloon_bundle_id, serializer);

@@ -657,7 +657,7 @@ pub fn encode_messageproto4(messageproto4: &MessageProto4) -> GZipWrapper<Messag
 pub struct DartMessageProto {
     /// always 1, is finished or ck sync state
     pub unk1: u32,
-    pub group_title: Option<String>,
+    pub subject: Option<String>,
     pub text: Option<String>,
     pub attributed_body: Option<Vec<u8>>,
     pub balloon_bundle_id: Option<String>,
@@ -707,7 +707,7 @@ pub struct DartMMCSAttachmentMeta {
 #[frb(non_opaque, mirror(AttachmentMeta), type_64bit_int)]
 pub struct DartAttachmentMeta {
     pub mime_type: Option<String>,
-    pub start_date: u64,
+    pub start_date: i64,
     pub total_bytes: u64,
     pub transfer_state: i32,
     pub is_sticker: bool,
@@ -720,7 +720,7 @@ pub struct DartAttachmentMeta {
     pub transfer_name: String,
     pub version: i32, // set to 1
     pub uti: Option<String>, // uti type
-    pub created_date: u64,
+    pub created_date: i64,
     pub pathc: Option<String>, // also transfer name
     pub md5: Option<String>, // first 8 bytes of md5 hash of file
 }

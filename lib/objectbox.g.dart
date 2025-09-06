@@ -117,7 +117,7 @@ final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
       id: const obx_int.IdUid(3, 9017250848141753702),
       name: 'Chat',
-      lastPropertyId: const obx_int.IdUid(47, 3819874096338136746),
+      lastPropertyId: const obx_int.IdUid(48, 6101265134976618931),
       flags: 0,
       properties: <obx_int.ModelProperty>[
         obx_int.ModelProperty(
@@ -324,6 +324,11 @@ final _entities = <obx_int.ModelEntity>[
         obx_int.ModelProperty(
             id: const obx_int.IdUid(47, 3819874096338136746),
             name: 'photoAttachmentGuid',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(48, 6101265134976618931),
+            name: 'cloudGuid',
             type: 9,
             flags: 0)
       ],
@@ -1227,7 +1232,10 @@ obx_int.ModelDefinition getObjectBoxModel() {
           final photoAttachmentGuidOffset = object.photoAttachmentGuid == null
               ? null
               : fbb.writeString(object.photoAttachmentGuid!);
-          fbb.startTable(48);
+          final cloudGuidOffset = object.cloudGuid == null
+              ? null
+              : fbb.writeString(object.cloudGuid!);
+          fbb.startTable(49);
           fbb.addInt64(0, object.id ?? 0);
           fbb.addOffset(2, guidOffset);
           fbb.addOffset(4, chatIdentifierOffset);
@@ -1270,6 +1278,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
           fbb.addOffset(44, ckRecordIdOffset);
           fbb.addBool(45, object.ckSyncState);
           fbb.addOffset(46, photoAttachmentGuidOffset);
+          fbb.addOffset(47, cloudGuidOffset);
           fbb.finish(fbb.endTable());
           return object.id ?? 0;
         },
@@ -1409,7 +1418,9 @@ obx_int.ModelDefinition getObjectBoxModel() {
                 const fb.BoolReader().vTableGet(buffer, rootOffset, 94, false)
             ..photoAttachmentGuid =
                 const fb.StringReader(asciiOptimization: true)
-                    .vTableGetNullable(buffer, rootOffset, 96);
+                    .vTableGetNullable(buffer, rootOffset, 96)
+            ..cloudGuid = const fb.StringReader(asciiOptimization: true)
+                .vTableGetNullable(buffer, rootOffset, 98);
           obx_int.InternalToManyAccess.setRelInfo<Chat>(object.handles, store,
               obx_int.RelInfo<Chat>.toMany(1, object.id!));
           obx_int.InternalToManyAccess.setRelInfo<Chat>(
@@ -2352,6 +2363,10 @@ class Chat_ {
   /// See [Chat.photoAttachmentGuid].
   static final photoAttachmentGuid =
       obx.QueryStringProperty<Chat>(_entities[1].properties[40]);
+
+  /// See [Chat.cloudGuid].
+  static final cloudGuid =
+      obx.QueryStringProperty<Chat>(_entities[1].properties[41]);
 
   /// see [Chat.handles]
   static final handles =

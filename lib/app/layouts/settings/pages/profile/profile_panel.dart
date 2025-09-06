@@ -475,7 +475,7 @@ class _ProfilePanelState extends OptimizedState<ProfilePanel> with WidgetsBindin
                           ss.saveSettings();
                         },
                         initialVal: ss.settings.cloudSyncingEnabled.value,
-                        title: "Messages in iCloud",
+                        title: "Messages in iCloud (BETA)",
                         backgroundColor: tileColor,
                       ),
                       if(ss.settings.cloudSyncingEnabled.value)

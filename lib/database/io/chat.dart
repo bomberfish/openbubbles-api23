@@ -366,6 +366,7 @@ class Chat {
 
   Uint8List? cloudData;
   String? ckRecordId;
+  String? cloudGuid;
   bool ckSyncState = false;
   String? photoAttachmentGuid;
 
@@ -590,6 +591,7 @@ class Chat {
         isArchived = existing?.isArchived ?? isArchived;
       }
       cloudData = existing?.cloudData ?? cloudData;
+      cloudGuid = existing?.cloudGuid ?? cloudGuid;
       if (!updateCkRecordId) {
         ckRecordId = existing?.ckRecordId ?? ckRecordId;
       }
@@ -823,7 +825,10 @@ class Chat {
 
     if (result != null) return result;
 
-    return await backend.createChat(c.participants.map((p) => p.uri).toList(), null, c.serviceName, existingGuid: c.groupId);
+    chat = await backend.createChat(c.participants.map((p) => p.uri).toList(), null, c.serviceName, existingGuid: c.groupId);
+    chat.senderIsKnown = true;
+    chat.save(updateSenderIsKnown: true);
+    return chat;
   }
 
   Future<api.CloudChat> toCloud() async {
@@ -832,15 +837,16 @@ class Chat {
       existing = api.restoreCloudChat(data: cloudData!);
     } else {
       chatIdentifier = participants.length == 1 ? participants[0].address : "chat${(Random().nextInt(pow(2, 32).toInt()) << 32) | Random().nextInt(pow(2, 32).toInt())}";
+      cloudGuid ??= guid;
       existing = api.CloudChat(
         style: isGroup ? 43 : 45, 
         isFiltered: 0, 
         successfulQuery: 1, 
         state: 3, // seems to be a constant 
         chatIdentifier: chatIdentifier!, 
-        groupId: guid, 
+        groupId: cloudGuid!, 
         serviceName: "iMessage", 
-        originalGroupId: guid, 
+        originalGroupId: cloudGuid!, 
         properties: api.CloudProp(
           numberOfTimesRespondedtoThread: 3, // always 3?
           shouldForceToSms: false,
@@ -887,6 +893,7 @@ class Chat {
   bool applyFromCloud(api.CloudChat c, String record) {
     chatIdentifier = c.chatIdentifier;
     ckRecordId = record;
+    cloudGuid = c.groupId;
     ckSyncState = c.properties?.pv == (groupVersion ?? 1);
     if (c.properties?.pv == null || c.properties!.pv! <= (groupVersion ?? 1)) {
       Database.chats.put(this);

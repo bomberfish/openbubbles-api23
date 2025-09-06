@@ -6980,7 +6980,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       throw Exception('unexpected arr length: expect 17 but see ${arr.length}');
     return AttachmentMeta(
       mimeType: dco_decode_opt_String(arr[0]),
-      startDate: dco_decode_CastedPrimitive_u_64(arr[1]),
+      startDate: dco_decode_CastedPrimitive_i_64(arr[1]),
       totalBytes: dco_decode_CastedPrimitive_u_64(arr[2]),
       transferState: dco_decode_i_32(arr[3]),
       isSticker: dco_decode_bool(arr[4]),
@@ -6993,7 +6993,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       transferName: dco_decode_String(arr[11]),
       version: dco_decode_i_32(arr[12]),
       uti: dco_decode_opt_String(arr[13]),
-      createdDate: dco_decode_CastedPrimitive_u_64(arr[14]),
+      createdDate: dco_decode_CastedPrimitive_i_64(arr[14]),
       pathc: dco_decode_opt_String(arr[15]),
       md5: dco_decode_opt_String(arr[16]),
     );
@@ -9049,7 +9049,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       throw Exception('unexpected arr length: expect 17 but see ${arr.length}');
     return MessageProto(
       unk1: dco_decode_u_32(arr[0]),
-      groupTitle: dco_decode_opt_String(arr[1]),
+      subject: dco_decode_opt_String(arr[1]),
       text: dco_decode_opt_String(arr[2]),
       attributedBody: dco_decode_opt_list_prim_u_8_strict(arr[3]),
       balloonBundleId: dco_decode_opt_String(arr[4]),
@@ -12062,7 +12062,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   AttachmentMeta sse_decode_attachment_meta(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     var var_mimeType = sse_decode_opt_String(deserializer);
-    var var_startDate = sse_decode_CastedPrimitive_u_64(deserializer);
+    var var_startDate = sse_decode_CastedPrimitive_i_64(deserializer);
     var var_totalBytes = sse_decode_CastedPrimitive_u_64(deserializer);
     var var_transferState = sse_decode_i_32(deserializer);
     var var_isSticker = sse_decode_bool(deserializer);
@@ -12077,7 +12077,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     var var_transferName = sse_decode_String(deserializer);
     var var_version = sse_decode_i_32(deserializer);
     var var_uti = sse_decode_opt_String(deserializer);
-    var var_createdDate = sse_decode_CastedPrimitive_u_64(deserializer);
+    var var_createdDate = sse_decode_CastedPrimitive_i_64(deserializer);
     var var_pathc = sse_decode_opt_String(deserializer);
     var var_md5 = sse_decode_opt_String(deserializer);
     return AttachmentMeta(
@@ -14494,7 +14494,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   MessageProto sse_decode_message_proto(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     var var_unk1 = sse_decode_u_32(deserializer);
-    var var_groupTitle = sse_decode_opt_String(deserializer);
+    var var_subject = sse_decode_opt_String(deserializer);
     var var_text = sse_decode_opt_String(deserializer);
     var var_attributedBody = sse_decode_opt_list_prim_u_8_strict(deserializer);
     var var_balloonBundleId = sse_decode_opt_String(deserializer);
@@ -14516,7 +14516,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         sse_decode_opt_box_autoadd_u_32(deserializer);
     return MessageProto(
         unk1: var_unk1,
-        groupTitle: var_groupTitle,
+        subject: var_subject,
         text: var_text,
         attributedBody: var_attributedBody,
         balloonBundleId: var_balloonBundleId,
@@ -17775,7 +17775,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       AttachmentMeta self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_opt_String(self.mimeType, serializer);
-    sse_encode_CastedPrimitive_u_64(self.startDate, serializer);
+    sse_encode_CastedPrimitive_i_64(self.startDate, serializer);
     sse_encode_CastedPrimitive_u_64(self.totalBytes, serializer);
     sse_encode_i_32(self.transferState, serializer);
     sse_encode_bool(self.isSticker, serializer);
@@ -17788,7 +17788,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     sse_encode_String(self.transferName, serializer);
     sse_encode_i_32(self.version, serializer);
     sse_encode_opt_String(self.uti, serializer);
-    sse_encode_CastedPrimitive_u_64(self.createdDate, serializer);
+    sse_encode_CastedPrimitive_i_64(self.createdDate, serializer);
     sse_encode_opt_String(self.pathc, serializer);
     sse_encode_opt_String(self.md5, serializer);
   }
@@ -19788,7 +19788,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   void sse_encode_message_proto(MessageProto self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_u_32(self.unk1, serializer);
-    sse_encode_opt_String(self.groupTitle, serializer);
+    sse_encode_opt_String(self.subject, serializer);
     sse_encode_opt_String(self.text, serializer);
     sse_encode_opt_list_prim_u_8_strict(self.attributedBody, serializer);
     sse_encode_opt_String(self.balloonBundleId, serializer);

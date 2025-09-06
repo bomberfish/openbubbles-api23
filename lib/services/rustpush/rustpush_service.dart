@@ -2113,6 +2113,7 @@ class RustPushService extends GetxService {
   RxBool isSyncing = false.obs;
   Future<void> doCloudKitSync() async {
     isSyncing.value = true;
+    chats.restoring = true;
     try {
       await doCloudKitSyncPrivate();
     } catch (e) {
@@ -2120,6 +2121,7 @@ class RustPushService extends GetxService {
       rethrow;
     } finally {
       isSyncing.value = false;
+      chats.restoring = false;
     }
   }
 
@@ -2169,7 +2171,7 @@ class RustPushService extends GetxService {
 
       if (saveMessageAttachments) {
         for (var attachment in message.attachments) {
-          if (!attachment!.getFile().exists() || attachment.ckRecordId != null) continue;
+          if (!attachment!.getFile().exists() || File(attachment.path).lengthSync() == 0 || attachment.ckRecordId != null) continue;
           totalSize += File(attachment.path).lengthSync();
           attachment.ckRecordId ??= createNewCloudKitId();
           uploadAttachments.add((attachment.path, attachment.ckRecordId!));
@@ -2263,9 +2265,11 @@ class RustPushService extends GetxService {
     ss.saveSettings();
 
     List<(String, String)> downloadPfPics = [];
-    var (token, items, state) = await api.syncChats(state: pushService.state, 
-      continuationToken: ss.settings.chatSyncToken.value != null ? base64Decode(ss.settings.chatSyncToken.value!) : null);
-    while (state != 3) {
+    var currentState = 0;
+    while (currentState != 3) {
+      var (token, items, state) = await api.syncChats(state: pushService.state, 
+        continuationToken: ss.settings.chatSyncToken.value != null ? base64Decode(ss.settings.chatSyncToken.value!) : null);
+      currentState = state;
       List<String> dupDeleteChats = [];
       for (var item in items.entries) {
         try {
@@ -2279,6 +2283,10 @@ class RustPushService extends GetxService {
               Chat.deleteChat(result);
               syncStopDelete = false;
             }
+            var index = downloadPfPics.indexWhere((i) => i.$2 == item.key);
+            if (index != -1) {
+              downloadPfPics.removeAt(index);
+            }
             continue;
           }
 
@@ -2289,7 +2297,6 @@ class RustPushService extends GetxService {
 
           if (chat.ckRecordId != null && chat.ckRecordId != item.key) {
             // we have a different record id
-            dupDeleteChats.add(chat.ckRecordId!);
             dupDeleteChats.add(chat.ckRecordId!);
           }
 
@@ -2319,23 +2326,17 @@ class RustPushService extends GetxService {
 
       ss.settings.chatSyncToken.value = base64Encode(token);
       ss.saveSettings();
-
-      (token, items, state) = await api.syncChats(state: pushService.state, 
-        continuationToken: ss.settings.chatSyncToken.value != null ? base64Decode(ss.settings.chatSyncToken.value!) : null);
-    }
-
-    ss.settings.chatSyncToken.value = base64Encode(token);
-    ss.saveSettings();
-
-  
+    }  
 
     if (downloadPfPics.isNotEmpty) {
       await api.downloadCloudGroupPhotos(state: pushService.state, files: downloadPfPics);
     }
 
-    var (token3, items3, state3) = await api.syncAttachments(state: pushService.state, 
-      continuationToken: ss.settings.attachmentSyncToken.value != null ? base64Decode(ss.settings.attachmentSyncToken.value!) : null);
-    while (state3 != 3) {
+    currentState = 0;
+    while (currentState != 3) {
+      var (token3, items3, state3) = await api.syncAttachments(state: pushService.state, 
+          continuationToken: ss.settings.attachmentSyncToken.value != null ? base64Decode(ss.settings.attachmentSyncToken.value!) : null);
+      currentState = state3;
       List<String> dupDeleteAttachments = [];
       for (var item in items3.entries) {
         try {
@@ -2353,7 +2354,6 @@ class RustPushService extends GetxService {
           if (existing != null) {
             if (existing.ckRecordId != null && existing.ckRecordId != item.key) {
               // we have a different record id
-              dupDeleteAttachments.add(existing.ckRecordId!);
               dupDeleteAttachments.add(existing.ckRecordId!);
             }
             existing.ckRecordId = item.key;
@@ -2385,13 +2385,7 @@ class RustPushService extends GetxService {
 
       ss.settings.attachmentSyncToken.value = base64Encode(token3);
       ss.saveSettings();
-
-      (token3, items3, state3) = await api.syncAttachments(state: pushService.state, 
-        continuationToken: ss.settings.attachmentSyncToken.value != null ? base64Decode(ss.settings.attachmentSyncToken.value!) : null);
     }
-
-    ss.settings.attachmentSyncToken.value = base64Encode(token3);
-    ss.saveSettings();
 
     int localUnchanged = 0;
     int localChanged = 0;
@@ -2400,12 +2394,14 @@ class RustPushService extends GetxService {
     int totalMessages = 0;
     int remoteNew = 0;
 
+    currentState = 0;
+    while (currentState != 3) {
+      var (token2, items2, state2) = await api.syncMessages(state: pushService.state, 
+        continuationToken: ss.settings.messageSyncToken.value != null ? base64Decode(ss.settings.messageSyncToken.value!) : null);
+      currentState = state2;
 
-    var (token2, items2, state2) = await api.syncMessages(state: pushService.state, 
-      continuationToken: ss.settings.messageSyncToken.value != null ? base64Decode(ss.settings.messageSyncToken.value!) : null);
-    while (state2 != 3) {
       List<String> dupDeleteMessages = [];
-      Logger.info("Syncing group of ${items2.length} messages");
+      Logger.info("Syncing group of ${items2.length} messages, total $totalMessages");
       totalMessages += items2.length;
 
       for (var item in items2.entries) {
@@ -2460,12 +2456,7 @@ class RustPushService extends GetxService {
       
       ss.settings.messageSyncToken.value = base64Encode(token2);
       ss.saveSettings();
-      
-      (token2, items2, state2) = await api.syncMessages(state: pushService.state, 
-        continuationToken: ss.settings.messageSyncToken.value != null ? base64Decode(ss.settings.messageSyncToken.value!) : null);
     }
-    ss.settings.messageSyncToken.value = base64Encode(token2);
-    ss.saveSettings();
 
     Logger.info("Out");
 
@@ -2492,7 +2483,10 @@ class RustPushService extends GetxService {
       chat.ckRecordId ??= generateCloudKitId();
 
       if (chat.customAvatarPath != null) {
-        uploadPhotos.add((chat.customAvatarPath!, chat.ckRecordId!));
+        var file = File(chat.customAvatarPath!);
+        if (file.existsSync() && file.lengthSync() > 0) {
+          uploadPhotos.add((chat.customAvatarPath!, chat.ckRecordId!));
+        }
       }
 
       saveChats[chat.ckRecordId!] = item;
@@ -3819,6 +3813,7 @@ class RustPushService extends GetxService {
   Future<(bool, String?)> promptPassword(api.ViableBottle bottle, String desc) async {
     var context = Get.context!;
     bool change = false;
+    bool obscureText = true;
     String? text;
     var codeController = TextEditingController();
     await showDialog(
@@ -3853,7 +3848,7 @@ class RustPushService extends GetxService {
                 children: [
                   Row(
                     children: List.generate(bottle.numericLength, (index) {
-                      var text = index < codeController.text.length ? codeController.text[index] : "";
+                      var text = index < codeController.text.length ? "•" : "";
                       return Expanded(child: 
                         Container(
                           decoration: index == codeController.text.length ? 
@@ -3875,7 +3870,7 @@ class RustPushService extends GetxService {
                           child: Center(
                             child: Text(
                               text,
-                              style: context.theme.textTheme.titleLarge
+                              style: context.theme.textTheme.titleLarge?.copyWith(fontSize: 40, fontWeight: FontWeight.bold)
                             ),
                           )
                         )
@@ -3896,14 +3891,24 @@ class RustPushService extends GetxService {
                       },
                     )),
                 ],
-              )) : TextField(
+              )) : StatefulBuilder(builder: (context, update) => TextField(
                 controller: codeController,
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   labelText: "Password",
-                  border: OutlineInputBorder(),
+                  border: const OutlineInputBorder(),
+                  suffixIcon: IconButton(
+                    icon: Icon(obscureText ? Icons.visibility_off : Icons.visibility),
+                    color: context.theme.colorScheme.outline,
+                    onPressed: () {
+                      update(() {
+                        obscureText = !obscureText;
+                      });
+                    },
+                  ),
                 ),
                 autofocus: true,
-              )
+                obscureText: obscureText,
+              ))
             ],
           ),
           backgroundColor: context.theme.colorScheme.properSurface,
@@ -3934,7 +3939,7 @@ class RustPushService extends GetxService {
           content: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: bottles.map((bottle) => Material( // provides a Material ancestor for the ripple
                 color: Colors.transparent,
                 child: InkWell(
@@ -4605,6 +4610,8 @@ class RustPushService extends GetxService {
   }
 
   Future reset(bool hw, bool logout) async {
+    ss.settings.cloudSyncingEnabled.value = false;
+    ss.saveSettings();
     await api.resetState(state: state, resetHw: hw, logout: logout);
   }
 

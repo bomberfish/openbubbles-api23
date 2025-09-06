@@ -94,7 +94,7 @@
     },
     {
       "id": "3:9017250848141753702",
-      "lastPropertyId": "47:3819874096338136746",
+      "lastPropertyId": "48:6101265134976618931",
       "name": "Chat",
       "properties": [
         {
@@ -303,6 +303,11 @@
         {
           "id": "47:3819874096338136746",
           "name": "photoAttachmentGuid",
+          "type": 9
+        },
+        {
+          "id": "48:6101265134976618931",
+          "name": "cloudGuid",
           "type": 9
         }
       ],

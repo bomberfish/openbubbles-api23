@@ -1035,7 +1035,7 @@ class Message {
       utm: api.utmNow(),
       type: associatedMessageGuid != null ? 2 : 1,
       error: error, 
-      chatId: "iMessage;${chat.target!.isGroup ? '+' : '-'};${chat.target!.chatIdentifier}", 
+      chatId: chat.target!.isGroup ? chat.target!.cloudGuid ?? chat.target!.guid : "iMessage;-;${chat.target!.chatIdentifier}", 
       sender: isFromMe == true ? "" : getHandle()?.address ?? "", 
       time: RustPushBBUtils.nsSinceAppleEpoch(dateCreated!), 
       msgProto2: threadOriginatorGuid != null ? api.encodeMessageproto2(messageproto2: api.MessageProto2(
@@ -1045,7 +1045,7 @@ class Message {
       destinationCallerId: chat.target!.usingHandle!.replaceFirst("mailto:", "").replaceFirst("tel:", ""), 
       msgProto: api.encodeMessageproto(messageproto: api.MessageProto(
         unk1: 1,
-        groupTitle: groupTitle, 
+        subject: subject, 
         text: attributedBody[0].string, 
         attributedBody: encodeAttributedBody(attributedBody, noAttachments),
         balloonBundleId: balloonBundleId,
@@ -1099,9 +1099,18 @@ class Message {
 
   void applyFromCloud(api.CloudMessage c, String cloudkitId) {
     Logger.info("item ${c.chatId}");
-    final query = Database.chats.query(Chat_.chatIdentifier.equals(c.chatId.contains(";") ? c.chatId.split(";")[2] : c.chatId)).build();
-    final chat = query.findFirst();
-    query.close();
+    Chat? chat;
+    if (c.chatId.contains(";")) {
+      final query = Database.chats.query(Chat_.chatIdentifier.equals(c.chatId.split(";")[2])).build();
+      chat = query.findFirst();
+      query.close();
+    } else {
+      final query = Database.chats.query(Chat_.cloudGuid.equals(c.chatId)).build();
+      chat = query.findFirst();
+      query.close();
+      
+      chat ??= Chat.findByRustGuid(c.chatId);
+    }
 
     if (chat?.isRpSms ?? true) return;
 
@@ -1111,19 +1120,26 @@ class Message {
 
     error = c.error;
     handle = RustPushBBUtils.rustHandleToBB(c.sender);
+    handleId = handle!.originalROWID;
     dateCreated = RustPushBBUtils.fromNsSinceAppleEpoch(c.time);
     var proto1 = api.decodeMessageproto(wrapped: c.msgProto);
-    groupTitle = proto1.groupTitle;
+    subject = proto1.subject;
     text = proto1.text;
     attributedBody = decodeAttributedBody(proto1.attributedBody);
     hasAttachments = attributedBody.firstOrNull?.runs.any((run) => run.attributes?.attachmentGuid != null) ?? false;
+    // urls are a whole weird system, ignore for now.
+    var eraseBalloonBundle = proto1.balloonBundleId == "com.apple.messages.URLBalloonProvider";
     balloonBundleId = proto1.balloonBundleId;
+    if (eraseBalloonBundle) {
+      balloonBundleId = null; // we don't support this at the moment.
+    }
     
     try {
-      payloadData = proto1.payloadData != null && proto1.balloonBundleId != "com.apple.messages.URLBalloonProvider" ? pushService.appToData(api.decodeExtensionApp(bp: gzip.encode(proto1.payloadData!), bid: proto1.balloonBundleId!)) : null;
+      payloadData = proto1.payloadData != null && !eraseBalloonBundle ? pushService.appToData(api.decodeExtensionApp(bp: gzip.encode(proto1.payloadData!), bid: proto1.balloonBundleId!)) : null;
     } catch (e, s) {
       Logger.info("Failed item ${hex.encode(proto1.payloadData!)} ${proto1.balloonBundleId}", error: e, trace: s);
     }
+    hasApplePayloadData = proto1.payloadData != null && !eraseBalloonBundle;
 
     if (proto1.messageSummaryInfo != null) {
       var summary = api.decodeMessageInfo(data: proto1.messageSummaryInfo!);
@@ -1150,7 +1166,6 @@ class Message {
     }
     associatedMessageGuid = proto1.associatedMessageGuid;
     associatedMessagePart = attributedBody.firstOrNull?.runs.firstWhereOrNull((b) => b.range[0] == proto1.associatedMessageRangeLocation && b.range[1] == proto1.associatedMessageRangeLength)?.attributes?.messagePart;
-    hasApplePayloadData = proto1.payloadData != null;
     guid = c.guid;
     var bits = c.flags.bits();
     isFromMe = (bits & IS_FROM_ME) != 0;

@@ -2863,7 +2863,7 @@ class MessageParts {
 class MessageProto {
   /// always 1, is finished or ck sync state
   final int unk1;
-  final String? groupTitle;
+  final String? subject;
   final String? text;
   final Uint8List? attributedBody;
   final String? balloonBundleId;
@@ -2882,7 +2882,7 @@ class MessageProto {
 
   const MessageProto({
     required this.unk1,
-    this.groupTitle,
+    this.subject,
     this.text,
     this.attributedBody,
     this.balloonBundleId,
@@ -2903,7 +2903,7 @@ class MessageProto {
   @override
   int get hashCode =>
       unk1.hashCode ^
-      groupTitle.hashCode ^
+      subject.hashCode ^
       text.hashCode ^
       attributedBody.hashCode ^
       balloonBundleId.hashCode ^
@@ -2926,7 +2926,7 @@ class MessageProto {
       other is MessageProto &&
           runtimeType == other.runtimeType &&
           unk1 == other.unk1 &&
-          groupTitle == other.groupTitle &&
+          subject == other.subject &&
           text == other.text &&
           attributedBody == other.attributedBody &&
           balloonBundleId == other.balloonBundleId &&
