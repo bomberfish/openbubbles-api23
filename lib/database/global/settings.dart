@@ -622,7 +622,7 @@ class Settings {
     ss.settings.isTester.value = map['isTester'] ?? false;
     ss.settings.cloudSyncingEnabled.value = map['cloudSyncingEnabled'] ?? false;
     ss.settings.lastSynced.value = map['lastSynced'] ?? 0;
-    ss.settings.attachmentSyncEnabled.value = map['attachmentSyncEnabled'] ?? true;
+    ss.settings.attachmentSyncEnabled.value = map['attachmentSyncEnabled'] ?? false;
     ss.settings.save();
 
     eventDispatcher.emit("theme-update", null);
@@ -797,7 +797,7 @@ class Settings {
     s.isTester.value = map['isTester'] ?? false;
     s.cloudSyncingEnabled.value = map['cloudSyncingEnabled'] ?? false;
     s.lastSynced.value = map['lastSynced'] ?? 0;
-    s.attachmentSyncEnabled.value = map['attachmentSyncEnabled'] ?? true;
+    s.attachmentSyncEnabled.value = map['attachmentSyncEnabled'] ?? false;
     return s;
   }
 
