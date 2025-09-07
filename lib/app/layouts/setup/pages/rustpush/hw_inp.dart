@@ -371,7 +371,7 @@ class HwInpState extends OptimizedState<HwInp> {
       }
       controller.handleOfflineError(e.toString(), currentTicket);
       showSnackbar("Failure handling subscription! Please try again", e.toString());
-      pushService.mixpanel.track("hosted-device-failure");
+      pushService.mixpanel?.track("hosted-device-failure");
       rethrow;
     }
     Get.back();
@@ -605,7 +605,7 @@ class HwInpState extends OptimizedState<HwInp> {
                                 hosted,
                                 () async {
                                   if (hosted) {
-                                    pushService.mixpanel.track("choose-hosted");
+                                    pushService.mixpanel?.track("choose-hosted");
                                     wrapSubscriptionPromise<void>((() async {
                                       await controller.ensureToken();
                                       pushService.client.runWithClientNonRetryable<void>((client) async {
@@ -963,7 +963,7 @@ class HwInpState extends OptimizedState<HwInp> {
         }
         ss.saveSettings();
         if (isHosted) {
-          pushService.mixpanel.track("hosted-device-configured");
+          pushService.mixpanel?.track("hosted-device-configured");
         }
       }
 

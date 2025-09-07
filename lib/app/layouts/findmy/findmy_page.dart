@@ -734,11 +734,11 @@ class _FindMyPageState extends OptimizedState<FindMyPage> with SingleTickerProvi
                     physics: const NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
                     padding: EdgeInsets.zero,
-                    findChildIndexCallback: (key) => findChildIndexByKey(itemsWithLocation, key, (item) => item.address?.uniqueValue),
+                    findChildIndexCallback: (key) => findChildIndexByKey(itemsWithLocation, key, (item) => item.id ?? randomString(6)),
                     itemBuilder: (context, i) {
                       final item = itemsWithLocation[i];
                       return ListTile(
-                        key: ValueKey(item.address?.uniqueValue),
+                        key: ValueKey(item.id ?? randomString(6)),
                         title: Text(ss.settings.redactedMode.value ? "Item" : (item.name ?? "Unknown Item")),
                         subtitle: Text(ss.settings.redactedMode.value ? "Location" : (item.address?.label ?? item.address?.mapItemFullAddress ?? "No location found")),
                         trailing: item.location?.latitude != null && item.location?.longitude != null ? ButtonTheme(

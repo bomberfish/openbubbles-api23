@@ -6981,7 +6981,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     return AttachmentMeta(
       mimeType: dco_decode_opt_String(arr[0]),
       startDate: dco_decode_CastedPrimitive_i_64(arr[1]),
-      totalBytes: dco_decode_CastedPrimitive_u_64(arr[2]),
+      totalBytes: dco_decode_CastedPrimitive_i_64(arr[2]),
       transferState: dco_decode_i_32(arr[3]),
       isSticker: dco_decode_bool(arr[4]),
       guid: dco_decode_String(arr[5]),
@@ -6990,7 +6990,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       filename: dco_decode_opt_String(arr[8]),
       extras: dco_decode_opt_box_autoadd_attachment_meta_extra(arr[9]),
       isOutgoing: dco_decode_bool(arr[10]),
-      transferName: dco_decode_String(arr[11]),
+      transferName: dco_decode_opt_String(arr[11]),
       version: dco_decode_i_32(arr[12]),
       uti: dco_decode_opt_String(arr[13]),
       createdDate: dco_decode_CastedPrimitive_i_64(arr[14]),
@@ -7006,7 +7006,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     if (arr.length != 1)
       throw Exception('unexpected arr length: expect 1 but see ${arr.length}');
     return AttachmentMetaExtra(
-      previewGenerationState: dco_decode_opt_box_autoadd_i_32(arr[0]),
+      previewGenerationState: dco_decode_opt_box_autoadd_num_or_string(arr[0]),
     );
   }
 
@@ -9346,6 +9346,10 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       case 1:
         return NumOrString_String(
           dco_decode_String(raw[1]),
+        );
+      case 2:
+        return NumOrString_Bool(
+          dco_decode_bool(raw[1]),
         );
       default:
         throw Exception("unreachable");
@@ -12063,7 +12067,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     // Codec=Sse (Serialization based), see doc to use other codecs
     var var_mimeType = sse_decode_opt_String(deserializer);
     var var_startDate = sse_decode_CastedPrimitive_i_64(deserializer);
-    var var_totalBytes = sse_decode_CastedPrimitive_u_64(deserializer);
+    var var_totalBytes = sse_decode_CastedPrimitive_i_64(deserializer);
     var var_transferState = sse_decode_i_32(deserializer);
     var var_isSticker = sse_decode_bool(deserializer);
     var var_guid = sse_decode_String(deserializer);
@@ -12074,7 +12078,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     var var_extras =
         sse_decode_opt_box_autoadd_attachment_meta_extra(deserializer);
     var var_isOutgoing = sse_decode_bool(deserializer);
-    var var_transferName = sse_decode_String(deserializer);
+    var var_transferName = sse_decode_opt_String(deserializer);
     var var_version = sse_decode_i_32(deserializer);
     var var_uti = sse_decode_opt_String(deserializer);
     var var_createdDate = sse_decode_CastedPrimitive_i_64(deserializer);
@@ -12105,7 +12109,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     var var_previewGenerationState =
-        sse_decode_opt_box_autoadd_i_32(deserializer);
+        sse_decode_opt_box_autoadd_num_or_string(deserializer);
     return AttachmentMetaExtra(
         previewGenerationState: var_previewGenerationState);
   }
@@ -14818,6 +14822,9 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       case 1:
         var var_field0 = sse_decode_String(deserializer);
         return NumOrString_String(var_field0);
+      case 2:
+        var var_field0 = sse_decode_bool(deserializer);
+        return NumOrString_Bool(var_field0);
       default:
         throw UnimplementedError('');
     }
@@ -17776,7 +17783,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_opt_String(self.mimeType, serializer);
     sse_encode_CastedPrimitive_i_64(self.startDate, serializer);
-    sse_encode_CastedPrimitive_u_64(self.totalBytes, serializer);
+    sse_encode_CastedPrimitive_i_64(self.totalBytes, serializer);
     sse_encode_i_32(self.transferState, serializer);
     sse_encode_bool(self.isSticker, serializer);
     sse_encode_String(self.guid, serializer);
@@ -17785,7 +17792,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     sse_encode_opt_String(self.filename, serializer);
     sse_encode_opt_box_autoadd_attachment_meta_extra(self.extras, serializer);
     sse_encode_bool(self.isOutgoing, serializer);
-    sse_encode_String(self.transferName, serializer);
+    sse_encode_opt_String(self.transferName, serializer);
     sse_encode_i_32(self.version, serializer);
     sse_encode_opt_String(self.uti, serializer);
     sse_encode_CastedPrimitive_i_64(self.createdDate, serializer);
@@ -17797,7 +17804,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   void sse_encode_attachment_meta_extra(
       AttachmentMetaExtra self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_opt_box_autoadd_i_32(self.previewGenerationState, serializer);
+    sse_encode_opt_box_autoadd_num_or_string(
+        self.previewGenerationState, serializer);
   }
 
   @protected
@@ -20018,6 +20026,9 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       case NumOrString_String(field0: final field0):
         sse_encode_i_32(1, serializer);
         sse_encode_String(field0, serializer);
+      case NumOrString_Bool(field0: final field0):
+        sse_encode_i_32(2, serializer);
+        sse_encode_bool(field0, serializer);
       default:
         throw UnimplementedError('');
     }

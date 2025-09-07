@@ -1293,7 +1293,7 @@ class RustPushService extends GetxService {
   var findMy = false;
   var sharedStreams = false;
 
-  late Mixpanel mixpanel;
+  Mixpanel? mixpanel;
 
   var disableOutgoingSms = false;
 
@@ -2155,13 +2155,17 @@ class RustPushService extends GetxService {
     for (var message in messages) {
       // counter += 1;
       // Logger.info("Processing message $counter of ${messages.length}");
+      if (message.chat.target?.isRpSms == true) {
+        message.ckSyncState = true;
+        continue;
+      }
       message.fetchAttachments();
 
       // remember: other invocations
       message.ckRecordId ??= createNewCloudKitId();
-      var saveMessageAttachments = !noAttachments || message.attachments.any((a) => a!.ckRecordId != null);
+      var saveMessageAttachments = !noAttachments || message.attachments.every((a) => a!.ckRecordId != null);
       try {
-        saveMessages[message.ckRecordId!] = message.toCloud(noAttachments);
+        saveMessages[message.ckRecordId!] = message.toCloud(!saveMessageAttachments);
       } catch (e, s) {
         Logger.warn("Failure to convert to cloud", error: e, trace: s);
         continue;
@@ -2169,7 +2173,7 @@ class RustPushService extends GetxService {
         message.ckSyncState = true;
       }
 
-      if (saveMessageAttachments) {
+      if (!noAttachments) {
         for (var attachment in message.attachments) {
           if (!attachment!.getFile().exists() || File(attachment.path).lengthSync() == 0 || attachment.ckRecordId != null) continue;
           totalSize += File(attachment.path).lengthSync();
@@ -2292,6 +2296,7 @@ class RustPushService extends GetxService {
 
           // localized deduplication works fine, since it should not sync down items that have been deleted
           if (dupDeleteChats.contains(item.key)) continue;
+          if (item.value!.serviceName != "iMessage") continue; // imessage only
 
           var chat = await Chat.findFromCloud(item.value!);
 
@@ -2463,7 +2468,7 @@ class RustPushService extends GetxService {
     List<(String, String)> uploadAttachments = [];
     Map<String, Attachment> idToAttachment = {};
 
-    var unsyncedChats = Database.chats.query(Chat_.ckSyncState.equals(false).and(Chat_.dateDeleted.isNull())).build();
+    var unsyncedChats = Database.chats.query(Chat_.ckSyncState.equals(false).and(Chat_.dateDeleted.isNull()).and(Chat_.isRpSms.equals(false))).build();
     var useChats = unsyncedChats.find();
     Logger.info("Out2");
     Map<String, api.CloudChat> saveChats = {};
@@ -2513,7 +2518,7 @@ class RustPushService extends GetxService {
     }
 
     Logger.info("Syncing messages");
-    bool noAttachments = ss.settings.attachmentSyncEnabled.value;
+    bool noAttachments = !ss.settings.attachmentSyncEnabled.value;
 
 
     var unsyncedMessages = Database.messages.query(Message_.ckRecordId.isNull().and(Message_.itemType.equals(0)).and(Message_.ckSyncState.equals(false).or(Message_.ckSyncState.isNull())))
@@ -3221,13 +3226,13 @@ class RustPushService extends GetxService {
       if (state is api.RegisterState_Registered) {
         notifiedFailed = false;
         if (ss.settings.deviceIsHosted.value) {
-          mixpanel.track("hosted-register-success");
+          mixpanel?.track("hosted-register-success");
         }
         handleRegistered();
       }
       if (state is api.RegisterState_Failed && !notifiedFailed) {
         if (ss.settings.deviceIsHosted.value) {
-          mixpanel.track("hosted-register-failure");
+          mixpanel?.track("hosted-register-failure");
         }
         notif.createRegisterFailed(state.retryWait == null);
         if (state.retryWait == null) {
@@ -4606,6 +4611,7 @@ class RustPushService extends GetxService {
   }
 
   void initMixPanel() async {
+    if (ss.settings.finishedSetup.value && !ss.settings.deviceIsHosted.value) return;
     mixpanel = await Mixpanel.init("d66dc2d8f2ad649fac2640ff059dc9f4", trackAutomaticEvents: false);
   }
 

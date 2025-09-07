@@ -94,7 +94,7 @@ class Attachment {
       hideAttachment: false, 
       userInfo: metadata!["rustpush"] != null ? api.attachmentToCloud(att: api.restoreAttachment(data: metadata!["rustpush"])) : null,
       filename: "~/Library/Messages/Attachments/24/04/${unconvertAttachmentGuid(guid!)}/test.png", 
-      extras: const api.AttachmentMetaExtra(previewGenerationState: 1),
+      extras: const api.AttachmentMetaExtra(previewGenerationState: api.NumOrString.num(1)),
       isOutgoing: message.target?.isFromMe ?? true, 
       transferName: transferName ?? "unknown", 
       version: 1, 

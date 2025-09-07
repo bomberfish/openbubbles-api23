@@ -677,13 +677,14 @@ pub struct DartMessageProto {
 
 #[frb(non_opaque, mirror(AttachmentMetaExtra))]
 pub struct DartAttachmentMetaExtra {
-    pub preview_generation_state: Option<i32>, // set to 1
+    pub preview_generation_state: Option<NumOrString>, // set to 1
 }
 
 #[frb(non_opaque, mirror(NumOrString))]
 pub enum DartNumOrString {
     Num(u32),
     String(String),
+    Bool(bool),
 }
 
 #[frb(non_opaque, mirror(MMCSAttachmentMeta))]
@@ -708,7 +709,7 @@ pub struct DartMMCSAttachmentMeta {
 pub struct DartAttachmentMeta {
     pub mime_type: Option<String>,
     pub start_date: i64,
-    pub total_bytes: u64,
+    pub total_bytes: i64,
     pub transfer_state: i32,
     pub is_sticker: bool,
     pub guid: String,
@@ -717,7 +718,7 @@ pub struct DartAttachmentMeta {
     pub filename: Option<String>, //path
     pub extras: Option<AttachmentMetaExtra>,
     pub is_outgoing: bool,
-    pub transfer_name: String,
+    pub transfer_name: Option<String>,
     pub version: i32, // set to 1
     pub uti: Option<String>, // uti type
     pub created_date: i64,

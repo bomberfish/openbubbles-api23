@@ -9604,7 +9604,7 @@ const _: fn() = || {
         let AttachmentMeta = None::<crate::api::api::AttachmentMeta>.unwrap();
         let _: Option<String> = AttachmentMeta.mime_type;
         let _: i64 = AttachmentMeta.start_date;
-        let _: u64 = AttachmentMeta.total_bytes;
+        let _: i64 = AttachmentMeta.total_bytes;
         let _: i32 = AttachmentMeta.transfer_state;
         let _: bool = AttachmentMeta.is_sticker;
         let _: String = AttachmentMeta.guid;
@@ -9613,7 +9613,7 @@ const _: fn() = || {
         let _: Option<String> = AttachmentMeta.filename;
         let _: Option<crate::api::api::AttachmentMetaExtra> = AttachmentMeta.extras;
         let _: bool = AttachmentMeta.is_outgoing;
-        let _: String = AttachmentMeta.transfer_name;
+        let _: Option<String> = AttachmentMeta.transfer_name;
         let _: i32 = AttachmentMeta.version;
         let _: Option<String> = AttachmentMeta.uti;
         let _: i64 = AttachmentMeta.created_date;
@@ -9622,7 +9622,7 @@ const _: fn() = || {
     }
     {
         let AttachmentMetaExtra = None::<crate::api::api::AttachmentMetaExtra>.unwrap();
-        let _: Option<i32> = AttachmentMetaExtra.preview_generation_state;
+        let _: Option<crate::api::api::NumOrString> = AttachmentMetaExtra.preview_generation_state;
     }
     match None::<crate::api::api::AttachmentType>.unwrap() {
         crate::api::api::AttachmentType::Inline(field0) => {
@@ -10317,6 +10317,9 @@ const _: fn() = || {
         }
         crate::api::api::NumOrString::String(field0) => {
             let _: String = field0;
+        }
+        crate::api::api::NumOrString::Bool(field0) => {
+            let _: bool = field0;
         }
     }
     {
@@ -11669,7 +11672,7 @@ impl SseDecode for crate::api::api::AttachmentMeta {
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
         let mut var_mimeType = <Option<String>>::sse_decode(deserializer);
         let mut var_startDate = <i64>::sse_decode(deserializer);
-        let mut var_totalBytes = <u64>::sse_decode(deserializer);
+        let mut var_totalBytes = <i64>::sse_decode(deserializer);
         let mut var_transferState = <i32>::sse_decode(deserializer);
         let mut var_isSticker = <bool>::sse_decode(deserializer);
         let mut var_guid = <String>::sse_decode(deserializer);
@@ -11680,7 +11683,7 @@ impl SseDecode for crate::api::api::AttachmentMeta {
         let mut var_extras =
             <Option<crate::api::api::AttachmentMetaExtra>>::sse_decode(deserializer);
         let mut var_isOutgoing = <bool>::sse_decode(deserializer);
-        let mut var_transferName = <String>::sse_decode(deserializer);
+        let mut var_transferName = <Option<String>>::sse_decode(deserializer);
         let mut var_version = <i32>::sse_decode(deserializer);
         let mut var_uti = <Option<String>>::sse_decode(deserializer);
         let mut var_createdDate = <i64>::sse_decode(deserializer);
@@ -11711,7 +11714,8 @@ impl SseDecode for crate::api::api::AttachmentMeta {
 impl SseDecode for crate::api::api::AttachmentMetaExtra {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
-        let mut var_previewGenerationState = <Option<i32>>::sse_decode(deserializer);
+        let mut var_previewGenerationState =
+            <Option<crate::api::api::NumOrString>>::sse_decode(deserializer);
         return crate::api::api::AttachmentMetaExtra {
             preview_generation_state: var_previewGenerationState,
         };
@@ -13886,6 +13890,10 @@ impl SseDecode for crate::api::api::NumOrString {
             1 => {
                 let mut var_field0 = <String>::sse_decode(deserializer);
                 return crate::api::api::NumOrString::String(var_field0);
+            }
+            2 => {
+                let mut var_field0 = <bool>::sse_decode(deserializer);
+                return crate::api::api::NumOrString::Bool(var_field0);
             }
             _ => {
                 unimplemented!("");
@@ -18913,6 +18921,9 @@ impl flutter_rust_bridge::IntoDart for FrbWrapper<crate::api::api::NumOrString> 
             crate::api::api::NumOrString::String(field0) => {
                 [1.into_dart(), field0.into_into_dart().into_dart()].into_dart()
             }
+            crate::api::api::NumOrString::Bool(field0) => {
+                [2.into_dart(), field0.into_into_dart().into_dart()].into_dart()
+            }
             _ => {
                 unimplemented!("");
             }
@@ -21238,7 +21249,7 @@ impl SseEncode for crate::api::api::AttachmentMeta {
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         <Option<String>>::sse_encode(self.mime_type, serializer);
         <i64>::sse_encode(self.start_date, serializer);
-        <u64>::sse_encode(self.total_bytes, serializer);
+        <i64>::sse_encode(self.total_bytes, serializer);
         <i32>::sse_encode(self.transfer_state, serializer);
         <bool>::sse_encode(self.is_sticker, serializer);
         <String>::sse_encode(self.guid, serializer);
@@ -21247,7 +21258,7 @@ impl SseEncode for crate::api::api::AttachmentMeta {
         <Option<String>>::sse_encode(self.filename, serializer);
         <Option<crate::api::api::AttachmentMetaExtra>>::sse_encode(self.extras, serializer);
         <bool>::sse_encode(self.is_outgoing, serializer);
-        <String>::sse_encode(self.transfer_name, serializer);
+        <Option<String>>::sse_encode(self.transfer_name, serializer);
         <i32>::sse_encode(self.version, serializer);
         <Option<String>>::sse_encode(self.uti, serializer);
         <i64>::sse_encode(self.created_date, serializer);
@@ -21259,7 +21270,10 @@ impl SseEncode for crate::api::api::AttachmentMeta {
 impl SseEncode for crate::api::api::AttachmentMetaExtra {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
-        <Option<i32>>::sse_encode(self.preview_generation_state, serializer);
+        <Option<crate::api::api::NumOrString>>::sse_encode(
+            self.preview_generation_state,
+            serializer,
+        );
     }
 }
 
@@ -22855,6 +22869,10 @@ impl SseEncode for crate::api::api::NumOrString {
             crate::api::api::NumOrString::String(field0) => {
                 <i32>::sse_encode(1, serializer);
                 <String>::sse_encode(field0, serializer);
+            }
+            crate::api::api::NumOrString::Bool(field0) => {
+                <i32>::sse_encode(2, serializer);
+                <bool>::sse_encode(field0, serializer);
             }
             _ => {
                 unimplemented!("");

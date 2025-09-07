@@ -969,7 +969,7 @@ class AttachmentMeta {
   final String? filename;
   final AttachmentMetaExtra? extras;
   final bool isOutgoing;
-  final String transferName;
+  final String? transferName;
   final int version;
   final String? uti;
   final int createdDate;
@@ -988,7 +988,7 @@ class AttachmentMeta {
     this.filename,
     this.extras,
     required this.isOutgoing,
-    required this.transferName,
+    this.transferName,
     required this.version,
     this.uti,
     required this.createdDate,
@@ -1041,7 +1041,7 @@ class AttachmentMeta {
 }
 
 class AttachmentMetaExtra {
-  final int? previewGenerationState;
+  final NumOrString? previewGenerationState;
 
   const AttachmentMetaExtra({
     this.previewGenerationState,
@@ -3500,6 +3500,9 @@ sealed class NumOrString with _$NumOrString {
   const factory NumOrString.string(
     String field0,
   ) = NumOrString_String;
+  const factory NumOrString.bool(
+    bool field0,
+  ) = NumOrString_Bool;
 }
 
 class OperatedChat {

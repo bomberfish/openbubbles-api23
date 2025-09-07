@@ -14133,18 +14133,21 @@ mixin _$NumOrString {
   TResult when<TResult extends Object?>({
     required TResult Function(int field0) num,
     required TResult Function(String field0) string,
+    required TResult Function(bool field0) bool,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(int field0)? num,
     TResult? Function(String field0)? string,
+    TResult? Function(bool field0)? bool,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(int field0)? num,
     TResult Function(String field0)? string,
+    TResult Function(bool field0)? bool,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -14152,18 +14155,21 @@ mixin _$NumOrString {
   TResult map<TResult extends Object?>({
     required TResult Function(NumOrString_Num value) num,
     required TResult Function(NumOrString_String value) string,
+    required TResult Function(NumOrString_Bool value) bool,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(NumOrString_Num value)? num,
     TResult? Function(NumOrString_String value)? string,
+    TResult? Function(NumOrString_Bool value)? bool,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(NumOrString_Num value)? num,
     TResult Function(NumOrString_String value)? string,
+    TResult Function(NumOrString_Bool value)? bool,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -14261,6 +14267,7 @@ class _$NumOrString_NumImpl extends NumOrString_Num {
   TResult when<TResult extends Object?>({
     required TResult Function(int field0) num,
     required TResult Function(String field0) string,
+    required TResult Function(bool field0) bool,
   }) {
     return num(field0);
   }
@@ -14270,6 +14277,7 @@ class _$NumOrString_NumImpl extends NumOrString_Num {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(int field0)? num,
     TResult? Function(String field0)? string,
+    TResult? Function(bool field0)? bool,
   }) {
     return num?.call(field0);
   }
@@ -14279,6 +14287,7 @@ class _$NumOrString_NumImpl extends NumOrString_Num {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(int field0)? num,
     TResult Function(String field0)? string,
+    TResult Function(bool field0)? bool,
     required TResult orElse(),
   }) {
     if (num != null) {
@@ -14292,6 +14301,7 @@ class _$NumOrString_NumImpl extends NumOrString_Num {
   TResult map<TResult extends Object?>({
     required TResult Function(NumOrString_Num value) num,
     required TResult Function(NumOrString_String value) string,
+    required TResult Function(NumOrString_Bool value) bool,
   }) {
     return num(this);
   }
@@ -14301,6 +14311,7 @@ class _$NumOrString_NumImpl extends NumOrString_Num {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(NumOrString_Num value)? num,
     TResult? Function(NumOrString_String value)? string,
+    TResult? Function(NumOrString_Bool value)? bool,
   }) {
     return num?.call(this);
   }
@@ -14310,6 +14321,7 @@ class _$NumOrString_NumImpl extends NumOrString_Num {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(NumOrString_Num value)? num,
     TResult Function(NumOrString_String value)? string,
+    TResult Function(NumOrString_Bool value)? bool,
     required TResult orElse(),
   }) {
     if (num != null) {
@@ -14404,6 +14416,7 @@ class _$NumOrString_StringImpl extends NumOrString_String {
   TResult when<TResult extends Object?>({
     required TResult Function(int field0) num,
     required TResult Function(String field0) string,
+    required TResult Function(bool field0) bool,
   }) {
     return string(field0);
   }
@@ -14413,6 +14426,7 @@ class _$NumOrString_StringImpl extends NumOrString_String {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(int field0)? num,
     TResult? Function(String field0)? string,
+    TResult? Function(bool field0)? bool,
   }) {
     return string?.call(field0);
   }
@@ -14422,6 +14436,7 @@ class _$NumOrString_StringImpl extends NumOrString_String {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(int field0)? num,
     TResult Function(String field0)? string,
+    TResult Function(bool field0)? bool,
     required TResult orElse(),
   }) {
     if (string != null) {
@@ -14435,6 +14450,7 @@ class _$NumOrString_StringImpl extends NumOrString_String {
   TResult map<TResult extends Object?>({
     required TResult Function(NumOrString_Num value) num,
     required TResult Function(NumOrString_String value) string,
+    required TResult Function(NumOrString_Bool value) bool,
   }) {
     return string(this);
   }
@@ -14444,6 +14460,7 @@ class _$NumOrString_StringImpl extends NumOrString_String {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(NumOrString_Num value)? num,
     TResult? Function(NumOrString_String value)? string,
+    TResult? Function(NumOrString_Bool value)? bool,
   }) {
     return string?.call(this);
   }
@@ -14453,6 +14470,7 @@ class _$NumOrString_StringImpl extends NumOrString_String {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(NumOrString_Num value)? num,
     TResult Function(NumOrString_String value)? string,
+    TResult Function(NumOrString_Bool value)? bool,
     required TResult orElse(),
   }) {
     if (string != null) {
@@ -14474,6 +14492,155 @@ abstract class NumOrString_String extends NumOrString {
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$NumOrString_StringImplCopyWith<_$NumOrString_StringImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$NumOrString_BoolImplCopyWith<$Res> {
+  factory _$$NumOrString_BoolImplCopyWith(_$NumOrString_BoolImpl value,
+          $Res Function(_$NumOrString_BoolImpl) then) =
+      __$$NumOrString_BoolImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({bool field0});
+}
+
+/// @nodoc
+class __$$NumOrString_BoolImplCopyWithImpl<$Res>
+    extends _$NumOrStringCopyWithImpl<$Res, _$NumOrString_BoolImpl>
+    implements _$$NumOrString_BoolImplCopyWith<$Res> {
+  __$$NumOrString_BoolImplCopyWithImpl(_$NumOrString_BoolImpl _value,
+      $Res Function(_$NumOrString_BoolImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of NumOrString
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? field0 = null,
+  }) {
+    return _then(_$NumOrString_BoolImpl(
+      null == field0
+          ? _value.field0
+          : field0 // ignore: cast_nullable_to_non_nullable
+              as bool,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$NumOrString_BoolImpl extends NumOrString_Bool {
+  const _$NumOrString_BoolImpl(this.field0) : super._();
+
+  @override
+  final bool field0;
+
+  @override
+  String toString() {
+    return 'NumOrString.bool(field0: $field0)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$NumOrString_BoolImpl &&
+            (identical(other.field0, field0) || other.field0 == field0));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, field0);
+
+  /// Create a copy of NumOrString
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$NumOrString_BoolImplCopyWith<_$NumOrString_BoolImpl> get copyWith =>
+      __$$NumOrString_BoolImplCopyWithImpl<_$NumOrString_BoolImpl>(
+          this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(int field0) num,
+    required TResult Function(String field0) string,
+    required TResult Function(bool field0) bool,
+  }) {
+    return bool(field0);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(int field0)? num,
+    TResult? Function(String field0)? string,
+    TResult? Function(bool field0)? bool,
+  }) {
+    return bool?.call(field0);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(int field0)? num,
+    TResult Function(String field0)? string,
+    TResult Function(bool field0)? bool,
+    required TResult orElse(),
+  }) {
+    if (bool != null) {
+      return bool(field0);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(NumOrString_Num value) num,
+    required TResult Function(NumOrString_String value) string,
+    required TResult Function(NumOrString_Bool value) bool,
+  }) {
+    return bool(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(NumOrString_Num value)? num,
+    TResult? Function(NumOrString_String value)? string,
+    TResult? Function(NumOrString_Bool value)? bool,
+  }) {
+    return bool?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(NumOrString_Num value)? num,
+    TResult Function(NumOrString_String value)? string,
+    TResult Function(NumOrString_Bool value)? bool,
+    required TResult orElse(),
+  }) {
+    if (bool != null) {
+      return bool(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class NumOrString_Bool extends NumOrString {
+  const factory NumOrString_Bool(final bool field0) = _$NumOrString_BoolImpl;
+  const NumOrString_Bool._() : super._();
+
+  @override
+  bool get field0;
+
+  /// Create a copy of NumOrString
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$NumOrString_BoolImplCopyWith<_$NumOrString_BoolImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 

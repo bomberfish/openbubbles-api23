@@ -412,7 +412,7 @@ class SetupViewController extends StatefulController {
       // ss.settings.cachedCodes.clear();
       Logger.debug("Success registered!");
       if (ss.settings.deviceIsHosted.value) {
-        pushService.mixpanel.track("hosted-setup-success");
+        pushService.mixpanel?.track("hosted-setup-success");
       }
       await pushService.configured();
 
@@ -576,7 +576,7 @@ class SetupViewController extends StatefulController {
     }
     error = newError;
     if (ss.settings.deviceIsHosted.value && errorIsProblem()) {
-      pushService.mixpanel.track("hosted-setup-error");
+      pushService.mixpanel?.track("hosted-setup-error");
     }
     updateWidgets<ErrorText>(newError);
   }
