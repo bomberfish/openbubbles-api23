@@ -4,7 +4,7 @@ use std::{borrow::{Borrow, BorrowMut}, collections::HashSet, fs::{self, File}, f
 pub use std::time::SystemTime;
 use anyhow::anyhow;
 use flutter_rust_bridge::{frb, IntoDart, JoinHandle};
-use icloud_auth::{default_provider, ArcAnisetteClient, LoginClientInfo};
+use rustpush::{default_provider, ArcAnisetteClient, LoginClientInfo};
 use log::{debug, error, info, warn};
 use plist::{Data, Dictionary};
 pub use plist::Value;
@@ -19,7 +19,7 @@ use rustpush::AnisetteProvider;
 pub use rustpush::findmy::{FindMyFriendsClient, FindMyPhoneClient};
 pub use rustpush::sharedstreams::{SharedAlbum, SyncStatus};
 pub use rustpush::cloudkit_proto::EscrowData;
-pub use icloud_auth::DefaultAnisetteProvider;
+pub use rustpush::DefaultAnisetteProvider;
 use uniffi::HandleAlloc;
 use rand::Rng;
 use uuid::Uuid;
@@ -422,7 +422,7 @@ async fn restore(curr_state: &PushState) {
     if let Ok(mut lock) = inner.cancel_poll_recv.try_lock() {
         let _ = lock.try_recv();
     }
-    
+
     if needs_rereg {
         // mark rereg
         let _ = inner.client.as_ref().unwrap().identity.refresh_now().await;
@@ -434,7 +434,7 @@ async fn restore(curr_state: &PushState) {
     if let Ok(mut state) = plist::from_file::<_, GSAConfig>(inner.conf_dir.join("gsa.plist")) {
         let mut apple_account =
             AppleAccount::new_with_anisette(get_login_config(&*inner).await, inner.anisette.clone().unwrap()).expect("aacbf?");
-        
+
         apple_account.username = Some(state.username.clone());
         apple_account.hashed_password = Some(state.password.clone().into());
 
@@ -476,7 +476,7 @@ async fn restore(curr_state: &PushState) {
     }
 
     info!("heer");
-    
+
     let facetime_path = inner.conf_dir.join("facetime.plist");
     let state: FTState = plist::from_file(&facetime_path).unwrap_or_default();
     inner.ft_client = Some(FTClient::new(state, Box::new(move |state| {
@@ -1861,8 +1861,8 @@ pub async fn get_quota_info(state: &Arc<PushState>) -> anyhow::Result<QuotaInfo>
     let info = inner.token_provider.as_ref().expect("No token provider!");
     let storage_info = info.get_storage_info().await?;
     Ok(QuotaInfo {
-        total_bytes: storage_info.storage_data.quota_info_in_bytes.total_quota, 
-        available_bytes: storage_info.storage_data.quota_info_in_bytes.total_available, 
+        total_bytes: storage_info.storage_data.quota_info_in_bytes.total_quota,
+        available_bytes: storage_info.storage_data.quota_info_in_bytes.total_available,
         messages_bytes: storage_info.storage_usage_by_media.iter().find(|m| &m.media_key == "messages").map(|m| m.usage_in_bytes).unwrap_or(0),
     })
 }
@@ -1876,7 +1876,7 @@ struct GSAConfig {
 
 async fn do_login(conf_dir: &Path, account: &mut AppleAccount<DefaultAnisetteProvider>, cookie: Option<&str>, anisette: &ArcAnisetteClient<DefaultAnisetteProvider>, os_config: &dyn OSConfig) -> anyhow::Result<IDSUser> {
     account.update_postdata("Apple Device", None, &["icloud", "imessage", "facetime"]).await?;
-    
+
     let Some(pet) = account.get_pet() else { return Err(anyhow!("No pet!")) };
     let Some(spd) = &account.spd else { return Err(anyhow!("No spd!")) };
 
@@ -1898,7 +1898,7 @@ async fn do_login(conf_dir: &Path, account: &mut AppleAccount<DefaultAnisettePro
         my_key: None,
         ..plist::from_file(&path).unwrap_or_default()
     }).unwrap()).unwrap();
-    
+
     let mobileme = delegates.mobileme.unwrap();
     let findmy = FindMyState::new(dsid.clone());
 
@@ -1912,7 +1912,7 @@ async fn do_login(conf_dir: &Path, account: &mut AppleAccount<DefaultAnisettePro
     let shared_streams = SharedStreamsState::new(dsid.clone(), &mobileme);
     if let Some(shared_streams) = shared_streams {
         let id_path = conf_dir.join("sharedstreams.plist");
-        std::fs::write(id_path, plist_to_string(&shared_streams).unwrap()).unwrap(); 
+        std::fs::write(id_path, plist_to_string(&shared_streams).unwrap()).unwrap();
     } else {
         warn!("missing shared streams tokens!");
     }
@@ -1943,7 +1943,7 @@ pub async fn try_auth(state: &Arc<PushState>, username: String, password: String
     let mut inner = state.0.write().await;
     let mut apple_account =
         AppleAccount::new_with_anisette(get_login_config(&*inner).await, inner.anisette.clone().unwrap())?;
-    
+
     let mut password_hasher = sha2::Sha256::new();
     password_hasher.update(&password.as_bytes());
     let hashed_password = password_hasher.finalize();
@@ -2014,7 +2014,7 @@ pub async fn supports_keychain(state: &Arc<PushState>) -> bool {
 pub async fn is_in_clique(state: &Arc<PushState>) -> bool {
     let inner = state.0.read().await;
     let Some(keychain) = inner.keychain.clone() else { return false };
-    
+
     keychain.is_in_clique().await
 }
 
@@ -2248,7 +2248,7 @@ pub async fn upload_cloud_attachments(state: &Arc<PushState>, files: Vec<(String
         hashes.push(prepared.total_sig.clone());
         to_upload.push((prepared, std::fs::File::open(file)?, record.clone()));
     }
-    
+
     let results = cloud_messages_client.upload_attachments(to_upload).await?;
 
     let mut finish = HashMap::new();
@@ -2271,7 +2271,7 @@ pub async fn upload_group_photo(state: &Arc<PushState>, files: Vec<(String, Stri
         hashes.push(prepared.total_sig.clone());
         to_upload.push((prepared, std::fs::File::open(file)?, record.clone()));
     }
-    
+
     let results = cloud_messages_client.upload_group_photo(to_upload).await?;
 
     let mut finish = HashMap::new();

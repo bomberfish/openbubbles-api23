@@ -1,0 +1,8 @@
+[submodule "rustpush"]
+	path = rustpush
+	url = https://github.com/OpenBubbles/rustpush.git
+	branch = master
+[submodule "android-smsmms"]
+	path = android-smsmms
+	url = https://github.com/OpenBubbles/android-smsmms.git
+	branch = master
