@@ -367,6 +367,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.4.2"
+  cli_config:
+    dependency: transitive
+    description:
+      name: cli_config
+      sha256: ac20a183a07002b700f0c25e61b7ee46b23c309d76ab7b7640a028f18e4d99ec
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.2.0"
   cli_util:
     dependency: transitive
     description:
@@ -443,10 +451,10 @@ packages:
     dependency: transitive
     description:
       name: coverage
-      sha256: "4b03e11f6d5b8f6e5bb5e9f7889a56fe6c5cbe942da5378ea4d4d7f73ef9dfe5"
+      sha256: "802bd084fb82e55df091ec8ad1553a7331b61c08251eef19a508b6f3f3a9858d"
       url: "https://pub.dev"
     source: hosted
-    version: "1.11.0"
+    version: "1.13.1"
   crop_your_image:
     dependency: "direct main"
     description:
@@ -729,14 +737,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.3"
-  ffmpeg_kit_flutter:
+  ffmpeg_kit_flutter_new:
     dependency: "direct main"
     description:
-      name: ffmpeg_kit_flutter
-      sha256: "843aae41823ca94a0988d975b4b6cdc6948744b9b7e2707d81a3a9cd237b0100"
+      name: ffmpeg_kit_flutter_new
+      sha256: a6f881b2a41c8900733afef1806e069f58ab48e395174552e98157eb10d8adc0
       url: "https://pub.dev"
     source: hosted
-    version: "6.0.3"
+    version: "3.2.0"
   ffmpeg_kit_flutter_platform_interface:
     dependency: transitive
     description:
@@ -3124,9 +3132,11 @@ packages:
   telephony_plus:
     dependency: "direct main"
     description:
-      path: "/home/tae/Downloads/telephony_plus"
-      relative: false
-    source: path
+      path: "."
+      ref: "6db951e1e2e055e8ec844ccaf4319161f6fe6e3e"
+      resolved-ref: "6db951e1e2e055e8ec844ccaf4319161f6fe6e3e"
+      url: "https://github.com/stevesoltys/telephony_plus.git"
+    source: git
     version: "0.0.1"
   term_glyph:
     dependency: transitive
