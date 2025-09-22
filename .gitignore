@@ -66,3 +66,7 @@ native-lib/target/**
 # Android
 android/app/local.properties
 android/app/.gradle/**
+
+# OpenBubbles Build Modules
+android/app/src/main/jniLibs/arm64-v8a/openbubbles.so
+android/app/src/main/resources/lib/arm64-v8a/macos-validation-data

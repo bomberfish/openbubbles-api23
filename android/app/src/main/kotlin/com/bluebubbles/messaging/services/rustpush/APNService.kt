@@ -26,6 +26,7 @@ import com.bluebubbles.messaging.services.backend_ui_interop.MethodCallHandler
 import com.bluebubbles.messaging.services.system.GetZenMode
 import com.bluebubbles.messaging.services.system.ZenModeUUIDHandler
 import com.bluebubbles.telephony_plus.receive.SMSObserver
+import com.google.common.io.Files
 import com.google.gson.GsonBuilder
 import com.google.gson.ToNumberPolicy
 import kotlinx.coroutines.CoroutineScope
@@ -34,6 +35,7 @@ import kotlinx.coroutines.SupervisorJob
 import uniffi.rust_lib_bluebubbles.NativePushState
 import uniffi.rust_lib_bluebubbles.initNative
 import uniffi.rust_lib_bluebubbles.MsgReceiver
+import java.io.File
 
 class APNService : Service(), MsgReceiver {
     lateinit var pushState: NativePushState
@@ -184,6 +186,19 @@ class APNService : Service(), MsgReceiver {
             }
             launchAgent()
             started = true
+
+            try {
+                // TODO: We need this to get the native library path from rustpush.
+                // We can do better than this...
+                val nativeLibraryDirectoryPath =
+                    File(applicationContext.filesDir, "native_library_directory")
+                Files.write(
+                    applicationInfo.nativeLibraryDir.toByteArray(),
+                    nativeLibraryDirectoryPath
+                )
+            } catch (e: Exception) {
+                Log.e("APNService", "Failed to write native library directory path", e)
+            }
         }
         return super.onStartCommand(intent, flags, startId)
     }

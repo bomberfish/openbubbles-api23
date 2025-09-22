@@ -29,7 +29,7 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           channel: stable
-          flutter-version: 3.24.0
+          flutter-version: 3.24.5
 
       - name: Set up Java
         uses: actions/setup-java@v2
@@ -38,9 +38,7 @@ jobs:
           distribution: 'temurin'
 
       - name: Install Protobuf compiler
-        run: sudo apt-get install -y protobuf-compiler
+        run: sudo apt-get install -y protobuf-compiler patchelf
 
-      # First run is expected to fail until ffmpeg_kit_flutter_new is fixed.
       - name: Run Build Script
-        run: |
-          ./build.sh
+        run: ./build.sh
