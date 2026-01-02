@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'dart:convert';
+// import 'dart:convert';
 
 import 'package:bluebubbles/helpers/ui/facetime_helpers.dart';
 import 'package:bluebubbles/database/models.dart';
@@ -11,12 +11,12 @@ import 'package:bluebubbles/services/network/backend_service.dart';
 import 'package:bluebubbles/utils/logger/logger.dart';
 import 'package:collection/collection.dart';
 import 'package:dio/dio.dart';
-import 'package:ffmpeg_kit_flutter_new/ffmpeg_kit.dart';
-import 'package:ffmpeg_kit_flutter_new/ffprobe_kit.dart';
-import 'package:ffmpeg_kit_flutter_new/log.dart';
-import 'package:ffmpeg_kit_flutter_new/return_code.dart';
-import 'package:ffmpeg_kit_flutter_new/session.dart';
-import 'package:ffmpeg_kit_flutter_new/statistics.dart';
+// import 'package:ffmpeg_kit_flutter_new/ffmpeg_kit.dart';
+// import 'package:ffmpeg_kit_flutter_new/ffprobe_kit.dart';
+// import 'package:ffmpeg_kit_flutter_new/log.dart';
+// import 'package:ffmpeg_kit_flutter_new/return_code.dart';
+// import 'package:ffmpeg_kit_flutter_new/session.dart';
+// import 'package:ffmpeg_kit_flutter_new/statistics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart' hide Response;
@@ -284,82 +284,19 @@ class ActionHandler extends GetxService {
       }
 
       var mm = attachment.mimeType ?? mime(attachment.transferName);
-      // 100 MB
       if (dialog && mm != null && mm.startsWith("video/") && Platform.isAndroid) {
-
-        String tempPath = "$directory/temp.mp4";
-        file.renameSync(tempPath);
-        // use FFMPEG to shrink
-        var info = await FFprobeKit.getMediaInformation(tempPath);
-        Logger.info(await info.getOutput());
-        var output = json.decode((await info.getOutput())!);
-        double duration = double.parse(output["format"]["duration"]);
-        List<dynamic> streams = output["streams"];
-        var videoStream = streams.firstWhereOrNull((stream) => stream["codec_type"] == "video");
-        int width = videoStream?["width"] ?? 1;
-        int height = videoStream?["height"] ?? 1;
-        var rotation = ((videoStream?["side_data_list"] as List<dynamic>?)?.firstOrNull?["rotation"] ?? 0).abs();
-        var flip = rotation == 90 || rotation == 270;
-        if (flip) {
-          var tmp = width;
-          width = height;
-          height = tmp;
-        }
-        if (width > height) {
-          var aspect = height / width;
-          width = 1920;
-          height = (aspect * width).floor();
-        } else {
-          var aspect = width / height;
-          height = 1920;
-          width = (aspect * height).floor();
-        }
-
-        double progress = 0;
-        Function? myUpdate;
-
-        Completer c = Completer();
-
-        var audioRate = 128 * 1000;
-        var maxBits = (50 * 1000 * 1000 * 8) - (audioRate * duration).floor();
-        var bitsPerSecond = (maxBits / duration).floor();
-        var executed = await FFmpegKit.executeAsync("-i \"$directory/temp.mp4\" -b:v $bitsPerSecond -vf \"scale=$width:$height\" -c:a aac -b:a $audioRate \"$directory/compressed.mp4\"",
-          (Session session) async {
-            if (myUpdate != null) {
-              Navigator.of(Get.context!).pop(); // dismiss dialog
-            }
-            c.complete();
-            Logger.info("Session finsihed $session");
-          },
-          (Log log) async { },
-          (Statistics statistics) {
-            progress = statistics.getTime() / 1000; // ms to s
-            if (myUpdate != null) {
-              myUpdate!(() {});
-            }
-            Logger.info("Time $progress");
-          });
-
-        Get.back();
-
-        showDialog(context: Get.context!,
-          barrierDismissible: false,
+        Get.back(); // dismiss the "Preparing..." dialog
+        
+        // Alert user that video is too large
+        showDialog(
+          context: Get.context!,
           builder: (BuildContext context) {
             return AlertDialog(
-              title: Text("Compressing...", style: context.theme.textTheme.titleLarge),
-              content: SizedBox(
-                      height: 5,
-                      child: Center(
-                        child: StatefulBuilder(builder: (context, update) {
-                          myUpdate = update;
-                          return LinearProgressIndicator(
-                            value: progress / duration,
-                            backgroundColor: context.theme.colorScheme.outline,
-                            valueColor: AlwaysStoppedAnimation<Color>(context.theme.colorScheme.primary),
-                          );
-                        }),
-                      ),
-                    ),
+              title: Text("Video Too Large", style: context.theme.textTheme.titleLarge),
+              content: Text(
+                "This video is over 100MB and cannot be sent. Please compress the video using another app before sending.",
+                style: context.theme.textTheme.bodyMedium,
+              ),
               backgroundColor: context.theme.colorScheme.properSurface,
               actions: [
                 TextButton(
@@ -367,34 +304,15 @@ class ActionHandler extends GetxService {
                     Navigator.of(context).pop();
                   },
                   child: Text(
-                    "Cancel", style: context.theme.textTheme.bodyLarge!.copyWith(color: context.theme.colorScheme.primary),
+                    "OK",
+                    style: context.theme.textTheme.bodyLarge!.copyWith(color: context.theme.colorScheme.primary),
                   ),
                 )
               ],
             );
-          }).then((_) async {
-            myUpdate = null;
-            executed.cancel();
-            await File(tempPath).delete();
-          });
-        
-        await c.future;
-
-        var returnCode = await executed.getReturnCode();
-        if (ReturnCode.isCancel(returnCode)) {
-          var output = File("$directory/compressed.mp4");
-          if (await output.exists()) {
-            await output.delete();
-          }
-          throw Exception("User cancelled!");
-        }
-        if (!ReturnCode.isSuccess(returnCode)) {
-          var output = await executed.getOutput();
-          showSnackbar("Error", "Failed to compress video");
-          throw Exception("FFMpeg failed $output code $returnCode");
-        } 
-        File("$directory/compressed.mp4").renameSync(pathName);
-        attachment.totalBytes = File(pathName).lengthSync();
+          },
+        );
+        throw Exception("Video too large (over 100MB). Please compress before sending.");
       } else if (dialog) {
         Get.back();
       }
