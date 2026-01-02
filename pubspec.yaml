@@ -204,7 +204,10 @@ dependencies:
       ref: 6db951e1e2e055e8ec844ccaf4319161f6fe6e3e
   barcode_widget: ^2.0.4
   vpn_connection_detector: ^1.0.6
-  ffmpeg_kit_flutter_new: ^3.2.0
+  ffmpeg_kit_flutter_new:
+    git:
+      url: https://github.com/bomberfish/ffmpeg_kit_flutter_api23.git
+      ref: master
   dotted_border: ^2.1.0
   external_path: ^2.0.1
   flutter_inappwebview: ^6.1.5
