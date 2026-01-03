@@ -22,7 +22,7 @@ import 'package:bluebubbles/utils/crypto_utils.dart';
 import 'package:bluebubbles/utils/logger/logger.dart';
 import 'package:collection/collection.dart';
 import 'package:crypto/crypto.dart';
-import 'package:ffmpeg_kit_flutter_new/ffmpeg_kit.dart';
+// import 'package:ffmpeg_kit_flutter_new/ffmpeg_kit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rust_bridge/flutter_rust_bridge.dart';
@@ -440,8 +440,6 @@ class RustPushBackend implements BackendService {
     }
 
     // android doesn't support CAF, convert to m4a
-    // FFmpeg conversion commented out - not supported in this backport
-    // User will need to handle CAF files manually on Android
     // if (attachment.uti == "com.apple.coreaudio-format" && Platform.isAndroid) {
     //   await File(attachment.path).rename("${attachment.directory}/encode.caf");
     //   var session = await FFmpegKit.execute("-i \"${attachment.directory}/encode.caf\" \"${attachment.directory}/encode.m4a\"");
