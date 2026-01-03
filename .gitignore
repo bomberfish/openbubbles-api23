@@ -8,6 +8,8 @@
 .buildlog/
 .history
 .svn/
+.vscode/
+bluebubbles-linux-x86_64*
 
 # IntelliJ related
 *.iml
