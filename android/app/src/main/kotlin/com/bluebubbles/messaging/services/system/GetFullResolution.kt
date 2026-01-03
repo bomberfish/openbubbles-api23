@@ -12,7 +12,6 @@ import android.provider.ContactsContract
 import android.util.Base64
 import android.view.WindowManager
 import com.bluebubbles.messaging.models.MethodCallHandlerImpl
-import com.radzivon.bartoshyk.avif.coder.HeifCoder
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import org.json.JSONObject

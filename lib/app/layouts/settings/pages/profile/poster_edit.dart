@@ -589,10 +589,10 @@ class PosterEditState
     var file = pushService.fileForAsset(posterPath, asset, "portrait-layer_background-backfill.HEIC");
     await file.writeAsBytes(paddedJpgBytes);
 
-    await mcs.invokeMethod("encode-heif", {
-      "file": file.path,
-      "output": file.path
-    });
+    // await mcs.invokeMethod("encode-heif", {
+    //   "file": file.path,
+    //   "output": file.path
+    // });
 
     var file2 = pushService.fileForAsset(posterPath, asset, "portrait-layer_background.HEIC");
     await file2.writeAsBytes(data!.buffer.asUint8List()); // format doesn't matter because we re-crop before upload
@@ -965,10 +965,10 @@ class PosterEditState
                         File("${file.path}.png").deleteSync();
                       }
 
-                      await mcs.invokeMethod("encode-heif", {
-                        "file": file.path,
-                        "output": file.path,
-                      });
+                      // await mcs.invokeMethod("encode-heif", {
+                      //   "file": file.path,
+                      //   "output": file.path,
+                      // });
 
                       await FileImage(file).evict();
 

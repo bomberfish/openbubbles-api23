@@ -2802,9 +2802,9 @@ class RustPushService extends GetxService {
           }
           await f.writeAsBytes(file.value);
 
-          if (file.key.endsWith("HEIC")) {
-            await mcs.invokeMethod("decode-heif", {"file": f.path, "output": "${f.path}.png"});
-          }
+          // if (file.key.endsWith("HEIC")) {
+          //   await mcs.invokeMethod("decode-heif", {"file": f.path, "output": "${f.path}.png"});
+          // }
 
           entries[file.key] = Uint8List(0);
         }
@@ -2820,7 +2820,7 @@ class RustPushService extends GetxService {
       }
       await f.writeAsBytes(memoji.data.avatarImageData);
 
-      await mcs.invokeMethod("decode-heif", {"file": f.path, "output": "$appDocPath/avatars/you/poster-$number/memoji.png"});
+      // await mcs.invokeMethod("decode-heif", {"file": f.path, "output": "$appDocPath/avatars/you/poster-$number/memoji.png"});
       memoji.data.avatarImageData = Uint8List(0);
     }
   }
