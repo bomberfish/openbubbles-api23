@@ -440,18 +440,20 @@ class RustPushBackend implements BackendService {
     }
 
     // android doesn't support CAF, convert to m4a
-    if (attachment.uti == "com.apple.coreaudio-format" && Platform.isAndroid) {
-      await File(attachment.path).rename("${attachment.directory}/encode.caf");
-      var session = await FFmpegKit.execute("-i \"${attachment.directory}/encode.caf\" \"${attachment.directory}/encode.m4a\"");
-
-      var output = (await session.getOutput())!;
-      while (output.isNotEmpty) {
-        Logger.info(output.substring(0, min(output.length, 300)));
-        output = output.substring(min(output.length, 300));
-      }
-
-      await File("${attachment.directory}/encode.m4a").rename(attachment.path);
-    }
+    // FFmpeg conversion commented out - not supported in this backport
+    // User will need to handle CAF files manually on Android
+    // if (attachment.uti == "com.apple.coreaudio-format" && Platform.isAndroid) {
+    //   await File(attachment.path).rename("${attachment.directory}/encode.caf");
+    //   var session = await FFmpegKit.execute("-i \"${attachment.directory}/encode.caf\" \"${attachment.directory}/encode.m4a\"");
+    //
+    //   var output = (await session.getOutput())!;
+    //   while (output.isNotEmpty) {
+    //     Logger.info(output.substring(0, min(output.length, 300)));
+    //     output = output.substring(min(output.length, 300));
+    //   }
+    //
+    //   await File("${attachment.directory}/encode.m4a").rename(attachment.path);
+    // }
 
     return attachment.getFile();
   }
